@@ -1,0 +1,80 @@
+# SepCare Backend
+
+## What This Is
+
+SepCare is a low-cost wearable armband for newborns (0–28 days) that continuously monitors vitals — heart rate, HRV, temperature, activity, and perfusion — via an ESP32-based device, and flags early signs of neonatal sepsis using a composite, multi-system risk-scoring model. It alerts caregivers or ASHA workers with a simple green/amber/red signal, no clinical interpretation required. This repo's `backend` branch is the cloud-side pipeline: it ingests vitals from the ESP32 over WiFi, runs the sepsis-risk fusion logic, stores everything in Supabase, handles offline-buffered batch syncs after connectivity gaps, and exposes a read API for the dashboard (currently built by teammates as static HTML, to be ported to Next.js on `main` later).
+
+## Core Value
+
+Reliably turn a stream of vitals from an ESP32 wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
+
+## Requirements
+
+### Validated
+
+(None yet — ship to validate)
+
+### Active
+
+- [ ] Device can POST a single vitals reading to a backend ingest endpoint
+- [ ] Device can POST a batch of buffered offline readings once connectivity returns, and they're stored with their original timestamps (not the upload time)
+- [ ] Backend authenticates each device request via a static per-device API key
+- [ ] Backend computes the composite sepsis-risk score and Green/Amber/Red status from incoming vitals, using the breadth + trend logic in `context/implementation-plans/neonatal-sepsis-armband.md` (§7.1.1)
+- [ ] Backend persists vitals, computed risk scores, and traffic-light status in Supabase (Postgres)
+- [ ] A read API (or Supabase realtime) exists for the frontend/dashboard to fetch current vitals, risk status, and history
+- [ ] System supports a single device/baby profile end-to-end (v1 demo scope)
+
+### Out of Scope
+
+- Multi-device / multi-baby support — deferred; v1 is a single-device demo
+- Raspberry Pi base station — superseded by direct ESP32-to-cloud architecture (ESP32 has native WiFi; no BLE bridge needed)
+- On-device (ESP32) sepsis-risk computation — all fusion/trend logic runs in the cloud backend, not on the wearable
+- Clinical-grade ML model trained on real sepsis cases — v1 uses the composite threshold/trend logic from the implementation plan; a trained model is future work
+- Notifications/paging (SMS, push alerts to ASHA workers) — dashboard color display only for v1
+- Caregiver/dashboard user accounts or auth — no user-facing auth in v1; only device-to-backend auth
+
+## Context
+
+- Origin: UN SDG 3 (Good Health & Well-being) team research, documented in `context/` — implementation plans, WHO IMCI danger-sign research, competitor analysis (BEMPU TempWatch, JivaScope, Cradle VSA, Neopenda neoGuard), and a detailed sepsis-vs-common-illness differentiation writeup (`context/web-research/sepsis-vs-common-illness-differentiation.md`).
+- The original implementation plan (`context/implementation-plans/neonatal-sepsis-armband.md`) specified a two-tier nRF52840 armband + Raspberry Pi base station architecture over BLE. This has been superseded — the team is now building directly on ESP32 (WiFi-capable), eliminating the Pi bridge entirely.
+- Frontend is being built in parallel by teammates as static HTML mockups, to be ported to a Next.js app on `main` later. This repo's `backend` branch is scoped purely to the backend/data pipeline; hardware build is a separate parallel track.
+- Sepsis-risk logic is a research-informed composite across six feature groups (temperature direction, HR–temperature proportionality, HRV pattern, perfusion index trend, respiratory irregularity, activity/lethargy trend) with breadth-of-systems gating — score escalates only when ≥3 of 6 groups are simultaneously abnormal and trending together over a multi-hour window. Full detail in the implementation plan (§7.1.1) and the differentiation research doc.
+- ESP32 firmware sends pre-computed vitals per interval (HR, SpO2/perfusion, temperature, activity score), not raw sensor waveforms — the device's PPG library already does on-chip beat detection, so the backend works from periodic summaries rather than 100Hz raw streams.
+
+## Constraints
+
+- **Hosting**: Free-tier only — Vercel for the backend, Supabase for storage/DB/realtime. No paid infrastructure for this phase.
+- **Tech stack**: Next.js (API routes / route handlers) for the backend service, TypeScript, Supabase (Postgres) for storage and realtime.
+- **Device**: ESP32 (WiFi-capable) — replaces the original nRF52840 + BLE + Raspberry Pi design.
+- **Team structure**: parallel hardware-build and backend tracks; frontend built separately by other teammates and merged later.
+
+## Key Decisions
+
+| Decision | Rationale | Outcome |
+|----------|-----------|---------|
+| Drop Raspberry Pi base station, go ESP32-direct-to-cloud | ESP32 has native WiFi, removing the need for a BLE-to-cloud bridge device; simplifies hardware to a single worn unit | — Pending |
+| Sepsis-risk fusion logic runs in the backend, not on-device | ESP32 lacks the Pi's compute headroom; backend can run the full composite/trend logic in TypeScript with room to iterate | — Pending |
+| Custom Next.js API backend instead of ESP32 → Supabase directly | The composite risk math (HRV entropy, breadth-gating, rolling multi-hour trends) is far easier to write and test as real code than as SQL/Edge Functions | — Pending |
+| Host backend on Vercel free tier, storage on Supabase free tier | No infrastructure budget — SDG/hackathon project | — Pending |
+| ESP32 sends pre-computed vitals per interval, not raw waveforms | Reduces payload size and backend complexity; on-chip PPG libraries already do beat detection | — Pending |
+| Static per-device API key for device auth | Sufficient for a single-device v1 demo; full auth/accounts deferred | — Pending |
+
+## Evolution
+
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition** (via `/gsd-transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `/gsd-complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
+
+---
+*Last updated: 2026-09-07 after initialization*
