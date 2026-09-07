@@ -72,23 +72,23 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ING-01 | TBD | Pending |
-| ING-02 | TBD | Pending |
-| ING-03 | TBD | Pending |
-| STOR-01 | TBD | Pending |
-| STOR-02 | TBD | Pending |
-| RISK-01 | TBD | Pending |
-| RISK-02 | TBD | Pending |
-| RISK-03 | TBD | Pending |
-| READ-01 | TBD | Pending |
-| READ-02 | TBD | Pending |
-| DEV-01 | TBD | Pending |
+| ING-01 | Phase 1 | Pending |
+| ING-02 | Phase 1 | Pending |
+| ING-03 | Phase 3 | Pending |
+| STOR-01 | Phase 1 | Pending |
+| STOR-02 | Phase 2 | Pending |
+| RISK-01 | Phase 2 | Pending |
+| RISK-02 | Phase 2 | Pending |
+| RISK-03 | Phase 2 | Pending |
+| READ-01 | Phase 1 | Pending |
+| READ-02 | Phase 4 | Pending |
+| DEV-01 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 11 total
-- Mapped to phases: 0
-- Unmapped: 11 ⚠️ (roadmap creation pending)
+- Mapped to phases: 11
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-09-07*
-*Last updated: 2026-09-07 after initial definition*
+*Last updated: 2026-09-07 after roadmap creation (4 phases, 100% coverage)*
