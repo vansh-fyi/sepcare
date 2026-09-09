@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SepCare — Neonatal Monitoring & Early Sepsis Detection</title>
-  <meta name="description" content="SepCare neonatal companion platform for continuous infant vitals monitoring and early sepsis triage.">
+  <title>SepCare — Neonatal Monitoring & Early Sepsis Detection System</title>
+  <meta name="description" content="SepCare neonatal companion platform for continuous infant vitals monitoring, early sepsis triage, and clinical escalation.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -37,6 +37,13 @@
       --pulse-blue: linear-gradient(180deg, #2563EB 0%, #1D4ED8 100%);
       --temp-coral: linear-gradient(180deg, #F04444 0%, #DC2626 100%);
       --activity-teal: linear-gradient(180deg, #10B981 0%, #059669 100%);
+      
+      /* IA & Mode Accent Colors */
+      --color-teal-accent: #0D9488;
+      --color-teal-bg: #CCFBF1;
+      --color-teal-dark: #115E59;
+      --color-clinical-blue: #0284C7;
+      --color-clinical-bg: #E0F2FE;
     }
 
     * {
@@ -66,36 +73,36 @@
     /* Top Studio Nav & Controls */
     .studio-bar {
       width: 100%;
-      max-width: 1100px;
-      padding: 16px 24px;
+      max-width: 1280px;
+      padding: 14px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 14px;
       z-index: 50;
     }
 
     .studio-brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       text-decoration: none;
       color: inherit;
     }
 
     .studio-logo-icon {
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
       background: linear-gradient(135deg, #FF645C 0%, #2563EB 100%);
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
       font-weight: 800;
       font-size: 16px;
-      box-shadow: 0 4px 12px rgba(255, 100, 92, 0.3);
+      box-shadow: 0 4px 14px rgba(255, 100, 92, 0.35);
     }
 
     .studio-title-group h1 {
@@ -105,7 +112,7 @@
     }
 
     .studio-title-group span {
-      font-size: 11px;
+      font-size: 11.5px;
       color: #94a3b8;
       font-weight: 500;
       display: block;
@@ -124,6 +131,7 @@
       border-radius: 999px;
       padding: 4px;
       display: flex;
+      align-items: center;
       gap: 4px;
     }
 
@@ -135,7 +143,7 @@
     .pill-btn {
       background: transparent;
       border: none;
-      padding: 6px 14px;
+      padding: 6px 13px;
       border-radius: 999px;
       color: #94A3B8;
       font-family: inherit;
@@ -146,6 +154,7 @@
       align-items: center;
       gap: 6px;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
 
     .pill-btn:hover {
@@ -165,6 +174,38 @@
     body.light-studio .pill-btn.active {
       background: #0F172A;
       color: #FFFFFF;
+    }
+
+    .ia-map-btn {
+      background: linear-gradient(135deg, #0D9488 0%, #059669 100%) !important;
+      color: #FFFFFF !important;
+      border: 1px solid #14B8A6 !important;
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(13, 148, 136, 0.35);
+    }
+
+    .ia-map-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .studio-quick-select {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #E2E8F0;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    body.light-studio .studio-quick-select {
+      background: #FFFFFF;
+      color: #0F172A;
+      border-color: #CBD5E1;
     }
 
     .studio-links {
@@ -191,10 +232,10 @@
 
     /* Simulation Canvas Wrapper */
     .app-viewport-wrapper {
-      padding: 20px;
+      padding: 16px 20px 32px;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       width: 100%;
       flex: 1;
     }
@@ -202,18 +243,20 @@
     /* iPhone / Device Mockup Frame */
     .device-shell {
       width: 100%;
-      max-width: 412px;
+      max-width: 416px;
       background: #FFFFFF;
-      border-radius: 50px;
+      border-radius: 46px;
       box-shadow: 
-        0 25px 65px -10px rgba(0, 0, 0, 0.45),
-        0 0 0 12px #1E2430,
-        0 0 0 14px #334155;
+        0 25px 65px -10px rgba(0, 0, 0, 0.5),
+        0 0 0 10px #1E2430,
+        0 0 0 12px #334155;
       overflow: hidden;
       position: relative;
       transition: max-width 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.4s ease, box-shadow 0.4s ease;
       display: flex;
       flex-direction: column;
+      height: min(840px, calc(100vh - 100px));
+      min-height: 640px;
     }
 
     /* Fullscreen Mode Override */
@@ -221,29 +264,107 @@
       max-width: 480px;
       border-radius: 0;
       box-shadow: none;
-      min-height: 100vh;
+      height: 100vh;
     }
 
     /* App Screen Scroll Area */
     .phone-screen {
       background-color: #F4F6FB;
-      min-height: 844px;
+      height: 100%;
       display: flex;
       flex-direction: column;
       position: relative;
       user-select: none;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      overflow: hidden;
     }
 
-    /* Coral Top Header Section */
+    /* In-App Segmented Mode Switcher (Top Header Bar) */
+    .inapp-mode-bar {
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 40;
+    }
+
+    .mode-tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 6px 8px;
+      border-radius: 999px;
+      color: #94A3B8;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mode-tab-btn:hover {
+      color: #F8FAFC;
+    }
+
+    .mode-tab-btn.active {
+      background: #FFFFFF;
+      color: #0F172A;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .mode-tab-btn.active.mode-setup {
+      background: #0D9488;
+      color: #FFFFFF;
+    }
+
+    .mode-tab-btn.active.mode-clinical {
+      background: #2563EB;
+      color: #FFFFFF;
+    }
+
+    .mode-tab-btn.active.mode-parent {
+      background: #FF645C;
+      color: #FFFFFF;
+    }
+
+    .ia-tree-trigger-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #38BDF8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .ia-tree-trigger-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.08);
+    }
+
+    /* App Header Section */
     .app-header {
       background: var(--header-normal-grad);
-      padding: 16px 20px 24px;
-      border-bottom-left-radius: 36px;
-      border-bottom-right-radius: 36px;
+      padding: 12px 18px 20px;
+      border-bottom-left-radius: 32px;
+      border-bottom-right-radius: 32px;
       position: relative;
       transition: background 0.4s ease;
+      flex-shrink: 0;
     }
 
     /* iOS Status Bar */
@@ -251,15 +372,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 4px 6px 16px;
+      padding: 2px 4px 12px;
       color: #0F172A;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
     }
 
     .status-time {
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 14.5px;
+      font-weight: 800;
       letter-spacing: -0.01em;
     }
 
@@ -278,14 +399,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
 
     .date-badge {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: #0F172A;
     }
@@ -298,13 +419,13 @@
     .header-quick-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .glass-action-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
       background: rgba(255, 255, 255, 0.45);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -332,8 +453,8 @@
       background-color: #22C55E;
       border-radius: 50%;
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: 7px;
+      right: 7px;
       box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
       animation: pulse-dot 2s infinite;
     }
@@ -343,17 +464,17 @@
       50% { transform: scale(1.3); opacity: 0.8; }
     }
 
-    /* Device Card inside Header */
+    /* Device Banner */
     .device-info-banner {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .device-icon-box {
-      width: 54px;
-      height: 54px;
-      border-radius: 18px;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
       background: var(--device-card-bg);
       display: flex;
       align-items: center;
@@ -364,8 +485,8 @@
     }
 
     .device-icon-box svg {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       stroke: #FFFFFF;
       fill: none;
     }
@@ -373,11 +494,11 @@
     .device-details {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
 
     .device-id-title {
-      font-size: 19px;
+      font-size: 17px;
       font-weight: 800;
       color: #0F172A;
       letter-spacing: -0.01em;
@@ -386,48 +507,68 @@
     .device-status-pills {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .status-check-pill {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       font-size: 11px;
       font-weight: 700;
       color: #7F1D1D;
       background: rgba(255, 255, 255, 0.55);
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 999px;
       backdrop-filter: blur(4px);
     }
 
     .status-check-pill svg {
-      width: 12px;
-      height: 12px;
+      width: 11px;
+      height: 11px;
       stroke: #7F1D1D;
       stroke-width: 3;
     }
 
     /* Main Scrollable Body Content */
-    .app-main-content {
-      padding: 24px 20px 32px;
+    .app-screen-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 16px 84px;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* Section Header */
+    /* Screen Visibility Rules */
+    .ia-screen-view {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      animation: fadeInScreen 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ia-screen-view.active {
+      display: flex;
+    }
+
+    @keyframes fadeInScreen {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Common Section Header */
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .section-title {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
       color: var(--text-main);
       letter-spacing: -0.01em;
@@ -437,7 +578,7 @@
       background: none;
       border: none;
       font-family: inherit;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: #2563EB;
       cursor: pointer;
@@ -451,7 +592,7 @@
     .more-options-btn {
       background: none;
       border: none;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1;
       color: #94A3B8;
       cursor: pointer;
@@ -460,21 +601,18 @@
       letter-spacing: 2px;
     }
 
-    .more-options-btn:hover {
-      color: #0F172A;
-    }
-
     /* Infant Status Card */
     .infant-status-card {
       background: var(--card-bg);
       border-radius: var(--card-radius-lg);
-      padding: 20px;
+      padding: 18px;
       box-shadow: var(--card-shadow);
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 16px;
       border: 1px solid rgba(226, 232, 240, 0.8);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
     }
 
     .infant-status-card:hover {
@@ -483,9 +621,9 @@
     }
 
     .status-badge-icon {
-      width: 58px;
-      height: 58px;
-      border-radius: 20px;
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
       background: #00BA88;
       display: flex;
       align-items: center;
@@ -496,8 +634,8 @@
     }
 
     .status-badge-icon svg {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       fill: none;
       stroke: #FFFFFF;
       stroke-width: 3;
@@ -512,16 +650,16 @@
     }
 
     .status-headline {
-      font-size: 16.5px;
+      font-size: 16px;
       font-weight: 800;
       color: var(--text-main);
       letter-spacing: -0.01em;
     }
 
     .status-subtext {
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--text-muted);
-      line-height: 1.45;
+      line-height: 1.4;
       font-weight: 500;
     }
 
@@ -529,17 +667,17 @@
     .vitals-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 10px;
     }
 
     .vital-card {
       border-radius: var(--card-radius-lg);
-      padding: 16px 12px 18px;
+      padding: 14px 10px 16px;
       color: #FFFFFF;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 168px;
+      min-height: 162px;
       position: relative;
       overflow: hidden;
       box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.12);
@@ -568,11 +706,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .vital-name {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       letter-spacing: 0.01em;
     }
@@ -587,13 +725,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 52px;
+      height: 48px;
       width: 100%;
     }
 
     .ecg-svg {
       width: 100%;
-      height: 38px;
+      height: 34px;
       overflow: visible;
     }
 
@@ -609,20 +747,14 @@
     }
 
     @keyframes ecg-draw {
-      0% {
-        stroke-dashoffset: 220;
-      }
-      50% {
-        stroke-dashoffset: 0;
-      }
-      100% {
-        stroke-dashoffset: -220;
-      }
+      0% { stroke-dashoffset: 220; }
+      50% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -220; }
     }
 
     .activity-check-circle {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: #FFFFFF;
       display: flex;
@@ -632,8 +764,8 @@
     }
 
     .activity-check-circle svg {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       stroke: #10B981;
       stroke-width: 3.2;
       fill: none;
@@ -642,25 +774,25 @@
     .vital-bottom-metric {
       display: flex;
       align-items: baseline;
-      gap: 4px;
+      gap: 3px;
       flex-wrap: wrap;
     }
 
     .vital-value {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
       line-height: 1;
       letter-spacing: -0.02em;
     }
 
     .vital-unit {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       opacity: 0.9;
     }
 
     .vital-status-text {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
       letter-spacing: -0.01em;
     }
@@ -669,17 +801,17 @@
     .instructions-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .instruction-card {
       background: var(--card-bg);
       border-radius: var(--card-radius-md);
-      padding: 16px 18px;
+      padding: 14px 16px;
       box-shadow: var(--card-shadow);
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       border: 1px solid rgba(226, 232, 240, 0.8);
       cursor: pointer;
       transition: all 0.2s ease;
@@ -692,9 +824,9 @@
     }
 
     .instruction-icon-box {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
       background: #F1F5F9;
       display: flex;
       align-items: center;
@@ -704,8 +836,8 @@
     }
 
     .instruction-icon-box svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       stroke: currentColor;
       stroke-width: 1.8;
       fill: none;
@@ -714,35 +846,34 @@
     .instruction-details {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
     }
 
     .instruction-title {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--text-main);
       letter-spacing: -0.01em;
     }
 
     .instruction-desc {
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--text-light);
       font-weight: 500;
     }
 
-    /* Bottom Voice Advice Floating Bar */
+    /* Voice Advice Floating Bar */
     .voice-advice-bar {
-      margin-top: 6px;
       background: #0F172A;
       color: #F8FAFC;
-      border-radius: 20px;
-      padding: 14px 18px;
+      border-radius: 18px;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       cursor: pointer;
-      box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.35);
+      box-shadow: 0 8px 22px -4px rgba(15, 23, 42, 0.35);
       border: 1px solid #1E293B;
       transition: transform 0.2s ease;
     }
@@ -754,12 +885,12 @@
     .voice-bar-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .speaker-wave-btn {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       background: #2563EB;
       display: flex;
@@ -770,13 +901,13 @@
     }
 
     .speaker-wave-btn svg {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       fill: currentColor;
     }
 
     .voice-text-group h4 {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
     }
 
@@ -786,10 +917,10 @@
     }
 
     .voice-badge {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       background: rgba(255, 255, 255, 0.12);
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 999px;
       color: #38BDF8;
     }
@@ -804,9 +935,6 @@
     .state-caution .status-badge-icon {
       background: #D97706;
       box-shadow: 0 6px 16px rgba(217, 119, 6, 0.35);
-    }
-    .state-caution .status-badge-icon svg {
-      stroke: #FFFFFF;
     }
 
     /* State Variations: CRITICAL (Red) */
@@ -826,130 +954,608 @@
       50% { transform: scale(1.08); }
     }
 
-    /* Modal / Drawer for Clinical Trends */
-    .clinical-modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      z-index: 100;
-      display: none;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 0;
+    /* In-App Contextual Bottom Navigation Bar */
+    .inapp-bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #FFFFFF;
+      border-top: 1px solid rgba(226, 232, 240, 0.9);
+      padding: 8px 12px 14px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 30;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
     }
 
-    .clinical-modal-backdrop.open {
+    .nav-item-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: #64748B;
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      min-width: 60px;
+    }
+
+    .nav-item-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-item-btn:hover {
+      color: #0F172A;
+    }
+
+    .nav-item-btn.active {
+      color: #0D9488;
+    }
+
+    .nav-item-btn.active svg {
+      stroke: #0D9488;
+      transform: translateY(-2px);
+    }
+
+    .nav-item-btn.active.parent-tab {
+      color: #FF645C;
+    }
+    .nav-item-btn.active.parent-tab svg {
+      stroke: #FF645C;
+    }
+
+    .nav-item-btn.active.clinical-tab {
+      color: #2563EB;
+    }
+    .nav-item-btn.active.clinical-tab svg {
+      stroke: #2563EB;
+    }
+
+    /* Generic Card Styles for Expanded IA Screens */
+    .ui-card {
+      background: var(--card-bg);
+      border-radius: var(--card-radius-lg);
+      padding: 18px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .ui-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ui-card-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ui-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    .badge-teal { background: #CCFBF1; color: #0F766E; }
+    .badge-blue { background: #E0F2FE; color: #0369A1; }
+    .badge-amber { background: #FEF3C7; color: #B45309; }
+    .badge-rose { background: #FFE4E6; color: #BE123C; }
+    .badge-gray { background: #F1F5F9; color: #475569; }
+
+    /* Forms, Toggles & Buttons */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .form-input {
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-main);
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: #2563EB;
+      background: #FFFFFF;
+    }
+
+    .ui-button {
+      background: #0F172A;
+      color: #FFFFFF;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .ui-button:hover {
+      background: #1E293B;
+      transform: translateY(-1px);
+    }
+
+    .ui-button:active {
+      transform: scale(0.98);
+    }
+
+    .ui-button.primary-teal {
+      background: #0D9488;
+    }
+    .ui-button.primary-teal:hover {
+      background: #0F766E;
+    }
+
+    .ui-button.primary-blue {
+      background: #2563EB;
+    }
+    .ui-button.primary-blue:hover {
+      background: #1D4ED8;
+    }
+
+    .ui-button.secondary {
+      background: #F1F5F9;
+      color: #334155;
+      border: 1px solid #CBD5E1;
+    }
+    .ui-button.secondary:hover {
+      background: #E2E8F0;
+      color: #0F172A;
+    }
+
+    .ui-button.emergency {
+      background: #DC2626;
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
+    }
+    .ui-button.emergency:hover {
+      background: #B91C1C;
+    }
+
+    /* Toggle Switch */
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #F1F5F9;
+    }
+
+    .switch-row:last-child {
+      border-bottom: none;
+    }
+
+    .switch-info h5 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .switch-info p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .toggle-pill {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: #CBD5E1;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .toggle-pill.checked {
+      background: #0D9488;
+    }
+
+    .toggle-pill.checked.blue {
+      background: #2563EB;
+    }
+
+    .toggle-circle {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: #FFFFFF;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toggle-pill.checked .toggle-circle {
+      transform: translateX(20px);
+    }
+
+    /* Ward Overview Crib Grid */
+    .ward-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .crib-card {
+      background: #FFFFFF;
+      border-radius: var(--card-radius-md);
+      padding: 12px;
+      border: 1.5px solid #E2E8F0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .crib-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -2px rgba(15, 23, 42, 0.08);
+      border-color: #94A3B8;
+    }
+
+    .crib-card.critical {
+      border-color: #F43F5E;
+      background: #FFF1F2;
+    }
+
+    .crib-card.caution {
+      border-color: #F59E0B;
+      background: #FFFBEB;
+    }
+
+    .crib-card.stable {
+      border-color: #10B981;
+      background: #F0FDF4;
+    }
+
+    .crib-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .crib-id {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748B;
+      text-transform: uppercase;
+    }
+
+    .crib-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .crib-metrics {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #475569;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 5px 8px;
+      border-radius: 8px;
+    }
+
+    /* Clinical Patient Detail 6-System Checklist */
+    .derangement-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .system-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border: 1px solid #E2E8F0;
+      background: #F8FAFC;
+    }
+
+    .system-item.deranged {
+      background: #FEF2F2;
+      border-color: #FECDD3;
+      color: #9F1239;
+    }
+
+    .system-item.normal {
+      background: #F0FDF4;
+      border-color: #BBF7D0;
+      color: #166534;
+    }
+
+    /* Timeline Event Log */
+    .timeline-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: #E2E8F0;
+    }
+
+    .timeline-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: #FFFFFF;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid #E2E8F0;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 14px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #0D9488;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 0 0 2px #0D9488;
+    }
+
+    .timeline-item.caution::before {
+      background: #F59E0B;
+      box-shadow: 0 0 0 2px #F59E0B;
+    }
+
+    .timeline-item.critical::before {
+      background: #E11D48;
+      box-shadow: 0 0 0 2px #E11D48;
+    }
+
+    .timeline-time {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94A3B8;
+    }
+
+    .timeline-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .timeline-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Interactive Visual IA Map Modal / Drawer */
+    .ia-map-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 15, 25, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .ia-map-backdrop.open {
       display: flex;
     }
 
-    .clinical-drawer {
+    .ia-map-modal {
       background: #0F172A;
       color: #F8FAFC;
       width: 100%;
-      max-width: 480px;
-      border-top-left-radius: 32px;
-      border-top-right-radius: 32px;
+      max-width: 960px;
+      border-radius: 28px;
+      border: 1px solid #334155;
+      box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.6);
+      padding: 24px;
       max-height: 90vh;
       overflow-y: auto;
-      padding: 24px 22px 36px;
-      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4);
-      border-top: 1px solid #334155;
-      animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes slide-up {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-
-    .drawer-handle {
-      width: 44px;
-      height: 5px;
-      background: #475569;
-      border-radius: 999px;
-      margin: 0 auto 20px;
-    }
-
-    .drawer-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .drawer-header h3 {
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .drawer-close-btn {
-      background: #1E293B;
-      border: none;
-      color: #94A3B8;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    .drawer-close-btn:hover {
-      color: #FFFFFF;
-      background: #334155;
-    }
-
-    .trends-grid {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 20px;
+      animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .trend-card {
-      background: #1E293B;
-      border-radius: 18px;
-      padding: 16px;
-      border: 1px solid #334155;
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    .trend-title-row {
+    .ia-map-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      border-bottom: 1px solid #1E293B;
+      padding-bottom: 14px;
     }
 
-    .trend-title {
+    .ia-map-header h3 {
+      font-size: 20px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ia-tree-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding: 10px 0;
+    }
+
+    .ia-root-node {
+      background: #FFFFFF;
+      color: #0F172A;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 10px 28px;
+      border-radius: 12px;
+      border: 2px solid #334155;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .ia-branches-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    .ia-branch-column {
+      background: #1E293B;
+      border: 1.5px solid #334155;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    .ia-branch-title {
       font-size: 14px;
-      font-weight: 700;
-      color: #E2E8F0;
+      font-weight: 800;
+      text-align: center;
+      color: #F8FAFC;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #334155;
     }
 
-    .trend-current-badge {
+    .ia-node-btn {
+      background: #0F172A;
+      border: 1.5px solid #334155;
+      color: #F8FAFC;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .ia-node-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      border-color: #38BDF8;
+    }
+
+    /* Node color distinctions matching user diagram: Gray = current design · Teal = recommended addition */
+    .ia-node-btn.node-gray {
+      background: #E2E8F0;
+      color: #1E293B;
+      border-color: #CBD5E1;
+    }
+
+    .ia-node-btn.node-teal {
+      background: #CCFBF1;
+      color: #0F766E;
+      border-color: #2DD4BF;
+    }
+
+    .ia-node-btn.active-node {
+      outline: 3px solid #38BDF8;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
+      transform: scale(1.02);
+    }
+
+    .ia-legend-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
       font-size: 12px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 6px;
+      color: #94A3B8;
+      border-top: 1px solid #1E293B;
+      padding-top: 14px;
     }
 
-    .badge-blue { background: rgba(37, 99, 235, 0.2); color: #60A5FA; }
-    .badge-red { background: rgba(239, 68, 68, 0.2); color: #F87171; }
-    .badge-teal { background: rgba(16, 185, 129, 0.2); color: #34D399; }
-
-    .chart-container {
-      width: 100%;
-      height: 80px;
-      margin-top: 10px;
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
     }
 
-    .chart-svg {
-      width: 100%;
-      height: 100%;
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
     }
+
+    .swatch-gray { background: #E2E8F0; border: 1px solid #94A3B8; }
+    .swatch-teal { background: #CCFBF1; border: 1px solid #2DD4BF; }
 
     /* Toast notifications */
     .toast-msg {
@@ -962,13 +1568,13 @@
       border: 1px solid #334155;
       padding: 12px 24px;
       border-radius: 999px;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       opacity: 0;
       pointer-events: none;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 200;
+      z-index: 300;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -979,10 +1585,10 @@
       opacity: 1;
     }
 
-    /* Responsive */
+    /* Responsive adjustments */
     @media (max-width: 640px) {
       .studio-bar {
-        padding: 12px 16px;
+        padding: 10px 14px;
       }
       .app-viewport-wrapper {
         padding: 0;
@@ -991,6 +1597,10 @@
         border-radius: 0;
         box-shadow: none;
         max-width: 100%;
+        height: 100vh;
+      }
+      .ia-branches-row {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -1003,25 +1613,54 @@
       <div class="studio-logo-icon">SC</div>
       <div class="studio-title-group">
         <h1>SepCare Platform</h1>
-        <span>Early Neonatal Sepsis Detection System</span>
+        <span>Early Neonatal Sepsis Detection System • Complete IA Flow</span>
       </div>
     </a>
 
-    <!-- Interactive Triage State Switcher -->
+    <!-- Interactive Triage & IA Controls -->
     <div class="studio-controls">
+      
+      <!-- Interactive Information Architecture Map Button -->
+      <button class="pill-btn ia-map-btn" onclick="openIaMapModal()" title="View Complete Information Architecture Tree">
+        🗺️ IA Flow Map
+      </button>
+
+      <!-- Quick Screen Selector -->
+      <select class="studio-quick-select" id="studioQuickSelect" onchange="quickJumpScreen(this.value)" title="Quick-jump to any IA node">
+        <optgroup label="1. Setup & account">
+          <option value="setup-login">1.1 Login & role</option>
+          <option value="setup-pairing">1.2 Device pairing</option>
+          <option value="setup-notifications">1.3 Notifications</option>
+          <option value="setup-help">1.4 Account & help</option>
+        </optgroup>
+        <optgroup label="2. Parent mode">
+          <option value="parent-status" selected>2.1 Infant status (Current UI)</option>
+          <option value="parent-instructions">2.2 Instructions (Current UI)</option>
+          <option value="parent-alerts">2.3 Alert history (New)</option>
+          <option value="parent-band">2.4 Band settings (New)</option>
+        </optgroup>
+        <optgroup label="3. Clinical mode">
+          <option value="clinical-ward">3.1 Ward overview (New)</option>
+          <option value="clinical-patient">3.2 Patient detail (New)</option>
+          <option value="clinical-escalation">3.3 Escalation log (New)</option>
+          <option value="clinical-staff">3.4 Staff settings (New)</option>
+        </optgroup>
+      </select>
+
+      <!-- Triage Switcher -->
       <div class="control-pill-group" role="group" aria-label="Clinical Condition State">
         <button class="pill-btn active" id="stateBtnNormal" onclick="setAppState('normal')">
-          <span>🟢</span> Normal (Resting)
+          <span>🟢</span> Normal
         </button>
         <button class="pill-btn" id="stateBtnCaution" onclick="setAppState('caution')">
-          <span>🟡</span> Caution Alert
+          <span>🟡</span> Caution
         </button>
         <button class="pill-btn" id="stateBtnCritical" onclick="setAppState('critical')">
-          <span>🔴</span> Critical Emergency
+          <span>🔴</span> Critical
         </button>
       </div>
 
-      <!-- View Controls -->
+      <!-- Viewport & Canvas Controls -->
       <div class="control-pill-group" role="group" aria-label="Viewport Controls">
         <button class="pill-btn active" id="viewBtnFrame" onclick="toggleDeviceFrame(false)">
           📱 Frame
@@ -1037,7 +1676,7 @@
 
     <div class="studio-links">
       <a href="design-system.html" class="text-link">
-        Figma Wireframes & Spec &rarr;
+        Figma Specs &rarr;
       </a>
     </div>
   </header>
@@ -1047,14 +1686,30 @@
     <div class="device-shell" id="deviceShell">
       <div class="phone-screen" id="phoneScreen">
 
-        <!-- Salmon / Coral Gradient Header -->
+        <!-- Top Segmented Mode Control (Inside Screen) -->
+        <div class="inapp-mode-bar">
+          <button class="mode-tab-btn mode-setup" id="topModeBtnSetup" onclick="switchMode('setup')">
+            ⚙️ Setup
+          </button>
+          <button class="mode-tab-btn active mode-parent" id="topModeBtnParent" onclick="switchMode('parent')">
+            👶 Parent Mode
+          </button>
+          <button class="mode-tab-btn mode-clinical" id="topModeBtnClinical" onclick="switchMode('clinical')">
+            🩺 Clinical
+          </button>
+          <button class="ia-tree-trigger-btn" onclick="openIaMapModal()" title="View IA Diagram">
+            🗺️
+          </button>
+        </div>
+
+        <!-- Dynamic Header Section -->
         <header class="app-header" id="appHeader">
           
           <!-- iOS Status Bar -->
           <div class="status-bar">
             <span class="status-time" id="liveTime">9:41</span>
             <div class="status-icons">
-              <!-- Cellular 4-bars -->
+              <!-- Cellular -->
               <svg width="17" height="11" viewBox="0 0 17 11">
                 <rect x="0" y="8" width="3" height="3" rx="1"></rect>
                 <rect x="4.5" y="5.5" width="3" height="5.5" rx="1"></rect>
@@ -1089,8 +1744,8 @@
             </div>
 
             <div class="header-quick-actions">
-              <!-- Clinical Trends / Spectrum Button -->
-              <button class="glass-action-btn" onclick="openClinicalModal()" title="View 24h Clinical Trends">
+              <!-- Clinical Trends / Telemetry Button -->
+              <button class="glass-action-btn" onclick="navigateToScreen('clinical-patient')" title="Open Clinical Patient Detail">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <rect x="4" y="12" width="3.5" height="8" rx="1.5"></rect>
                   <rect x="10.5" y="6" width="3.5" height="14" rx="1.5"></rect>
@@ -1099,7 +1754,7 @@
               </button>
               
               <!-- Wearable Device Indicator Button -->
-              <button class="glass-action-btn" onclick="showToast('Wearable Band synced • Battery 88% • Signal Excellent')" title="Sensor Connectivity">
+              <button class="glass-action-btn" onclick="navigateToScreen('parent-band')" title="View Flexi-Cuff Hardware Telemetry">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="7" y="6" width="10" height="12" rx="3"></rect>
                   <path d="M9 6V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"></path>
@@ -1112,7 +1767,7 @@
 
           <!-- Device SKU Banner -->
           <div class="device-info-banner">
-            <div class="device-icon-box">
+            <div class="device-icon-box" id="deviceIconBox">
               <svg viewBox="0 0 24 24">
                 <rect x="7" y="6" width="10" height="12" rx="3" stroke-width="2"></rect>
                 <path d="M10 2h4v4h-4zM10 18h4v4h-4z" stroke-width="1.8"></path>
@@ -1120,15 +1775,15 @@
               </svg>
             </div>
             <div class="device-details">
-              <div class="device-id-title">Device-SKU-1234</div>
+              <div class="device-id-title" id="headerDeviceTitle">Flexi-Cuff-8842</div>
               <div class="device-status-pills">
-                <span class="status-check-pill">
+                <span class="status-check-pill" id="headerPillMonitor">
                   <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  Monitor Active
+                  Triage Active
                 </span>
-                <span class="status-check-pill">
+                <span class="status-check-pill" id="headerPillBle">
                   <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  Wearable Connected
+                  BLE 5.2 Connected
                 </span>
               </div>
             </div>
@@ -1136,113 +1791,362 @@
 
         </header>
 
-        <!-- Main Body Content -->
-        <div class="app-main-content">
+        <!-- Main Scroll Area with 12 Dedicated IA Screens -->
+        <div class="app-screen-scroll" id="appScreenScroll">
 
-          <!-- Infant Status Section -->
-          <section>
+          <!-- ========================================== -->
+          <!-- BRANCH 1: SETUP & ACCOUNT                  -->
+          <!-- ========================================== -->
+
+          <!-- Screen 1.1: Login & Role -->
+          <section class="ia-screen-view" id="screen-setup-login">
             <div class="section-header">
-              <h2 class="section-title">Infant Status</h2>
-              <button class="more-options-btn" onclick="showToast('Status Options: Log diaper change, temperature calibration')" title="Options">•••</button>
+              <h2 class="section-title">Login & Role Assignment</h2>
+              <span class="ui-badge badge-teal">Setup Flow</span>
             </div>
 
-            <div class="infant-status-card" id="statusCard" onclick="openClinicalModal()">
-              <div class="status-badge-icon" id="statusIcon">
-                <svg viewBox="0 0 24 24">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
+            <div class="ui-card">
+              <h4 class="form-label">Select Active User Role</h4>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <button class="ui-button primary-teal" id="roleBtnParent" onclick="selectUserRole('parent')">
+                  👶 Caregiver
+                </button>
+                <button class="ui-button secondary" id="roleBtnClinician" onclick="selectUserRole('clinical')">
+                  🩺 Clinician / ASHA
+                </button>
               </div>
-              <div class="status-content">
-                <h3 class="status-headline" id="statusTitle">Baby is Resting Safely</h3>
-                <p class="status-subtext" id="statusDescription">Based on the data, baby's health status is above average.</p>
+
+              <div class="form-group" style="margin-top:6px;">
+                <label class="form-label">Language (Regional Audio-First)</label>
+                <select class="form-input" id="langSelect" onchange="showToast('Language updated to ' + this.options[this.selectedIndex].text)">
+                  <option value="en">English (India)</option>
+                  <option value="hi" selected>Hindi (हिंदी)</option>
+                  <option value="mr">Marathi (मराठी)</option>
+                  <option value="bn">Bengali (বাংলা)</option>
+                  <option value="ta">Tamil (தமிழ்)</option>
+                  <option value="te">Telugu (తెలుగు)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Phone Number / ASHA Mobile</label>
+                <input type="tel" class="form-input" value="+91 98765 43210" placeholder="+91">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">4-Digit Security PIN</label>
+                <input type="password" class="form-input" value="1234" placeholder="••••">
+              </div>
+
+              <button class="ui-button primary-teal" onclick="showToast('Authenticated • Session Token Active', '✅')">
+                Sign In & Sync Profile
+              </button>
+
+              <div style="display:flex; justify-content:space-between; font-size:12px; color:#64748B;">
+                <span>Offline local mode: Available</span>
+                <span style="color:#0D9488; font-weight:700; cursor:pointer;" onclick="showToast('OTP re-sent via SMS')">Resend OTP</span>
               </div>
             </div>
           </section>
 
-          <!-- Vitals Section -->
-          <section>
+          <!-- Screen 1.2: Device Pairing -->
+          <section class="ia-screen-view" id="screen-setup-pairing">
             <div class="section-header">
-              <h2 class="section-title">Vitals</h2>
-              <button class="section-action" onclick="openClinicalModal()">See All</button>
+              <h2 class="section-title">Device Pairing & Contact</h2>
+              <span class="ui-badge badge-teal">BLE 5.2</span>
             </div>
 
-            <div class="vitals-grid">
-              <!-- Pulse Metric Card -->
-              <div class="vital-card pulse" onclick="openClinicalModal('pulse')">
-                <div class="vital-top-row">
-                  <span class="vital-name">Pulse</span>
-                  <svg class="vital-heart-icon" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-                  </svg>
-                </div>
-                
-                <div class="vital-center-visual">
-                  <!-- Animated ECG Rhythm -->
-                  <svg class="ecg-svg" viewBox="0 0 100 40">
-                    <path class="ecg-path" d="M0,20 L25,20 L30,12 L35,28 L40,6 L45,34 L50,16 L55,22 L60,20 L100,20" />
-                  </svg>
-                </div>
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <span class="ui-card-title">📡 Discovered Flexi-Cuffs</span>
+                <button class="ui-button secondary" style="padding:6px 10px; font-size:11px;" onclick="showToast('Scanning for nearby cuffs...')">
+                  🔄 Scan
+                </button>
+              </div>
 
-                <div class="vital-bottom-metric">
-                  <span class="vital-value" id="pulseValue">78.2</span>
-                  <span class="vital-unit">BPM</span>
+              <!-- Device 1: Connected -->
+              <div style="background:#F0FDF4; border:1.5px solid #86EFAC; border-radius:14px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-weight:800; font-size:14px; color:#065F46;">SepCare-Cuff-8842</div>
+                  <div style="font-size:11.5px; color:#047857;">Signal: -58 dBm (Strong) • Battery: 88%</div>
+                </div>
+                <span class="ui-badge badge-teal" style="background:#059669; color:#FFFFFF;">Connected</span>
+              </div>
+
+              <!-- Device 2: Nearby -->
+              <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:14px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-weight:700; font-size:14px; color:#334155;">SepCare-Cuff-1049</div>
+                  <div style="font-size:11.5px; color:#64748B;">Signal: -84 dBm (Nearby Ward Crib)</div>
+                </div>
+                <button class="ui-button secondary" style="padding:6px 12px; font-size:11px;" onclick="showToast('Pairing with Cuff-1049...')">Pair</button>
+              </div>
+
+              <!-- Placement instructions card -->
+              <div style="background:#FEF3C7; border:1px solid #FCD34D; border-radius:14px; padding:12px; font-size:12.5px; color:#92400E; display:flex; gap:10px; align-items:flex-start;">
+                <span style="font-size:18px;">💡</span>
+                <div>
+                  <strong>Placement Checklist:</strong>
+                  Wrap around medial ankle. Keep 1 finger gap looseness. Optical sensor must rest flush against skin.
                 </div>
               </div>
 
-              <!-- Temperature Metric Card -->
-              <div class="vital-card temp" onclick="openClinicalModal('temp')">
-                <div class="vital-top-row">
-                  <span class="vital-name">Temp</span>
-                  <svg class="vital-heart-icon" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-                  </svg>
-                </div>
+              <button class="ui-button primary-teal" onclick="testSkinContact()">
+                ⚡ Test Live Skin Contact & Vibrate
+              </button>
+            </div>
+          </section>
 
-                <div class="vital-center-visual">
-                  <svg class="ecg-svg" viewBox="0 0 100 40">
-                    <path class="ecg-path" d="M0,20 Q15,10 30,20 T60,20 T90,20 L100,20" />
-                  </svg>
-                </div>
+          <!-- Screen 1.3: Notifications -->
+          <section class="ia-screen-view" id="screen-setup-notifications">
+            <div class="section-header">
+              <h2 class="section-title">Notification & Escalation Rules</h2>
+              <span class="ui-badge badge-teal">Alerts</span>
+            </div>
 
-                <div class="vital-bottom-metric">
-                  <span class="vital-value" id="tempValue">98.6</span>
-                  <span class="vital-unit">°F</span>
+            <div class="ui-card">
+              <div class="switch-row">
+                <div class="switch-info">
+                  <h5>Critical Sepsis Alarm</h5>
+                  <p>Loud override sound if temperature or HRV derangement occurs</p>
+                </div>
+                <div class="toggle-pill checked" onclick="toggleSwitch(this)">
+                  <div class="toggle-circle"></div>
                 </div>
               </div>
 
-              <!-- Activity Metric Card -->
-              <div class="vital-card activity" onclick="openClinicalModal('activity')">
-                <div class="vital-top-row">
-                  <span class="vital-name">Activity</span>
-                  <svg class="vital-heart-icon" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+              <div class="switch-row">
+                <div class="switch-info">
+                  <h5>Caution Chimes</h5>
+                  <p>Repeat audible guidance every 30 mins during Amber state</p>
+                </div>
+                <div class="toggle-pill checked" onclick="toggleSwitch(this)">
+                  <div class="toggle-circle"></div>
+                </div>
+              </div>
+
+              <div class="switch-row">
+                <div class="switch-info">
+                  <h5>Band Detached Alert</h5>
+                  <p>Immediate phone vibration if cuff slips off baby</p>
+                </div>
+                <div class="toggle-pill checked" onclick="toggleSwitch(this)">
+                  <div class="toggle-circle"></div>
+                </div>
+              </div>
+
+              <div class="switch-row">
+                <div class="switch-info">
+                  <h5>Auto-Notify ASHA Worker</h5>
+                  <p>Send emergency SMS with GPS link on Critical alert</p>
+                </div>
+                <div class="toggle-pill checked" onclick="toggleSwitch(this)">
+                  <div class="toggle-circle"></div>
+                </div>
+              </div>
+
+              <div class="switch-row">
+                <div class="switch-info">
+                  <h5>Night Quiet Hours (10 PM - 6 AM)</h5>
+                  <p>Mute routine tips; emergency vital alarms remain active</p>
+                </div>
+                <div class="toggle-pill" onclick="toggleSwitch(this)">
+                  <div class="toggle-circle"></div>
+                </div>
+              </div>
+
+              <button class="ui-button secondary" onclick="showToast('Alarm test sound played 🔔')">
+                🔔 Test Sound Pattern
+              </button>
+            </div>
+          </section>
+
+          <!-- Screen 1.4: Account & Help -->
+          <section class="ia-screen-view" id="screen-setup-help">
+            <div class="section-header">
+              <h2 class="section-title">Account & Caregiver Support</h2>
+              <span class="ui-badge badge-teal">Help</span>
+            </div>
+
+            <!-- Profile Info Card -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <span class="ui-card-title">👶 Registered Infant</span>
+                <span class="ui-badge badge-blue">ABDM Linked</span>
+              </div>
+              <div style="font-size:13.5px; color:#1E293B; line-height:1.5;">
+                <strong>Baby Aarav</strong> • 12 Days Old<br>
+                Birth Weight: 2.75 kg • Blood Group: AB+<br>
+                Mother: Sunita Devi • PHC Kalyanpur Rural
+              </div>
+            </div>
+
+            <!-- One-tap Emergency Helplines -->
+            <div class="ui-card">
+              <span class="ui-card-title">📞 Quick Healthcare Contacts</span>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <button class="ui-button secondary" style="justify-content:space-between;" onclick="showToast('Calling ASHA Smt. Sunita (+91 98112 34567)...')">
+                  <span>👩‍⚕️ ASHA Smt. Sunita Devi</span>
+                  <span style="color:#0D9488; font-weight:800;">Call &rarr;</span>
+                </button>
+                <button class="ui-button secondary" style="justify-content:space-between;" onclick="showToast('Calling PHC Kalyanpur 24x7 desk...')">
+                  <span>🏥 PHC Kalyanpur 24x7 Help</span>
+                  <span style="color:#2563EB; font-weight:800;">Call &rarr;</span>
+                </button>
+                <button class="ui-button emergency" style="justify-content:space-between;" onclick="showToast('Dialing 108 Neonatal Emergency Ambulance...')">
+                  <span>🚑 108 Emergency Ambulance</span>
+                  <span style="font-weight:800;">Emergency &rarr;</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tutorials -->
+            <div class="ui-card">
+              <span class="ui-card-title">📖 Visual Care Guides</span>
+              <div style="display:flex; flex-direction:column; gap:6px; font-size:13px;">
+                <div style="padding:8px 0; border-bottom:1px solid #F1F5F9; cursor:pointer;" onclick="showToast('Opening Kangaroo Mother Care guide')">
+                  🦘 <strong>Kangaroo Mother Care (KMC)</strong> — Skin-to-skin guide
+                </div>
+                <div style="padding:8px 0; border-bottom:1px solid #F1F5F9; cursor:pointer;" onclick="showToast('Opening Cuff Cleaning manual')">
+                  🧼 <strong>Cuff Cleaning</strong> — Alcohol swab & maintenance
+                </div>
+                <div style="padding:8px 0; cursor:pointer;" onclick="showToast('Opening Sepsis Early Signs manual')">
+                  ⚠️ <strong>Recognizing Danger Signs</strong> — Fever, refusal to feed, lethargy
+                </div>
+              </div>
+            </div>
+          </section>
+
+
+          <!-- ========================================== -->
+          <!-- BRANCH 2: PARENT MODE                      -->
+          <!-- ========================================== -->
+
+          <!-- Screen 2.1: Infant Status (Current UI from Main) -->
+          <section class="ia-screen-view active" id="screen-parent-status">
+            
+            <!-- Infant Status Section -->
+            <div>
+              <div class="section-header">
+                <h2 class="section-title">Infant Status</h2>
+                <button class="more-options-btn" onclick="showToast('Status Options: Log diaper change, temperature calibration')" title="Options">•••</button>
+              </div>
+
+              <div class="infant-status-card" id="statusCard" onclick="navigateToScreen('clinical-patient')">
+                <div class="status-badge-icon" id="statusIcon">
+                  <svg viewBox="0 0 24 24">
+                    <polyline points="20 6 9 17 4 12"></polyline>
                   </svg>
                 </div>
+                <div class="status-content">
+                  <h3 class="status-headline" id="statusTitle">Baby is Resting Safely</h3>
+                  <p class="status-subtext" id="statusDescription">Based on the data, baby's health status is above average.</p>
+                </div>
+              </div>
+            </div>
 
-                <div class="vital-center-visual">
-                  <div class="activity-check-circle" id="activityCircle">
-                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <!-- Vitals Section -->
+            <div>
+              <div class="section-header">
+                <h2 class="section-title">Vitals</h2>
+                <button class="section-action" onclick="navigateToScreen('clinical-patient')">See All</button>
+              </div>
+
+              <div class="vitals-grid">
+                <!-- Pulse Metric Card -->
+                <div class="vital-card pulse" onclick="navigateToScreen('clinical-patient')">
+                  <div class="vital-top-row">
+                    <span class="vital-name">Pulse</span>
+                    <svg class="vital-heart-icon" viewBox="0 0 24 24">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                    </svg>
+                  </div>
+                  
+                  <div class="vital-center-visual">
+                    <svg class="ecg-svg" viewBox="0 0 100 40">
+                      <path class="ecg-path" d="M0,20 L25,20 L30,12 L35,28 L40,6 L45,34 L50,16 L55,22 L60,20 L100,20" />
+                    </svg>
+                  </div>
+
+                  <div class="vital-bottom-metric">
+                    <span class="vital-value" id="pulseValue">78.2</span>
+                    <span class="vital-unit">BPM</span>
                   </div>
                 </div>
 
-                <div class="vital-bottom-metric">
-                  <span class="vital-status-text" id="activityValue">Healthy</span>
+                <!-- Temperature Metric Card -->
+                <div class="vital-card temp" onclick="navigateToScreen('clinical-patient')">
+                  <div class="vital-top-row">
+                    <span class="vital-name">Temp</span>
+                    <svg class="vital-heart-icon" viewBox="0 0 24 24">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                    </svg>
+                  </div>
+
+                  <div class="vital-center-visual">
+                    <svg class="ecg-svg" viewBox="0 0 100 40">
+                      <path class="ecg-path" d="M0,20 Q15,10 30,20 T60,20 T90,20 L100,20" />
+                    </svg>
+                  </div>
+
+                  <div class="vital-bottom-metric">
+                    <span class="vital-value" id="tempValue">98.6</span>
+                    <span class="vital-unit">°F</span>
+                  </div>
+                </div>
+
+                <!-- Activity Metric Card -->
+                <div class="vital-card activity" onclick="navigateToScreen('clinical-patient')">
+                  <div class="vital-top-row">
+                    <span class="vital-name">Activity</span>
+                    <svg class="vital-heart-icon" viewBox="0 0 24 24">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                    </svg>
+                  </div>
+
+                  <div class="vital-center-visual">
+                    <div class="activity-check-circle" id="activityCircle">
+                      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                  </div>
+
+                  <div class="vital-bottom-metric">
+                    <span class="vital-status-text" id="activityValue">Healthy</span>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <!-- Voice Advice Floating Bar -->
+            <div class="voice-advice-bar" onclick="playVoiceAdvice()">
+              <div class="voice-bar-left">
+                <div class="speaker-wave-btn">
+                  <svg viewBox="0 0 24 24">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"></path>
+                  </svg>
+                </div>
+                <div class="voice-text-group">
+                  <h4 id="voiceBarTitle">Tap for Voice Advice</h4>
+                  <p id="voiceBarSubtitle">Audio summary for caregiver in Hindi / English</p>
+                </div>
+              </div>
+              <span class="voice-badge">🔊 Listen</span>
+            </div>
+
           </section>
 
-          <!-- Instructions Section -->
-          <section>
+          <!-- Screen 2.2: Instructions (Current UI from Main) -->
+          <section class="ia-screen-view" id="screen-parent-instructions">
             <div class="section-header">
-              <h2 class="section-title">Instructions</h2>
+              <h2 class="section-title">Caregiver Instructions</h2>
+              <span class="ui-badge badge-teal">Daily Routine</span>
             </div>
 
             <div class="instructions-list" id="instructionsList">
               <!-- Item 1: Feeding -->
               <div class="instruction-card" onclick="showToast('Feeding guide: Ensure 8-12 feeds per 24 hours')">
                 <div class="instruction-icon-box">
-                  <!-- Baby Bottle Icon -->
                   <svg viewBox="0 0 24 24">
                     <path d="M10 2h4v3h-4z"></path>
                     <path d="M8 8h8v12a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V8z"></path>
@@ -1259,7 +2163,6 @@
               <!-- Item 2: Warmth -->
               <div class="instruction-card" onclick="showToast('Kangaroo Mother Care (KMC) recommended for temperature stability')">
                 <div class="instruction-icon-box">
-                  <!-- Swaddled Baby / Warmth Icon -->
                   <svg viewBox="0 0 24 24">
                     <circle cx="12" cy="8" r="4"></circle>
                     <path d="M6 21v-2a6 6 0 0 1 12 0v2"></path>
@@ -1275,7 +2178,6 @@
               <!-- Item 3: Ankle Band -->
               <div class="instruction-card" onclick="showToast('Band fit: 1 finger looseness under the silicone band')">
                 <div class="instruction-icon-box">
-                  <!-- Ankle Band / Sensor Icon -->
                   <svg viewBox="0 0 24 24">
                     <rect x="7" y="6" width="10" height="12" rx="3"></rect>
                     <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path>
@@ -1288,98 +2190,596 @@
                 </div>
               </div>
             </div>
+
+            <!-- Immediate Action Help -->
+            <div class="ui-card" style="background:#F0FDF4; border-color:#BBF7D0;">
+              <span class="ui-card-title" style="color:#166534;">🌟 Caregiver Best Practices</span>
+              <p style="font-size:12.5px; color:#14532D; line-height:1.5;">
+                Continuous monitoring works best when skin contact is maintained. If the band turns amber or red, listen to the audio advice immediately and consult your ASHA worker.
+              </p>
+            </div>
           </section>
 
-          <!-- Audio / Voice Guidance Hero Bar (Dual-Tier Audio-First rule) -->
-          <div class="voice-advice-bar" onclick="playVoiceAdvice()">
-            <div class="voice-bar-left">
-              <div class="speaker-wave-btn">
-                <svg viewBox="0 0 24 24">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"></path>
-                </svg>
+          <!-- Screen 2.3: Alert History (New Addition) -->
+          <section class="ia-screen-view" id="screen-parent-alerts">
+            <div class="section-header">
+              <h2 class="section-title">Alert & Event History</h2>
+              <span class="ui-badge badge-teal">Past 48h</span>
+            </div>
+
+            <!-- Severity Filter Chips -->
+            <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:4px;">
+              <button class="pill-btn active" style="background:#0F172A; color:#FFFFFF; font-size:11px;" onclick="filterAlerts('all')">All (4)</button>
+              <button class="pill-btn" style="background:#F1F5F9; color:#475569; font-size:11px;" onclick="filterAlerts('caution')">Caution (1)</button>
+              <button class="pill-btn" style="background:#F1F5F9; color:#475569; font-size:11px;" onclick="filterAlerts('critical')">Critical (1)</button>
+              <button class="pill-btn" style="background:#F1F5F9; color:#475569; font-size:11px;" onclick="filterAlerts('resolved')">Resolved (2)</button>
+            </div>
+
+            <!-- Event Timeline List -->
+            <div class="timeline-container">
+              
+              <div class="timeline-item" data-type="resolved">
+                <span class="timeline-time">Today • 04:10 AM</span>
+                <div class="timeline-title">🟢 Resting Vitals Stable</div>
+                <div class="timeline-desc">Heart rate 78.2 BPM, Core Temp 98.6°F. Normal telemetry.</div>
               </div>
-              <div class="voice-text-group">
-                <h4 id="voiceBarTitle">Tap for Voice Advice</h4>
-                <p id="voiceBarSubtitle">Audio summary for caregiver in Hindi / English</p>
+
+              <div class="timeline-item caution" data-type="caution">
+                <span class="timeline-time">Yesterday • 10:45 PM</span>
+                <div class="timeline-title">🟡 Slight Temperature Rise (99.8°F)</div>
+                <div class="timeline-desc">Caution alerted for 25 mins. Caregiver offered feeding & adjusted swaddle blanket. Returned to baseline.</div>
+              </div>
+
+              <div class="timeline-item critical" data-type="critical">
+                <span class="timeline-time">14 Aug • 08:15 PM</span>
+                <div class="timeline-title">🔴 Transient HRV Deceleration</div>
+                <div class="timeline-desc">Sensor flagged reduced variability. ASHA Smt. Sunita notified via SMS. Re-check normal at 08:45 PM.</div>
+              </div>
+
+              <div class="timeline-item" data-type="resolved">
+                <span class="timeline-time">13 Aug • 02:30 PM</span>
+                <div class="timeline-title">ℹ️ Band Detached (Diaper Change)</div>
+                <div class="timeline-desc">Cuff removed for 8 minutes. Re-attached with solid skin contact.</div>
+              </div>
+
+            </div>
+
+            <button class="ui-button primary-teal" onclick="showToast('Exporting 48h Alert Summary to WhatsApp...', '📤')">
+              📤 Share Summary with ASHA / Doctor
+            </button>
+          </section>
+
+          <!-- Screen 2.4: Band Settings (New Addition) -->
+          <section class="ia-screen-view" id="screen-parent-band">
+            <div class="section-header">
+              <h2 class="section-title">Band Settings & Diagnostics</h2>
+              <span class="ui-badge badge-teal">Hardware</span>
+            </div>
+
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <span class="ui-card-title">🔋 Battery & Hardware Health</span>
+                <span class="ui-badge badge-teal">88% Power</span>
+              </div>
+              <div style="font-size:13px; color:#475569;">
+                Continuous runtime left: <strong>~42 Hours</strong><br>
+                Firmware: SepCare OS v2.4.1 (Stable)<br>
+                BLE RSSI: -58 dBm (Strong)
               </div>
             </div>
-            <span class="voice-badge">🔊 Listen</span>
-          </div>
+
+            <!-- Skin Contact Impedance -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <span class="ui-card-title">🩺 Sensor Contact Integrity</span>
+                <span class="ui-badge badge-teal">100% Solid</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:12.5px;">
+                <div style="display:flex; justify-content:space-between;">
+                  <span>Optical PPG Contact</span>
+                  <strong style="color:#059669;">✓ Optimal (Medial Plantar)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span>NTC Thermistor Contact</span>
+                  <strong style="color:#059669;">✓ Flush against skin (36.2°C)</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span>Accelerometer Baseline</span>
+                  <strong style="color:#059669;">✓ Resting / Low Noise</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ankle Rotation Tracker (Safety Guideline) -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <span class="ui-card-title">🦶 Ankle Rotation Tracker</span>
+                <span class="ui-badge badge-blue">Right Ankle</span>
+              </div>
+              <p style="font-size:12px; color:#64748B;">
+                Worn on right ankle for <strong>16 hours</strong>. To prevent skin pressure marks, rotate to left ankle in <strong>8 hours</strong>.
+              </p>
+              <div style="width:100%; height:8px; background:#E2E8F0; border-radius:999px; overflow:hidden;">
+                <div style="width:66%; height:100%; background:#0D9488; border-radius:999px;"></div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+              <button class="ui-button secondary" onclick="testSkinContact()">
+                🔊 Ping Cuff Buzzer
+              </button>
+              <button class="ui-button primary-teal" onclick="showToast('Recalibrating sensors... zero baseline saved', '✅')">
+                🔄 Recalibrate
+              </button>
+            </div>
+          </section>
+
+
+          <!-- ========================================== -->
+          <!-- BRANCH 3: CLINICAL MODE                    -->
+          <!-- ========================================== -->
+
+          <!-- Screen 3.1: Ward Overview (New Addition) -->
+          <section class="ia-screen-view" id="screen-clinical-ward">
+            <div class="section-header">
+              <h2 class="section-title">Ward Multi-Crib Monitor</h2>
+              <span class="ui-badge badge-blue">6 Beds</span>
+            </div>
+
+            <!-- Filter Pills -->
+            <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:4px;">
+              <button class="pill-btn active" style="background:#0F172A; color:#FFFFFF; font-size:11px;" onclick="filterWard('all')">All (6)</button>
+              <button class="pill-btn" style="background:#FEE2E2; color:#991B1B; font-size:11px;" onclick="filterWard('critical')">Critical (1)</button>
+              <button class="pill-btn" style="background:#FEF3C7; color:#92400E; font-size:11px;" onclick="filterWard('caution')">Caution (2)</button>
+              <button class="pill-btn" style="background:#DCFCE7; color:#166534; font-size:11px;" onclick="filterWard('stable')">Stable (3)</button>
+            </div>
+
+            <!-- Multi-Crib Grid -->
+            <div class="ward-grid" id="wardGrid">
+              
+              <!-- Crib 1 (Stable) -->
+              <div class="crib-card stable" data-status="stable" onclick="openPatientDetail('Aarav', 'Crib 01', 'normal')">
+                <div class="crib-top">
+                  <span class="crib-id">Crib 01</span>
+                  <span class="ui-badge" style="background:#DCFCE7; color:#15803D;">Stable</span>
+                </div>
+                <div class="crib-name">Baby Aarav</div>
+                <div class="crib-metrics">
+                  <span>98.6°F</span>
+                  <span>138 BPM</span>
+                  <span>PI 2.4%</span>
+                </div>
+              </div>
+
+              <!-- Crib 2 (Caution) -->
+              <div class="crib-card caution" data-status="caution" onclick="openPatientDetail('Diya', 'Crib 02', 'caution')">
+                <div class="crib-top">
+                  <span class="crib-id">Crib 02</span>
+                  <span class="ui-badge" style="background:#FEF3C7; color:#B45309;">Caution</span>
+                </div>
+                <div class="crib-name">Baby Diya</div>
+                <div class="crib-metrics">
+                  <span>99.8°F</span>
+                  <span>155 BPM</span>
+                  <span>PI 1.2%</span>
+                </div>
+              </div>
+
+              <!-- Crib 3 (Critical) -->
+              <div class="crib-card critical" data-status="critical" onclick="openPatientDetail('Rohit', 'Crib 03', 'critical')">
+                <div class="crib-top">
+                  <span class="crib-id">Crib 03</span>
+                  <span class="ui-badge" style="background:#FFE4E6; color:#BE123C; font-weight:800;">CRITICAL</span>
+                </div>
+                <div class="crib-name">Baby Rohit</div>
+                <div class="crib-metrics" style="color:#9F1239; font-weight:700;">
+                  <span>101.4°F</span>
+                  <span>178 BPM</span>
+                  <span>PI 0.6%</span>
+                </div>
+              </div>
+
+              <!-- Crib 4 (Stable) -->
+              <div class="crib-card stable" data-status="stable" onclick="openPatientDetail('Priya', 'Crib 04', 'normal')">
+                <div class="crib-top">
+                  <span class="crib-id">Crib 04</span>
+                  <span class="ui-badge" style="background:#DCFCE7; color:#15803D;">Stable</span>
+                </div>
+                <div class="crib-name">Baby Priya</div>
+                <div class="crib-metrics">
+                  <span>98.4°F</span>
+                  <span>140 BPM</span>
+                  <span>PI 2.2%</span>
+                </div>
+              </div>
+
+              <!-- Crib 5 (Caution) -->
+              <div class="crib-card caution" data-status="caution" onclick="openPatientDetail('Ananya', 'Crib 05', 'caution')">
+                <div class="crib-top">
+                  <span class="crib-id">Crib 05</span>
+                  <span class="ui-badge" style="background:#FEF3C7; color:#B45309;">Caution</span>
+                </div>
+                <div class="crib-name">Baby Ananya</div>
+                <div class="crib-metrics">
+                  <span>96.2°F</span>
+                  <span>122 BPM</span>
+                  <span>PI 1.1%</span>
+                </div>
+              </div>
+
+              <!-- Crib 6 (Stable) -->
+              <div class="crib-card stable" data-status="stable" onclick="openPatientDetail('Vihaan', 'Crib 06', 'normal')">
+                <div class="crib-top">
+                  <span class="crib-id">Crib 06</span>
+                  <span class="ui-badge" style="background:#DCFCE7; color:#15803D;">Stable</span>
+                </div>
+                <div class="crib-name">Baby Vihaan</div>
+                <div class="crib-metrics">
+                  <span>98.5°F</span>
+                  <span>135 BPM</span>
+                  <span>PI 2.5%</span>
+                </div>
+              </div>
+
+            </div>
+
+            <div style="font-size:11.5px; color:#64748B; text-align:center;">
+              Tap any crib card to view clinical telemetric telemetry and 6-system derangements.
+            </div>
+          </section>
+
+          <!-- Screen 3.2: Patient Detail (New Addition - Frame 2 from Spec) -->
+          <section class="ia-screen-view" id="screen-clinical-patient">
+            <div class="section-header">
+              <h2 class="section-title" id="patientDetailTitle">Patient Detail: Baby Rohit</h2>
+              <button class="section-action" onclick="navigateToScreen('clinical-ward')">&larr; All Beds</button>
+            </div>
+
+            <!-- Risk Suspicion Header -->
+            <div class="ui-card" style="background:#1E293B; color:#F8FAFC; border-color:#334155;">
+              <div class="ui-card-header">
+                <div>
+                  <span style="font-size:11.5px; color:#94A3B8;">Crib 03 • 5 Days Old • 1.95 kg</span>
+                  <div style="font-size:16px; font-weight:800; color:#FB7185; margin-top:2px;">
+                    HIGH SEPSIS SUSPICION (3 / 6)
+                  </div>
+                </div>
+                <span class="ui-badge badge-rose">Stage II Risk</span>
+              </div>
+              <p style="font-size:12px; color:#CBD5E1; line-height:1.4;">
+                Breadth-of-systems gate triggered: 3 independent channels abnormal over rolling 4h window.
+              </p>
+            </div>
+
+            <!-- 6-System Sepsis Derangement Checklist -->
+            <div class="ui-card">
+              <span class="ui-card-title">📋 6-System Sepsis Derangement Checklist</span>
+              <div class="derangement-list">
+                <div class="system-item deranged">
+                  <span>✖ Thermoregulation</span>
+                  <span>Fever Spike (101.4°F)</span>
+                </div>
+                <div class="system-item deranged">
+                  <span>✖ Cardiac Autonomic (HRV)</span>
+                  <span>Entropy Collapse & Decelerations</span>
+                </div>
+                <div class="system-item deranged">
+                  <span>✖ Perfusion Index (PI)</span>
+                  <span>Vasoconstriction (PI 0.6%)</span>
+                </div>
+                <div class="system-item normal">
+                  <span>✓ HR / Temp Proportionality</span>
+                  <span>Proportionate Response</span>
+                </div>
+                <div class="system-item normal">
+                  <span>✓ Respiratory Pattern</span>
+                  <span>Regular (48 br/min)</span>
+                </div>
+                <div class="system-item normal">
+                  <span>✓ Spontaneous Activity</span>
+                  <span>Mild movement observed</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4-Channel Trends -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <span class="ui-card-title">📈 4-Channel Vital Trends</span>
+                <div style="display:flex; gap:4px; font-size:11px;">
+                  <button class="pill-btn active" style="padding:2px 6px; font-size:10px; background:#0F172A; color:#FFFFFF;">12h</button>
+                  <button class="pill-btn" style="padding:2px 6px; font-size:10px; background:#F1F5F9; color:#475569;">24h</button>
+                </div>
+              </div>
+
+              <!-- Channel 1: Temp Curve -->
+              <div style="border:1px solid #E2E8F0; border-radius:12px; padding:10px;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;">
+                  <span>Core Temp Curve (°F)</span>
+                  <span style="color:#DC2626;">101.4°F (Elevated)</span>
+                </div>
+                <svg viewBox="0 0 300 50" style="width:100%; height:46px; margin-top:4px;">
+                  <rect x="0" y="16" width="300" height="20" fill="#DCFCE7" opacity="0.6"></rect>
+                  <path d="M0,26 Q60,28 120,24 T200,18 T300,8" fill="none" stroke="#DC2626" stroke-width="2.5"></path>
+                </svg>
+              </div>
+
+              <!-- Channel 2: Heart Rate & HRV -->
+              <div style="border:1px solid #E2E8F0; border-radius:12px; padding:10px;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;">
+                  <span>Heart Rate & HRV Entropy</span>
+                  <span style="color:#2563EB;">178 BPM • Low Variability</span>
+                </div>
+                <svg viewBox="0 0 300 50" style="width:100%; height:46px; margin-top:4px;">
+                  <path d="M0,32 Q50,28 100,34 T180,24 T300,12" fill="none" stroke="#2563EB" stroke-width="2.5"></path>
+                </svg>
+              </div>
+
+              <!-- Channel 3: Perfusion Index -->
+              <div style="border:1px solid #E2E8F0; border-radius:12px; padding:10px;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;">
+                  <span>Peripheral Perfusion Index (PI %)</span>
+                  <span style="color:#D97706;">0.6% (Vasoconstriction)</span>
+                </div>
+                <svg viewBox="0 0 300 50" style="width:100%; height:46px; margin-top:4px;">
+                  <path d="M0,15 Q75,18 150,28 T240,40 T300,44" fill="none" stroke="#D97706" stroke-width="2.5"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Manual Spot-Check Form -->
+            <div class="ui-card">
+              <span class="ui-card-title">📝 Clinician Spot-Check Entry</span>
+              <div class="form-group">
+                <label class="form-label">Manual Thermometer Reading (°C / °F)</label>
+                <input type="text" class="form-input" placeholder="e.g. 38.6°C">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Capillary Refill Time (CRT in Seconds)</label>
+                <input type="number" class="form-input" placeholder="e.g. >3 seconds">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Feeding Ability</label>
+                <select class="form-input">
+                  <option>Normal vigorous suck</option>
+                  <option selected>Reduced / Poor suck</option>
+                  <option>Refusing feed completely</option>
+                </select>
+              </div>
+              <button class="ui-button primary-blue" onclick="showToast('Spot check observation committed to EHR', '✅')">
+                Save Clinical Spot-Check
+              </button>
+            </div>
+          </section>
+
+          <!-- Screen 3.3: Escalation Log (New Addition) -->
+          <section class="ia-screen-view" id="screen-clinical-escalation">
+            <div class="section-header">
+              <h2 class="section-title">Clinical Escalation Log</h2>
+              <span class="ui-badge badge-rose">Audit Trail</span>
+            </div>
+
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <span class="ui-card-title">🚨 Active Protocol Timeline</span>
+                <span class="ui-badge badge-rose">IMNCI Step 2</span>
+              </div>
+
+              <div class="timeline-container">
+                <div class="timeline-item critical">
+                  <span class="timeline-time">04:40 AM • Dispatched</span>
+                  <div class="timeline-title">🚑 108 Neonatal Ambulance Dispatched</div>
+                  <div class="timeline-desc">Referral order to SNCU District Hospital approved by MO. Live ETA: 18 mins.</div>
+                </div>
+
+                <div class="timeline-item">
+                  <span class="timeline-time">04:30 AM • Medication</span>
+                  <div class="timeline-title">💉 1st Dose IV Antibiotics Logged</div>
+                  <div class="timeline-desc">Ampicillin (50mg/kg) + Gentamicin (5mg/kg) administered by ANM Anita.</div>
+                </div>
+
+                <div class="timeline-item caution">
+                  <span class="timeline-time">04:22 AM • Examination</span>
+                  <div class="timeline-title">🩺 Duty MO Dr. R. Sharma Examined</div>
+                  <div class="timeline-desc">Confirmed lethargy, fast breathing (62 bpm), CRT 3.5s. Blood culture drawn.</div>
+                </div>
+
+                <div class="timeline-item critical">
+                  <span class="timeline-time">04:12 AM • Alert Trigger</span>
+                  <div class="timeline-title">⚠️ AI Breadth-of-Systems Trigger</div>
+                  <div class="timeline-desc">3 continuous derangements flagged: Temp 101.4°F + HRV collapse + PI 0.6%.</div>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+                <button class="ui-button primary-blue" onclick="showToast('Opening Tele-NICU video consult window...')">
+                  📹 Connect Tele-NICU Specialist
+                </button>
+                <button class="ui-button secondary" onclick="showToast('Escalation summary exported to PDF', '📄')">
+                  📄 Export Escalation Summary PDF
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Screen 3.4: Staff Settings (New Addition) -->
+          <section class="ia-screen-view" id="screen-clinical-staff">
+            <div class="section-header">
+              <h2 class="section-title">Clinical Staff & Protocols</h2>
+              <span class="ui-badge badge-blue">Ward Config</span>
+            </div>
+
+            <!-- Duty Staff on Shift -->
+            <div class="ui-card">
+              <span class="ui-card-title">👩‍⚕️ Current Shift Roster</span>
+              <div style="font-size:13px; color:#334155; line-height:1.5;">
+                <strong>Primary Staff Nurse:</strong> ANM Sunita Verma<br>
+                <strong>Duty Medical Officer:</strong> Dr. Rajesh Sharma, MD<br>
+                <strong>Shift Timing:</strong> Night Shift (20:00 - 08:00) • 3h 45m left
+              </div>
+            </div>
+
+            <!-- Alarm Threshold Limits -->
+            <div class="ui-card">
+              <span class="ui-card-title">⚙️ Sepsis Alert Trigger Thresholds</span>
+              <div class="switch-row">
+                <div class="switch-info">
+                  <h5>Hyperthermia Trigger (>37.8°C / 100.0°F)</h5>
+                  <p>Immediate audio siren for ward nurse</p>
+                </div>
+                <div class="toggle-pill checked blue" onclick="toggleSwitch(this)">
+                  <div class="toggle-circle"></div>
+                </div>
+              </div>
+              <div class="switch-row">
+                <div class="switch-info">
+                  <h5>Hypothermia Trigger (&lt;35.5°C / 95.9°F)</h5>
+                  <p>Trigger KMC warmth checklist protocol</p>
+                </div>
+                <div class="toggle-pill checked blue" onclick="toggleSwitch(this)">
+                  <div class="toggle-circle"></div>
+                </div>
+              </div>
+              <div class="switch-row">
+                <div class="switch-info">
+                  <h5>HR Deceleration & Entropy Collapse</h5>
+                  <p>HRV triad monitoring enabled</p>
+                </div>
+                <div class="toggle-pill checked blue" onclick="toggleSwitch(this)">
+                  <div class="toggle-circle"></div>
+                </div>
+              </div>
+              <div class="switch-row">
+                <div class="switch-info">
+                  <h5>ABDM / Ayushman Bharat Digital Cloud Sync</h5>
+                  <p>Push hourly vitals to government health portal</p>
+                </div>
+                <div class="toggle-pill checked blue" onclick="toggleSwitch(this)">
+                  <div class="toggle-circle"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="ui-button primary-blue" onclick="showToast('Ward shift handover notes generated', '📋')">
+              📋 Complete Shift Handover Sign-off
+            </button>
+          </section>
 
         </div>
+
+        <!-- In-App Contextual Bottom Navigation Bar -->
+        <nav class="inapp-bottom-nav" id="inappBottomNav">
+          <!-- Dynamic buttons injected via JavaScript based on active mode -->
+        </nav>
+
       </div>
     </div>
   </main>
 
-  <!-- Clinical Trends Drawer (Tier 2 Clinical View) -->
-  <div class="clinical-modal-backdrop" id="clinicalModal" onclick="handleBackdropClick(event)">
-    <div class="clinical-drawer" onclick="event.stopPropagation()">
-      <div class="drawer-handle"></div>
-      
-      <div class="drawer-header">
-        <div>
-          <h3>Clinical Trends (24h)</h3>
-          <p style="font-size: 12px; color: #94A3B8;">Device-SKU-1234 • Continuous Telemetry</p>
-        </div>
-        <button class="drawer-close-btn" onclick="closeClinicalModal()" aria-label="Close">✕</button>
+  <!-- Interactive Information Architecture Map Modal -->
+  <div class="ia-map-backdrop" id="iaMapModal" onclick="handleIaBackdropClick(event)">
+    <div class="ia-map-modal" onclick="event.stopPropagation()">
+      <div class="ia-map-header">
+        <h3>
+          <span>🗺️</span> Information Architecture Flow Map
+        </h3>
+        <button class="pill-btn" style="background:#1E293B; color:#94A3B8; font-size:16px; padding:4px 10px;" onclick="closeIaMapModal()">✕</button>
       </div>
 
-      <div class="trends-grid">
-        <!-- Heart Rate Trend -->
-        <div class="trend-card">
-          <div class="trend-title-row">
-            <span class="trend-title">Heart Rate (BPM)</span>
-            <span class="trend-current-badge badge-blue" id="drawerPulseBadge">78.2 BPM • Normal</span>
-          </div>
-          <div class="chart-container">
-            <svg class="chart-svg" viewBox="0 0 300 70">
-              <path d="M0,45 Q50,40 100,48 T200,42 T300,46" fill="none" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"></path>
-              <line x1="0" y1="20" x2="300" y2="20" stroke="#334155" stroke-dasharray="4"></line>
-              <line x1="0" y1="55" x2="300" y2="55" stroke="#334155" stroke-dasharray="4"></line>
-            </svg>
-          </div>
-          <div style="display:flex; justify-content:space-between; font-size:11px; color:#64748B; margin-top:4px;">
-            <span>00:00</span><span>06:00</span><span>12:00</span><span>Now</span>
-          </div>
+      <div class="ia-tree-visual">
+        <!-- Root App Node -->
+        <div class="ia-root-node">
+          SEPCARE app
         </div>
 
-        <!-- Temperature Trend -->
-        <div class="trend-card">
-          <div class="trend-title-row">
-            <span class="trend-title">Core Temperature (°F)</span>
-            <span class="trend-current-badge badge-red" id="drawerTempBadge">98.6 °F • Stable</span>
+        <!-- SVG Branch Connectors -->
+        <svg width="100%" height="24" viewBox="0 0 600 24" style="overflow:visible; max-width:680px;">
+          <line x1="300" y1="0" x2="300" y2="12" stroke="#475569" stroke-width="2"></line>
+          <line x1="100" y1="12" x2="500" y2="12" stroke="#475569" stroke-width="2"></line>
+          <line x1="100" y1="12" x2="100" y2="24" stroke="#475569" stroke-width="2"></line>
+          <line x1="300" y1="12" x2="300" y2="24" stroke="#475569" stroke-width="2"></line>
+          <line x1="500" y1="12" x2="500" y2="24" stroke="#475569" stroke-width="2"></line>
+        </svg>
+
+        <!-- 3 Primary Branches -->
+        <div class="ia-branches-row">
+          
+          <!-- Branch 1: Setup & Account -->
+          <div class="ia-branch-column">
+            <div class="ia-branch-title">Setup & account</div>
+            <button class="ia-node-btn node-teal" id="iaNode-setup-login" onclick="navigateToIaNode('setup-login')">
+              <span>Login & role</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="ia-node-btn node-teal" id="iaNode-setup-pairing" onclick="navigateToIaNode('setup-pairing')">
+              <span>Device pairing</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="ia-node-btn node-teal" id="iaNode-setup-notifications" onclick="navigateToIaNode('setup-notifications')">
+              <span>Notifications</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="ia-node-btn node-teal" id="iaNode-setup-help" onclick="navigateToIaNode('setup-help')">
+              <span>Account & help</span>
+              <span>&rarr;</span>
+            </button>
           </div>
-          <div class="chart-container">
-            <svg class="chart-svg" viewBox="0 0 300 70">
-              <path d="M0,38 Q75,32 150,37 T250,35 T300,36" fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round"></path>
-              <line x1="0" y1="20" x2="300" y2="20" stroke="#334155" stroke-dasharray="4"></line>
-              <line x1="0" y1="50" x2="300" y2="50" stroke="#334155" stroke-dasharray="4"></line>
-            </svg>
+
+          <!-- Branch 2: Parent Mode -->
+          <div class="ia-branch-column">
+            <div class="ia-branch-title">Parent mode</div>
+            <button class="ia-node-btn node-gray active-node" id="iaNode-parent-status" onclick="navigateToIaNode('parent-status')">
+              <span>Infant status</span>
+              <span>★</span>
+            </button>
+            <button class="ia-node-btn node-gray" id="iaNode-parent-instructions" onclick="navigateToIaNode('parent-instructions')">
+              <span>Instructions</span>
+              <span>★</span>
+            </button>
+            <button class="ia-node-btn node-teal" id="iaNode-parent-alerts" onclick="navigateToIaNode('parent-alerts')">
+              <span>Alert history</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="ia-node-btn node-teal" id="iaNode-parent-band" onclick="navigateToIaNode('parent-band')">
+              <span>Band settings</span>
+              <span>&rarr;</span>
+            </button>
           </div>
-          <div style="display:flex; justify-content:space-between; font-size:11px; color:#64748B; margin-top:4px;">
-            <span>00:00</span><span>06:00</span><span>12:00</span><span>Now</span>
+
+          <!-- Branch 3: Clinical Mode -->
+          <div class="ia-branch-column">
+            <div class="ia-branch-title">Clinical mode</div>
+            <button class="ia-node-btn node-teal" id="iaNode-clinical-ward" onclick="navigateToIaNode('clinical-ward')">
+              <span>Ward overview</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="ia-node-btn node-teal" id="iaNode-clinical-patient" onclick="navigateToIaNode('clinical-patient')">
+              <span>Patient detail</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="ia-node-btn node-teal" id="iaNode-clinical-escalation" onclick="navigateToIaNode('clinical-escalation')">
+              <span>Escalation log</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="ia-node-btn node-teal" id="iaNode-clinical-staff" onclick="navigateToIaNode('clinical-staff')">
+              <span>Staff settings</span>
+              <span>&rarr;</span>
+            </button>
           </div>
+
         </div>
 
-        <!-- Sensor Diagnostics -->
-        <div class="trend-card">
-          <div class="trend-title-row">
-            <span class="trend-title">Telemetry Diagnostics</span>
-            <span class="trend-current-badge badge-teal">BLE 5.2 Active</span>
-          </div>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:10px; font-size:12px;">
-            <div style="background:#0F172A; padding:8px 12px; border-radius:10px;">
-              <div style="color:#64748B;">Battery</div>
-              <div style="font-weight:700; color:#F8FAFC;">88% (42h left)</div>
-            </div>
-            <div style="background:#0F172A; padding:8px 12px; border-radius:10px;">
-              <div style="color:#64748B;">Skin Contact</div>
-              <div style="font-weight:700; color:#34D399;">100% Solid</div>
-            </div>
-          </div>
+        <!-- Legend -->
+        <div class="ia-legend-row">
+          <span class="legend-chip">
+            <span class="legend-swatch swatch-gray"></span>
+            Gray = current design (from main)
+          </span>
+          <span class="legend-chip">
+            <span class="legend-swatch swatch-teal"></span>
+            Teal = recommended addition or change
+          </span>
         </div>
-
       </div>
     </div>
   </div>
@@ -1391,7 +2791,48 @@
   </div>
 
   <script>
-    // State management for clinical variations
+    // =======================================================
+    // INFORMATION ARCHITECTURE & NAVIGATION DEFINITIONS
+    // =======================================================
+    
+    const IA_TREE = {
+      setup: {
+        title: "Setup & account",
+        defaultScreen: "setup-login",
+        tabs: [
+          { id: "setup-login", label: "Login & Role", icon: "👤" },
+          { id: "setup-pairing", label: "Pairing", icon: "⚡" },
+          { id: "setup-notifications", label: "Alerts", icon: "🔔" },
+          { id: "setup-help", label: "Help", icon: "📖" }
+        ]
+      },
+      parent: {
+        title: "Parent mode",
+        defaultScreen: "parent-status",
+        tabs: [
+          { id: "parent-status", label: "Infant Status", icon: "👶" },
+          { id: "parent-instructions", label: "Instructions", icon: "📝" },
+          { id: "parent-alerts", label: "Alert History", icon: "⏱️" },
+          { id: "parent-band", label: "Band Settings", icon: "🦶" }
+        ]
+      },
+      clinical: {
+        title: "Clinical mode",
+        defaultScreen: "clinical-ward",
+        tabs: [
+          { id: "clinical-ward", label: "Ward Overview", icon: "🏥" },
+          { id: "clinical-patient", label: "Patient Detail", icon: "📈" },
+          { id: "clinical-escalation", label: "Escalation Log", icon: "🚨" },
+          { id: "clinical-staff", label: "Staff Settings", icon: "⚙️" }
+        ]
+      }
+    };
+
+    let currentMode = 'parent';
+    let currentScreen = 'parent-status';
+    let currentState = 'normal';
+
+    // Clinical Triage States
     const states = {
       normal: {
         title: "Baby is Resting Safely",
@@ -1440,8 +2881,144 @@
       }
     };
 
-    let currentState = 'normal';
+    // Initialize Navigation & UI
+    function initApp() {
+      renderBottomNav();
+      navigateToScreen('parent-status');
+      updateClock();
+      setInterval(updateClock, 30000);
+    }
 
+    // Switch between Setup, Parent, and Clinical modes
+    function switchMode(modeKey) {
+      currentMode = modeKey;
+
+      // Update Top segmented buttons
+      document.getElementById('topModeBtnSetup').classList.toggle('active', modeKey === 'setup');
+      document.getElementById('topModeBtnParent').classList.toggle('active', modeKey === 'parent');
+      document.getElementById('topModeBtnClinical').classList.toggle('active', modeKey === 'clinical');
+
+      // Adjust Header device SKU styling
+      const headerTitle = document.getElementById('headerDeviceTitle');
+      if (modeKey === 'clinical') {
+        headerTitle.innerText = "SNCU Ward Monitor • Sub-Centre";
+      } else if (modeKey === 'setup') {
+        headerTitle.innerText = "Device-SKU-1234 • Setup";
+      } else {
+        headerTitle.innerText = "Device-SKU-1234";
+      }
+
+      // Render updated bottom navigation
+      renderBottomNav();
+
+      // Navigate to default screen of this mode
+      navigateToScreen(IA_TREE[modeKey].defaultScreen);
+      showToast(`Switched to ${IA_TREE[modeKey].title}`);
+    }
+
+    // Render Context-aware Bottom Navigation
+    function renderBottomNav() {
+      const navContainer = document.getElementById('inappBottomNav');
+      const tabs = IA_TREE[currentMode].tabs;
+
+      let html = '';
+      tabs.forEach(tab => {
+        const isActive = tab.id === currentScreen;
+        const activeClass = isActive ? `active ${currentMode}-tab` : '';
+        html += `
+          <button class="nav-item-btn ${activeClass}" onclick="navigateToScreen('${tab.id}')">
+            <span style="font-size:17px; line-height:1;">${tab.icon}</span>
+            <span>${tab.label}</span>
+          </button>
+        `;
+      });
+      navContainer.innerHTML = html;
+    }
+
+    // Navigate to a specific IA Screen View
+    function navigateToScreen(screenId) {
+      currentScreen = screenId;
+
+      // Determine mode of this screen
+      let targetMode = 'parent';
+      for (const [mKey, mData] of Object.entries(IA_TREE)) {
+        if (mData.tabs.some(t => t.id === screenId)) {
+          targetMode = mKey;
+          break;
+        }
+      }
+
+      if (targetMode !== currentMode) {
+        currentMode = targetMode;
+        document.getElementById('topModeBtnSetup').classList.toggle('active', targetMode === 'setup');
+        document.getElementById('topModeBtnParent').classList.toggle('active', targetMode === 'parent');
+        document.getElementById('topModeBtnClinical').classList.toggle('active', targetMode === 'clinical');
+      }
+
+      // Hide all screen views and show active one
+      document.querySelectorAll('.ia-screen-view').forEach(view => {
+        view.classList.remove('active');
+      });
+      const activeEl = document.getElementById(`screen-${screenId}`);
+      if (activeEl) {
+        activeEl.classList.add('active');
+      }
+
+      // Reset scroll position of screen
+      document.getElementById('appScreenScroll').scrollTop = 0;
+
+      // Update Bottom Navigation buttons
+      renderBottomNav();
+
+      // Update Studio Quick-Select dropdown
+      const quickSelect = document.getElementById('studioQuickSelect');
+      if (quickSelect) {
+        quickSelect.value = screenId;
+      }
+
+      // Update active highlight in IA tree diagram
+      updateIaTreeActiveNode(screenId);
+    }
+
+    // Quick Jump from Studio selector
+    function quickJumpScreen(screenId) {
+      navigateToScreen(screenId);
+      showToast(`Jumped to ${screenId.replace('-', ' ')}`);
+    }
+
+    // IA Map Modal Management
+    function openIaMapModal() {
+      document.getElementById('iaMapModal').classList.add('open');
+      updateIaTreeActiveNode(currentScreen);
+    }
+
+    function closeIaMapModal() {
+      document.getElementById('iaMapModal').classList.remove('open');
+    }
+
+    function handleIaBackdropClick(e) {
+      if (e.target.id === 'iaMapModal') {
+        closeIaMapModal();
+      }
+    }
+
+    function navigateToIaNode(screenId) {
+      navigateToScreen(screenId);
+      closeIaMapModal();
+      showToast(`Navigated to ${screenId.replace('-', ' ')}`, '🗺️');
+    }
+
+    function updateIaTreeActiveNode(screenId) {
+      document.querySelectorAll('.ia-node-btn').forEach(btn => {
+        btn.classList.remove('active-node');
+      });
+      const targetNode = document.getElementById(`iaNode-${screenId}`);
+      if (targetNode) {
+        targetNode.classList.add('active-node');
+      }
+    }
+
+    // Triage Condition Switcher
     function setAppState(stateName) {
       currentState = stateName;
       const screen = document.getElementById('phoneScreen');
@@ -1457,7 +3034,7 @@
       if (stateName === 'caution') screen.classList.add('state-caution');
       if (stateName === 'critical') screen.classList.add('state-critical');
 
-      // Update Content
+      // Update Content in Parent Mode
       document.getElementById('statusTitle').innerText = data.title;
       document.getElementById('statusDescription').innerText = data.desc;
       document.getElementById('pulseValue').innerText = data.pulse;
@@ -1478,11 +3055,67 @@
       document.getElementById('instTitle3').innerText = data.instructions[2].title;
       document.getElementById('instDesc3').innerText = data.instructions[2].desc;
 
-      // Update Drawer badges
-      document.getElementById('drawerPulseBadge').innerText = `${data.pulse} BPM • ${stateName.toUpperCase()}`;
-      document.getElementById('drawerTempBadge').innerText = `${data.temp} °F • ${stateName.toUpperCase()}`;
+      showToast(`Switched to ${stateName.toUpperCase()} triage condition`);
+    }
 
-      showToast(`Switched to ${stateName.toUpperCase()} triage state`);
+    // Role Selection in Setup
+    function selectUserRole(role) {
+      document.getElementById('roleBtnParent').classList.toggle('primary-teal', role === 'parent');
+      document.getElementById('roleBtnParent').classList.toggle('secondary', role !== 'parent');
+      document.getElementById('roleBtnClinician').classList.toggle('primary-teal', role === 'clinical');
+      document.getElementById('roleBtnClinician').classList.toggle('secondary', role !== 'clinical');
+
+      showToast(`Selected role: ${role === 'parent' ? 'Caregiver' : 'Clinician / ASHA'}`);
+    }
+
+    // Test Skin Contact
+    function testSkinContact() {
+      showToast('⚡ Testing skin contact: 100% Solid Contact Verified • Haptic OK', '✅');
+      const dot = document.getElementById('bleIndicator');
+      dot.style.transform = 'scale(1.8)';
+      setTimeout(() => { dot.style.transform = 'scale(1)'; }, 600);
+    }
+
+    // Toggle switch helper
+    function toggleSwitch(el) {
+      el.classList.toggle('checked');
+      showToast('Preference updated', '⚙️');
+    }
+
+    // Ward Multi-Crib Filtering
+    function filterWard(filterType) {
+      const cards = document.querySelectorAll('.crib-card');
+      cards.forEach(card => {
+        if (filterType === 'all' || card.dataset.status === filterType) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      showToast(`Filtered ward view: ${filterType}`);
+    }
+
+    // Open specific Patient Detail from Ward overview
+    function openPatientDetail(babyName, cribId, stateOverride) {
+      document.getElementById('patientDetailTitle').innerText = `Patient Detail: Baby ${babyName}`;
+      navigateToScreen('clinical-patient');
+      if (stateOverride) {
+        setAppState(stateOverride);
+      }
+      showToast(`Opened telemetry for Baby ${babyName} (${cribId})`);
+    }
+
+    // Filter Alert History
+    function filterAlerts(filterType) {
+      const items = document.querySelectorAll('.timeline-item');
+      items.forEach(item => {
+        if (filterType === 'all' || item.dataset.type === filterType) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      showToast(`Filtered alerts: ${filterType}`);
     }
 
     // Toggle Mobile Frame vs Full Screen
@@ -1502,25 +3135,6 @@
       document.body.classList.toggle('light-studio');
       const isLight = document.body.classList.contains('light-studio');
       showToast(isLight ? 'Switched to Light Studio canvas' : 'Switched to Dark Studio canvas');
-    }
-
-    // Clinical Modal
-    function openClinicalModal(metric) {
-      const modal = document.getElementById('clinicalModal');
-      modal.classList.add('open');
-      if (metric) {
-        showToast(`Viewing detailed ${metric} history`);
-      }
-    }
-
-    function closeClinicalModal() {
-      document.getElementById('clinicalModal').classList.remove('open');
-    }
-
-    function handleBackdropClick(e) {
-      if (e.target.id === 'clinicalModal') {
-        closeClinicalModal();
-      }
     }
 
     // Toast Notification
@@ -1552,7 +3166,7 @@
       }
     }
 
-    // Live clock update for status bar
+    // Live clock update
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
@@ -1560,8 +3174,9 @@
       hours = hours % 12 || 12;
       document.getElementById('liveTime').innerText = `${hours}:${minutes}`;
     }
-    updateClock();
-    setInterval(updateClock, 30000);
+
+    // Start App
+    initApp();
   </script>
 </body>
 </html>
