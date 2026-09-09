@@ -40,6 +40,7 @@ Reliably turn a stream of vitals from an ESP32 wearable into an accurate, trustw
 - Frontend is being built in parallel by teammates as static HTML mockups, to be ported to a Next.js app on `main` later. This repo's `backend` branch is scoped purely to the backend/data pipeline; hardware build is a separate parallel track.
 - Sepsis-risk logic is a research-informed composite across six feature groups (temperature direction, HR–temperature proportionality, HRV pattern, perfusion index trend, respiratory irregularity, activity/lethargy trend) with breadth-of-systems gating — score escalates only when ≥3 of 6 groups are simultaneously abnormal and trending together over a multi-hour window. Full detail in the implementation plan (§7.1.1) and the differentiation research doc.
 - ESP32 firmware sends pre-computed vitals per interval (HR, SpO2/perfusion, temperature, activity score), not raw sensor waveforms — the device's PPG library already does on-chip beat detection, so the backend works from periodic summaries rather than 100Hz raw streams.
+- Hardware prototype parts list (sensors, MCU, battery/charging, purchased links) is tracked in `parts-list.md` at the repo root.
 
 ## Constraints
 
