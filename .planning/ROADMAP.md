@@ -13,7 +13,7 @@ SepCare's backend ships as four sequential vertical slices, each a fully working
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Device Ingest & Live Readout** - A single live reading flows from device POST through auth and storage to being fetchable via a read API
+- [x] **Phase 1: Device Ingest & Live Readout** - A single live reading flows from device POST through auth and storage to being fetchable via a read API (completed 2026-09-12)
 - [ ] **Phase 2: Automatic Risk Scoring & Status** - Every stored reading is automatically scored for sepsis risk and surfaced as Green/Amber/Red
 - [ ] **Phase 3: Offline-Buffered Batch Sync** - Readings buffered during connectivity gaps arrive as a batch, stored with correct original timestamps, and risk-scored like any other reading
 - [ ] **Phase 4: Historical Trends API** - Historical vitals and risk-status data over a time range is available via the read API
@@ -103,7 +103,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Device Ingest & Live Readout | 4/4 | In Progress|  |
+| 1. Device Ingest & Live Readout | 4/4 | Complete    | 2026-09-12 |
 | 2. Automatic Risk Scoring & Status | 0/TBD | Not started | - |
 | 3. Offline-Buffered Batch Sync | 0/TBD | Not started | - |
 | 4. Historical Trends API | 0/TBD | Not started | - |
