@@ -9,13 +9,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Ingest
 
-- [ ] **ING-01**: Device can POST a single vitals reading (device ID, timestamp, HR, SpO2/perfusion, temperature, activity score) to a backend ingest endpoint
-- [ ] **ING-02**: Backend authenticates each ingest request via a static per-device API key, rejecting requests with a missing/invalid key
+- [x] **ING-01**: Device can POST a single vitals reading (device ID, timestamp, HR, SpO2/perfusion, temperature, activity score) to a backend ingest endpoint
+- [x] **ING-02**: Backend authenticates each ingest request via a static per-device API key, rejecting requests with a missing/invalid key
 - [ ] **ING-03**: Device can POST a batch (array) of buffered offline readings to a dedicated sync endpoint, and each reading is stored with its original device timestamp, not the upload time
 
 ### Storage
 
-- [ ] **STOR-01**: Vitals readings are persisted in Supabase (Postgres) with device ID, timestamp, and all reading fields
+- [x] **STOR-01**: Vitals readings are persisted in Supabase (Postgres) with device ID, timestamp, and all reading fields
 - [ ] **STOR-02**: Computed risk scores and Green/Amber/Red status are persisted alongside (or linked to) their source readings, queryable by time range
 
 ### Risk Computation
@@ -26,12 +26,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Read API
 
-- [ ] **READ-01**: A read API (or Supabase realtime subscription) exposes the latest vitals and current risk status for the frontend/dashboard to consume
+- [x] **READ-01**: A read API (or Supabase realtime subscription) exposes the latest vitals and current risk status for the frontend/dashboard to consume
 - [ ] **READ-02**: A read API exposes historical vitals and risk-status trend over a given time range, for the frontend to render a trend view
 
 ### Device
 
-- [ ] **DEV-01**: System supports a single provisioned device/baby profile end-to-end for v1 (device ID + API key configured manually, no registration UI needed)
+- [x] **DEV-01**: System supports a single provisioned device/baby profile end-to-end for v1 (device ID + API key configured manually, no registration UI needed)
 
 ## v2 Requirements
 
@@ -72,19 +72,20 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ING-01 | Phase 1 | Pending |
-| ING-02 | Phase 1 | Pending |
+| ING-01 | Phase 1 | Complete |
+| ING-02 | Phase 1 | Complete |
 | ING-03 | Phase 3 | Pending |
-| STOR-01 | Phase 1 | Pending |
+| STOR-01 | Phase 1 | Complete |
 | STOR-02 | Phase 2 | Pending |
 | RISK-01 | Phase 2 | Pending |
 | RISK-02 | Phase 2 | Pending |
 | RISK-03 | Phase 2 | Pending |
-| READ-01 | Phase 1 | Pending |
+| READ-01 | Phase 1 | Complete |
 | READ-02 | Phase 4 | Pending |
-| DEV-01 | Phase 1 | Pending |
+| DEV-01 | Phase 1 | Complete |
 
 **Coverage:**
+
 - v1 requirements: 11 total
 - Mapped to phases: 11
 - Unmapped: 0 ✓
