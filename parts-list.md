@@ -38,3 +38,20 @@ Cheap, off-the-shelf components for a first working prototype. Prices are approx
 | DS18B20 Temperature Sensor Module | Body temperature; pull-up resistor built onto module | https://robu.in/product/ds18b20-temperature-sensor-module/ |
 | Nova 603450 1100mAh 3.7V Micro LiPo Battery | Power source | https://robu.in/product/nova-603450-1100mah-3-7v-micro-lipo-battery-pack/ |
 | TP4056 3.7V Lithium Charging Module (1A, USB Type-C, PH2.0 terminal) | Charging/protection; PH2.0 connector matches battery plug | https://robu.in/product/tp4056-3-7v-lithium-battery-charging-module-1a-usb-type-c-port-ph2-0-terminal/ |
+
+## Board Plan
+
+- **Dev stage**: using the full-size ESP32-WROOM-32 (CP2102, Type-C) board for setup, wiring, and firmware bring-up.
+- **Final stage**: swapping to the Waveshare ESP32-S3-Tiny (dual-core, 512KB SRAM, 2MB PSRAM, 4MB flash, FPC connector + adapter board) once it arrives, for the actual wearable form factor.
+
+## Firmware Note — Deep Sleep Required for Battery Target
+
+Target: ~1 week of runtime on the 1100mAh battery. Continuous active operation (WiFi connected + sensors on) draws ~100-150mA, giving only ~7-8 hours — not sufficient on its own.
+
+To hit the 1-week target, firmware must duty-cycle using ESP32 deep sleep (~10-150µA idle) instead of running an always-on loop:
+
+- Wake → sample sensors (~1-2s) → connect WiFi + transmit (~2-5s) → deep sleep. Repeat every few minutes.
+- A ~5s active window every 5 minutes (~1.7% duty cycle) brings average current down to ~2.5-3mA, giving 2-3+ weeks of runtime.
+- This aligns with the backend's existing design: ESP32 sends pre-computed periodic vitals, not continuous raw streams, and the sepsis-risk fusion logic evaluates multi-hour trends — so sampling every few minutes doesn't hurt detection quality.
+
+Flag for whoever writes the ESP32 firmware: build around wake/sleep cycles from the start rather than retrofitting deep sleep later.
