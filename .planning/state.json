@@ -1,0 +1,33 @@
+{
+  "contract": "1.0.0",
+  "flavor": "core",
+  "milestone": null,
+  "phases": [
+    {
+      "number": "1",
+      "name": "Device Ingest & Live Readout",
+      "status": "pending"
+    },
+    {
+      "number": "2",
+      "name": "Automatic Risk Scoring & Status",
+      "status": "pending"
+    },
+    {
+      "number": "3",
+      "name": "Offline-Buffered Batch Sync",
+      "status": "pending"
+    },
+    {
+      "number": "4",
+      "name": "Historical Trends API",
+      "status": "pending"
+    }
+  ],
+  "next": {
+    "command": "/gsd:progress --next",
+    "label": "Advance to the next step",
+    "reason": "Phase 1 of 4 · 0% · executing"
+  },
+  "updated_at": "2026-09-12T16:55:42.288Z"
+}

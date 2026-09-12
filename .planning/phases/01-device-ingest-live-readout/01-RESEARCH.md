@@ -386,17 +386,19 @@ alter publication supabase_realtime add table public.readings;
 
 **If this table is empty:** N/A — see entries above.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Should the anon RLS policy hardcode the device_id literal, or read it from a config/env-driven value?**
+1. **RESOLVED — Should the anon RLS policy hardcode the device_id literal, or read it from a config/env-driven value?**
    - What we know: v1 has exactly one device (D-06); a literal string in the policy works and is simplest.
    - What's unclear: Whether the planner wants the device_id used in the policy sourced from the same seed script that creates the `devices` row (to avoid two places needing manual sync), or accepts the literal as intentionally hardcoded for v1.
    - Recommendation: Seed script should create the `devices` row and print/output the exact `device_id` value to paste into the RLS policy migration — treat this as one manual step, documented, not two independently-typed literals that could drift.
+   - **Resolution:** `01-01-PLAN.md` Task 2 fixes the device-id literal as `nb-001`, defined exactly once and reused consistently across the migration's RLS policy and `01-02-PLAN.md`'s seed step — no drift between two independently-typed literals.
 
-2. **Does the phase need a `vercel.json`, or does zero-config Next.js detection suffice?**
+2. **RESOLVED — Does the phase need a `vercel.json`, or does zero-config Next.js detection suffice?**
    - What we know: Vercel auto-detects Next.js projects with zero configuration needed for standard App Router route handlers on the Hobby (free) plan.
    - What's unclear: Whether any custom function timeout/region setting is needed (Hobby plan default serverless function timeout is 10s, which should be more than sufficient for a single insert+auth check).
    - Recommendation: Skip `vercel.json` entirely for this phase; add one only if a concrete need surfaces (there is no research-identified reason to add one now).
+   - **Resolution:** `01-04-PLAN.md` deploys with zero-config Vercel detection and cites this section directly ("no `vercel.json` needed") — no task creates one.
 
 ## Environment Availability
 
