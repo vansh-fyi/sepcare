@@ -29,7 +29,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Requests with a missing or invalid device API key are rejected before any data is stored
   3. Each submitted reading is persisted in Supabase with device ID, timestamp, and all reading fields intact
   4. A read API returns the latest stored vitals reading for the single provisioned device
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Scaffold Next.js + install deps + author Supabase migration (devices/readings/RLS/Realtime)
+- [ ] 01-02-PLAN.md — Provision live Supabase project, push schema, seed the v1 device
+- [ ] 01-03-PLAN.md — Wire POST /api/ingest end-to-end (tracer) + prove the Realtime read path
+- [ ] 01-04-PLAN.md — Deploy to Vercel and verify the full pipeline against the production URL
 
 ### Phase 2: Automatic Risk Scoring & Status
 **Goal**: Every ingested reading is automatically scored for sepsis risk, producing a Green/Amber/Red status that's persisted and exposed via the same read API established in Phase 1.
@@ -73,7 +79,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Device Ingest & Live Readout | 0/TBD | Not started | - |
+| 1. Device Ingest & Live Readout | 0/4 | Not started | - |
 | 2. Automatic Risk Scoring & Status | 0/TBD | Not started | - |
 | 3. Offline-Buffered Batch Sync | 0/TBD | Not started | - |
 | 4. Historical Trends API | 0/TBD | Not started | - |
