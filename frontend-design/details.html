@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Clinical View & Detailed Analytics</title>
+  <meta name="description" content="SepCare clinical details panel with dual Vitals and System graph trend modes.">
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Standalone Reusable Component Stylesheet -->
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+
+  <!-- =========================================================================
+       RESPONSIVE APP VIEWPORT (.sc-app-viewport)
+       Full bleed responsive layout (no fake device frames). Edge-to-edge responsive.
+       ========================================================================= -->
+  <main class="sc-app-viewport" role="main" aria-label="SepCare Clinical View Panel">
+
+    <!-- Mobile Status Bar (Light theme with dark text/icons) -->
+    <header class="sc-status-bar sc-status-bar--light" style="background: transparent;">
+      <span class="sc-status-bar__time" id="scClinicalClock">9:41</span>
+      <div class="sc-status-bar__icons" aria-label="System status: Full signal, Wi-Fi connected, Full battery">
+        <!-- 4-bar cellular signal -->
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
+          <rect x="0.5" y="8" width="2.5" height="4" rx="0.8" fill="#0F172A" />
+          <rect x="4.5" y="5.5" width="2.5" height="6.5" rx="0.8" fill="#0F172A" />
+          <rect x="8.5" y="3" width="2.5" height="9" rx="0.8" fill="#0F172A" />
+          <rect x="12.5" y="0.5" width="2.5" height="11.5" rx="0.8" fill="#0F172A" />
+        </svg>
+
+        <!-- Wi-Fi icon -->
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M8 2.2C10.5 2.2 12.8 3.1 14.5 4.6L15.6 3.4C13.5 1.5 10.9 0.4 8 0.4C5.1 0.4 2.5 1.5 0.4 3.4L1.5 4.6C3.2 3.1 5.5 2.2 8 2.2ZM8 5.6C9.7 5.6 11.2 6.2 12.4 7.2L13.5 6C12 4.7 10.1 4 8 4C5.9 4 4 4.7 2.5 6L3.6 7.2C4.8 6.2 6.3 5.6 8 5.6ZM8 9C9 9 9.8 9.4 10.4 10L8 12.6L5.6 10C6.2 9.4 7 9 8 9Z" fill="#0F172A" />
+        </svg>
+
+        <!-- Battery icon -->
+        <svg width="24" height="12" viewBox="0 0 24 12" fill="none" aria-hidden="true">
+          <rect x="0.5" y="0.5" width="20" height="11" rx="3.5" stroke="#0F172A" stroke-width="1.1" />
+          <rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="#0F172A" />
+          <path d="M22 4C22.6 4.3 23 4.9 23 5.6V6.4C23 7.1 22.6 7.7 22 8V4Z" fill="#0F172A" />
+        </svg>
+      </div>
+    </header>
+
+    <!-- Top Navigation Row: Back Button & Screen Title -->
+    <nav class="sc-top-nav-row">
+      <a href="index.html" class="sc-back-btn" aria-label="Return to Dashboard Overview">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </a>
+      <h1 class="sc-top-nav-title">Clinical View</h1>
+    </nav>
+
+    <!-- Standalone Device Status Card -->
+    <section class="sc-clinical-device-card" aria-label="Connected Monitoring Device">
+      <div class="sc-clinical-device-card__badge" aria-hidden="true">
+        <!-- Watch outline icon with notification dot -->
+        <svg viewBox="0 0 24 24">
+          <rect x="7" y="6" width="10" height="12" rx="3" />
+          <path d="M9 6V3.5C9 3.2 9.2 3 9.5 3H14.5C14.8 3 15 3.2 15 3.5V6" />
+          <path d="M9 18V20.5C9 20.8 9.2 21 9.5 21H14.5C14.8 21 15 20.8 15 20.5V18" />
+          <circle cx="16.5" cy="5.5" r="1.5" fill="white" stroke="none" />
+        </svg>
+      </div>
+      <div class="sc-clinical-device-card__info">
+        <h2 class="sc-clinical-device-card__title">Device-SKU-1234</h2>
+        <p class="sc-clinical-device-card__subtext">Device ID: <span>SKU-1234</span></p>
+      </div>
+    </section>
+
+
+    <!-- =====================================================================
+         TAB PANE 1: VITALS SUMMARY MODE (.sc-tab-pane #tab-vitals)
+         Shows Infant Status Card + 6 Systems List Cards
+         ===================================================================== -->
+    <div class="sc-tab-pane active" id="tab-vitals">
+      
+      <div class="sc-body" style="padding-top: 14px;">
+
+        <!-- Infant Status Hero Card -->
+        <section class="sc-section" aria-labelledby="heading-clinical-infant-status">
+          <div class="sc-section__header">
+            <h2 id="heading-clinical-infant-status" class="sc-section__title">Infant Status</h2>
+          </div>
+
+          <article class="sc-status-card" onclick="triggerToast('Infant Status: All vitals within normal parameters')">
+            <div class="sc-status-card__badge" aria-hidden="true">
+              <div class="sc-status-card__inner-circle">
+                <svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+            </div>
+            <div class="sc-status-card__text">
+              <h3 class="sc-status-card__title">All Systems Stable</h3>
+              <p class="sc-status-card__desc">All stats on the infant are normal. Baby is healthy</p>
+            </div>
+          </article>
+        </section>
+
+        <!-- Vitals Systems Summary Cards -->
+        <section class="sc-section" aria-labelledby="heading-clinical-vitals-list">
+          <div class="sc-section__header">
+            <h2 id="heading-clinical-vitals-list" class="sc-section__title">Vitals</h2>
+          </div>
+
+          <div class="sc-clinical-list">
+            
+            <!-- 1. Thermoregulation -->
+            <article class="sc-clinical-card" onclick="triggerToast('Thermoregulation: 98.6 °F (Stable)')">
+              <div class="sc-mint-icon-box" aria-hidden="true">
+                <!-- Thermometer Icon -->
+                <svg viewBox="0 0 24 24">
+                  <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
+                </svg>
+              </div>
+              <div class="sc-clinical-card__info">
+                <h3 class="sc-clinical-card__title">Thermoregulation</h3>
+                <p class="sc-clinical-card__desc">All systems stable</p>
+              </div>
+            </article>
+
+            <!-- 2. Cardiac Autonomic -->
+            <article class="sc-clinical-card" onclick="triggerToast('Cardiac Autonomic: Normal sinus rhythm')">
+              <div class="sc-mint-icon-box" aria-hidden="true">
+                <!-- Heartbeat / ECG Icon -->
+                <svg viewBox="0 0 24 24">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                </svg>
+              </div>
+              <div class="sc-clinical-card__info">
+                <h3 class="sc-clinical-card__title">Cardiac Autonomic</h3>
+                <p class="sc-clinical-card__desc">All systems stable</p>
+              </div>
+            </article>
+
+            <!-- 3. Perfusion Index -->
+            <article class="sc-clinical-card" onclick="triggerToast('Perfusion Index: PI 1.8% (Normal perfusion)')">
+              <div class="sc-mint-icon-box" aria-hidden="true">
+                <!-- Droplet Icon -->
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                </svg>
+              </div>
+              <div class="sc-clinical-card__info">
+                <h3 class="sc-clinical-card__title">Perfusion Index</h3>
+                <p class="sc-clinical-card__desc">All systems stable</p>
+              </div>
+            </article>
+
+            <!-- 4. HR / Temp Ratio -->
+            <article class="sc-clinical-card" onclick="triggerToast('HR / Temp Ratio: Proportionate autonomic index')">
+              <div class="sc-mint-icon-box" aria-hidden="true">
+                <!-- Pie / Circle Quadrant Icon -->
+                <svg viewBox="0 0 24 24">
+                  <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+                  <path d="M22 12A10 10 0 0 0 12 2v10z" />
+                </svg>
+              </div>
+              <div class="sc-clinical-card__info">
+                <h3 class="sc-clinical-card__title">HR / Temp Ratio</h3>
+                <p class="sc-clinical-card__desc">All systems stable</p>
+              </div>
+            </article>
+
+            <!-- 5. Respiratory Pattern -->
+            <article class="sc-clinical-card" onclick="triggerToast('Respiratory Pattern: 42 breaths/min (Regular)')">
+              <div class="sc-mint-icon-box" aria-hidden="true">
+                <!-- Lungs Icon -->
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 4v16" />
+                  <path d="M7 16.5A5.5 5.5 0 0 1 12 11c1.5 0 2.5 1 2.5 1" />
+                  <path d="M17 16.5A5.5 5.5 0 0 0 12 11" />
+                  <path d="M6 8a4 4 0 0 1 6-3 4 4 0 0 1 6 3c0 4-3 9-6 9s-6-5-6-9z" />
+                </svg>
+              </div>
+              <div class="sc-clinical-card__info">
+                <h3 class="sc-clinical-card__title">Respiratory Pattern</h3>
+                <p class="sc-clinical-card__desc">All systems stable</p>
+              </div>
+            </article>
+
+            <!-- 6. Activity Level -->
+            <article class="sc-clinical-card" onclick="triggerToast('Activity Level: Normal infant motility')">
+              <div class="sc-mint-icon-box" aria-hidden="true">
+                <!-- Wireless Sensor / Broadcast Waves Icon -->
+                <svg viewBox="0 0 24 24">
+                  <path d="M4.93 4.93a10 10 0 0 1 14.14 0" />
+                  <path d="M7.76 7.76a6 6 0 0 1 8.48 0" />
+                  <circle cx="12" cy="12" r="2" />
+                </svg>
+              </div>
+              <div class="sc-clinical-card__info">
+                <h3 class="sc-clinical-card__title">Activity Level</h3>
+                <p class="sc-clinical-card__desc">All systems stable</p>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+
+    <!-- =====================================================================
+         TAB PANE 2: SYSTEM GRAPH TREND MODE (.sc-tab-pane #tab-system)
+         Shows Time Scale Selector + 6 Physiological Trend Graphs
+         ===================================================================== -->
+    <div class="sc-tab-pane" id="tab-system">
+      
+      <!-- Time Scale Selector Bar -->
+      <section class="sc-time-scale-wrapper" aria-label="Select Graph Time Scale">
+        <h3 class="sc-time-scale-label">Select Time Scale</h3>
+        <div class="sc-time-scale-pills">
+          <button type="button" class="sc-time-pill" onclick="selectTimeScale(this)">2H</button>
+          <button type="button" class="sc-time-pill active" onclick="selectTimeScale(this)">4H</button>
+          <button type="button" class="sc-time-pill" onclick="selectTimeScale(this)">6H</button>
+          <button type="button" class="sc-time-pill" onclick="selectTimeScale(this)">8H</button>
+          <button type="button" class="sc-time-pill" onclick="selectTimeScale(this)">10H</button>
+          <button type="button" class="sc-time-pill" onclick="selectTimeScale(this)">12H</button>
+          <button type="button" class="sc-time-pill" onclick="selectTimeScale(this)">24H</button>
+        </div>
+      </section>
+
+      <div class="sc-body" style="padding-top: 10px;">
+
+        <section class="sc-section" aria-labelledby="heading-system-vitals">
+          <div class="sc-section__header">
+            <h2 id="heading-system-vitals" class="sc-section__title">Vitals</h2>
+          </div>
+
+          <div class="sc-clinical-list">
+            
+            <!-- Graph Card 1: Thermoregulation -->
+            <article class="sc-graph-card">
+              <div class="sc-graph-card__top">
+                <div class="sc-graph-card__header-left">
+                  <div class="sc-mint-icon-box" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" /></svg>
+                  </div>
+                  <div>
+                    <h3 class="sc-clinical-card__title">Thermoregulation</h3>
+                    <p class="sc-clinical-card__desc">All systems stable</p>
+                  </div>
+                </div>
+                <span class="sc-stable-badge">Stable</span>
+              </div>
+
+              <!-- Trend Chart Canvas -->
+              <div class="sc-graph-canvas-container">
+                <div class="sc-graph-y-axis">
+                  <span>100</span>
+                  <span>99</span>
+                  <span>96</span>
+                  <span>94</span>
+                </div>
+                <div class="sc-graph-chart-area">
+                  <svg class="sc-chart-svg" viewBox="0 0 300 64" preserveAspectRatio="none">
+                    <!-- Vertical Grid Lines -->
+                    <line x1="20" y1="0" x2="20" y2="60" class="sc-chart-grid-line" />
+                    <line x1="65" y1="0" x2="65" y2="60" class="sc-chart-grid-line" />
+                    <line x1="110" y1="0" x2="110" y2="60" class="sc-chart-grid-line" />
+                    <line x1="155" y1="0" x2="155" y2="60" class="sc-chart-grid-line" />
+                    <line x1="200" y1="0" x2="200" y2="60" class="sc-chart-grid-line" />
+                    <line x1="245" y1="0" x2="245" y2="60" class="sc-chart-grid-line" />
+                    <line x1="290" y1="0" x2="290" y2="60" class="sc-chart-grid-line" />
+
+                    <!-- Trend Line -->
+                    <polyline points="20,32 65,32 75,18 85,38 95,24 105,32 110,32 130,32 145,16 155,36 165,22 180,32 245,32 290,32" class="sc-chart-trend-line" />
+
+                    <!-- Key Data Points -->
+                    <circle cx="20" cy="32" class="sc-chart-point" />
+                    <circle cx="65" cy="32" class="sc-chart-point" />
+                    <circle cx="105" cy="32" class="sc-chart-point" />
+                    <circle cx="130" cy="32" class="sc-chart-point" />
+                    <circle cx="165" cy="22" class="sc-chart-point" />
+                    <circle cx="245" cy="32" class="sc-chart-point" />
+                    <circle cx="290" cy="32" class="sc-chart-point" />
+                  </svg>
+                  <div class="sc-graph-x-axis">
+                    <span>8:00</span>
+                    <span>9:00</span>
+                    <span>10:00</span>
+                    <span>11:00</span>
+                    <span>12:00</span>
+                    <span>13:00</span>
+                    <span>14:00</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Graph Card 2: Cardiac Autonomic -->
+            <article class="sc-graph-card">
+              <div class="sc-graph-card__top">
+                <div class="sc-graph-card__header-left">
+                  <div class="sc-mint-icon-box" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+                  </div>
+                  <div>
+                    <h3 class="sc-clinical-card__title">Cardiac Autonomic</h3>
+                    <p class="sc-clinical-card__desc">All systems stable</p>
+                  </div>
+                </div>
+                <span class="sc-stable-badge">Stable</span>
+              </div>
+
+              <!-- Trend Chart Canvas -->
+              <div class="sc-graph-canvas-container">
+                <div class="sc-graph-y-axis">
+                  <span>100</span>
+                  <span>99</span>
+                  <span>96</span>
+                  <span>94</span>
+                </div>
+                <div class="sc-graph-chart-area">
+                  <svg class="sc-chart-svg" viewBox="0 0 300 64" preserveAspectRatio="none">
+                    <line x1="20" y1="0" x2="20" y2="60" class="sc-chart-grid-line" />
+                    <line x1="65" y1="0" x2="65" y2="60" class="sc-chart-grid-line" />
+                    <line x1="110" y1="0" x2="110" y2="60" class="sc-chart-grid-line" />
+                    <line x1="155" y1="0" x2="155" y2="60" class="sc-chart-grid-line" />
+                    <line x1="200" y1="0" x2="200" y2="60" class="sc-chart-grid-line" />
+                    <line x1="245" y1="0" x2="245" y2="60" class="sc-chart-grid-line" />
+                    <line x1="290" y1="0" x2="290" y2="60" class="sc-chart-grid-line" />
+
+                    <polyline points="20,32 65,32 75,18 85,38 95,24 105,32 110,32 130,32 145,16 155,36 165,22 180,32 245,32 290,32" class="sc-chart-trend-line" />
+
+                    <circle cx="20" cy="32" class="sc-chart-point" />
+                    <circle cx="65" cy="32" class="sc-chart-point" />
+                    <circle cx="105" cy="32" class="sc-chart-point" />
+                    <circle cx="130" cy="32" class="sc-chart-point" />
+                    <circle cx="165" cy="22" class="sc-chart-point" />
+                    <circle cx="245" cy="32" class="sc-chart-point" />
+                    <circle cx="290" cy="32" class="sc-chart-point" />
+                  </svg>
+                  <div class="sc-graph-x-axis">
+                    <span>8:00</span>
+                    <span>9:00</span>
+                    <span>10:00</span>
+                    <span>11:00</span>
+                    <span>12:00</span>
+                    <span>13:00</span>
+                    <span>14:00</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Graph Card 3: Perfusion Index -->
+            <article class="sc-graph-card">
+              <div class="sc-graph-card__top">
+                <div class="sc-graph-card__header-left">
+                  <div class="sc-mint-icon-box" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg>
+                  </div>
+                  <div>
+                    <h3 class="sc-clinical-card__title">Perfusion Index</h3>
+                    <p class="sc-clinical-card__desc">All systems stable</p>
+                  </div>
+                </div>
+                <span class="sc-stable-badge">Stable</span>
+              </div>
+
+              <div class="sc-graph-canvas-container">
+                <div class="sc-graph-y-axis">
+                  <span>100</span>
+                  <span>99</span>
+                  <span>96</span>
+                  <span>94</span>
+                </div>
+                <div class="sc-graph-chart-area">
+                  <svg class="sc-chart-svg" viewBox="0 0 300 64" preserveAspectRatio="none">
+                    <line x1="20" y1="0" x2="20" y2="60" class="sc-chart-grid-line" />
+                    <line x1="65" y1="0" x2="65" y2="60" class="sc-chart-grid-line" />
+                    <line x1="110" y1="0" x2="110" y2="60" class="sc-chart-grid-line" />
+                    <line x1="155" y1="0" x2="155" y2="60" class="sc-chart-grid-line" />
+                    <line x1="200" y1="0" x2="200" y2="60" class="sc-chart-grid-line" />
+                    <line x1="245" y1="0" x2="245" y2="60" class="sc-chart-grid-line" />
+                    <line x1="290" y1="0" x2="290" y2="60" class="sc-chart-grid-line" />
+
+                    <polyline points="20,32 65,32 75,18 85,38 95,24 105,32 110,32 130,32 145,16 155,36 165,22 180,32 245,32 290,32" class="sc-chart-trend-line" />
+
+                    <circle cx="20" cy="32" class="sc-chart-point" />
+                    <circle cx="65" cy="32" class="sc-chart-point" />
+                    <circle cx="105" cy="32" class="sc-chart-point" />
+                    <circle cx="130" cy="32" class="sc-chart-point" />
+                    <circle cx="165" cy="22" class="sc-chart-point" />
+                    <circle cx="245" cy="32" class="sc-chart-point" />
+                    <circle cx="290" cy="32" class="sc-chart-point" />
+                  </svg>
+                  <div class="sc-graph-x-axis">
+                    <span>8:00</span>
+                    <span>9:00</span>
+                    <span>10:00</span>
+                    <span>11:00</span>
+                    <span>12:00</span>
+                    <span>13:00</span>
+                    <span>14:00</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Graph Card 4: HR / Temp Ratio -->
+            <article class="sc-graph-card">
+              <div class="sc-graph-card__top">
+                <div class="sc-graph-card__header-left">
+                  <div class="sc-mint-icon-box" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></svg>
+                  </div>
+                  <div>
+                    <h3 class="sc-clinical-card__title">HR / Temp Ratio</h3>
+                    <p class="sc-clinical-card__desc">All systems stable</p>
+                  </div>
+                </div>
+                <span class="sc-stable-badge">Stable</span>
+              </div>
+
+              <div class="sc-graph-canvas-container">
+                <div class="sc-graph-y-axis">
+                  <span>100</span>
+                  <span>99</span>
+                  <span>96</span>
+                  <span>94</span>
+                </div>
+                <div class="sc-graph-chart-area">
+                  <svg class="sc-chart-svg" viewBox="0 0 300 64" preserveAspectRatio="none">
+                    <line x1="20" y1="0" x2="20" y2="60" class="sc-chart-grid-line" />
+                    <line x1="65" y1="0" x2="65" y2="60" class="sc-chart-grid-line" />
+                    <line x1="110" y1="0" x2="110" y2="60" class="sc-chart-grid-line" />
+                    <line x1="155" y1="0" x2="155" y2="60" class="sc-chart-grid-line" />
+                    <line x1="200" y1="0" x2="200" y2="60" class="sc-chart-grid-line" />
+                    <line x1="245" y1="0" x2="245" y2="60" class="sc-chart-grid-line" />
+                    <line x1="290" y1="0" x2="290" y2="60" class="sc-chart-grid-line" />
+
+                    <polyline points="20,32 65,32 75,18 85,38 95,24 105,32 110,32 130,32 145,16 155,36 165,22 180,32 245,32 290,32" class="sc-chart-trend-line" />
+
+                    <circle cx="20" cy="32" class="sc-chart-point" />
+                    <circle cx="65" cy="32" class="sc-chart-point" />
+                    <circle cx="105" cy="32" class="sc-chart-point" />
+                    <circle cx="130" cy="32" class="sc-chart-point" />
+                    <circle cx="165" cy="22" class="sc-chart-point" />
+                    <circle cx="245" cy="32" class="sc-chart-point" />
+                    <circle cx="290" cy="32" class="sc-chart-point" />
+                  </svg>
+                  <div class="sc-graph-x-axis">
+                    <span>8:00</span>
+                    <span>9:00</span>
+                    <span>10:00</span>
+                    <span>11:00</span>
+                    <span>12:00</span>
+                    <span>13:00</span>
+                    <span>14:00</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Graph Card 5: Respiratory Pattern -->
+            <article class="sc-graph-card">
+              <div class="sc-graph-card__top">
+                <div class="sc-graph-card__header-left">
+                  <div class="sc-mint-icon-box" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M12 4v16" /><path d="M7 16.5A5.5 5.5 0 0 1 12 11c1.5 0 2.5 1 2.5 1" /><path d="M17 16.5A5.5 5.5 0 0 0 12 11" /><path d="M6 8a4 4 0 0 1 6-3 4 4 0 0 1 6 3c0 4-3 9-6 9s-6-5-6-9z" /></svg>
+                  </div>
+                  <div>
+                    <h3 class="sc-clinical-card__title">Respiratory Pattern</h3>
+                    <p class="sc-clinical-card__desc">All systems stable</p>
+                  </div>
+                </div>
+                <span class="sc-stable-badge">Stable</span>
+              </div>
+
+              <div class="sc-graph-canvas-container">
+                <div class="sc-graph-y-axis">
+                  <span>100</span>
+                  <span>99</span>
+                  <span>96</span>
+                  <span>94</span>
+                </div>
+                <div class="sc-graph-chart-area">
+                  <svg class="sc-chart-svg" viewBox="0 0 300 64" preserveAspectRatio="none">
+                    <line x1="20" y1="0" x2="20" y2="60" class="sc-chart-grid-line" />
+                    <line x1="65" y1="0" x2="65" y2="60" class="sc-chart-grid-line" />
+                    <line x1="110" y1="0" x2="110" y2="60" class="sc-chart-grid-line" />
+                    <line x1="155" y1="0" x2="155" y2="60" class="sc-chart-grid-line" />
+                    <line x1="200" y1="0" x2="200" y2="60" class="sc-chart-grid-line" />
+                    <line x1="245" y1="0" x2="245" y2="60" class="sc-chart-grid-line" />
+                    <line x1="290" y1="0" x2="290" y2="60" class="sc-chart-grid-line" />
+
+                    <polyline points="20,32 65,32 75,18 85,38 95,24 105,32 110,32 130,32 145,16 155,36 165,22 180,32 245,32 290,32" class="sc-chart-trend-line" />
+
+                    <circle cx="20" cy="32" class="sc-chart-point" />
+                    <circle cx="65" cy="32" class="sc-chart-point" />
+                    <circle cx="105" cy="32" class="sc-chart-point" />
+                    <circle cx="130" cy="32" class="sc-chart-point" />
+                    <circle cx="165" cy="22" class="sc-chart-point" />
+                    <circle cx="245" cy="32" class="sc-chart-point" />
+                    <circle cx="290" cy="32" class="sc-chart-point" />
+                  </svg>
+                  <div class="sc-graph-x-axis">
+                    <span>8:00</span>
+                    <span>9:00</span>
+                    <span>10:00</span>
+                    <span>11:00</span>
+                    <span>12:00</span>
+                    <span>13:00</span>
+                    <span>14:00</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Graph Card 6: Activity Level -->
+            <article class="sc-graph-card">
+              <div class="sc-graph-card__top">
+                <div class="sc-graph-card__header-left">
+                  <div class="sc-mint-icon-box" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M4.93 4.93a10 10 0 0 1 14.14 0" /><path d="M7.76 7.76a6 6 0 0 1 8.48 0" /><circle cx="12" cy="12" r="2" /></svg>
+                  </div>
+                  <div>
+                    <h3 class="sc-clinical-card__title">Activity Level</h3>
+                    <p class="sc-clinical-card__desc">All systems stable</p>
+                  </div>
+                </div>
+                <span class="sc-stable-badge">Stable</span>
+              </div>
+
+              <div class="sc-graph-canvas-container">
+                <div class="sc-graph-y-axis">
+                  <span>100</span>
+                  <span>99</span>
+                  <span>96</span>
+                  <span>94</span>
+                </div>
+                <div class="sc-graph-chart-area">
+                  <svg class="sc-chart-svg" viewBox="0 0 300 64" preserveAspectRatio="none">
+                    <line x1="20" y1="0" x2="20" y2="60" class="sc-chart-grid-line" />
+                    <line x1="65" y1="0" x2="65" y2="60" class="sc-chart-grid-line" />
+                    <line x1="110" y1="0" x2="110" y2="60" class="sc-chart-grid-line" />
+                    <line x1="155" y1="0" x2="155" y2="60" class="sc-chart-grid-line" />
+                    <line x1="200" y1="0" x2="200" y2="60" class="sc-chart-grid-line" />
+                    <line x1="245" y1="0" x2="245" y2="60" class="sc-chart-grid-line" />
+                    <line x1="290" y1="0" x2="290" y2="60" class="sc-chart-grid-line" />
+
+                    <polyline points="20,32 65,32 75,18 85,38 95,24 105,32 110,32 130,32 145,16 155,36 165,22 180,32 245,32 290,32" class="sc-chart-trend-line" />
+
+                    <circle cx="20" cy="32" class="sc-chart-point" />
+                    <circle cx="65" cy="32" class="sc-chart-point" />
+                    <circle cx="105" cy="32" class="sc-chart-point" />
+                    <circle cx="130" cy="32" class="sc-chart-point" />
+                    <circle cx="165" cy="22" class="sc-chart-point" />
+                    <circle cx="245" cy="32" class="sc-chart-point" />
+                    <circle cx="290" cy="32" class="sc-chart-point" />
+                  </svg>
+                  <div class="sc-graph-x-axis">
+                    <span>8:00</span>
+                    <span>9:00</span>
+                    <span>10:00</span>
+                    <span>11:00</span>
+                    <span>12:00</span>
+                    <span>13:00</span>
+                    <span>14:00</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+
+    <!-- =====================================================================
+         FLOATING BOTTOM SEGMENTED BAR (.sc-bottom-nav-container)
+         Dual Mode Switcher: Vitals <-> System
+         ===================================================================== -->
+    <nav class="sc-bottom-nav-container" aria-label="Clinical View Modes">
+      <!-- Vitals Mode Button -->
+      <button type="button" class="sc-bottom-nav-btn active" id="btn-tab-vitals" onclick="switchMode('vitals')" aria-selected="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+          <path d="M22 12A10 10 0 0 0 12 2v10z" />
+        </svg>
+        <span>Vitals</span>
+      </button>
+
+      <!-- System Mode Button -->
+      <button type="button" class="sc-bottom-nav-btn" id="btn-tab-system" onclick="switchMode('system')" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+        </svg>
+        <span>System</span>
+      </button>
+    </nav>
+
+  </main>
+
+  <!-- Prototype Interactive Toast Element -->
+  <div class="sc-toast" id="scToast" role="status" aria-live="polite">
+    <span id="scToastText">Notification</span>
+  </div>
+
+  <script>
+    // Mode Switcher Logic (Vitals <-> System)
+    function switchMode(mode) {
+      const tabVitals = document.getElementById('tab-vitals');
+      const tabSystem = document.getElementById('tab-system');
+      const btnVitals = document.getElementById('btn-tab-vitals');
+      const btnSystem = document.getElementById('btn-tab-system');
+
+      if (mode === 'vitals') {
+        tabVitals.classList.add('active');
+        tabSystem.classList.remove('active');
+        btnVitals.classList.add('active');
+        btnVitals.setAttribute('aria-selected', 'true');
+        btnSystem.classList.remove('active');
+        btnSystem.setAttribute('aria-selected', 'false');
+        triggerToast('Switched to Vitals Overview mode');
+      } else {
+        tabSystem.classList.add('active');
+        tabVitals.classList.remove('active');
+        btnSystem.classList.add('active');
+        btnSystem.setAttribute('aria-selected', 'true');
+        btnVitals.classList.remove('active');
+        btnVitals.setAttribute('aria-selected', 'false');
+        triggerToast('Switched to System Graph Trends mode');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Time Scale Pill Selector
+    function selectTimeScale(button) {
+      document.querySelectorAll('.sc-time-pill').forEach(pill => pill.classList.remove('active'));
+      button.classList.add('active');
+      triggerToast(`Time scale updated to ${button.textContent.trim()}`);
+    }
+
+    // Interactive Toast Helper
+    let toastTimeout;
+    function triggerToast(message) {
+      const toast = document.getElementById('scToast');
+      const text = document.getElementById('scToastText');
+      if (!toast || !text) return;
+      
+      text.textContent = message;
+      toast.classList.add('active');
+      
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2400);
+    }
+
+    // Dynamic Live Clock
+    function updateClinicalClock() {
+      const clockEl = document.getElementById('scClinicalClock');
+      if (!clockEl) return;
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      clockEl.textContent = `${hours}:${minutes}`;
+    }
+    updateClinicalClock();
+    setInterval(updateClinicalClock, 30000);
+  </script>
+
+</body>
+</html>

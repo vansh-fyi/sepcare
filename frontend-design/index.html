@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Infant Health Companion</title>
+  <meta name="description" content="Working responsive HTML prototype for SepCare infant health companion dashboard with reusable components.">
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Standalone Reusable Component Stylesheet -->
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+
+  <!-- =========================================================================
+       RESPONSIVE APP VIEWPORT (.sc-app-viewport)
+       Full bleed responsive layout (no hardware device frames). Fills mobile screens
+       100% and centers on wider desktop viewports.
+       ========================================================================= -->
+  <main class="sc-app-viewport" role="main" aria-label="SepCare Caregiver Dashboard">
+
+    <!-- =====================================================================
+         COMPONENT: APP HEADER WRAPPER (.sc-header-wrapper)
+         Curved coral gradient header housing the status bar, date, actions, and device info
+         ===================================================================== -->
+    <div class="sc-header-wrapper">
+
+      <!-- SUB-COMPONENT 1: Mobile Status Bar (.sc-status-bar) -->
+      <header class="sc-status-bar">
+        <span class="sc-status-bar__time" id="scClock">9:41</span>
+        <div class="sc-status-bar__icons" aria-label="System status: Full signal, Wi-Fi connected, Full battery">
+          <!-- 4-bar cellular signal -->
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
+            <rect x="0.5" y="8" width="2.5" height="4" rx="0.8" fill="white" />
+            <rect x="4.5" y="5.5" width="2.5" height="6.5" rx="0.8" fill="white" />
+            <rect x="8.5" y="3" width="2.5" height="9" rx="0.8" fill="white" />
+            <rect x="12.5" y="0.5" width="2.5" height="11.5" rx="0.8" fill="white" />
+          </svg>
+
+          <!-- Wi-Fi icon -->
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M8 2.2C10.5 2.2 12.8 3.1 14.5 4.6L15.6 3.4C13.5 1.5 10.9 0.4 8 0.4C5.1 0.4 2.5 1.5 0.4 3.4L1.5 4.6C3.2 3.1 5.5 2.2 8 2.2ZM8 5.6C9.7 5.6 11.2 6.2 12.4 7.2L13.5 6C12 4.7 10.1 4 8 4C5.9 4 4 4.7 2.5 6L3.6 7.2C4.8 6.2 6.3 5.6 8 5.6ZM8 9C9 9 9.8 9.4 10.4 10L8 12.6L5.6 10C6.2 9.4 7 9 8 9Z" fill="white" />
+          </svg>
+
+          <!-- Battery icon -->
+          <svg width="24" height="12" viewBox="0 0 24 12" fill="none" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="20" height="11" rx="3.5" stroke="white" stroke-width="1.1" />
+            <rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="white" />
+            <path d="M22 4C22.6 4.3 23 4.9 23 5.6V6.4C23 7.1 22.6 7.7 22 8V4Z" fill="white" />
+          </svg>
+        </div>
+      </header>
+
+      <!-- SUB-COMPONENT 2: Header Content (Date, Quick Actions, Device Info) -->
+      <section class="sc-header-content">
+        
+        <!-- Top Row: Date Badge & Actions -->
+        <div class="sc-header-top-row">
+          <div class="sc-date-badge" onclick="triggerToast('Calendar: Monitored data from Sun, 16 Aug 2026')">
+            <!-- Calendar Outline Icon -->
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="17" rx="3" />
+              <line x1="16" y1="2" x2="16" y2="5" />
+              <line x1="8" y1="2" x2="8" y2="5" />
+              <line x1="3" y1="9" x2="21" y2="9" />
+            </svg>
+            <span>Sun, 16 Aug 2026</span>
+          </div>
+
+          <div class="sc-header-actions">
+            <!-- Action 1: Equalizer / Stats Wave -->
+            <button type="button" class="sc-glass-btn" aria-label="Frequency and rhythm analysis" onclick="triggerToast('Audio & vital signal analysis opened')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="5.5" y="9" width="3" height="10" rx="1.5" fill="white" />
+                <rect x="10.5" y="5" width="3" height="14" rx="1.5" fill="white" />
+                <rect x="15.5" y="11" width="3" height="8" rx="1.5" fill="white" />
+              </svg>
+            </button>
+
+            <!-- Action 2: Wearable / Cuff Status with Dot -->
+            <button type="button" class="sc-glass-btn" aria-label="Wearable band settings" onclick="triggerToast('Wearable Band: Battery 96% • BLE Active')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="7" y="6" width="10" height="12" rx="3" stroke="white" stroke-width="1.8" />
+                <path d="M9 6V3.5C9 3.2 9.2 3 9.5 3H14.5C14.8 3 15 3.2 15 3.5V6" stroke="white" stroke-width="1.8" />
+                <path d="M9 18V20.5C9 20.8 9.2 21 9.5 21H14.5C14.8 21 15 20.8 15 20.5V18" stroke="white" stroke-width="1.8" />
+                <circle cx="17.5" cy="4.5" r="2.2" fill="white" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Hardware Device Banner -->
+        <div class="sc-device-card" onclick="triggerToast('Hardware: SKU-1234 • Firmware v2.4.1 Connected')">
+          <div class="sc-device-card__icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="7" y="6" width="10" height="12" rx="3" />
+              <path d="M9 6V3.5C9 3.2 9.2 3 9.5 3H14.5C14.8 3 15 3.2 15 3.5V6" />
+              <path d="M9 18V20.5C9 20.8 9.2 21 9.5 21H14.5C14.8 21 15 20.8 15 20.5V18" />
+              <circle cx="16.5" cy="5.5" r="1.5" fill="white" stroke="none" />
+            </svg>
+          </div>
+
+          <div class="sc-device-card__info">
+            <h1 class="sc-device-card__title">Device-SKU-1234</h1>
+            <div class="sc-device-card__status-row">
+              <span class="sc-device-status-item">
+                <span class="sc-check-dot">
+                  <svg viewBox="0 0 12 12" aria-hidden="true"><polyline points="2.5 6 5 8.5 9.5 3.5" /></svg>
+                </span>
+                Monitor Active
+              </span>
+              <span class="sc-device-status-item">
+                <span class="sc-check-dot">
+                  <svg viewBox="0 0 12 12" aria-hidden="true"><polyline points="2.5 6 5 8.5 9.5 3.5" /></svg>
+                </span>
+                Wearable Connected
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+
+    <!-- =====================================================================
+         MAIN BODY AREA (.sc-body)
+         Contains all core modules: Infant Status, Vitals, and Instructions
+         ===================================================================== -->
+    <div class="sc-body">
+
+      <!-- ===================================================================
+           COMPONENT 3: INFANT STATUS SECTION (.sc-status-card)
+           Reusable Hero triage card with status headline & supportive copy
+           =================================================================== -->
+      <section class="sc-section" aria-labelledby="heading-infant-status">
+        <div class="sc-section__header">
+          <h2 id="heading-infant-status" class="sc-section__title">Infant Status</h2>
+          <button type="button" class="sc-more-btn" aria-label="Infant status options" onclick="triggerToast('Options: Calibrate Sensor • Log Diaper • Share Report')">•••</button>
+        </div>
+
+        <article class="sc-status-card" onclick="triggerToast('Infant Health: Normal tier • No sepsis warning signs detected')">
+          <div class="sc-status-card__badge" aria-hidden="true">
+            <div class="sc-status-card__inner-circle">
+              <svg viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+          </div>
+          <div class="sc-status-card__text">
+            <h3 class="sc-status-card__title">Baby is Resting Safely</h3>
+            <p class="sc-status-card__desc">Based on the data, baby's health status is above average.</p>
+          </div>
+        </article>
+      </section>
+
+
+      <!-- ===================================================================
+           COMPONENT 4: VITALS SECTION (.sc-vitals-grid, .sc-vital-card)
+           Modular 3-column vital sign metric cards with custom rhythm graphics
+           Variants:
+             - .sc-vital-card--pulse (Pulse Rate)
+             - .sc-vital-card--temp (Temperature)
+             - .sc-vital-card--activity (Activity / Movement)
+           =================================================================== -->
+      <section class="sc-section" aria-labelledby="heading-vitals">
+        <div class="sc-section__header">
+          <h2 id="heading-vitals" class="sc-section__title">Vitals</h2>
+          <a href="details.html" class="sc-section__action">See All</a>
+        </div>
+
+        <div class="sc-vitals-grid">
+          
+          <!-- Vital Card 1: Pulse Rate -->
+          <article class="sc-vital-card sc-vital-card--pulse" onclick="triggerToast('Pulse: 78.2 BPM (Normal resting range: 70-100 BPM)')">
+            <div class="sc-vital-card__header">
+              <span class="sc-vital-card__name">Pulse</span>
+              <span class="sc-vital-card__heart" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+              </span>
+            </div>
+
+            <div class="sc-vital-card__visual" aria-hidden="true">
+              <svg class="sc-ecg-svg" viewBox="0 0 100 32">
+                <!-- Sharp QRS cardiac pulse wave -->
+                <path d="M0,16 L22,16 L25,16 L28,11 L31,21 L35,3 L39,30 L43,12 L47,18 L51,16 L100,16" />
+              </svg>
+            </div>
+
+            <div class="sc-vital-card__footer">
+              <span class="sc-vital-card__value">78.2</span>
+              <span class="sc-vital-card__unit">BPM</span>
+            </div>
+          </article>
+
+          <!-- Vital Card 2: Temperature -->
+          <article class="sc-vital-card sc-vital-card--temp" onclick="triggerToast('Skin Temperature: 98.6 °F (Normal normothermia range)')">
+            <div class="sc-vital-card__header">
+              <span class="sc-vital-card__name">Temp</span>
+              <span class="sc-vital-card__heart" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+              </span>
+            </div>
+
+            <div class="sc-vital-card__visual" aria-hidden="true">
+              <svg class="sc-ecg-svg" viewBox="0 0 100 32">
+                <!-- Temperature physiological wave pattern -->
+                <path d="M0,16 L22,16 L26,12 L30,20 L34,6 L38,26 L42,12 L46,18 L50,16 L100,16" />
+              </svg>
+            </div>
+
+            <div class="sc-vital-card__footer">
+              <span class="sc-vital-card__value">98.6</span>
+              <span class="sc-vital-card__unit">°F</span>
+            </div>
+          </article>
+
+          <!-- Vital Card 3: Activity / Movement -->
+          <article class="sc-vital-card sc-vital-card--activity" onclick="triggerToast('Activity Status: Healthy motor movement detected')">
+            <div class="sc-vital-card__header">
+              <span class="sc-vital-card__name">Activity</span>
+              <span class="sc-vital-card__heart" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+              </span>
+            </div>
+
+            <div class="sc-vital-card__visual" aria-hidden="true">
+              <div class="sc-activity-badge">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="sc-vital-card__footer">
+              <span class="sc-vital-card__status-text">Healthy</span>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+
+      <!-- ===================================================================
+           COMPONENT 5: INSTRUCTIONS SECTION (.sc-instructions-list, .sc-instruction-card)
+           Reusable actionable recommendation rows with icon box, title, subtitle
+           =================================================================== -->
+      <section class="sc-section" aria-labelledby="heading-instructions">
+        <div class="sc-section__header">
+          <h2 id="heading-instructions" class="sc-section__title">Instructions</h2>
+        </div>
+
+        <div class="sc-instructions-list">
+          
+          <!-- Instruction 1: Feeding -->
+          <article class="sc-instruction-card" onclick="triggerToast('Feeding Guide: Ensure regular feeds every 2-3 hours')">
+            <div class="sc-instruction-card__icon-box" aria-hidden="true">
+              <!-- Baby Bottle Icon (angled with graduation ticks) -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M15.5 3.5L14 5L19 10L20.5 8.5C21.1 7.9 21.1 6.9 20.5 6.3L17.7 3.5C17.1 2.9 16.1 2.9 15.5 3.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 5L5.5 13.5C4.5 14.5 4 15.8 4 17.2C4 20.4 6.6 23 9.8 23C11.2 23 12.5 22.5 13.5 21.5L22 13L17 8L14 5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="8.5" y1="13.5" x2="11.5" y2="16.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <line x1="11" y1="11" x2="13.5" y2="13.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <circle cx="18" cy="4" r="1" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="sc-instruction-card__content">
+              <h3 class="sc-instruction-card__title">Continue Regular Feeding</h3>
+              <p class="sc-instruction-card__desc">Continue as advised</p>
+            </div>
+          </article>
+
+          <!-- Instruction 2: Warmth & Swaddling -->
+          <article class="sc-instruction-card" onclick="triggerToast('Warmth Guide: Kangaroo Mother Care (KMC) recommended')">
+            <div class="sc-instruction-card__icon-box" aria-hidden="true">
+              <!-- Swaddled Baby in Warm Blanket Icon -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="7" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M7 11C7 11 5 15 5 19C5 20.7 6.3 22 8 22H16C17.7 22 19 20.7 19 19C19 15 17 11 17 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M8 14L16 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M16 14L8 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="sc-instruction-card__content">
+              <h3 class="sc-instruction-card__title">Keep Baby Warm & Covered</h3>
+              <p class="sc-instruction-card__desc">Keep Baby warm around a soft cloth</p>
+            </div>
+          </article>
+
+          <!-- Instruction 3: Ankle Band Continuous Wear -->
+          <article class="sc-instruction-card" onclick="triggerToast('Ankle Band: Ensure snug fit with 1-finger gap')">
+            <div class="sc-instruction-card__icon-box" aria-hidden="true">
+              <!-- Wearable Band / Smart Ankle Cuff Icon -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="7" y="6" width="10" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M9 6V3.5C9 3.2 9.2 3 9.5 3H14.5C14.8 3 15 3.2 15 3.5V6" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M9 18V20.5C9 20.8 9.2 21 9.5 21H14.5C14.8 21 15 20.8 15 20.5V18" stroke="currentColor" stroke-width="1.8"/>
+                <line x1="12" y1="10" x2="12" y2="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="sc-instruction-card__content">
+              <h3 class="sc-instruction-card__title">Keep Ankle Band On</h3>
+              <p class="sc-instruction-card__desc">Ensure that the ankle band stays on</p>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Prototype Interactive Toast Element -->
+  <div class="sc-toast" id="scToast" role="status" aria-live="polite">
+    <span id="scToastText">Notification</span>
+  </div>
+
+  <script>
+    // Lightweight Interactive Prototype Logic
+    let toastTimeout;
+    function triggerToast(message) {
+      const toast = document.getElementById('scToast');
+      const text = document.getElementById('scToastText');
+      if (!toast || !text) return;
+      
+      text.textContent = message;
+      toast.classList.add('active');
+      
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2600);
+    }
+
+    // Dynamic Live Clock
+    function updateClock() {
+      const clockEl = document.getElementById('scClock');
+      if (!clockEl) return;
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      clockEl.textContent = `${hours}:${minutes}`;
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+  </script>
+
+</body>
+</html>
