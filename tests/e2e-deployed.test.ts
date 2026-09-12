@@ -13,7 +13,11 @@ const anonClient = DEPLOYED_URL
     )
   : null;
 
-function openInsertSubscription(matchDeviceId: string) {
+// Filters by BOTH deviceId and timestamp — a deviceId-only filter can be
+// satisfied by an unrelated concurrent nb-001 insert from another test
+// file, producing a false-positive match (see tests/realtime.subscribe.test.ts
+// for the same fix and the reproduction that motivated it).
+function openInsertSubscription(matchDeviceId: string, matchTimestamp: number) {
   return new Promise<{
     waitForRow: (timeoutMs: number) => Promise<Record<string, unknown> | null>;
     close: () => void;
@@ -21,13 +25,17 @@ function openInsertSubscription(matchDeviceId: string) {
     let resolveRow: ((row: Record<string, unknown> | null) => void) | null = null;
 
     const channel = anonClient!
-      .channel(`e2e-deployed-${matchDeviceId}-${Date.now()}`)
+      .channel(`e2e-deployed-${matchDeviceId}-${matchTimestamp}`)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "readings" },
         (payload) => {
           const row = payload.new as Record<string, unknown>;
-          if (row.deviceId === matchDeviceId && resolveRow) {
+          if (
+            row.deviceId === matchDeviceId &&
+            row.timestamp === matchTimestamp &&
+            resolveRow
+          ) {
             resolveRow(row);
             resolveRow = null;
           }
@@ -73,7 +81,7 @@ describe.skipIf(!DEPLOYED_URL)(
         const timestamp = Date.now() + 900;
         insertedTimestamps.push(timestamp);
 
-        const sub = await openInsertSubscription(DEVICE_ID);
+        const sub = await openInsertSubscription(DEVICE_ID, timestamp);
         const waitPromise = sub.waitForRow(10000);
 
         const res = await fetch(`${DEPLOYED_URL}/api/ingest`, {

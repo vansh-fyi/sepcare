@@ -19,8 +19,19 @@ const anonClient = createClient(
  * Opens the postgres_changes subscription and resolves once Supabase
  * confirms SUBSCRIBED — firing the INSERT before this ack is a race that
  * silently drops the event, since the channel isn't listening yet.
+ *
+ * Filters by BOTH deviceId and timestamp, not deviceId alone: under
+ * vitest's default file-level parallelism, ingest.route.test.ts and
+ * ingest.auth.test.ts insert their own nb-001 rows concurrently with this
+ * file's run, and a deviceId-only filter can be satisfied by one of THEIR
+ * inserts instead of the row this test actually created — a false-positive
+ * match that produced flaky failures under `npm test` (2/3 runs) despite
+ * passing reliably in isolation.
  */
-function openInsertSubscription(matchDeviceId: string): Promise<{
+function openInsertSubscription(
+  matchDeviceId: string,
+  matchTimestamp: number
+): Promise<{
   waitForRow: (timeoutMs: number) => Promise<Record<string, unknown> | null>;
   close: () => void;
 }> {
@@ -28,13 +39,17 @@ function openInsertSubscription(matchDeviceId: string): Promise<{
     let resolveRow: ((row: Record<string, unknown> | null) => void) | null = null;
 
     const channel = anonClient
-      .channel(`readings-test-${matchDeviceId}-${Date.now()}`)
+      .channel(`readings-test-${matchDeviceId}-${matchTimestamp}`)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "readings" },
         (payload) => {
           const row = payload.new as Record<string, unknown>;
-          if (row.deviceId === matchDeviceId && resolveRow) {
+          if (
+            row.deviceId === matchDeviceId &&
+            row.timestamp === matchTimestamp &&
+            resolveRow
+          ) {
             resolveRow(row);
             resolveRow = null;
           }
@@ -79,7 +94,7 @@ describe("Supabase Realtime — anon subscriber (READ-01, D-07, D-08, D-09)", ()
       const timestamp = Date.now() + 500;
       insertedTimestamps.push(timestamp);
 
-      const sub = await openInsertSubscription(DEVICE_ID);
+      const sub = await openInsertSubscription(DEVICE_ID, timestamp);
       const waitPromise = sub.waitForRow(10000);
 
       const res = await POST(
@@ -123,7 +138,7 @@ describe("Supabase Realtime — anon subscriber (READ-01, D-07, D-08, D-09)", ()
       const timestamp = Date.now() + 501;
       insertedTimestamps.push(timestamp);
 
-      const sub = await openInsertSubscription(THROWAWAY_DEVICE_ID);
+      const sub = await openInsertSubscription(THROWAWAY_DEVICE_ID, timestamp);
       const waitPromise = sub.waitForRow(5000);
 
       const { error } = await supabaseAdmin.from("readings").insert({
