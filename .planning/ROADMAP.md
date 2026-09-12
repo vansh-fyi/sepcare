@@ -33,12 +33,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Each submitted reading is persisted in Supabase with device ID, timestamp, and all reading fields intact
   4. A read API returns the latest stored vitals reading for the single provisioned device
 
-**Plans**: 4 plans
+**Plans**: 1/4 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Scaffold Next.js + install deps + author Supabase migration (devices/readings/RLS/Realtime)
+- [x] 01-01-PLAN.md — Scaffold Next.js + install deps + author Supabase migration (devices/readings/RLS/Realtime)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -103,7 +103,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Device Ingest & Live Readout | 0/4 | Not started | - |
+| 1. Device Ingest & Live Readout | 1/4 | In Progress|  |
 | 2. Automatic Risk Scoring & Status | 0/TBD | Not started | - |
 | 3. Offline-Buffered Batch Sync | 0/TBD | Not started | - |
 | 4. Historical Trends API | 0/TBD | Not started | - |
