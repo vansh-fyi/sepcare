@@ -38,11 +38,14 @@ Cheap, off-the-shelf components for a first working prototype. Prices are approx
 | DS18B20 Temperature Sensor Module | Body temperature; pull-up resistor built onto module | https://robu.in/product/ds18b20-temperature-sensor-module/ |
 | Nova 603450 1100mAh 3.7V Micro LiPo Battery | Power source | https://robu.in/product/nova-603450-1100mah-3-7v-micro-lipo-battery-pack/ |
 | TP4056 3.7V Lithium Charging Module (1A, USB Type-C, PH2.0 terminal) | Charging/protection; PH2.0 connector matches battery plug | https://robu.in/product/tp4056-3-7v-lithium-battery-charging-module-1a-usb-type-c-port-ph2-0-terminal/ |
+| Waveshare ESP32-S3-Tiny Mini Dev Board | Final-stage MCU; dual-core LX7, 512KB SRAM, 2MB PSRAM, 4MB flash, FPC connector (needs adapter board for breadboard use) | https://robu.in/product/waveshare-esp32-s3-mini-development-board-based-on-esp32-s3fh4r2-dual-core-processor-240mhz-running-frequency-usb-port-adapter-board-optional/ |
 
 ## Board Plan
 
 - **Dev stage**: using the full-size ESP32-WROOM-32 (CP2102, Type-C) board for setup, wiring, and firmware bring-up.
 - **Final stage**: swapping to the Waveshare ESP32-S3-Tiny (dual-core, 512KB SRAM, 2MB PSRAM, 4MB flash, FPC connector + adapter board) once it arrives, for the actual wearable form factor.
+- Rejected ESP32-C3 Super Mini for the final stage — documented antenna/thermal reliability issues under continuous WiFi transmission (some units brownout-reset from overheating). S3-Tiny doesn't share this known issue.
+- Rejected CMOS/coin-cell battery (e.g. CR2032) as a power source — not rechargeable, can't supply the current an active WiFi MCU needs, and wrong voltage (3V vs the 3.7V LiPo the charging circuit is built around).
 
 ## Firmware Note — Deep Sleep Required for Battery Target
 
