@@ -11,7 +11,7 @@
     {
       "number": "2",
       "name": "Automatic Risk Scoring & Status",
-      "status": "pending"
+      "status": "in_progress"
     },
     {
       "number": "3",
@@ -29,5 +29,5 @@
     "label": "Advance to the next step",
     "reason": "Phase 2 of 4 · 0% · executing"
   },
-  "updated_at": "2026-09-18T11:20:41.008Z"
+  "updated_at": "2026-09-18T11:35:53.696Z"
 }
