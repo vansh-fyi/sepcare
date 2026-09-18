@@ -524,6 +524,79 @@ describe("computeAndPersistRiskScore — 12h window adjacency (D-26 inclusive >=
   });
 });
 
+describe("computeAndPersistRiskScore — window pagination past PostgREST's max_rows cap", () => {
+  it(
+    "a >1000-reading 12h window is never silently truncated to the oldest max_rows rows",
+    async () => {
+      const NORMAL_COUNT = 1000;
+      const MARKER_COUNT = 5;
+      const NORMAL_HR = 100;
+      const MARKER_HR = 100000;
+      const SPACING_MS = 30 * 1000; // 30s apart -> ~8.4h span, within the 12h window
+      const totalPrior = NORMAL_COUNT + MARKER_COUNT;
+
+      const baseTimestamp = Date.now() + 218 * DAY_MS;
+      const rangeStart = baseTimestamp;
+      const rangeEnd = baseTimestamp + (totalPrior - 1) * SPACING_MS;
+
+      // The 5 newest prior rows (closest to the target) carry an extreme,
+      // distinguishable heartRate. If the window query were silently
+      // truncated to PostgREST's oldest-1000 rows (the pre-fix bug), these
+      // markers would be excluded entirely and the computed baseline would
+      // reflect only the 1000 normal rows.
+      const bulkRows = Array.from({ length: totalPrior }, (_, i) => ({
+        deviceId: DEVICE_ID,
+        timestamp: baseTimestamp + i * SPACING_MS,
+        heartRate: i >= NORMAL_COUNT ? MARKER_HR : NORMAL_HR,
+        spo2: 98,
+        temperature: 36.5,
+        activityScore: 5,
+      }));
+
+      const { error: bulkInsertError } = await supabaseAdmin
+        .from("readings")
+        .insert(bulkRows);
+      expect(bulkInsertError).toBeNull();
+
+      try {
+        const targetTimestamp = rangeEnd + SPACING_MS;
+        const target = await insertReading({
+          timestamp: targetTimestamp,
+          heartRate: 130,
+          temperature: 37.0, // deltaTemp fixed at 0.5 vs the 36.5 baseline mean
+          activityScore: 5,
+        });
+
+        try {
+          const expectedBaselineHR =
+            (NORMAL_COUNT * NORMAL_HR + MARKER_COUNT * MARKER_HR) / totalPrior;
+          const expectedRatio = (target.heartRate - expectedBaselineHR) / 0.5;
+          // Sanity check the test's own math is actually distinguishing —
+          // the buggy (truncated) baseline would produce ratio=(130-100)/0.5=60.
+          expect(expectedRatio).toBeLessThan(-100);
+
+          const result = await computeAndPersistRiskScore(target);
+
+          expect(result.breakdown.hrTempProportionality.ratio).toBeCloseTo(
+            expectedRatio,
+            2
+          );
+        } finally {
+          await deleteReadingByTimestamp(targetTimestamp);
+        }
+      } finally {
+        await supabaseAdmin
+          .from("readings")
+          .delete()
+          .eq("deviceId", DEVICE_ID)
+          .gte("timestamp", rangeStart)
+          .lte("timestamp", rangeEnd);
+      }
+    },
+    30000
+  );
+});
+
 describe("risk_scores queryable by time range through readings (STOR-02, Plan 02-03 Task 2)", () => {
   const insertedTimestamps: number[] = [];
 
