@@ -466,4 +466,60 @@ describe("computeAndPersistRiskScore — 12h window adjacency (D-26 inclusive >=
     expect(windowIds).toContain(boundaryRow.id);
     expect(windowIds).not.toContain(outsideRow.id);
   });
+
+  it("readings sharing an identical timestamp are ordered deterministically by id, and the target excludes only itself from its own baseline (not an earlier same-timestamp row)", async () => {
+    const baselineTimestamp = Date.now() + 216 * DAY_MS;
+    const sharedTimestamp = baselineTimestamp + 2 * 60 * 60 * 1000; // 2h later, establishes baseline
+    insertedTimestamps.push(baselineTimestamp, sharedTimestamp);
+
+    const olderRow = await insertReading({
+      timestamp: baselineTimestamp,
+      heartRate: 100,
+      temperature: 36.0,
+      activityScore: 5,
+    });
+
+    // Two rows at the exact same timestamp, inserted in sequence so the
+    // identity column guarantees priorRow.id < target.id.
+    const priorRow = await insertReading({
+      timestamp: sharedTimestamp,
+      heartRate: 100,
+      temperature: 36.0,
+      activityScore: 5,
+    });
+    const target = await insertReading({
+      timestamp: sharedTimestamp,
+      heartRate: 200,
+      temperature: 36.2,
+      activityScore: 5,
+    });
+
+    expect(priorRow.id).toBeLessThan(target.id);
+
+    const { data: windowRows, error } = await supabaseAdmin
+      .from("readings")
+      .select("id, timestamp")
+      .eq("deviceId", DEVICE_ID)
+      .lte("timestamp", target.timestamp)
+      .gte("timestamp", target.timestamp - TREND_WINDOW_MS)
+      .order("timestamp", { ascending: true })
+      .order("id", { ascending: true });
+
+    expect(error).toBeNull();
+    // Stable, deterministic order: olderRow first (earlier timestamp), then
+    // priorRow before target (same timestamp, tie-broken by id).
+    expect(windowRows?.map((row) => row.id)).toEqual([
+      olderRow.id,
+      priorRow.id,
+      target.id,
+    ]);
+
+    // If the target reading were wrongly included in its own "prior" set
+    // (tie-break bug), baselineHR would be mean(100,100,200)=133.33 and
+    // ratio=(200-133.33)/0.2≈333.3. Correctly excluding the target itself
+    // (only priorRow's earlier id counts as prior) gives baselineHR=100,
+    // ratio=(200-100)/0.2=500 — the two behaviors are numerically distinct.
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.breakdown.hrTempProportionality.ratio).toBeCloseTo(500, 5);
+  });
 });
