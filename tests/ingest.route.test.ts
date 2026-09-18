@@ -55,6 +55,23 @@ describe("POST /api/ingest — valid submissions and storage integrity", () => {
       temperature: 36.9,
       activityScore: 3,
     });
+
+    // RISK-03: a risk_scores row is automatically created for the inserted
+    // reading, with no manual trigger.
+    const { data: reading } = await supabaseAdmin
+      .from("readings")
+      .select("id")
+      .eq("timestamp", timestamp)
+      .maybeSingle();
+
+    const { data: riskScore, error: riskScoreError } = await supabaseAdmin
+      .from("risk_scores")
+      .select("status, breakdown")
+      .eq("reading_id", reading!.id)
+      .maybeSingle();
+
+    expect(riskScoreError).toBeNull();
+    expect(riskScore).not.toBeNull();
   });
 
   it("returns 400 for a valid key but a body missing vitals.heartRate, naming the missing field (D-11)", async () => {
