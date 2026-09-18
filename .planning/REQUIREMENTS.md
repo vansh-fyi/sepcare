@@ -16,7 +16,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Storage
 
 - [x] **STOR-01**: Vitals readings are persisted in Supabase (Postgres) with device ID, timestamp, and all reading fields
-- [ ] **STOR-02**: Computed risk scores and Green/Amber/Red status are persisted alongside (or linked to) their source readings, queryable by time range
+- [x] **STOR-02**: Computed risk scores and Green/Amber/Red status are persisted alongside (or linked to) their source readings, queryable by time range
 
 ### Risk Computation
 
@@ -76,7 +76,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ING-02 | Phase 1 | Complete |
 | ING-03 | Phase 3 | Pending |
 | STOR-01 | Phase 1 | Complete |
-| STOR-02 | Phase 2 | Pending |
+| STOR-02 | Phase 2 | Complete |
 | RISK-01 | Phase 2 | Complete |
 | RISK-02 | Phase 2 | Complete |
 | RISK-03 | Phase 2 | Complete |

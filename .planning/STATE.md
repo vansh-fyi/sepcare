@@ -2,17 +2,17 @@
 gsd_state_version: "1.0"
 current_phase: 2
 current_phase_name: Automatic Risk Scoring & Status
-status: executing
-stopped_at: Completed 02-02-PLAN.md
-last_updated: "2026-09-18T11:36:32.671Z"
+status: verifying
+stopped_at: Completed 02-03-PLAN.md
+last_updated: "2026-09-18T11:44:11.377Z"
 last_activity: 2026-09-18
 last_activity_desc: Phase 2 execution started
-state_head: 26b0502ecc9a119d7c8b9454f7176d7c6c976170
+state_head: d8cb1c941cb096717d0c15535228368f9502bd1f
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
   percent: 0
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-07)
 
 Phase: 2 (Automatic Risk Scoring & Status) — EXECUTING
 Plan: 3 of 3
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-09-18 — Phase 2 execution started
 
 Progress: [░░░░░░░░░░] 0%
@@ -60,6 +60,7 @@ Progress: [░░░░░░░░░░] 0%
 |------|----------|-------|-------|
 | Phase 02 P01 | 52min | 2 tasks | 2 files |
 | Phase 02 P02 | 33min | 2 tasks | 5 files |
+| Phase 02 P03 | 15min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,7 @@ Recent decisions affecting current work:
 - [Phase 02]: risk_scores RLS mirrors readings exactly: identical anon-read-only policy name and nb-001 literal scope (D-21), added to supabase_realtime (D-20) — Keeps the security posture consistent with Phase 1 and easy to audit; Realtime publication membership must be hand-written since Supabase does not auto-add new tables
 - [Phase 02]: Added readings_deviceid_timestamp_idx composite index now rather than deferring to Plan 02-02 — Every rolling-window query planned for this phase depends on it, and RESEARCH.md flagged the missing index as a known pitfall to close early
 - [Phase 02]: computeAndPersistRiskScore's breadth-gating and window logic proved correct against the full boundary/prohibition matrix on the first implementation pass (Task 2's hardening tests required zero compute.ts changes) — Confirms building Task 1 as a production-quality tracer (not a throwaway) against the plan's exact algorithm spec paid off
+- [Phase 02]: risk_scores Realtime tests buffer-and-match by reading_id (unknown until POST completes) instead of pre-filtering, since risk_scores carries no timestamp column — reading_id is only generated inside POST /api/ingest's synchronous insert, unlike the readings analog where deviceId+timestamp are known before subscribing
 
 ### Pending Todos
 
@@ -95,6 +97,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-18T11:36:32.651Z
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-09-18T11:44:11.361Z
+Stopped at: Completed 02-03-PLAN.md
 Resume file: None
