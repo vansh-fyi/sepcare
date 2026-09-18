@@ -55,6 +55,54 @@ function mean(values: number[]): number {
 }
 
 /**
+ * PostgREST (via `supabase/config.toml`'s `api.max_rows`) caps any single
+ * response at 1000 rows regardless of how the query is shaped — a plain
+ * unpaginated select silently truncates to the oldest 1000 in-window rows
+ * once a device's 12h window exceeds that count, corrupting the personal
+ * baseline with no error raised. Page through the full window with
+ * `.range()` instead of trusting a single response to be complete.
+ */
+const WINDOW_PAGE_SIZE = 1000;
+
+/**
+ * Fetches every `readings` row for `deviceId` within
+ * `[fromTimestamp, toTimestamp]`, paginating past PostgREST's `max_rows`
+ * cap so a high-frequency device's rolling window is never silently
+ * truncated (see WINDOW_PAGE_SIZE).
+ */
+async function fetchWindow(
+  deviceId: string,
+  fromTimestamp: number,
+  toTimestamp: number
+): Promise<WindowRow[]> {
+  const rows: WindowRow[] = [];
+  let from = 0;
+
+  for (;;) {
+    const to = from + WINDOW_PAGE_SIZE - 1;
+    const { data: page, error } = await supabaseAdmin
+      .from("readings")
+      .select("id, timestamp, heartRate, temperature, activityScore")
+      .eq("deviceId", deviceId)
+      .lte("timestamp", toTimestamp)
+      .gte("timestamp", fromTimestamp)
+      .order("timestamp", { ascending: true })
+      .order("id", { ascending: true })
+      .range(from, to);
+
+    if (error) throw error;
+
+    const pageRows = (page ?? []) as WindowRow[];
+    rows.push(...pageRows);
+
+    if (pageRows.length < WINDOW_PAGE_SIZE) break;
+    from += WINDOW_PAGE_SIZE;
+  }
+
+  return rows;
+}
+
+/**
  * Computes a Green/Amber/Red risk status for `target` from its device's
  * own rolling history and persists the result to `risk_scores`.
  *
@@ -73,18 +121,11 @@ function mean(values: number[]): number {
 export async function computeAndPersistRiskScore(
   target: TargetReading
 ): Promise<{ status: "green" | "amber" | "red"; breakdown: RiskBreakdown }> {
-  const { data: window, error } = await supabaseAdmin
-    .from("readings")
-    .select("id, timestamp, heartRate, temperature, activityScore")
-    .eq("deviceId", target.deviceId)
-    .lte("timestamp", target.timestamp)
-    .gte("timestamp", target.timestamp - TREND_WINDOW_MS)
-    .order("timestamp", { ascending: true })
-    .order("id", { ascending: true });
-
-  if (error) throw error;
-
-  const rows = (window ?? []) as WindowRow[];
+  const rows = await fetchWindow(
+    target.deviceId,
+    target.timestamp - TREND_WINDOW_MS,
+    target.timestamp
+  );
 
   // D-18: baseline is established once the window's earliest reading is
   // at least BASELINE_MIN_MS older than the target. When the window is
