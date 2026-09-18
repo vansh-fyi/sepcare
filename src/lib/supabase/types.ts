@@ -98,6 +98,45 @@ export type Database = {
           },
         ]
       }
+      risk_scores: {
+        Row: {
+          breakdown: Json
+          created_at: string
+          deviceId: string
+          reading_id: number
+          status: string
+        }
+        Insert: {
+          breakdown: Json
+          created_at?: string
+          deviceId: string
+          reading_id: number
+          status: string
+        }
+        Update: {
+          breakdown?: Json
+          created_at?: string
+          deviceId?: string
+          reading_id?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "risk_scores_deviceId_fkey"
+            columns: ["deviceId"]
+            isOneToOne: false
+            referencedRelation: "devices"
+            referencedColumns: ["device_id"]
+          },
+          {
+            foreignKeyName: "risk_scores_reading_id_fkey"
+            columns: ["reading_id"]
+            isOneToOne: true
+            referencedRelation: "readings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
