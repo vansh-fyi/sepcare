@@ -3,16 +3,16 @@ gsd_state_version: "1.0"
 current_phase: 2
 current_phase_name: Automatic Risk Scoring & Status
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-09-18T11:21:35.094Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-09-18T11:36:32.671Z"
 last_activity: 2026-09-18
 last_activity_desc: Phase 2 execution started
-state_head: 9ead1372f84b092a433831441b0a67a4104fb67f
+state_head: 26b0502ecc9a119d7c8b9454f7176d7c6c976170
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 7
-  completed_plans: 5
+  completed_plans: 6
   percent: 0
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-07)
 ## Current Position
 
 Phase: 2 (Automatic Risk Scoring & Status) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-09-18 — Phase 2 execution started
 
@@ -59,6 +59,7 @@ Progress: [░░░░░░░░░░] 0%
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 02 P01 | 52min | 2 tasks | 2 files |
+| Phase 02 P02 | 33min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -74,6 +75,7 @@ Recent decisions affecting current work:
 - [Phase 02]: risk_scores.reading_id is itself the primary key referencing readings.id ON DELETE CASCADE (D-19) — Guarantees the reading<->score relationship as a schema-level 1:1 invariant with no separate surrogate id column needed
 - [Phase 02]: risk_scores RLS mirrors readings exactly: identical anon-read-only policy name and nb-001 literal scope (D-21), added to supabase_realtime (D-20) — Keeps the security posture consistent with Phase 1 and easy to audit; Realtime publication membership must be hand-written since Supabase does not auto-add new tables
 - [Phase 02]: Added readings_deviceid_timestamp_idx composite index now rather than deferring to Plan 02-02 — Every rolling-window query planned for this phase depends on it, and RESEARCH.md flagged the missing index as a known pitfall to close early
+- [Phase 02]: computeAndPersistRiskScore's breadth-gating and window logic proved correct against the full boundary/prohibition matrix on the first implementation pass (Task 2's hardening tests required zero compute.ts changes) — Confirms building Task 1 as a production-quality tracer (not a throwaway) against the plan's exact algorithm spec paid off
 
 ### Pending Todos
 
@@ -93,6 +95,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-18T11:21:35.080Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-09-18T11:36:32.651Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None

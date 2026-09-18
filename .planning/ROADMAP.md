@@ -67,7 +67,7 @@ Plans:
 3. Computed risk scores and status are persisted in Supabase, linked to their source reading and queryable by time range
 4. The read API returns the current risk status alongside the latest vitals reading
 
-**Plans**: 1/3 plans executed
+**Plans**: 2/3 plans executed
 
 Plans:
 **Wave 1**
@@ -76,7 +76,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 02-02-PLAN.md — Compute engine (tracer) + wire synchronously into POST /api/ingest + harden breadth-gating matrix
+- [x] 02-02-PLAN.md — Compute engine (tracer) + wire synchronously into POST /api/ingest + harden breadth-gating matrix
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -119,6 +119,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase                              | Plans Complete | Status      | Completed  |
 | ---------------------------------- | -------------- | ----------- | ---------- |
 | 1. Device Ingest & Live Readout    | 4/4            | Complete    | 2026-09-12 |
-| 2. Automatic Risk Scoring & Status | 1/3 | In Progress|  |
+| 2. Automatic Risk Scoring & Status | 2/3 | In Progress|  |
 | 3. Offline-Buffered Batch Sync     | 0/TBD          | Not started | -          |
 | 4. Historical Trends API           | 0/TBD          | Not started | -          |

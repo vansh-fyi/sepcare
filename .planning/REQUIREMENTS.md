@@ -20,9 +20,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Risk Computation
 
-- [ ] **RISK-01**: Backend computes a sepsis-risk score from incoming readings using a simplified composite of temperature thresholds (fever/hypothermia), HR–temperature proportionality, and activity/lethargy trend
-- [ ] **RISK-02**: Backend derives a Green/Amber/Red traffic-light status from the risk score, applying breadth-gating logic (escalation requires multiple concurrent abnormal signals, not a single isolated reading)
-- [ ] **RISK-03**: Risk computation runs automatically as new readings (or batches) arrive, without requiring a manual trigger
+- [x] **RISK-01**: Backend computes a sepsis-risk score from incoming readings using a simplified composite of temperature thresholds (fever/hypothermia), HR–temperature proportionality, and activity/lethargy trend
+- [x] **RISK-02**: Backend derives a Green/Amber/Red traffic-light status from the risk score, applying breadth-gating logic (escalation requires multiple concurrent abnormal signals, not a single isolated reading)
+- [x] **RISK-03**: Risk computation runs automatically as new readings (or batches) arrive, without requiring a manual trigger
 
 ### Read API
 
@@ -77,9 +77,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ING-03 | Phase 3 | Pending |
 | STOR-01 | Phase 1 | Complete |
 | STOR-02 | Phase 2 | Pending |
-| RISK-01 | Phase 2 | Pending |
-| RISK-02 | Phase 2 | Pending |
-| RISK-03 | Phase 2 | Pending |
+| RISK-01 | Phase 2 | Complete |
+| RISK-02 | Phase 2 | Complete |
+| RISK-03 | Phase 2 | Complete |
 | READ-01 | Phase 1 | Complete |
 | READ-02 | Phase 4 | Pending |
 | DEV-01 | Phase 1 | Complete |
