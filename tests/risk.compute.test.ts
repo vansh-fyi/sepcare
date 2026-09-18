@@ -523,3 +523,53 @@ describe("computeAndPersistRiskScore — 12h window adjacency (D-26 inclusive >=
     expect(result.breakdown.hrTempProportionality.ratio).toBeCloseTo(500, 5);
   });
 });
+
+describe("risk_scores queryable by time range through readings (STOR-02, Plan 02-03 Task 2)", () => {
+  const insertedTimestamps: number[] = [];
+
+  afterEach(async () => {
+    while (insertedTimestamps.length) {
+      const ts = insertedTimestamps.pop()!;
+      await deleteReadingByTimestamp(ts); // cascades to risk_scores via ON DELETE CASCADE
+    }
+  });
+
+  it("a PostgREST embedded-join range query filtered by readings.timestamp returns exactly the in-range readings, each carrying its own non-null nested risk_scores, in ascending timestamp order", async () => {
+    const baseTimestamp = Date.now() + 217 * DAY_MS;
+    const spacingMs = 2 * 60 * 60 * 1000; // ~2h apart
+    const timestamps = [0, 1, 2, 3].map((offset) => baseTimestamp + offset * spacingMs);
+    insertedTimestamps.push(...timestamps);
+
+    // 4 readings, each immediately scored so every one has a linked
+    // risk_scores row — a realistic multi-reading history to query over.
+    for (const [index, timestamp] of timestamps.entries()) {
+      const reading = await insertReading({
+        timestamp,
+        heartRate: 120 + index,
+        temperature: 36.5 + index * 0.1,
+        activityScore: 5,
+      });
+      await computeAndPersistRiskScore(reading);
+    }
+
+    // Bounded window covering exactly the 2nd and 3rd readings.
+    const { data: rangeRows, error } = await supabaseAdmin
+      .from("readings")
+      .select("timestamp, risk_scores(status, breakdown)")
+      .eq("deviceId", DEVICE_ID)
+      .gte("timestamp", timestamps[1])
+      .lte("timestamp", timestamps[2])
+      .order("timestamp", { ascending: true });
+
+    expect(error).toBeNull();
+    expect(rangeRows).toHaveLength(2);
+    expect(rangeRows?.[0]?.timestamp).toBe(timestamps[1]);
+    expect(rangeRows?.[1]?.timestamp).toBe(timestamps[2]);
+
+    for (const row of rangeRows ?? []) {
+      const nested = row.risk_scores as unknown as { status: string; breakdown: unknown } | null;
+      expect(nested).not.toBeNull();
+      expect(typeof nested?.status).toBe("string");
+    }
+  });
+});
