@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { IngestSchema } from "@/lib/validation/ingest-schema";
+import { computeAndPersistRiskScore } from "@/lib/risk/compute";
 
 /**
  * POST /api/ingest — single vitals reading from an ESP32 device.
@@ -61,19 +62,35 @@ export async function POST(request: NextRequest) {
 
   const { deviceId, timestamp, vitals } = parsed.data;
 
-  const { error: insertError } = await supabaseAdmin.from("readings").insert({
-    deviceId,
-    timestamp,
-    heartRate: vitals.heartRate,
-    spo2: vitals.spo2,
-    temperature: vitals.temperature,
-    activityScore: vitals.activityScore,
-  });
+  const { data: insertedReading, error: insertError } = await supabaseAdmin
+    .from("readings")
+    .insert({
+      deviceId,
+      timestamp,
+      heartRate: vitals.heartRate,
+      spo2: vitals.spo2,
+      temperature: vitals.temperature,
+      activityScore: vitals.activityScore,
+    })
+    .select("id, deviceId, timestamp, heartRate, temperature, activityScore")
+    .single();
 
-  if (insertError) {
+  if (insertError || !insertedReading) {
     return NextResponse.json(
       { error: "Failed to store reading" },
       { status: 500 }
+    );
+  }
+
+  // D-23/D-24: score synchronously, but never let a scoring bug turn a
+  // successful readings insert into a failed request — log and continue.
+  try {
+    await computeAndPersistRiskScore(insertedReading);
+  } catch (scoringError) {
+    console.error(
+      "Risk scoring failed for reading",
+      insertedReading.id,
+      scoringError
     );
   }
 
