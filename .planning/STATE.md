@@ -3,17 +3,17 @@ gsd_state_version: "1.0"
 current_phase: 2
 current_phase_name: Automatic Risk Scoring & Status
 status: executing
-stopped_at: Phase 2 context gathered
-last_updated: "2026-09-18T09:15:37.968Z"
-last_activity: 2026-09-12
-last_activity_desc: Phase 01 complete, transitioned to Phase 2
-state_head: b7f8ef7d0136bfd3fa3e13db012627058af66453
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-09-18T11:21:35.094Z"
+last_activity: 2026-09-18
+last_activity_desc: Phase 2 execution started
+state_head: 9ead1372f84b092a433831441b0a67a4104fb67f
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 0
   total_plans: 7
-  completed_plans: 4
-  percent: 25
+  completed_plans: 5
+  percent: 0
 ---
 
 # Project State
@@ -23,16 +23,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-07)
 
 **Core value:** Reliably turn a stream of vitals from an ESP32 wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
-**Current focus:** Phase 01 — Device Ingest & Live Readout
+**Current focus:** Phase 2 — Automatic Risk Scoring & Status
 
 ## Current Position
 
-Phase: 2 (Automatic Risk Scoring & Status) — READY TO EXECUTE
-Plan: Not started
+Phase: 2 (Automatic Risk Scoring & Status) — EXECUTING
+Plan: 2 of 3
 Status: Ready to execute
-Last activity: 2026-09-12 — Phase 01 complete, transitioned to Phase 2
+Last activity: 2026-09-18 — Phase 2 execution started
 
-Progress: [███░░░░░░░] 25%
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -54,6 +54,11 @@ Progress: [███░░░░░░░] 25%
 - Trend: -
 
 *Updated after each plan completion*
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 02 P01 | 52min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -66,6 +71,9 @@ Recent decisions affecting current work:
 - Sepsis-risk fusion logic runs in the backend (Next.js), not on-device
 - Custom Next.js API backend instead of ESP32 → Supabase directly, for testable risk math
 - Static per-device API key for device auth (v1 single-device scope; full auth deferred)
+- [Phase 02]: risk_scores.reading_id is itself the primary key referencing readings.id ON DELETE CASCADE (D-19) — Guarantees the reading<->score relationship as a schema-level 1:1 invariant with no separate surrogate id column needed
+- [Phase 02]: risk_scores RLS mirrors readings exactly: identical anon-read-only policy name and nb-001 literal scope (D-21), added to supabase_realtime (D-20) — Keeps the security posture consistent with Phase 1 and easy to audit; Realtime publication membership must be hand-written since Supabase does not auto-add new tables
+- [Phase 02]: Added readings_deviceid_timestamp_idx composite index now rather than deferring to Plan 02-02 — Every rolling-window query planned for this phase depends on it, and RESEARCH.md flagged the missing index as a known pitfall to close early
 
 ### Pending Todos
 
@@ -85,6 +93,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-18T07:56:19.328Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-automatic-risk-scoring-status/02-CONTEXT.md
+Last session: 2026-09-18T11:21:35.080Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None
