@@ -524,6 +524,58 @@ describe("computeAndPersistRiskScore — 12h window adjacency (D-26 inclusive >=
   });
 });
 
+describe("computeAndPersistRiskScore — failure isolation across requests (RISK-03, D-24)", () => {
+  const insertedTimestamps: number[] = [];
+
+  afterEach(async () => {
+    while (insertedTimestamps.length) {
+      const ts = insertedTimestamps.pop()!;
+      await deleteReadingByTimestamp(ts);
+    }
+  });
+
+  it("a forced failure for one target does not corrupt a subsequent, valid computation", async () => {
+    // Force a real failure: a target whose id has no matching readings row
+    // violates risk_scores.reading_id's FK constraint at the upsert step —
+    // this exercises the actual failure path, not just a code-inspection claim.
+    const bogusTarget = {
+      id: 999999999,
+      deviceId: DEVICE_ID,
+      timestamp: Date.now() + 300 * DAY_MS,
+      heartRate: 130,
+      temperature: 36.9,
+      activityScore: 5,
+    };
+
+    await expect(computeAndPersistRiskScore(bogusTarget)).rejects.toBeTruthy();
+
+    // Immediately after the forced failure, a normal reading must still
+    // score correctly — no leftover/corrupted state from the failed call
+    // (compute.ts holds no module-level mutable state between invocations).
+    const timestamp = Date.now() + 301 * DAY_MS;
+    insertedTimestamps.push(timestamp);
+
+    const target = await insertReading({
+      timestamp,
+      heartRate: 130,
+      temperature: 36.9,
+      activityScore: 5,
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.status).toBe("green");
+
+    const { data: riskScore, error } = await supabaseAdmin
+      .from("risk_scores")
+      .select("status")
+      .eq("reading_id", target.id)
+      .maybeSingle();
+
+    expect(error).toBeNull();
+    expect(riskScore?.status).toBe("green");
+  });
+});
+
 describe("computeAndPersistRiskScore — window pagination past PostgREST's max_rows cap", () => {
   it(
     "a >1000-reading 12h window is never silently truncated to the oldest max_rows rows",
