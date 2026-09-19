@@ -16,10 +16,10 @@ const breakdown: RiskBreakdown = {
   activityTrend: { trending: false, delta: null },
 };
 
-function makeRequest(params: Record<string, string>) {
+function makeRequest(params: Record<string, string | undefined>) {
   const url = new URL("http://localhost/api/readings");
   for (const [key, value] of Object.entries(params)) {
-    url.searchParams.set(key, value);
+    if (value !== undefined) url.searchParams.set(key, value);
   }
   return new NextRequest(url);
 }
