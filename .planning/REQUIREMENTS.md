@@ -11,7 +11,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **ING-01**: Device can POST a single vitals reading (device ID, timestamp, HR, SpO2/perfusion, temperature, activity score) to a backend ingest endpoint
 - [x] **ING-02**: Backend authenticates each ingest request via a static per-device API key, rejecting requests with a missing/invalid key
-- [ ] **ING-03**: Device can POST a batch (array) of buffered offline readings to a dedicated sync endpoint, and each reading is stored with its original device timestamp, not the upload time
+- [x] **ING-03**: Device can POST a batch (array) of buffered offline readings to a dedicated sync endpoint, and each reading is stored with its original device timestamp, not the upload time
 
 ### Storage
 
@@ -74,7 +74,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | ING-01 | Phase 1 | Complete |
 | ING-02 | Phase 1 | Complete |
-| ING-03 | Phase 3 | Pending |
+| ING-03 | Phase 3 | Complete |
 | STOR-01 | Phase 1 | Complete |
 | STOR-02 | Phase 2 | Complete |
 | RISK-01 | Phase 2 | Complete |

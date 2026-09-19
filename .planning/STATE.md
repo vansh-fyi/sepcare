@@ -2,17 +2,17 @@
 gsd_state_version: "1.0"
 current_phase: 3
 current_phase_name: Offline-Buffered Batch Sync
-status: executing
-stopped_at: Completed 03-02-PLAN.md
-last_updated: "2026-09-19T11:18:42.957Z"
+status: verifying
+stopped_at: Completed 03-03-PLAN.md
+last_updated: "2026-09-19T11:23:42.926Z"
 last_activity: 2026-09-19
 last_activity_desc: Phase 3 execution started
-state_head: 526f9274a30eada6ee234cda9cd724d07e48e84a
+state_head: d683d4f3aeadcaedc8c526ea224593f0f541d6ec
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
   percent: 0
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-19)
 
 Phase: 3 (Offline-Buffered Batch Sync) — EXECUTING
 Plan: 3 of 3
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-09-19 — Phase 3 execution started
 
 Progress: [░░░░░░░░░░] 0%
@@ -64,6 +64,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02 P03 | 15min | 2 tasks | 2 files |
 | Phase 03 P01 | 15min | 2 tasks | 2 files |
 | Phase 03 P02 | 35min | 2 tasks | 6 files |
+| Phase 03 P03 | 12min | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,7 @@ Recent decisions affecting current work:
 - [Phase 03]: Kept the existing plain readings_deviceid_timestamp_idx index untouched alongside the new unique constraint (additive, per D-33). — The unique constraint's implicit index is separate from the pre-existing plain index; dropping the old one was explicitly out of this phase's scope per the plan.
 - [Phase 03]: Kept the existing readings_deviceid_timestamp_idx-adjacent scope intact and added deleteReadingsInRange to tests/helpers/cleanup.ts during Task 1 rather than Task 2 — Task 1's own shuffled-order/multi-timestamp test already needed range-based cleanup for a batch of readings inserted under distinct timestamps; no functional difference from the plan's intent since Task 2 simply reuses the helper.
 - [Phase 03]: Deferred (did not fix) a pre-existing tests/risk.compute.test.ts failure caused by Plan 03-01's live unique-constraint migration — The failure is reproduced identically on the commit before any 03-02 change, is in a file outside 03-02's declared files_modified scope, and reconciling D-26's same-timestamp tie-break test coverage with D-33's unique constraint is an architectural decision for a follow-up task — logged in full to deferred-items.md per the executor's scope-boundary rule.
+- [Phase 03]: [Phase 03]: Applied D-33/D-34 to the single-reading POST /api/ingest route exactly per RESEARCH.md Pitfall 2's Code Example — Completes D-33's explicit requirement that both ingest routes get upsert-ignore treatment; the single-reading route's .single() would otherwise throw 500 on a legitimate duplicate-skip retry now that the unique constraint exists.
 
 ### Pending Todos
 
@@ -105,6 +107,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-19T11:18:42.936Z
-Stopped at: Completed 03-02-PLAN.md
+Last session: 2026-09-19T11:23:42.909Z
+Stopped at: Completed 03-03-PLAN.md
 Resume file: None
