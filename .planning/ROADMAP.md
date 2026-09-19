@@ -6,6 +6,10 @@
 
 SepCare's backend ships as four sequential vertical slices, each a fully working device-to-read-API pipeline that gets richer with every phase. Phase 1 proves the wire end-to-end for one live reading — POST, authenticate, store, read back. Phase 2 turns that pipeline into the actual product by attaching automatic sepsis-risk scoring and Green/Amber/Red status to every stored reading. Phase 3 makes the pipeline resilient to the real-world WiFi/power gaps the device will hit in the field, accepting buffered batch syncs with correct historical timestamps. Phase 4 completes the v1 read surface with a historical trend endpoint so risk status can be reviewed over time, not just as a snapshot. By the end of Phase 4, every v1 requirement is delivered and the backend can support the single-device v1 demo end-to-end.
 
+## Hardware baseline (cross-phase)
+
+Every phase assumes the single device is the **Waveshare ESP32-S3-Tiny**, not a full-size ESP32-WROOM and not the obsolete nRF52840/Raspberry Pi BLE split. It supplies periodic `heartRate`, `spo2`, `temperature`, and `activityScore` summaries over WiFi. The electrical schematic, GPIO assignments, 600mAh LiPo power path, and bring-up order live in [`hardware/SEPCARE-HARDWARE-SOT.md`](../hardware/SEPCARE-HARDWARE-SOT.md); the BOM is [`hardware/parts-list.md`](../hardware/parts-list.md). Firmware must preserve original epoch-millisecond timestamps during offline buffering so Phases 1–4 receive one consistent wire contract.
+
 ## Phases
 
 **Phase Numbering:**
@@ -18,7 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [X] **Phase 1: Device Ingest & Live Readout** - A single live reading flows from device POST through auth and storage to being fetchable via a read API (completed 2026-09-12)
 - [x] **Phase 2: Automatic Risk Scoring & Status** - Every stored reading is automatically scored for sepsis risk and surfaced as Green/Amber/Red (completed 2026-09-19)
 - [x] **Phase 3: Offline-Buffered Batch Sync** - Readings buffered during connectivity gaps arrive as a batch, stored with correct original timestamps, and risk-scored like any other reading (completed 2026-09-19)
-- [ ] **Phase 4: Historical Trends API** - Historical vitals and risk-status data over a time range is available via the read API
+- [x] **Phase 4: Historical Trends API** - Historical vitals and risk-status data over a time range is available via the read API (completed 2026-09-19)
 
 ## Phase Details
 
@@ -131,4 +135,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Device Ingest & Live Readout    | 4/4            | Complete    | 2026-09-12 |
 | 2. Automatic Risk Scoring & Status | 3/3 | Complete    | 2026-09-19 |
 | 3. Offline-Buffered Batch Sync     | 3/3 | Complete    | 2026-09-19 |
-| 4. Historical Trends API           | 0/TBD          | Not started | -          |
+| 4. Historical Trends API           | 1/1 | Complete    | 2026-09-19 |

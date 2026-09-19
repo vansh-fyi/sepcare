@@ -1,7 +1,7 @@
 # Requirements: SepCare Backend
 
 **Defined:** 2026-09-07
-**Core Value:** Reliably turn a stream of vitals from an ESP32 wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
+**Core Value:** Reliably turn a stream of vitals from a Waveshare ESP32-S3-Tiny wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
 
 ## v1 Requirements
 
@@ -27,11 +27,15 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Read API
 
 - [x] **READ-01**: A read API (or Supabase realtime subscription) exposes the latest vitals and current risk status for the frontend/dashboard to consume
-- [ ] **READ-02**: A read API exposes historical vitals and risk-status trend over a given time range, for the frontend to render a trend view
+- [x] **READ-02**: A read API exposes historical vitals and risk-status trend over a given time range, for the frontend to render a trend view
 
 ### Device
 
 - [x] **DEV-01**: System supports a single provisioned device/baby profile end-to-end for v1 (device ID + API key configured manually, no registration UI needed)
+
+### Hardware integration baseline (not a backend requirement)
+
+The v1 prototype is the Waveshare ESP32-S3-Tiny, with MAX30102 and MPU6050 on shared I²C (GPIO 6/7), DS18B20 on 1-Wire (GPIO 4), and optional MAX30102 interrupt (GPIO 5). The canonical schematic and safe power path are in `hardware/SEPCARE-HARDWARE-SOT.md`. This constrains the physical producer of the wire contract but does not change the 11 backend requirements or their roadmap coverage.
 
 ## v2 Requirements
 
@@ -61,7 +65,7 @@ Explicitly excluded. Documented to prevent scope creep.
 
 | Feature | Reason |
 |---------|--------|
-| Raspberry Pi base station | Superseded by direct ESP32-to-cloud architecture over WiFi |
+| Raspberry Pi base station | Superseded by direct ESP32-S3-Tiny-to-cloud architecture over WiFi |
 | On-device (ESP32) sepsis-risk computation | ESP32 lacks compute headroom for the composite/trend logic; backend does the fusion instead |
 | Clinical validation of the risk model on real sepsis cases | Requires IRB-approved clinical partnership; explicitly future work beyond this build |
 | Any paid hosting/infrastructure | Free-tier constraint (Vercel + Supabase) for this phase |
@@ -81,7 +85,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RISK-02 | Phase 2 | Complete |
 | RISK-03 | Phase 2 | Complete |
 | READ-01 | Phase 1 | Complete |
-| READ-02 | Phase 4 | Pending |
+| READ-02 | Phase 4 | Complete |
 | DEV-01 | Phase 1 | Complete |
 
 **Coverage:**
