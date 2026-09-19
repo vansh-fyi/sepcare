@@ -16,7 +16,7 @@ SepCare's backend ships as four sequential vertical slices, each a fully working
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [X] **Phase 1: Device Ingest & Live Readout** - A single live reading flows from device POST through auth and storage to being fetchable via a read API (completed 2026-09-12)
-- [ ] **Phase 2: Automatic Risk Scoring & Status** - Every stored reading is automatically scored for sepsis risk and surfaced as Green/Amber/Red
+- [x] **Phase 2: Automatic Risk Scoring & Status** - Every stored reading is automatically scored for sepsis risk and surfaced as Green/Amber/Red (completed 2026-09-19)
 - [ ] **Phase 3: Offline-Buffered Batch Sync** - Readings buffered during connectivity gaps arrive as a batch, stored with correct original timestamps, and risk-scored like any other reading
 - [ ] **Phase 4: Historical Trends API** - Historical vitals and risk-status data over a time range is available via the read API
 
@@ -95,7 +95,17 @@ Plans:
 3. Risk computation runs on synced readings the same way it does on live readings, correctly reflecting their true chronological position
 4. Readings ingested via live POST and via batch sync are indistinguishable in storage and downstream queries — same schema, same risk logic applied
 
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+**Wave 1**
+
+- [ ] 03-01-PLAN.md — Author readings unique-constraint migration + push to live Supabase + regenerate types
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 03-02-PLAN.md — POST /api/ingest/batch end-to-end (tracer) + backfill rescoring + edge-case hardening
+- [ ] 03-03-PLAN.md — Apply D-33 upsert-ignore fix to POST /api/ingest (single-reading route)
 
 ### Phase 4: Historical Trends API
 
@@ -119,6 +129,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase                              | Plans Complete | Status      | Completed  |
 | ---------------------------------- | -------------- | ----------- | ---------- |
 | 1. Device Ingest & Live Readout    | 4/4            | Complete    | 2026-09-12 |
-| 2. Automatic Risk Scoring & Status | 3/3 | In Progress|  |
+| 2. Automatic Risk Scoring & Status | 3/3 | Complete    | 2026-09-19 |
 | 3. Offline-Buffered Batch Sync     | 0/TBD          | Not started | -          |
 | 4. Historical Trends API           | 0/TBD          | Not started | -          |
