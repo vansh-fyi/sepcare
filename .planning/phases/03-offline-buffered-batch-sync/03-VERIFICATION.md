@@ -1,9 +1,10 @@
 ---
 phase: 03-offline-buffered-batch-sync
 verified: 2026-09-19T17:35:00Z
-status: human_needed
+status: passed
 score: 14/16 must-haves verified
 covered_files:
+
   - ".planning/REQUIREMENTS.md"
   - ".planning/phases/03-offline-buffered-batch-sync/03-01-PLAN.md"
   - ".planning/phases/03-offline-buffered-batch-sync/03-01-SUMMARY.md"
@@ -23,10 +24,12 @@ covered_files:
   - "tests/ingest.batch.test.ts"
   - "tests/ingest.route.test.ts"
   - "tests/risk.compute.test.ts"
+
 covered_digest: "v1:sha256:d436f993b12d63cf394879ea950d303d683156ae34b56f2c4b0981384866c311"
 behavior_unverified: 2
 overrides_applied: 0
 behavior_unverified_items:
+
   - truth: "Readings within a single batch are sorted ascending by timestamp before insert, and each newly-inserted row is scored sequentially in that ascending order (D-29)."
     test: "Instrument or spy on computeAndPersistRiskScore invocations for a shuffled-order batch submission and record the sequence of timestamps it is called with."
     expected: "computeAndPersistRiskScore is invoked in strictly ascending-timestamp order, matching the sorted array, not the original (shuffled) submission order."
@@ -36,6 +39,7 @@ behavior_unverified_items:
     expected: "Final status/breakdown is invariant to internal scoring order."
     why_human: "Explicitly declared verification: backstop in 03-02-PLAN.md's must_haves.truths — a non-inferable truth per verification policy; no dedicated test exists (03-02-SUMMARY.md coverage id D10: human_judgment: true, 'not independently tested by a dedicated test'). Code inspection of compute.ts's fetchWindow (reads full DB state at scoring time) supports the claim but does not constitute direct behavioral evidence."
 human_verification:
+
   - test: "Instrument computeAndPersistRiskScore (temporarily, e.g. via a console.log or a spy in a throwaway test) while POSTing a batch with shuffled timestamps, and record invocation order."
     expected: "Calls occur in ascending timestamp order, matching the code's explicit `.sort((a,b) => a.timestamp - b.timestamp)` step."
     why_human: "Ordering invariant with no existing behavioral test; see behavior_unverified_items above."

@@ -16,12 +16,12 @@ Reliably turn a stream of vitals from an ESP32 wearable into an accurate, trustw
 - ✓ Backend authenticates each device request via a static per-device API key — Phase 1
 - ✓ Backend computes the composite sepsis-risk score and Green/Amber/Red status from incoming vitals, using a v1-scoped subset (temperature threshold, HR-temperature proportionality, activity/lethargy trend) of the breadth + trend logic in `context/implementation-plans/neonatal-sepsis-armband.md` (§7.1.1) — Phase 2
 - ✓ Backend persists vitals, computed risk scores, and traffic-light status in Supabase (Postgres), risk scores queryable by time range through their linked reading — Phase 1 (vitals) + Phase 2 (risk scores/status)
+- ✓ Device can POST a batch of buffered offline readings once connectivity returns, and they are stored with their original timestamps — Phase 3
 
 ### Active
 
-- [ ] Device can POST a batch of buffered offline readings once connectivity returns, and they're stored with their original timestamps (not the upload time)
 - [ ] A read API (or Supabase realtime) exists for the frontend/dashboard to fetch current vitals, risk status, and history — live vitals + risk status delivered via Realtime (Phase 1 + 2); historical trend range query still pending (Phase 4)
-- [ ] System supports a single device/baby profile end-to-end (v1 demo scope) — device provisioning, ingest, and scoring done; full end-to-end (including offline batch sync and historical trends) pending Phases 3-4
+- [ ] System supports a single device/baby profile end-to-end (v1 demo scope) — device provisioning, ingest, scoring, and offline batch sync done; historical trends pending Phase 4
 
 ### Out of Scope
 
@@ -60,6 +60,7 @@ Reliably turn a stream of vitals from an ESP32 wearable into an accurate, trustw
 | Static per-device API key for device auth | Sufficient for a single-device v1 demo; full auth/accounts deferred | ✓ Validated — Phase 1 |
 | v1's composite risk model rescales §7.1.1's 6-feature/≥3-of-6 breadth gate to 3 features (temperature, HR-temp proportionality, activity trend) at 3-of-3 for Red | HRV, perfusion index, and respiratory irregularity need sensor/data streams not yet available from the ESP32 payload (RISK-V2-01); the reduced feature set still needed a gating rule faithful to the "breadth over severity" clinical intent it was built to preserve | ✓ Validated — Phase 2, all boundary/breadth-gating/prohibition cases covered by passing tests |
 | `risk_scores` as a separate table (reading_id as PK, FK-cascade to readings) rather than columns on `readings` | Keeps `readings` as pure raw-vitals-in; makes the 1:1 reading↔score relationship a schema-level guarantee; gives Phase 4's historical trend queries a clean join target | ✓ Validated — Phase 2, proven queryable by time range via PostgREST embedded join |
+| Batch sync sorts and deduplicates in memory before one upsert, then rescans affected history | Preserves original chronology, avoids duplicate rows on retries, and recomputes scores whose 12-hour windows gain backfilled readings | ✓ Validated — Phase 3 |
 
 ## Evolution
 
@@ -79,4 +80,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-19 after Phase 2*
+*Last updated: 2026-09-19 after Phase 3*

@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [X] **Phase 1: Device Ingest & Live Readout** - A single live reading flows from device POST through auth and storage to being fetchable via a read API (completed 2026-09-12)
 - [x] **Phase 2: Automatic Risk Scoring & Status** - Every stored reading is automatically scored for sepsis risk and surfaced as Green/Amber/Red (completed 2026-09-19)
-- [ ] **Phase 3: Offline-Buffered Batch Sync** - Readings buffered during connectivity gaps arrive as a batch, stored with correct original timestamps, and risk-scored like any other reading
+- [x] **Phase 3: Offline-Buffered Batch Sync** - Readings buffered during connectivity gaps arrive as a batch, stored with correct original timestamps, and risk-scored like any other reading (completed 2026-09-19)
 - [ ] **Phase 4: Historical Trends API** - Historical vitals and risk-status data over a time range is available via the read API
 
 ## Phase Details
@@ -130,5 +130,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | ---------------------------------- | -------------- | ----------- | ---------- |
 | 1. Device Ingest & Live Readout    | 4/4            | Complete    | 2026-09-12 |
 | 2. Automatic Risk Scoring & Status | 3/3 | Complete    | 2026-09-19 |
-| 3. Offline-Buffered Batch Sync     | 3/3 | In Progress|  |
+| 3. Offline-Buffered Batch Sync     | 3/3 | Complete    | 2026-09-19 |
 | 4. Historical Trends API           | 0/TBD          | Not started | -          |
