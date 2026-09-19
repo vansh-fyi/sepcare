@@ -198,6 +198,19 @@ export async function deleteReadingByTimestamp(deviceId: string, timestamp: numb
 
 ---
 
+## Resolution (2026-09-19)
+
+| Finding | Disposition | Notes |
+|---|---|---|
+| CR-01 | **Fixed** | `successfullyScoredIds` now tracks scoring *success*, not attempts — a row whose initial scoring throws is no longer excluded from the backfill retry pass. Full suite (44 passed) and `tsc --noEmit` both clean after the fix. No dedicated regression test added: forcing a genuine (non-mocked) `computeAndPersistRiskScore` failure for a validly-inserted row isn't reachable through this codebase's pure-integration-test convention (no `vi.mock` used anywhere in the suite) without an FK-violation-style trick that doesn't apply here since the row is always real. The fix's correctness follows from code inspection: the exclusion set is now populated only inside the `try` block's success path. |
+| WR-01 | **Deferred** | Real DRY/security-drift risk, but extracting a shared auth helper touches both routes' tested, passing code for a maintainability concern, not a correctness bug — left as tracked debt rather than bundled into this phase's fix pass. |
+| WR-02 | **Deferred** | Predates Phase 3 (Phase 1's `IngestSchema`); adding physiological/timestamp bounds is a scope decision affecting both ingest routes' existing validated behavior, not something Phase 3's CONTEXT.md locked. Tracked as a follow-up, not fixed here. |
+| WR-03 | **Deferred** | Predates Phase 3 (Phase 1's `deleteReadingByTimestamp` helper); fixing it means updating every call site across the Phase 1/2/3 test suite for a v1 single-device demo where the risk is currently inert (one device, `nb-001`, throughout). Tracked as latent risk, not fixed here. |
+| IN-01 | **Fixed** | Added a pointer comment in `compute.ts` next to the tie-break filter, cross-referencing D-33 and the test file. |
+| IN-02 | **Fixed** | Tightened the batch route's scoring-loop comment to state duplicate-skip rows get no *initial* score but are idempotently re-scored by the backfill pass. |
+
+---
+
 _Reviewed: 2026-09-19_
 _Reviewer: Claude (gsd-code-reviewer)_
 _Depth: standard_

@@ -106,11 +106,23 @@ export async function POST(request: NextRequest) {
   // Never trust upsert response row order as insertion order — re-sort.
   const newlyInserted = (insertedRows ?? []).sort((a, b) => a.timestamp - b.timestamp);
 
-  // D-34/D-37: only newly-inserted rows are scored here; a duplicate-skip
-  // retry is a safe no-op since nothing about it changed.
+  // D-34/D-37: only newly-inserted rows are scored here — a duplicate-skip
+  // retry gets no initial score in this loop (it never appears in
+  // `newlyInserted`), but is picked up and idempotently re-scored by the
+  // backfill pass below, since its timestamp always falls within the
+  // batch's own [batchMin, batchMax] range.
+  //
+  // Track SUCCESSES here, not attempts — a row whose initial scoring
+  // throws must still be picked up by the backfill pass below (its own
+  // timestamp always falls inside [batchMin, batchMax + TREND_WINDOW_MS],
+  // so it's always present in `affected`). Excluding it by attempt alone
+  // would silently leave it with no risk_scores row and no retry path,
+  // defeating the offline-resilience guarantee this endpoint exists for.
+  const successfullyScoredIds = new Set<number>();
   for (const row of newlyInserted) {
     try {
       await computeAndPersistRiskScore(row);
+      successfullyScoredIds.add(row.id);
     } catch (scoringError) {
       console.error("Risk scoring failed for reading", row.id, scoringError);
     }
@@ -127,10 +139,9 @@ export async function POST(request: NextRequest) {
     batchMin,
     batchMax + TREND_WINDOW_MS
   );
-  const alreadyScoredIds = new Set(newlyInserted.map((r) => r.id));
 
   for (const row of affected) {
-    if (alreadyScoredIds.has(row.id)) continue;
+    if (successfullyScoredIds.has(row.id)) continue;
     try {
       // fetchWindow's WindowRow lacks deviceId — single-device batch makes
       // attaching the batch's own deviceId always correct.

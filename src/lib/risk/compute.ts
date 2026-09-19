@@ -136,7 +136,12 @@ export async function computeAndPersistRiskScore(
   const baselineEstablished = target.timestamp - earliest >= BASELINE_MIN_MS;
 
   // Prior history excludes the target reading itself, even under
-  // duplicate timestamps (tie-broken by strictly smaller id).
+  // duplicate timestamps (tie-broken by strictly smaller id). The
+  // same-timestamp branch is unreachable for a single device as of
+  // Phase 3's D-33 (readings_deviceid_timestamp_key unique constraint
+  // makes two same-device rows at one timestamp impossible) — retained as
+  // harmless defensive code; see tests/risk.compute.test.ts's D-26/D-33
+  // reconciliation note for the full history.
   const prior = rows.filter(
     (row) =>
       row.timestamp < target.timestamp ||
