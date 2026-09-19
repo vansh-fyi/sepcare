@@ -118,6 +118,17 @@ The executor subagent hit an API session usage-limit reset (resets 8:20pm Asia/C
 - The live `readings("deviceId","timestamp")` unique constraint exists — Plans 03-02 (batch endpoint) and 03-03 (single-route retrofit) can now build and test their `onConflict: "deviceId,timestamp"` upsert-ignore-duplicates logic against a real constraint, not just type-level assumptions.
 - No blockers for Wave 2.
 
+## Self-Check: PASSED
+
+- FOUND: supabase/migrations/20260919105432_readings_unique_device_timestamp.sql
+- FOUND: src/lib/supabase/types.ts
+- CONFIRMED: `grep -c 'add constraint readings_deviceid_timestamp_key unique'` → 1
+- CONFIRMED: `grep -c 'delete from public.readings a'` → 1
+- CONFIRMED: `git log --oneline --all --grep="03-01"` → 2 commits (85c987a, ef995a3)
+- CONFIRMED: `supabase migration list --linked` shows 20260919105432_readings_unique_device_timestamp on Remote
+- CONFIRMED: `npm run build` exits 0
+- CONFIRMED: no tracked/staged/unstaged content contains the SUPABASE_DB_PASSWORD value
+
 ---
 *Phase: 03-offline-buffered-batch-sync*
 *Completed: 2026-09-19*
