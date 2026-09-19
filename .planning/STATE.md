@@ -3,17 +3,17 @@ gsd_state_version: "1.0"
 current_phase: 4
 current_phase_name: Historical Trends API
 status: planning
-stopped_at: Phase 3 complete, ready to plan Phase 4
-last_updated: "2026-09-19T13:05:48.421Z"
+stopped_at: Phase 4 context gathered
+last_updated: "2026-09-19T14:32:25.232Z"
 last_activity: 2026-09-19
 last_activity_desc: Phase 3 complete, transitioned to Phase 4
-state_head: 5ec4b4f1c01a65ae6e1c0fc86a5149b8bf98c61a
+state_head: cd3cbee435131dfdbe89a92f449a9dbb8cf4efad
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 0
   total_plans: 10
   completed_plans: 10
-  percent: 25
+  percent: 0
 ---
 
 # Project State
@@ -22,7 +22,7 @@ progress:
 
 See: .planning/PROJECT.md (updated 2026-09-19)
 
-**Core value:** Reliably turn a stream of vitals from an ESP32 wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
+**Core value:** Reliably turn a stream of vitals from a Waveshare ESP32-S3-Tiny wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
 **Current focus:** Phase 4 — Historical Trends API
 
 ## Current Position
@@ -32,7 +32,7 @@ Plan: Not started
 Status: Ready to plan
 Last activity: 2026-09-19 — Phase 3 complete, transitioned to Phase 4
 
-Progress: [███░░░░░░░] 25%
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -74,7 +74,8 @@ Progress: [███░░░░░░░] 25%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- Drop Raspberry Pi base station, go ESP32-direct-to-cloud (native WiFi replaces BLE bridge)
+- Drop Raspberry Pi base station, go ESP32-S3-Tiny-direct-to-cloud (native WiFi replaces BLE bridge)
+- Hardware baseline: Waveshare ESP32-S3-Tiny; GPIO 6/7 I²C (MAX30102 + MPU6050), GPIO 4 DS18B20 1-Wire, GPIO 5 optional MAX30102 interrupt, GPIO 38 onboard RGB; 600mAh LiPo → TP4056 protected output → switch → S3-Tiny 5V, with the onboard 3V3 regulator supplying sensors. See `hardware/SEPCARE-HARDWARE-SOT.md`.
 - Sepsis-risk fusion logic runs in the backend (Next.js), not on-device
 - Custom Next.js API backend instead of ESP32 → Supabase directly, for testable risk math
 - Static per-device API key for device auth (v1 single-device scope; full auth deferred)
@@ -106,6 +107,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-19T18:26:00Z
-Stopped at: Phase 3 complete, ready to plan Phase 4
-Resume file: None
+Last session: 2026-09-19T14:32:25.203Z
+Stopped at: Phase 4 context gathered
+Resume file: .planning/phases/04-historical-trends-api/04-CONTEXT.md
