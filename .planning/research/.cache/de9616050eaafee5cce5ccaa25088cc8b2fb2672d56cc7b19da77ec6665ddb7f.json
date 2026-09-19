@@ -1,0 +1,1 @@
+{"content":"Supabase: service-role key (SUPABASE_SERVICE_ROLE_KEY, no NEXT_PUBLIC_ prefix) bypasses RLS and must only be used in server-only code (route handlers); anon key is safe to expose client-side and is RLS-constrained.","source":"web","provider":"websearch","confidence":"LOW","fetched_at":"2026-09-12T16:21:16.189Z","ttl":86400000,"kind":"docs"}

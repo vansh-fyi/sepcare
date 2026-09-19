@@ -1,0 +1,1 @@
+{"content":"Postgres epoch storage: use bigint (not int) to avoid Y2038 overflow if storing raw epoch; timestamptz generally preferred for native time-range query support, converted on insert via to_timestamp(ms::numeric/1000).","source":"web","provider":"websearch","confidence":"LOW","fetched_at":"2026-09-12T16:21:16.615Z","ttl":86400000,"kind":"web"}
