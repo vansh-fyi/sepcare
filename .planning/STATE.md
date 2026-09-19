@@ -3,16 +3,16 @@ gsd_state_version: "1.0"
 current_phase: 3
 current_phase_name: Offline-Buffered Batch Sync
 status: executing
-stopped_at: Phase 3 context gathered
-last_updated: "2026-09-19T10:28:38.483Z"
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-09-19T11:03:51.422Z"
 last_activity: 2026-09-19
-last_activity_desc: Phase 2 complete, transitioned to Phase 3
-state_head: 38afa9c564fb56a258dfc30c65151cb2595192ae
+last_activity_desc: Phase 3 execution started
+state_head: 85c987a1a3e7ab5677c42684e647c2c953d8a0e8
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 10
-  completed_plans: 7
+  completed_plans: 8
   percent: 25
 ---
 
@@ -27,10 +27,10 @@ See: .planning/PROJECT.md (updated 2026-09-19)
 
 ## Current Position
 
-Phase: 3 (Offline-Buffered Batch Sync) — READY TO EXECUTE
-Plan: Not started
+Phase: 3 (Offline-Buffered Batch Sync) — EXECUTING
+Plan: 2 of 3
 Status: Ready to execute
-Last activity: 2026-09-19 — Phase 2 complete, transitioned to Phase 3
+Last activity: 2026-09-19 — Phase 3 execution started
 
 Progress: [███░░░░░░░] 25%
 
@@ -62,6 +62,7 @@ Progress: [███░░░░░░░] 25%
 | Phase 02 P01 | 52min | 2 tasks | 2 files |
 | Phase 02 P02 | 33min | 2 tasks | 5 files |
 | Phase 02 P03 | 15min | 2 tasks | 2 files |
+| Phase 03 P01 | 15min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,7 @@ Recent decisions affecting current work:
 - [Phase 02]: Added readings_deviceid_timestamp_idx composite index now rather than deferring to Plan 02-02 — Every rolling-window query planned for this phase depends on it, and RESEARCH.md flagged the missing index as a known pitfall to close early
 - [Phase 02]: computeAndPersistRiskScore's breadth-gating and window logic proved correct against the full boundary/prohibition matrix on the first implementation pass (Task 2's hardening tests required zero compute.ts changes) — Confirms building Task 1 as a production-quality tracer (not a throwaway) against the plan's exact algorithm spec paid off
 - [Phase 02]: risk_scores Realtime tests buffer-and-match by reading_id (unknown until POST completes) instead of pre-filtering, since risk_scores carries no timestamp column — reading_id is only generated inside POST /api/ingest's synchronous insert, unlike the readings analog where deviceId+timestamp are known before subscribing
+- [Phase 03]: Kept the existing plain readings_deviceid_timestamp_idx index untouched alongside the new unique constraint (additive, per D-33). — The unique constraint's implicit index is separate from the pre-existing plain index; dropping the old one was explicitly out of this phase's scope per the plan.
 
 ### Pending Todos
 
@@ -98,6 +100,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-19T06:55:34.257Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-offline-buffered-batch-sync/03-CONTEXT.md
+Last session: 2026-09-19T11:03:30.467Z
+Stopped at: Completed 03-01-PLAN.md
+Resume file: None

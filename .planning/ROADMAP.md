@@ -95,12 +95,12 @@ Plans:
 3. Risk computation runs on synced readings the same way it does on live readings, correctly reflecting their true chronological position
 4. Readings ingested via live POST and via batch sync are indistinguishable in storage and downstream queries — same schema, same risk logic applied
 
-**Plans**: 3 plans
+**Plans**: 1/3 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 03-01-PLAN.md — Author readings unique-constraint migration + push to live Supabase + regenerate types
+- [x] 03-01-PLAN.md — Author readings unique-constraint migration + push to live Supabase + regenerate types
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -130,5 +130,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | ---------------------------------- | -------------- | ----------- | ---------- |
 | 1. Device Ingest & Live Readout    | 4/4            | Complete    | 2026-09-12 |
 | 2. Automatic Risk Scoring & Status | 3/3 | Complete    | 2026-09-19 |
-| 3. Offline-Buffered Batch Sync     | 0/TBD          | Not started | -          |
+| 3. Offline-Buffered Batch Sync     | 1/3 | In Progress|  |
 | 4. Historical Trends API           | 0/TBD          | Not started | -          |
