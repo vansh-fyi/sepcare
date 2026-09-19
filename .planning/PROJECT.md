@@ -12,17 +12,16 @@ Reliably turn a stream of vitals from an ESP32 wearable into an accurate, trustw
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Device can POST a single vitals reading to a backend ingest endpoint — Phase 1
+- ✓ Backend authenticates each device request via a static per-device API key — Phase 1
+- ✓ Backend computes the composite sepsis-risk score and Green/Amber/Red status from incoming vitals, using a v1-scoped subset (temperature threshold, HR-temperature proportionality, activity/lethargy trend) of the breadth + trend logic in `context/implementation-plans/neonatal-sepsis-armband.md` (§7.1.1) — Phase 2
+- ✓ Backend persists vitals, computed risk scores, and traffic-light status in Supabase (Postgres), risk scores queryable by time range through their linked reading — Phase 1 (vitals) + Phase 2 (risk scores/status)
 
 ### Active
 
-- [ ] Device can POST a single vitals reading to a backend ingest endpoint
 - [ ] Device can POST a batch of buffered offline readings once connectivity returns, and they're stored with their original timestamps (not the upload time)
-- [ ] Backend authenticates each device request via a static per-device API key
-- [ ] Backend computes the composite sepsis-risk score and Green/Amber/Red status from incoming vitals, using the breadth + trend logic in `context/implementation-plans/neonatal-sepsis-armband.md` (§7.1.1)
-- [ ] Backend persists vitals, computed risk scores, and traffic-light status in Supabase (Postgres)
-- [ ] A read API (or Supabase realtime) exists for the frontend/dashboard to fetch current vitals, risk status, and history
-- [ ] System supports a single device/baby profile end-to-end (v1 demo scope)
+- [ ] A read API (or Supabase realtime) exists for the frontend/dashboard to fetch current vitals, risk status, and history — live vitals + risk status delivered via Realtime (Phase 1 + 2); historical trend range query still pending (Phase 4)
+- [ ] System supports a single device/baby profile end-to-end (v1 demo scope) — device provisioning, ingest, and scoring done; full end-to-end (including offline batch sync and historical trends) pending Phases 3-4
 
 ### Out of Scope
 
@@ -53,12 +52,14 @@ Reliably turn a stream of vitals from an ESP32 wearable into an accurate, trustw
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Drop Raspberry Pi base station, go ESP32-direct-to-cloud | ESP32 has native WiFi, removing the need for a BLE-to-cloud bridge device; simplifies hardware to a single worn unit | — Pending |
-| Sepsis-risk fusion logic runs in the backend, not on-device | ESP32 lacks the Pi's compute headroom; backend can run the full composite/trend logic in TypeScript with room to iterate | — Pending |
-| Custom Next.js API backend instead of ESP32 → Supabase directly | The composite risk math (HRV entropy, breadth-gating, rolling multi-hour trends) is far easier to write and test as real code than as SQL/Edge Functions | — Pending |
-| Host backend on Vercel free tier, storage on Supabase free tier | No infrastructure budget — SDG/hackathon project | — Pending |
-| ESP32 sends pre-computed vitals per interval, not raw waveforms | Reduces payload size and backend complexity; on-chip PPG libraries already do beat detection | — Pending |
-| Static per-device API key for device auth | Sufficient for a single-device v1 demo; full auth/accounts deferred | — Pending |
+| Drop Raspberry Pi base station, go ESP32-direct-to-cloud | ESP32 has native WiFi, removing the need for a BLE-to-cloud bridge device; simplifies hardware to a single worn unit | — Pending (hardware track) |
+| Sepsis-risk fusion logic runs in the backend, not on-device | ESP32 lacks the Pi's compute headroom; backend can run the full composite/trend logic in TypeScript with room to iterate | ✓ Validated — Phase 2's `computeAndPersistRiskScore` runs entirely in Next.js/TypeScript |
+| Custom Next.js API backend instead of ESP32 → Supabase directly | The composite risk math (HRV entropy, breadth-gating, rolling multi-hour trends) is far easier to write and test as real code than as SQL/Edge Functions | ✓ Validated — Phase 2 shipped the composite scoring logic as tested TypeScript, not SQL/Edge Functions |
+| Host backend on Vercel free tier, storage on Supabase free tier | No infrastructure budget — SDG/hackathon project | ✓ Validated — Phase 1 deployed to Vercel + Supabase free tiers; Phase 2 added schema/logic on the same stack with no upgrade needed |
+| ESP32 sends pre-computed vitals per interval, not raw waveforms | Reduces payload size and backend complexity; on-chip PPG libraries already do beat detection | — Pending (hardware track) |
+| Static per-device API key for device auth | Sufficient for a single-device v1 demo; full auth/accounts deferred | ✓ Validated — Phase 1 |
+| v1's composite risk model rescales §7.1.1's 6-feature/≥3-of-6 breadth gate to 3 features (temperature, HR-temp proportionality, activity trend) at 3-of-3 for Red | HRV, perfusion index, and respiratory irregularity need sensor/data streams not yet available from the ESP32 payload (RISK-V2-01); the reduced feature set still needed a gating rule faithful to the "breadth over severity" clinical intent it was built to preserve | ✓ Validated — Phase 2, all boundary/breadth-gating/prohibition cases covered by passing tests |
+| `risk_scores` as a separate table (reading_id as PK, FK-cascade to readings) rather than columns on `readings` | Keeps `readings` as pure raw-vitals-in; makes the 1:1 reading↔score relationship a schema-level guarantee; gives Phase 4's historical trend queries a clean join target | ✓ Validated — Phase 2, proven queryable by time range via PostgREST embedded join |
 
 ## Evolution
 
@@ -78,4 +79,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-07 after initialization*
+*Last updated: 2026-09-19 after Phase 2*
