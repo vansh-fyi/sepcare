@@ -74,17 +74,12 @@ describe("POST /api/ingest/batch", () => {
         .eq("timestamp", timestamp)
         .maybeSingle();
       expect(error).toBeNull();
+      // Stored under its own submitted timestamp, never the server's
+      // request-time "now" (each submitted timestamp is ~500h in the
+      // past, far from Date.now()).
       expect(data?.timestamp).toBe(timestamp);
+      expect(Date.now() - data!.timestamp).toBeGreaterThan(HOUR_MS);
     }
-
-    // Never stored near Date.now() — sanity check against request time.
-    const { data: nearNow } = await supabaseAdmin
-      .from("readings")
-      .select("id")
-      .eq("deviceId", DEVICE_ID)
-      .gte("timestamp", Date.now() - MIN_MS)
-      .lte("timestamp", Date.now() + MIN_MS);
-    expect(nearNow ?? []).toEqual([]);
   });
 
   it("backfill-rescores an already-scored existing reading whose 12h window overlaps a batch of older readings (D-27/D-28)", async () => {
@@ -205,5 +200,140 @@ describe("POST /api/ingest/batch", () => {
     expect(Object.keys(batchScore!).sort()).toEqual(
       ["reading_id", "deviceId", "status", "breakdown", "created_at"].sort()
     );
+  });
+
+  it("rejects a batch of 501 readings with 400 before any row is inserted (D-32)", async () => {
+    const base = Date.now() - 800 * HOUR_MS;
+    ranges.push([base - MIN_MS, base + 502 * MIN_MS]);
+
+    const readings = Array.from({ length: 501 }, (_, i) => ({
+      timestamp: base + i * MIN_MS,
+      vitals: { heartRate: 130, spo2: 98, temperature: 36.8, activityScore: 3 },
+    }));
+
+    const res = await BATCH_POST(
+      makeBatchRequest(
+        { deviceId: DEVICE_ID, readings },
+        { "x-api-key": VALID_KEY }
+      )
+    );
+    expect(res.status).toBe(400);
+
+    const { data } = await supabaseAdmin
+      .from("readings")
+      .select("id")
+      .eq("deviceId", DEVICE_ID)
+      .gte("timestamp", base)
+      .lte("timestamp", base + 500 * MIN_MS);
+    expect(data ?? []).toEqual([]);
+  });
+
+  it("rejects the whole batch with 400 when one item fails validation, storing none of it (D-35 all-or-nothing)", async () => {
+    const base = Date.now() - 900 * HOUR_MS;
+    const timestamps = [base, base + 5 * MIN_MS, base + 10 * MIN_MS, base + 15 * MIN_MS];
+    ranges.push([base - MIN_MS, base + 20 * MIN_MS]);
+
+    const readings = timestamps.map((timestamp, i) => {
+      if (i === 2) {
+        // Missing vitals.heartRate at array index 2.
+        return {
+          timestamp,
+          vitals: { spo2: 98, temperature: 36.8, activityScore: 3 },
+        };
+      }
+      return {
+        timestamp,
+        vitals: { heartRate: 130, spo2: 98, temperature: 36.8, activityScore: 3 },
+      };
+    });
+
+    const res = await BATCH_POST(
+      makeBatchRequest(
+        { deviceId: DEVICE_ID, readings },
+        { "x-api-key": VALID_KEY }
+      )
+    );
+    expect(res.status).toBe(400);
+    const json = await res.json();
+    const paths = json.details.map((d: { path: unknown[] }) => d.path.join("."));
+    expect(paths.some((p: string) => p.includes("readings.2"))).toBe(true);
+
+    for (const timestamp of timestamps) {
+      const { data } = await supabaseAdmin
+        .from("readings")
+        .select("id")
+        .eq("deviceId", DEVICE_ID)
+        .eq("timestamp", timestamp)
+        .maybeSingle();
+      expect(data).toBeNull();
+    }
+  });
+
+  it("returns 201 with no additional rows on a verbatim batch retry (D-33/D-34)", async () => {
+    const base = Date.now() - 1000 * HOUR_MS;
+    const timestamps = [base, base + 5 * MIN_MS];
+    ranges.push([base - MIN_MS, base + 10 * MIN_MS]);
+
+    const payload = {
+      deviceId: DEVICE_ID,
+      readings: timestamps.map((timestamp) => ({
+        timestamp,
+        vitals: { heartRate: 130, spo2: 98, temperature: 36.8, activityScore: 3 },
+      })),
+    };
+
+    const firstRes = await BATCH_POST(
+      makeBatchRequest(payload, { "x-api-key": VALID_KEY })
+    );
+    expect(firstRes.status).toBe(201);
+
+    const secondRes = await BATCH_POST(
+      makeBatchRequest(payload, { "x-api-key": VALID_KEY })
+    );
+    expect(secondRes.status).toBe(201);
+
+    const { data } = await supabaseAdmin
+      .from("readings")
+      .select("id")
+      .eq("deviceId", DEVICE_ID)
+      .gte("timestamp", base)
+      .lte("timestamp", base + 5 * MIN_MS);
+    expect((data ?? []).length).toBe(timestamps.length);
+  });
+
+  it("dedupes two same-timestamp entries to one row, keeping a verbatim submitted value, never averaging (dedup-fidelity prohibition)", async () => {
+    const base = Date.now() - 1100 * HOUR_MS;
+    const ts = base;
+    ranges.push([base - MIN_MS, base + MIN_MS]);
+
+    const payload = {
+      deviceId: DEVICE_ID,
+      readings: [
+        { timestamp: ts, vitals: { heartRate: 100, spo2: 98, temperature: 36.8, activityScore: 3 } },
+        { timestamp: ts, vitals: { heartRate: 150, spo2: 98, temperature: 36.8, activityScore: 3 } },
+      ],
+    };
+
+    const res = await BATCH_POST(makeBatchRequest(payload, { "x-api-key": VALID_KEY }));
+    expect(res.status).toBe(201);
+
+    const { data } = await supabaseAdmin
+      .from("readings")
+      .select("heartRate")
+      .eq("deviceId", DEVICE_ID)
+      .eq("timestamp", ts);
+    expect((data ?? []).length).toBe(1);
+    expect([100, 150]).toContain(data![0].heartRate);
+    expect(data![0].heartRate).not.toBe(125);
+  });
+
+  it("rejects a batch sync request with an empty readings array before any insert (empty edge)", async () => {
+    const res = await BATCH_POST(
+      makeBatchRequest(
+        { deviceId: DEVICE_ID, readings: [] },
+        { "x-api-key": VALID_KEY }
+      )
+    );
+    expect(res.status).toBe(400);
   });
 });
