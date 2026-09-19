@@ -8,6 +8,15 @@ directly caused by the current task's own changes).
 
 ### `tests/risk.compute.test.ts` — pre-existing failure caused by Plan 03-01's live migration
 
+**Status: RESOLVED at the phase's regression gate (2026-09-19).** The test was rewritten to assert
+the actual current invariant — that the DB itself now rejects a same-device duplicate-timestamp
+insert with the `readings_deviceid_timestamp_key` violation — rather than trying to reconstruct the
+now-impossible two-rows-same-timestamp scenario. The tie-break-by-`id` branch in `compute.ts`
+(`row.timestamp === target.timestamp && row.id < target.id`) is retained as harmless, now-unreachable
+defensive code; removing it was judged out of scope for this fix (a Phase 2 algorithm change, not a
+test-coverage reconciliation). Full suite passes (44 passed, 1 skipped, 0 failed).
+
+
 - **Test:** `computeAndPersistRiskScore — 12h window adjacency (D-26 inclusive >=, Task 2) >
   readings sharing an identical timestamp are ordered deterministically by id, and the target
   excludes only itself from its own baseline (not an earlier same-timestamp row)`

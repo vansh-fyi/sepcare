@@ -93,9 +93,7 @@ None yet.
 
 ### Blockers/Concerns
 
-yet.
-
-- tests/risk.compute.test.ts has a pre-existing, deterministic failure ("readings sharing an identical timestamp are ordered deterministically by id...") caused by Plan 03-01's live readings_deviceid_timestamp_key unique constraint, which makes that test's two-rows-same-timestamp scenario impossible to construct. Out of Plan 03-02's file scope; needs a follow-up task to reconcile D-26's tie-break test coverage with D-33's constraint. Details in .planning/phases/03-offline-buffered-batch-sync/deferred-items.md.
+None currently. (Resolved: the tests/risk.compute.test.ts failure caused by Plan 03-01's unique constraint was fixed during Phase 3's verification gate — see deferred-items.md.)
 
 ## Deferred Items
 
