@@ -103,6 +103,8 @@ describe("GET /api/readings — chronological history", () => {
 describe("GET /api/readings — public range contract", () => {
   it.each([
     { params: { from: String(FIXTURE_START), to: String(FIXTURE_END) }, error: "deviceId is required", field: "deviceId", reason: "missing" },
+    { params: { deviceId: DEVICE_ID, to: String(FIXTURE_END) }, error: "from is required", field: "from", reason: "missing" },
+    { params: { deviceId: DEVICE_ID, from: String(FIXTURE_START) }, error: "to is required", field: "to", reason: "missing" },
     { params: validParams({ from: "" }), error: "from must be a whole epoch-millisecond integer", field: "from", reason: "not-a-whole-decimal" },
     { params: validParams({ to: "" }), error: "to must be a whole epoch-millisecond integer", field: "to", reason: "not-a-whole-decimal" },
     { params: validParams({ from: "text" }), error: "from must be a whole epoch-millisecond integer", field: "from", reason: "not-a-whole-decimal" },
