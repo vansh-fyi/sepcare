@@ -17,8 +17,10 @@ type HistoryRow = {
   spo2: number;
   temperature: number;
   activityScore: number;
-  risk_scores: HistoryRisk | null;
+  risk_scores: HistoryRisk | HistoryRisk[] | null;
 };
+
+type ParsedEpoch = { value: number } | { error: NextResponse };
 
 function json(body: unknown, init: ResponseInit = {}) {
   return NextResponse.json(body, {
@@ -35,7 +37,10 @@ function invalidQuery(field: string, reason: string, error: string) {
   return json({ error }, { status: 400 });
 }
 
-function parseEpochMilliseconds(value: string | null, field: "from" | "to") {
+function parseEpochMilliseconds(
+  value: string | null,
+  field: "from" | "to"
+): ParsedEpoch {
   if (value === null) {
     return { error: invalidQuery(field, "missing", `${field} is required`) };
   }
@@ -81,7 +86,7 @@ async function fetchHistory(from: number, to: number): Promise<HistoryRow[]> {
 
     if (error) throw error;
 
-    const page = (data ?? []) as HistoryRow[];
+    const page = (data ?? []) as unknown as HistoryRow[];
     rows.push(...page);
 
     if (page.length < PAGE_SIZE) return rows;
@@ -123,18 +128,24 @@ export async function GET(request: NextRequest) {
 
   try {
     const rows = await fetchHistory(from, to);
-    const entries = rows.map((row) => ({
-      timestamp: row.timestamp,
-      vitals: {
-        heartRate: row.heartRate,
-        spo2: row.spo2,
-        temperature: row.temperature,
-        activityScore: row.activityScore,
-      },
-      risk: row.risk_scores
-        ? { status: row.risk_scores.status, breakdown: row.risk_scores.breakdown }
-        : null,
-    }));
+    const entries = rows.map((row) => {
+      const riskScore = Array.isArray(row.risk_scores)
+        ? row.risk_scores[0] ?? null
+        : row.risk_scores;
+
+      return {
+        timestamp: row.timestamp,
+        vitals: {
+          heartRate: row.heartRate,
+          spo2: row.spo2,
+          temperature: row.temperature,
+          activityScore: row.activityScore,
+        },
+        risk: riskScore
+          ? { status: riskScore.status, breakdown: riskScore.breakdown }
+          : null,
+      };
+    });
 
     return json({ deviceId: DEVICE_ID, from, to, entries });
   } catch (error) {
