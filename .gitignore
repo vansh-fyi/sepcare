@@ -1,6 +1,10 @@
 .DS_Store
 **/.DS_Store
 .env
+.env.local
+.next/
+.vercel/
+*.tsbuildinfo
 node_modules/
 dist/
 
@@ -9,4 +13,3 @@ dist/
 .claude/
 .codex/
 .opencode/
-

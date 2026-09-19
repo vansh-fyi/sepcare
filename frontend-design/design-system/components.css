@@ -1,0 +1,902 @@
+/**
+ * SepCare Design System — Component Library Styles
+ * Version: 1.0.0
+ * Comprehensive, production-grade reusable classes for SepCare healthcare platform.
+ */
+
+@import url('tokens.css');
+
+/* ==========================================================================
+   01 — GLOBAL RESET & BASE STYLES
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--sc-font-family);
+  background-color: var(--sc-color-bg-primary);
+  color: var(--sc-color-text-primary);
+  line-height: var(--sc-lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   02 — TYPOGRAPHY UTILITY CLASSES
+   ========================================================================== */
+.sc-display {
+  font-size: var(--sc-font-display-mobile);
+  font-weight: var(--sc-weight-bold);
+  line-height: var(--sc-lh-tight);
+  letter-spacing: var(--sc-tracking-display);
+  color: var(--sc-color-text-primary);
+}
+
+.sc-heading-page {
+  font-size: var(--sc-font-heading-page-mobile);
+  font-weight: var(--sc-weight-bold);
+  line-height: var(--sc-lh-heading);
+  letter-spacing: var(--sc-tracking-heading);
+  color: var(--sc-color-text-primary);
+}
+
+.sc-heading-section {
+  font-size: var(--sc-font-heading-section-mobile);
+  font-weight: var(--sc-weight-semibold);
+  line-height: var(--sc-lh-heading);
+  color: var(--sc-color-text-primary);
+}
+
+.sc-heading-card {
+  font-size: var(--sc-font-heading-card-mobile);
+  font-weight: var(--sc-weight-semibold);
+  line-height: var(--sc-lh-heading);
+  color: var(--sc-color-text-primary);
+}
+
+.sc-body {
+  font-size: var(--sc-font-body-mobile);
+  font-weight: var(--sc-weight-regular);
+  line-height: var(--sc-lh-body);
+  color: var(--sc-color-text-primary);
+}
+
+.sc-secondary {
+  font-size: var(--sc-font-secondary-mobile);
+  font-weight: var(--sc-weight-regular);
+  line-height: var(--sc-lh-body);
+  color: var(--sc-color-text-secondary);
+}
+
+.sc-caption {
+  font-size: var(--sc-font-caption-mobile);
+  font-weight: var(--sc-weight-regular);
+  line-height: 1.4;
+  letter-spacing: var(--sc-tracking-caption);
+  color: var(--sc-color-text-muted);
+}
+
+.sc-vital-metric {
+  font-size: var(--sc-font-vital-mobile);
+  font-weight: var(--sc-weight-bold);
+  line-height: var(--sc-lh-tight);
+  letter-spacing: -0.03em;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  color: var(--sc-color-text-primary);
+}
+
+@media (min-width: 768px) {
+  .sc-display { font-size: var(--sc-font-display-tablet); }
+  .sc-heading-page { font-size: var(--sc-font-heading-page-tablet); }
+  .sc-heading-section { font-size: var(--sc-font-heading-section-tablet); }
+  .sc-heading-card { font-size: var(--sc-font-heading-card-tablet); }
+  .sc-body { font-size: var(--sc-font-body-tablet); }
+  .sc-secondary { font-size: var(--sc-font-secondary-tablet); }
+  .sc-caption { font-size: var(--sc-font-caption-tablet); }
+  .sc-vital-metric { font-size: var(--sc-font-vital-tablet); }
+}
+
+/* ==========================================================================
+   03 — BUTTON SYSTEM
+   ========================================================================== */
+.sc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sc-space-8);
+  font-family: var(--sc-font-family);
+  font-size: var(--sc-font-button-mobile);
+  font-weight: var(--sc-weight-semibold);
+  line-height: 1;
+  padding: 12px 20px;
+  border-radius: var(--sc-radius-btn);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--sc-transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  position: relative;
+}
+
+.sc-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--sc-shadow-focus);
+}
+
+/* Primary Button (Interaction Blue) */
+.sc-btn--primary {
+  background-color: var(--sc-color-brand-primary);
+  color: var(--sc-color-text-inverse);
+  border-color: var(--sc-color-brand-primary);
+}
+.sc-btn--primary:hover {
+  background-color: var(--sc-color-brand-hover);
+  border-color: var(--sc-color-brand-hover);
+}
+.sc-btn--primary:active {
+  background-color: var(--sc-color-brand-active);
+  transform: translateY(1px);
+}
+
+/* Secondary Button (White Surface + Subtle Border) */
+.sc-btn--secondary {
+  background-color: var(--sc-color-surface-white);
+  color: var(--sc-color-text-primary);
+  border-color: var(--sc-color-border-default);
+  box-shadow: 0 1px 3px rgba(24, 34, 53, 0.03);
+}
+.sc-btn--secondary:hover {
+  background-color: var(--sc-color-surface-soft-blue);
+  border-color: #D4DEEB;
+}
+.sc-btn--secondary:active {
+  background-color: #E2ECF7;
+  transform: translateY(1px);
+}
+
+/* Tertiary / Text Button */
+.sc-btn--tertiary {
+  background-color: transparent;
+  color: var(--sc-color-brand-primary);
+  padding: 8px 12px;
+  border-radius: var(--sc-radius-8);
+}
+.sc-btn--tertiary:hover {
+  background-color: var(--sc-color-brand-soft);
+}
+.sc-btn--tertiary:active {
+  background-color: rgba(111, 159, 213, 0.2);
+}
+
+/* Critical Action Button (Emergency Action Only) */
+.sc-btn--critical {
+  background-color: var(--sc-color-status-critical-primary);
+  color: var(--sc-color-text-inverse);
+  border-color: var(--sc-color-status-critical-primary);
+}
+.sc-btn--critical:hover {
+  background-color: #C74848;
+  border-color: #C74848;
+  box-shadow: var(--sc-shadow-critical);
+}
+.sc-btn--critical:active {
+  background-color: var(--sc-color-status-critical-dark);
+  transform: translateY(1px);
+}
+
+/* Icon Button */
+.sc-btn--icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--sc-radius-14);
+  background-color: var(--sc-color-surface-white);
+  border-color: var(--sc-color-border-default);
+  color: var(--sc-color-text-secondary);
+}
+.sc-btn--icon:hover {
+  background-color: var(--sc-color-surface-soft-blue);
+  color: var(--sc-color-brand-primary);
+  border-color: #D4DEEB;
+}
+
+/* Disabled State */
+.sc-btn:disabled,
+.sc-btn--disabled {
+  background-color: #F1F4F9 !important;
+  color: var(--sc-color-text-disabled) !important;
+  border-color: var(--sc-color-border-default) !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
+/* Loading State */
+.sc-btn--loading {
+  color: transparent !important;
+  pointer-events: none;
+}
+.sc-btn--loading::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: sc-spin 0.75s infinite linear;
+}
+.sc-btn--secondary.sc-btn--loading::after {
+  border-color: rgba(24, 34, 53, 0.2);
+  border-top-color: var(--sc-color-text-primary);
+}
+
+@keyframes sc-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   04 — CARD SYSTEM
+   ========================================================================== */
+.sc-card {
+  background-color: var(--sc-color-surface-white);
+  border: 1px solid var(--sc-color-border-default);
+  border-radius: var(--sc-radius-card);
+  padding: var(--sc-space-24);
+  box-shadow: var(--sc-shadow-card);
+  transition: all var(--sc-transition-normal);
+  position: relative;
+}
+
+.sc-card--large {
+  border-radius: var(--sc-radius-hero);
+  padding: var(--sc-space-32);
+}
+
+.sc-card--floating {
+  box-shadow: var(--sc-shadow-floating);
+}
+
+/* Soft atmospheric tinted card fills */
+.sc-card--soft-blue {
+  background-color: var(--sc-color-surface-soft-blue);
+}
+.sc-card--soft-lavender {
+  background-color: var(--sc-color-surface-soft-lavender);
+}
+.sc-card--soft-peach {
+  background-color: var(--sc-color-surface-soft-peach);
+}
+.sc-card--soft-blush {
+  background-color: var(--sc-color-surface-soft-blush);
+}
+
+/* ==========================================================================
+   05 — STATUS PILL / BADGE (Icon + Label + Color)
+   ========================================================================== */
+.sc-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--sc-radius-full);
+  font-size: 13px;
+  font-weight: var(--sc-weight-bold);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: 1px solid transparent;
+}
+
+.sc-status-pill--safe {
+  background-color: var(--sc-color-status-safe-soft);
+  color: var(--sc-color-status-safe-dark);
+  border-color: rgba(79, 175, 120, 0.25);
+}
+
+.sc-status-pill--caution {
+  background-color: var(--sc-color-status-caution-soft);
+  color: var(--sc-color-status-caution-dark);
+  border-color: rgba(217, 165, 46, 0.30);
+}
+
+.sc-status-pill--critical {
+  background-color: var(--sc-color-status-critical-soft);
+  color: var(--sc-color-status-critical-dark);
+  border-color: rgba(217, 87, 87, 0.30);
+}
+
+.sc-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.sc-status-pill--safe .sc-status-dot { background-color: var(--sc-color-status-safe-primary); }
+.sc-status-pill--caution .sc-status-dot { background-color: var(--sc-color-status-caution-primary); }
+.sc-status-pill--critical .sc-status-dot { background-color: var(--sc-color-status-critical-primary); }
+
+/* ==========================================================================
+   06 — STATUS HERO CARD (Universal Structural Template)
+   ========================================================================== */
+.sc-status-card {
+  background-color: var(--sc-color-surface-white);
+  border-radius: var(--sc-radius-hero);
+  border: 1px solid var(--sc-color-border-default);
+  padding: var(--sc-space-24);
+  box-shadow: var(--sc-shadow-card);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-16);
+  transition: border-color var(--sc-transition-normal), box-shadow var(--sc-transition-normal);
+}
+
+.sc-status-card--safe {
+  border-color: rgba(79, 175, 120, 0.35);
+}
+.sc-status-card--caution {
+  border-color: rgba(217, 165, 46, 0.45);
+}
+.sc-status-card--critical {
+  border-color: rgba(217, 87, 87, 0.45);
+  box-shadow: var(--sc-shadow-critical);
+}
+
+.sc-status-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sc-space-12);
+}
+
+.sc-status-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-12);
+}
+
+.sc-status-card__meta {
+  font-size: var(--sc-font-secondary-mobile);
+  color: var(--sc-color-text-muted);
+}
+
+.sc-status-card__description {
+  font-size: var(--sc-font-body-mobile);
+  color: var(--sc-color-text-primary);
+  line-height: var(--sc-lh-body);
+}
+
+.sc-status-card__vitals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sc-space-12);
+  padding: var(--sc-space-16) 0;
+  border-top: 1px solid var(--sc-color-border-subtle);
+  border-bottom: 1px solid var(--sc-color-border-subtle);
+}
+
+.sc-status-card__vital-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sc-status-card__vital-label {
+  font-size: 13px;
+  color: var(--sc-color-text-secondary);
+}
+.sc-status-card__vital-value {
+  font-size: 20px;
+  font-weight: var(--sc-weight-bold);
+  color: var(--sc-color-text-primary);
+  font-feature-settings: "tnum" 1;
+}
+
+.sc-status-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sc-space-12);
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   07 — VITAL CARD COMPONENT
+   ========================================================================== */
+.sc-vital-card {
+  background-color: var(--sc-color-surface-white);
+  border: 1px solid var(--sc-color-border-default);
+  border-radius: var(--sc-radius-card);
+  padding: var(--sc-space-20, 20px);
+  box-shadow: var(--sc-shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-12);
+  transition: transform var(--sc-transition-fast), box-shadow var(--sc-transition-fast);
+}
+.sc-vital-card:hover {
+  box-shadow: var(--sc-shadow-floating);
+}
+
+.sc-vital-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sc-vital-card__icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--sc-radius-12);
+  background-color: var(--sc-color-surface-soft-blue);
+  color: var(--sc-color-brand-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sc-vital-card__label {
+  font-size: 14px;
+  font-weight: var(--sc-weight-semibold);
+  color: var(--sc-color-text-secondary);
+}
+
+.sc-vital-card__measurement-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.sc-vital-card__unit {
+  font-size: 14px;
+  color: var(--sc-color-text-muted);
+  font-weight: var(--sc-weight-medium);
+}
+
+.sc-vital-card__sparkline-wrap {
+  width: 100%;
+  height: 48px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.sc-vital-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--sc-color-text-muted);
+}
+
+/* ==========================================================================
+   08 — ANKLE-BAND DEVICE COMPONENT
+   ========================================================================== */
+.sc-device-card {
+  background-color: var(--sc-color-surface-white);
+  border: 1px solid var(--sc-color-border-default);
+  border-radius: var(--sc-radius-card);
+  padding: var(--sc-space-20, 20px);
+  box-shadow: var(--sc-shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-16);
+}
+
+.sc-device-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sc-device-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--sc-radius-full);
+  font-size: 12px;
+  font-weight: var(--sc-weight-semibold);
+}
+.sc-device-badge--connected {
+  background-color: var(--sc-color-status-safe-soft);
+  color: var(--sc-color-status-safe-dark);
+}
+.sc-device-badge--syncing {
+  background-color: var(--sc-color-brand-soft);
+  color: #265588;
+}
+.sc-device-badge--warning {
+  background-color: var(--sc-color-status-caution-soft);
+  color: var(--sc-color-status-caution-dark);
+}
+.sc-device-badge--disconnected {
+  background-color: var(--sc-color-status-critical-soft);
+  color: var(--sc-color-status-critical-dark);
+}
+
+.sc-device-stats {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-16);
+  font-size: 13px;
+  color: var(--sc-color-text-secondary);
+}
+.sc-device-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   09 — BABY PROFILE CARD (Parent & Professional)
+   ========================================================================== */
+.sc-baby-profile {
+  background-color: var(--sc-color-surface-white);
+  border: 1px solid var(--sc-color-border-default);
+  border-radius: var(--sc-radius-card);
+  padding: var(--sc-space-20, 20px);
+  box-shadow: var(--sc-shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-16);
+}
+
+.sc-baby-profile__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--sc-color-surface-soft-lavender);
+  color: #584687;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--sc-weight-bold);
+  font-size: 18px;
+}
+
+.sc-baby-profile__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.sc-baby-profile__name {
+  font-size: 16px;
+  font-weight: var(--sc-weight-semibold);
+  color: var(--sc-color-text-primary);
+}
+
+.sc-baby-profile__detail {
+  font-size: 13px;
+  color: var(--sc-color-text-secondary);
+}
+
+/* ==========================================================================
+   10 — ALERTS & BANNERS
+   ========================================================================== */
+.sc-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sc-space-12);
+  padding: var(--sc-space-16);
+  border-radius: var(--sc-radius-card-sm);
+  border: 1px solid transparent;
+  font-size: 14px;
+}
+
+.sc-alert--info {
+  background-color: var(--sc-color-status-info-soft);
+  border-color: rgba(111, 159, 213, 0.3);
+  color: var(--sc-color-status-info-dark);
+}
+
+.sc-alert--caution {
+  background-color: var(--sc-color-status-caution-soft);
+  border-color: rgba(217, 165, 46, 0.35);
+  color: var(--sc-color-status-caution-dark);
+}
+
+.sc-alert--critical {
+  background-color: var(--sc-color-status-critical-soft);
+  border-color: rgba(217, 87, 87, 0.35);
+  color: var(--sc-color-status-critical-dark);
+}
+
+.sc-alert--success {
+  background-color: var(--sc-color-status-safe-soft);
+  border-color: rgba(79, 175, 120, 0.35);
+  color: var(--sc-color-status-safe-dark);
+}
+
+.sc-alert__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sc-alert__title {
+  font-weight: var(--sc-weight-bold);
+  font-size: 14px;
+}
+
+.sc-alert__desc {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   11 — MONITORING INSIGHT COMPONENT
+   ========================================================================== */
+.sc-insight-card {
+  background-color: var(--sc-color-surface-soft-lavender);
+  border: 1px solid rgba(88, 70, 135, 0.12);
+  border-radius: var(--sc-radius-card);
+  padding: var(--sc-space-20, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-12);
+}
+
+.sc-insight-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: var(--sc-weight-bold);
+  color: #5D4B85;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sc-insight-card__text {
+  font-size: 14px;
+  color: var(--sc-color-text-primary);
+  line-height: var(--sc-lh-body);
+}
+
+.sc-insight-card__link {
+  font-size: 13px;
+  font-weight: var(--sc-weight-semibold);
+  color: var(--sc-color-brand-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.sc-insight-card__link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   12 — FORMS & INPUT CONTROLS
+   ========================================================================== */
+.sc-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.sc-label {
+  font-size: 13px;
+  font-weight: var(--sc-weight-semibold);
+  color: var(--sc-color-text-primary);
+}
+
+.sc-input,
+.sc-select {
+  width: 100%;
+  font-family: var(--sc-font-family);
+  font-size: 14px;
+  padding: 12px 14px;
+  border-radius: var(--sc-radius-input);
+  border: 1px solid var(--sc-color-border-default);
+  background-color: var(--sc-color-surface-white);
+  color: var(--sc-color-text-primary);
+  outline: none;
+  transition: border-color var(--sc-transition-fast), box-shadow var(--sc-transition-fast);
+}
+
+.sc-input:focus,
+.sc-select:focus {
+  border-color: var(--sc-color-border-focus);
+  box-shadow: var(--sc-shadow-focus);
+}
+
+.sc-input--error {
+  border-color: var(--sc-color-status-critical-primary);
+}
+.sc-input--error:focus {
+  box-shadow: 0 0 0 3px rgba(217, 87, 87, 0.25);
+}
+
+.sc-input:disabled {
+  background-color: #F1F4F9;
+  color: var(--sc-color-text-disabled);
+  cursor: not-allowed;
+}
+
+/* Search input with icon container */
+.sc-search-wrap {
+  position: relative;
+  width: 100%;
+}
+.sc-search-wrap .sc-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--sc-color-text-muted);
+  pointer-events: none;
+}
+.sc-search-input {
+  padding-left: 40px;
+}
+
+/* Toggle Switch */
+.sc-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  user-select: none;
+}
+.sc-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.sc-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #D4DEEB;
+  border-radius: 24px;
+  transition: var(--sc-transition-fast);
+}
+.sc-toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: var(--sc-transition-fast);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.sc-toggle input:checked + .sc-toggle-slider {
+  background-color: var(--sc-color-brand-primary);
+}
+.sc-toggle input:checked + .sc-toggle-slider::before {
+  transform: translateX(20px);
+}
+
+/* Segmented Control */
+.sc-segmented-control {
+  display: inline-flex;
+  background-color: #ECEFF5;
+  padding: 4px;
+  border-radius: var(--sc-radius-14);
+  gap: 2px;
+}
+.sc-segmented-btn {
+  font-family: var(--sc-font-family);
+  font-size: 13px;
+  font-weight: var(--sc-weight-medium);
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  color: var(--sc-color-text-secondary);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all var(--sc-transition-fast);
+}
+.sc-segmented-btn--active {
+  background-color: var(--sc-color-surface-white);
+  color: var(--sc-color-text-primary);
+  font-weight: var(--sc-weight-semibold);
+  box-shadow: 0 2px 6px rgba(24, 34, 53, 0.08);
+}
+
+/* ==========================================================================
+   13 — FEEDBACK & SKELETON STATES
+   ========================================================================== */
+.sc-skeleton {
+  background: linear-gradient(90deg, #EDF2F7 25%, #F7FAFC 50%, #EDF2F7 75%);
+  background-size: 200% 100%;
+  animation: sc-shimmer 1.5s infinite;
+  border-radius: var(--sc-radius-8);
+}
+@keyframes sc-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.sc-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--sc-space-32);
+  gap: var(--sc-space-12);
+  color: var(--sc-color-text-secondary);
+}
+
+/* ==========================================================================
+   14 — NAVIGATION PATTERNS
+   ========================================================================== */
+.sc-bottom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: var(--sc-color-surface-white);
+  border-top: 1px solid var(--sc-color-border-default);
+  padding: 8px 12px;
+  border-radius: 0;
+  box-shadow: 0 -4px 16px rgba(24, 34, 53, 0.04);
+}
+
+.sc-bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: var(--sc-color-text-muted);
+  font-size: 11px;
+  font-weight: var(--sc-weight-medium);
+  padding: 6px 12px;
+  border-radius: var(--sc-radius-12);
+  transition: color var(--sc-transition-fast), background-color var(--sc-transition-fast);
+}
+.sc-bottom-nav__item--active {
+  color: var(--sc-color-brand-primary);
+  background-color: var(--sc-color-brand-soft);
+  font-weight: var(--sc-weight-semibold);
+}
+
+.sc-sidebar-nav {
+  width: 240px;
+  background-color: var(--sc-color-surface-white);
+  border-right: 1px solid var(--sc-color-border-default);
+  padding: var(--sc-space-24) var(--sc-space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-8);
+}
+.sc-sidebar-nav__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-12);
+  padding: 10px 14px;
+  border-radius: var(--sc-radius-12);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: var(--sc-weight-medium);
+  color: var(--sc-color-text-secondary);
+  transition: all var(--sc-transition-fast);
+}
+.sc-sidebar-nav__item:hover {
+  background-color: var(--sc-color-surface-soft-blue);
+  color: var(--sc-color-text-primary);
+}
+.sc-sidebar-nav__item--active {
+  background-color: var(--sc-color-brand-soft);
+  color: var(--sc-color-brand-primary);
+  font-weight: var(--sc-weight-semibold);
+}

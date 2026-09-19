@@ -1,0 +1,162 @@
+/**
+ * SepCare Design System — Foundation Design Tokens
+ * Version: 1.0.0
+ * Pure CSS Custom Properties adhering strictly to the SepCare Visual Specification
+ */
+
+:root {
+  /* ==========================================================================
+     01 — SURFACES & CANVAS (70% Neutral Surfaces Rule)
+     ========================================================================== */
+  --sc-color-bg-primary: #F7F9FC;
+  --sc-color-surface-white: #FFFFFF;
+  --sc-color-surface-card: #FFFFFF;
+  --sc-color-surface-soft-blue: #EEF5FC;
+  --sc-color-surface-soft-lavender: #F3F0FA;
+  --sc-color-surface-soft-blush: #FBF1F2;
+  --sc-color-surface-soft-peach: #FCF4EA;
+  --sc-color-border-default: #E6EAF0;
+  --sc-color-border-subtle: #EDF1F7;
+  --sc-color-border-focus: #6F9FD5;
+
+  /* ==========================================================================
+     02 — TEXT HIERARCHY
+     ========================================================================== */
+  --sc-color-text-primary: #182235;
+  --sc-color-text-secondary: #5F6B7A;
+  --sc-color-text-muted: #8D97A5;
+  --sc-color-text-disabled: #B8BEC7;
+  --sc-color-text-inverse: #FFFFFF;
+
+  /* ==========================================================================
+     03 — INTERACTION BLUE (Strictly Non-Health-Status)
+     ========================================================================== */
+  --sc-color-brand-primary: #6F9FD5;
+  --sc-color-brand-hover: #5B8EC5;
+  --sc-color-brand-active: #4B7DB4;
+  --sc-color-brand-soft: #E8F1FA;
+  --sc-color-brand-tint: rgba(111, 159, 213, 0.12);
+
+  /* ==========================================================================
+     04 — SEMANTIC HEALTH-STATUS COLORS (Tri-State System)
+     ========================================================================== */
+  /* SAFE / STABLE */
+  --sc-color-status-safe-primary: #4FAF78;
+  --sc-color-status-safe-soft: #EAF6EF;
+  --sc-color-status-safe-dark: #27734B;
+
+  /* CAUTION */
+  --sc-color-status-caution-primary: #D9A52E;
+  --sc-color-status-caution-soft: #FFF6DF;
+  --sc-color-status-caution-dark: #89691A;
+
+  /* CRITICAL */
+  --sc-color-status-critical-primary: #D95757;
+  --sc-color-status-critical-soft: #FCECEC;
+  --sc-color-status-critical-dark: #963737;
+
+  /* INFORMATIONAL */
+  --sc-color-status-info-primary: #6F9FD5;
+  --sc-color-status-info-soft: #E8F1FA;
+  --sc-color-status-info-dark: #2A5485;
+
+  /* ==========================================================================
+     05 — TYPOGRAPHY SYSTEM (Inter with Tabular Numbers)
+     ========================================================================== */
+  --sc-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Mobile Scale */
+  --sc-font-display-mobile: 38px;
+  --sc-font-heading-page-mobile: 24px;
+  --sc-font-heading-section-mobile: 18px;
+  --sc-font-heading-card-mobile: 16px;
+  --sc-font-body-mobile: 15px;
+  --sc-font-secondary-mobile: 13px;
+  --sc-font-caption-mobile: 12px;
+  --sc-font-button-mobile: 15px;
+  --sc-font-status-mobile: 22px;
+  --sc-font-vital-mobile: 36px;
+
+  /* Tablet / iPad Scale */
+  --sc-font-display-tablet: 46px;
+  --sc-font-heading-page-tablet: 32px;
+  --sc-font-heading-section-tablet: 22px;
+  --sc-font-heading-card-tablet: 18px;
+  --sc-font-body-tablet: 16px;
+  --sc-font-secondary-tablet: 14px;
+  --sc-font-caption-tablet: 13px;
+  --sc-font-button-tablet: 16px;
+  --sc-font-status-tablet: 26px;
+  --sc-font-vital-tablet: 44px;
+
+  /* Font Weights */
+  --sc-weight-regular: 400;
+  --sc-weight-medium: 500;
+  --sc-weight-semibold: 600;
+  --sc-weight-bold: 700;
+
+  /* Line Heights */
+  --sc-lh-tight: 1.15;
+  --sc-lh-heading: 1.30;
+  --sc-lh-body: 1.50;
+  --sc-lh-none: 1.00;
+
+  /* Letter Spacing */
+  --sc-tracking-display: -0.025em;
+  --sc-tracking-heading: -0.015em;
+  --sc-tracking-body: 0.00em;
+  --sc-tracking-caption: 0.015em;
+
+  /* ==========================================================================
+     06 — 8PX SPACING SYSTEM
+     ========================================================================== */
+  --sc-space-4: 4px;
+  --sc-space-8: 8px;
+  --sc-space-12: 12px;
+  --sc-space-16: 16px;
+  --sc-space-24: 24px;
+  --sc-space-32: 32px;
+  --sc-space-48: 48px;
+  --sc-space-64: 64px;
+
+  /* Page Margins */
+  --sc-margin-mobile: 20px;
+  --sc-margin-tablet: 32px;
+  --sc-margin-desktop: 48px;
+
+  /* ==========================================================================
+     07 — CORNER RADIUS SYSTEM
+     ========================================================================== */
+  --sc-radius-8: 8px;
+  --sc-radius-12: 12px;
+  --sc-radius-14: 14px;
+  --sc-radius-16: 16px;
+  --sc-radius-20: 20px;
+  --sc-radius-24: 24px;
+  --sc-radius-28: 28px;
+  --sc-radius-full: 9999px;
+
+  /* Semantic Radii */
+  --sc-radius-input: var(--sc-radius-12);
+  --sc-radius-btn: var(--sc-radius-14);
+  --sc-radius-card-sm: var(--sc-radius-16);
+  --sc-radius-card: var(--sc-radius-20);
+  --sc-radius-hero: var(--sc-radius-24);
+  --sc-radius-modal: var(--sc-radius-28);
+
+  /* ==========================================================================
+     08 — ELEVATION & SHADOWS
+     ========================================================================== */
+  --sc-shadow-card: 0 4px 20px rgba(24, 34, 53, 0.05);
+  --sc-shadow-floating: 0 8px 30px rgba(24, 34, 53, 0.08);
+  --sc-shadow-dropdown: 0 12px 36px rgba(24, 34, 53, 0.10);
+  --sc-shadow-critical: 0 10px 32px rgba(217, 87, 87, 0.12);
+  --sc-shadow-focus: 0 0 0 3px rgba(111, 159, 213, 0.25);
+
+  /* ==========================================================================
+     09 — TRANSITIONS
+     ========================================================================== */
+  --sc-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --sc-transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --sc-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
