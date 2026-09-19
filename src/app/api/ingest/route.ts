@@ -62,20 +62,28 @@ export async function POST(request: NextRequest) {
 
   const { deviceId, timestamp, vitals } = parsed.data;
 
+  // D-33: upsert-ignore-duplicates against the readings_deviceid_timestamp_key
+  // unique constraint, so a retried POST with the same deviceId+timestamp is
+  // a safe no-op instead of a constraint-violation error. `.maybeSingle()`
+  // (not `.single()`) because a duplicate-skip retry legitimately returns
+  // zero rows (RESEARCH.md Pitfall 2).
   const { data: insertedReading, error: insertError } = await supabaseAdmin
     .from("readings")
-    .insert({
-      deviceId,
-      timestamp,
-      heartRate: vitals.heartRate,
-      spo2: vitals.spo2,
-      temperature: vitals.temperature,
-      activityScore: vitals.activityScore,
-    })
+    .upsert(
+      {
+        deviceId,
+        timestamp,
+        heartRate: vitals.heartRate,
+        spo2: vitals.spo2,
+        temperature: vitals.temperature,
+        activityScore: vitals.activityScore,
+      },
+      { onConflict: "deviceId,timestamp", ignoreDuplicates: true }
+    )
     .select("id, deviceId, timestamp, heartRate, temperature, activityScore")
-    .single();
+    .maybeSingle();
 
-  if (insertError || !insertedReading) {
+  if (insertError) {
     return NextResponse.json(
       { error: "Failed to store reading" },
       { status: 500 }
@@ -84,14 +92,18 @@ export async function POST(request: NextRequest) {
 
   // D-23/D-24: score synchronously, but never let a scoring bug turn a
   // successful readings insert into a failed request — log and continue.
-  try {
-    await computeAndPersistRiskScore(insertedReading);
-  } catch (scoringError) {
-    console.error(
-      "Risk scoring failed for reading",
-      insertedReading.id,
-      scoringError
-    );
+  // D-34: a duplicate-skip retry (insertedReading is null with no error)
+  // falls through directly to the 201 response with scoring skipped.
+  if (insertedReading) {
+    try {
+      await computeAndPersistRiskScore(insertedReading);
+    } catch (scoringError) {
+      console.error(
+        "Risk scoring failed for reading",
+        insertedReading.id,
+        scoringError
+      );
+    }
   }
 
   return NextResponse.json({ status: "ok" }, { status: 201 });
