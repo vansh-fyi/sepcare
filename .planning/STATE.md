@@ -3,17 +3,17 @@ gsd_state_version: "1.0"
 current_phase: 3
 current_phase_name: Offline-Buffered Batch Sync
 status: executing
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-09-19T11:03:51.422Z"
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-09-19T11:18:42.957Z"
 last_activity: 2026-09-19
 last_activity_desc: Phase 3 execution started
-state_head: 85c987a1a3e7ab5677c42684e647c2c953d8a0e8
+state_head: 526f9274a30eada6ee234cda9cd724d07e48e84a
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 0
   total_plans: 10
-  completed_plans: 8
-  percent: 25
+  completed_plans: 9
+  percent: 0
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-19)
 ## Current Position
 
 Phase: 3 (Offline-Buffered Batch Sync) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-09-19 — Phase 3 execution started
 
-Progress: [███░░░░░░░] 25%
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -63,6 +63,7 @@ Progress: [███░░░░░░░] 25%
 | Phase 02 P02 | 33min | 2 tasks | 5 files |
 | Phase 02 P03 | 15min | 2 tasks | 2 files |
 | Phase 03 P01 | 15min | 2 tasks | 2 files |
+| Phase 03 P02 | 35min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,8 @@ Recent decisions affecting current work:
 - [Phase 02]: computeAndPersistRiskScore's breadth-gating and window logic proved correct against the full boundary/prohibition matrix on the first implementation pass (Task 2's hardening tests required zero compute.ts changes) — Confirms building Task 1 as a production-quality tracer (not a throwaway) against the plan's exact algorithm spec paid off
 - [Phase 02]: risk_scores Realtime tests buffer-and-match by reading_id (unknown until POST completes) instead of pre-filtering, since risk_scores carries no timestamp column — reading_id is only generated inside POST /api/ingest's synchronous insert, unlike the readings analog where deviceId+timestamp are known before subscribing
 - [Phase 03]: Kept the existing plain readings_deviceid_timestamp_idx index untouched alongside the new unique constraint (additive, per D-33). — The unique constraint's implicit index is separate from the pre-existing plain index; dropping the old one was explicitly out of this phase's scope per the plan.
+- [Phase 03]: Kept the existing readings_deviceid_timestamp_idx-adjacent scope intact and added deleteReadingsInRange to tests/helpers/cleanup.ts during Task 1 rather than Task 2 — Task 1's own shuffled-order/multi-timestamp test already needed range-based cleanup for a batch of readings inserted under distinct timestamps; no functional difference from the plan's intent since Task 2 simply reuses the helper.
+- [Phase 03]: Deferred (did not fix) a pre-existing tests/risk.compute.test.ts failure caused by Plan 03-01's live unique-constraint migration — The failure is reproduced identically on the commit before any 03-02 change, is in a file outside 03-02's declared files_modified scope, and reconciling D-26's same-timestamp tie-break test coverage with D-33's unique constraint is an architectural decision for a follow-up task — logged in full to deferred-items.md per the executor's scope-boundary rule.
 
 ### Pending Todos
 
@@ -88,7 +91,9 @@ None yet.
 
 ### Blockers/Concerns
 
-None yet.
+yet.
+
+- tests/risk.compute.test.ts has a pre-existing, deterministic failure ("readings sharing an identical timestamp are ordered deterministically by id...") caused by Plan 03-01's live readings_deviceid_timestamp_key unique constraint, which makes that test's two-rows-same-timestamp scenario impossible to construct. Out of Plan 03-02's file scope; needs a follow-up task to reconcile D-26's tie-break test coverage with D-33's constraint. Details in .planning/phases/03-offline-buffered-batch-sync/deferred-items.md.
 
 ## Deferred Items
 
@@ -100,6 +105,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-19T11:03:30.467Z
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-09-19T11:18:42.936Z
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None
