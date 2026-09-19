@@ -18,3 +18,21 @@ export const IngestSchema = z.object({
 });
 
 export type IngestPayload = z.infer<typeof IngestSchema>;
+
+/**
+ * Batch-sync payload shape (D-30): a single top-level `deviceId` (auth is
+ * per-device, not per-reading) plus an array of per-item readings reusing
+ * `IngestSchema`'s nested `vitals` shape, just without a repeated
+ * `deviceId` per entry.
+ *
+ * `.min(1)` rejects an empty batch; `.max(500)` enforces D-32's cap — both
+ * checked by Zod before any DB work is attempted.
+ */
+export const BatchItemSchema = IngestSchema.omit({ deviceId: true });
+
+export const BatchIngestSchema = z.object({
+  deviceId: z.string().min(1),
+  readings: z.array(BatchItemSchema).min(1).max(500),
+});
+
+export type BatchIngestPayload = z.infer<typeof BatchIngestSchema>;

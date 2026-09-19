@@ -42,7 +42,7 @@ export interface RiskBreakdown {
   activityTrend: { trending: boolean; delta: number | null };
 }
 
-interface WindowRow {
+export interface WindowRow {
   id: number;
   timestamp: number;
   heartRate: number;
@@ -70,7 +70,7 @@ const WINDOW_PAGE_SIZE = 1000;
  * cap so a high-frequency device's rolling window is never silently
  * truncated (see WINDOW_PAGE_SIZE).
  */
-async function fetchWindow(
+export async function fetchWindow(
   deviceId: string,
   fromTimestamp: number,
   toTimestamp: number
