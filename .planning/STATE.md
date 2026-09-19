@@ -9,10 +9,10 @@ last_activity_desc: Phase 04 complete
 state_head: 0d5ca5266d338caa33ec18095cfacd1896350f5e
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 4
   total_plans: 11
   completed_plans: 11
-  percent: 25
+  percent: 100
 ---
 
 # Project State
@@ -22,16 +22,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-19)
 
 **Core value:** Reliably turn a stream of vitals from a Waveshare ESP32-S3-Tiny wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
-**Current focus:** Phase 04 — Historical Trends API
+**Current focus:** Milestone complete — all 4 phases shipped; next step is `/gsd-complete-milestone`
 
 ## Current Position
 
-Phase: 04
+Phase: 04 (final phase)
 Plan: Not started
-Status: All phases complete
+Status: All phases complete — milestone ready to close
 Last activity: 2026-09-19 — Phase 04 complete
 
-Progress: [███░░░░░░░] 25%
+Progress: [████████████████████] 100%
 
 ## Performance Metrics
 
@@ -88,6 +88,8 @@ Recent decisions affecting current work:
 - [Phase 03]: Kept the existing readings_deviceid_timestamp_idx-adjacent scope intact and added deleteReadingsInRange to tests/helpers/cleanup.ts during Task 1 rather than Task 2 — Task 1's own shuffled-order/multi-timestamp test already needed range-based cleanup for a batch of readings inserted under distinct timestamps; no functional difference from the plan's intent since Task 2 simply reuses the helper.
 - [Phase 03]: Deferred (did not fix) a pre-existing tests/risk.compute.test.ts failure caused by Plan 03-01's live unique-constraint migration — The failure is reproduced identically on the commit before any 03-02 change, is in a file outside 03-02's declared files_modified scope, and reconciling D-26's same-timestamp tie-break test coverage with D-33's unique constraint is an architectural decision for a follow-up task — logged in full to deferred-items.md per the executor's scope-boundary rule.
 - [Phase 03]: [Phase 03]: Applied D-33/D-34 to the single-reading POST /api/ingest route exactly per RESEARCH.md Pitfall 2's Code Example — Completes D-33's explicit requirement that both ingest routes get upsert-ignore treatment; the single-reading route's .single() would otherwise throw 500 on a legitimate duplicate-skip retry now that the unique constraint exists.
+- [Phase 04]: Preserve an unscored stored reading as `risk: null` instead of using an inner join, and apply `Cache-Control: no-store` to every public response — Keeps Realtime-triggered dashboard refetches seeing current storage and matches the existing safe-failure/no-store pattern from Phase 1–3.
+- [Phase 04]: A code-review follow-up fix (WR-01: added `it.each` rows covering omitted `from`/`to` query params) passed `npm test` but broke `npm run build`'s TypeScript pass — caught only by phase-goal re-verification, not by the incremental code review (which ran `vitest` without a type-check). Fixed by widening `makeRequest`'s test-helper param type to `Record<string, string | undefined>`. — Confirms `npm test` alone is not a sufficient pre-verify gate for this project; `npm run build` must be re-run after any test-file edit that changes an `it.each` table's object shape.
 
 ### Pending Todos
 
@@ -95,7 +97,9 @@ None yet.
 
 ### Blockers/Concerns
 
-None currently. (Resolved: the tests/risk.compute.test.ts failure caused by Plan 03-01's unique constraint was fixed during Phase 3's verification gate — see deferred-items.md.)
+None currently. (Resolved: the tests/risk.compute.test.ts failure caused by Plan 03-01's unique constraint was fixed during Phase 3's verification gate — see deferred-items.md. Also resolved: Phase 4's post-review `npm run build` TypeScript break, fixed and re-verified during Phase 4's own verification gate.)
+
+Known flake (not a blocker): `tests/realtime.subscribe.test.ts` and `tests/realtime.risk-scores.test.ts` intermittently time out waiting for a Realtime INSERT event under full-suite (`npm test`) runs, but pass cleanly in isolation. Documented across Phase 1, 2, and 4 verification runs — Realtime delivery timing, not a code defect.
 
 ## Deferred Items
 
@@ -107,6 +111,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-19T14:32:25.203Z
-Stopped at: Phase 04 complete — all phases complete
-Resume file: .planning/phases/04-historical-trends-api/04-CONTEXT.md
+Last session: 2026-09-19T22:56:00.000Z
+Stopped at: Phase 04 complete, all 4 phases complete — ready for /gsd-complete-milestone
+Resume file: None
