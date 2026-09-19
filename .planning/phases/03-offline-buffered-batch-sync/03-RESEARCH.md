@@ -367,15 +367,17 @@ return NextResponse.json({ status: "ok" }, { status: 201 });
 
 ## Open Questions
 
-1. **Should batch/single-reading `timestamp` values be bounded relative to "now" to cap D-28's backfill-rescore blast radius?**
+1. **(RESOLVED — accepted residual risk, see 03-02-PLAN.md `<flagged_assumptions>`) Should batch/single-reading `timestamp` values be bounded relative to "now" to cap D-28's backfill-rescore blast radius?**
    - What we know: D-28 was reasoned about assuming "gaps measured in hours," but no timestamp range validation exists in `IngestSchema` today, and none was locked as a CONTEXT.md decision for this phase.
    - What's unclear: Whether this is in-scope for Phase 3 (tightening validation) or an accepted residual risk for a single-device demo with a trusted device.
    - Recommendation: Surface to the user/planner explicitly rather than assuming either "add a bound" or "leave unbounded" — this is a genuine gap between stated assumption (D-28's rationale) and enforced constraint (schema), not something research should unilaterally decide.
+   - Resolution: Planner carried this forward as an explicit flagged assumption in 03-02-PLAN.md rather than silently resolving it either way — consistent with D-28's own rationale (uncapped by design at v1's demo scale, revisit only if a real deployment shows pathological batch sizes). No timestamp-range validation added this phase.
 
-2. **Does `ON CONFLICT DO NOTHING` actually error on in-statement duplicate keys in this project's Postgres version?**
+2. **(RESOLVED — moot given the mitigation) Does `ON CONFLICT DO NOTHING` actually error on in-statement duplicate keys in this project's Postgres version?**
    - What we know: Official docs only explicitly document the failure mode for `DO UPDATE`; secondary sources disagree about `DO NOTHING`.
    - What's unclear: The definitive behavior, since no falsification test could be run in this session (no local Postgres, no `pg` package, live Supabase instance not probed for this specific mechanic).
    - Recommendation: The JS-level pre-dedup mitigation (Pitfall 1) makes this moot for correctness — no action needed beyond including that dedup step in the plan. If the planner wants certainty regardless, a Wave 0 spike test against the live Supabase instance (post-migration) would resolve it definitively at negligible cost.
+   - Resolution: 03-02-PLAN.md Task 1 includes the JS-level pre-dedup-by-`(deviceId, timestamp)` step before the bulk upsert call, neutralizing the ambiguity regardless of its underlying answer.
 
 ## Environment Availability
 
