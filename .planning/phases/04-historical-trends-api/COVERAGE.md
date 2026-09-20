@@ -1,1 +1,0 @@
-No external API integration: this phase adds a first-party Next.js route over the already-established Supabase data layer; it adopts no new third-party API, SDK, service capability, or integration surface.

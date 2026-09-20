@@ -1,1 +1,0 @@
-No external API integration: the only detector signal was "Historical Trends API," Phase 4's roadmap text bleeding into scope — an internal endpoint, not third-party. Phase 3 touches only this project's Supabase schema.
