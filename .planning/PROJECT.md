@@ -33,6 +33,28 @@ Reliably turn a stream of vitals from a Waveshare ESP32-S3-Tiny wearable into an
 - Notifications/paging (SMS, push alerts to ASHA workers) — dashboard color display only for v1
 - Caregiver/dashboard user accounts or auth — no user-facing auth in v1; only device-to-backend auth
 
+## Current State (after v1.0)
+
+- **Shipped:** v1.0 MVP — 4 phases, 11 plans, 21 tasks, ~3,737 lines of TypeScript. Deployed live on Vercel (`sepcare.vercel.app`) against a live Supabase project.
+- All 11 v1 requirements validated and satisfied; milestone audit (`.planning/milestones/v1.0-MILESTONE-AUDIT.md`) confirmed 4/4 phases passed, 4/4 cross-phase flows wired, 0 broken flows.
+- **Known tech debt carried into v1.1 planning** (see `.planning/milestones/v1.0-MILESTONE-AUDIT.md` for full detail):
+  - `GET /api/readings` has no API-key/auth gate — protected only by the hardcoded `nb-001` device allow-list. Fine for the current single-device demo; must be revisited before wider exposure.
+  - Two Phase 3 batch-scoring-order truths (D-29) remain human-judgment/backstop-tier, not covered by a dedicated automated test.
+  - Nyquist validation (`/gsd-validate-phase`) was never run against any of the 4 phases — a coverage gap, not a proven failure.
+  - Known flake (non-blocking): `tests/realtime.subscribe.test.ts` / `tests/realtime.risk-scores.test.ts` intermittently time out under full-suite runs but pass in isolation (Realtime delivery timing).
+
+## Next Milestone Goals
+
+Candidates pulled from REQUIREMENTS.md's v2 section (archived at `.planning/milestones/v1.0-REQUIREMENTS.md`) — to be scoped properly during `/gsd-new-milestone`:
+
+- Full six-feature composite risk model (add HRV pattern, perfusion index trend, respiratory irregularity to the v1 3-feature subset) — RISK-V2-01
+- Trained ML model as an alternative/complement to the threshold-and-trend composite — RISK-V2-02
+- Multi-device / multi-baby support with per-device data isolation — DEV-V2-01
+- Device registration/provisioning flow (replace manual API key setup) — DEV-V2-02
+- Push/SMS alerting to caregivers/ASHA workers on Red status — ALRT-V2-01
+- Caregiver/dashboard user accounts and authentication — ACC-V2-01
+- Close v1.0 tech debt: auth-gate `GET /api/readings`, add a dedicated test for D-29 batch-scoring order, run `/gsd-validate-phase` for all 4 phases
+
 ## Context
 
 - Origin: UN SDG 3 (Good Health & Well-being) team research, documented in `context/` — implementation plans, WHO IMCI danger-sign research, competitor analysis (BEMPU TempWatch, JivaScope, Cradle VSA, Neopenda neoGuard), and a detailed sepsis-vs-common-illness differentiation writeup (`context/web-research/sepsis-vs-common-illness-differentiation.md`).
@@ -85,4 +107,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-19 after Phase 4*
+*Last updated: 2026-09-20 after v1.0 milestone*
