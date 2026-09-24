@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Select User Type</title>
+
+  <!-- Google Fonts: Outfit (SepCare Design System Typography) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Outfit"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+    
+    .role-card {
+      transition: background-color 0.22s ease, border-color 0.22s ease;
+    }
+
+    .check-badge {
+      transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 font-sans min-h-screen min-h-[100dvh] flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 select-none antialiased overflow-x-hidden">
+
+  <!-- Centered Content Container matching reference composition & responsive across all viewports -->
+  <main class="w-full max-w-[340px] sm:max-w-[380px] md:max-w-[420px] flex flex-col justify-center my-auto py-4">
+
+    <!-- Screen Heading: Clean, bold typography left-aligned with cards -->
+    <h1 class="text-[32px] sm:text-4xl md:text-[42px] font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6 sm:mb-8 text-left">
+      Select<br>user type
+    </h1>
+
+    <!-- Two Selectable Role Cards with Identical Proportions -->
+    <div class="flex flex-col gap-5 sm:gap-6 w-full" role="radiogroup" aria-label="Select user type">
+
+      <!-- ===================================================================
+           ROLE 1: PARENT
+           =================================================================== -->
+      <div 
+        id="cardParent"
+        onclick="selectRole('parent')"
+        onkeydown="handleKey(event, 'parent')"
+        role="radio"
+        aria-checked="false"
+        tabindex="0"
+        class="role-card relative w-full h-[120px] sm:h-36 rounded-[24px] sm:rounded-[28px] bg-[#FDF2F4] border-2 border-[#FCE7F0] flex items-center px-3 sm:px-4 cursor-pointer focus:outline-hidden"
+      >
+        <!-- Friendly Vector Illustration on Left Portion -->
+        <div class="w-24 sm:w-32 h-full flex items-center justify-center shrink-0">
+          <svg viewBox="0 0 110 110" class="w-20 h-20 sm:w-26 sm:h-26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Parent Torso in warm rose sweater -->
+            <path d="M18 102 C18 78 30 68 55 68 C80 68 92 78 92 102 Z" fill="#F472B6" opacity="0.85" />
+            <!-- Collar / Neck -->
+            <path d="M48 68 C48 74 62 74 62 68 Z" fill="#FDE2CD" />
+            <!-- Parent Head -->
+            <ellipse cx="55" cy="46" rx="15" ry="17" fill="#FDE2CD" />
+            <!-- Parent Hair (Curved modern bob) -->
+            <path d="M37 46 C37 28 45 22 55 22 C66 22 73 28 73 42 C73 48 70 54 68 56 C66 48 62 34 50 34 C43 34 40 40 38 48 C37 47 37 46 37 46 Z" fill="#334155" />
+            <path d="M37 44 C36 54 40 62 44 64 C42 58 41 52 42 46 Z" fill="#334155" />
+            <!-- Gentle Facial Features -->
+            <path d="M48 45 Q51 47.5 53 45" stroke="#475569" stroke-width="1.6" stroke-linecap="round" fill="none" />
+            <path d="M57 45 Q59 47.5 62 45" stroke="#475569" stroke-width="1.6" stroke-linecap="round" fill="none" />
+            <!-- Soft Blush -->
+            <circle cx="47" cy="49" r="3" fill="#FB7185" opacity="0.4" />
+            <circle cx="63" cy="49" r="3" fill="#FB7185" opacity="0.4" />
+            <!-- Calm Smile -->
+            <path d="M53 52 Q55 54 57 52" stroke="#94A3B8" stroke-width="1.4" stroke-linecap="round" fill="none" />
+            <!-- Swaddled Baby in Parent's Arms -->
+            <g transform="translate(40, 65)">
+              <path d="M6 14 C4 24 12 30 26 28 C34 26 38 20 36 12 C34 6 22 4 14 6 C8 8 6 10 6 14 Z" fill="#FFFFFF" />
+              <path d="M10 16 C16 22 26 24 32 20" stroke="#FBCFE8" stroke-width="1.8" stroke-linecap="round" fill="none" />
+              <circle cx="14" cy="11" r="7.5" fill="#FDE2CD" />
+              <path d="M7 10 C7 4 15 3 21 8 C20 13 18 14 7 10 Z" fill="#FDA4AF" />
+              <circle cx="15" cy="4" r="2" fill="#FDA4AF" />
+              <path d="M12 11 Q14 13 16 11" stroke="#64748B" stroke-width="1.2" stroke-linecap="round" fill="none" />
+              <circle cx="12" cy="13.5" r="1.5" fill="#FB7185" opacity="0.6" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- Role Name & Details on Right -->
+        <div class="flex flex-col justify-center flex-1 pl-2 sm:pl-3 pr-2">
+          <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 tracking-tight leading-tight">Parent</h2>
+          <p class="text-[11px] sm:text-xs md:text-[13px] text-slate-500 font-medium mt-0.5 sm:mt-1 leading-snug">Family & infant care</p>
+        </div>
+
+        <!-- Subtle Selected State Check Badge (Positioned at bottom center like reference) -->
+        <div 
+          id="badgeParent"
+          class="check-badge absolute -bottom-3.5 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-white shadow-sm border border-rose-200 flex items-center justify-center opacity-0 scale-75 pointer-events-none"
+          aria-hidden="true"
+        >
+          <svg class="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           ROLE 2: CAREGIVER
+           =================================================================== -->
+      <div 
+        id="cardCaregiver"
+        onclick="selectRole('caregiver')"
+        onkeydown="handleKey(event, 'caregiver')"
+        role="radio"
+        aria-checked="false"
+        tabindex="0"
+        class="role-card relative w-full h-[120px] sm:h-36 rounded-[24px] sm:rounded-[28px] bg-[#EBF9F6] border-2 border-[#D1F4EC] flex items-center px-3 sm:px-4 cursor-pointer focus:outline-hidden"
+      >
+        <!-- Friendly Vector Illustration on Left Portion -->
+        <div class="w-24 sm:w-32 h-full flex items-center justify-center shrink-0">
+          <svg viewBox="0 0 110 110" class="w-20 h-20 sm:w-26 sm:h-26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Caregiver Torso in clinical teal scrubs -->
+            <path d="M18 102 C18 78 30 68 55 68 C80 68 92 78 92 102 Z" fill="#0D9488" opacity="0.85" />
+            <!-- V-neck of scrubs -->
+            <path d="M46 68 L55 80 L64 68 Z" fill="#FDE2CD" />
+            <path d="M45 68 L55 82 L65 68" stroke="#115E59" stroke-width="2" stroke-linecap="round" fill="none" />
+            <!-- Caregiver Neck & Head -->
+            <ellipse cx="55" cy="46" rx="15" ry="17" fill="#FDE2CD" />
+            <!-- Caregiver Professional Hair -->
+            <path d="M37 44 C37 26 46 22 55 22 C64 22 73 26 73 44 C73 48 71 52 69 54 C66 42 62 33 50 33 C41 33 39 42 37 44 Z" fill="#1E293B" />
+            <ellipse cx="55" cy="19" rx="8" ry="6" fill="#1E293B" />
+            <!-- Stethoscope around neck -->
+            <path d="M42 68 C42 84 48 92 53 92 C54 92 55 90 55 86" stroke="#E2E8F0" stroke-width="2.5" stroke-linecap="round" fill="none" />
+            <path d="M68 68 C68 84 62 92 57 92 C56 92 55 90 55 86" stroke="#E2E8F0" stroke-width="2.5" stroke-linecap="round" fill="none" />
+            <circle cx="55" cy="94" r="4.5" fill="#94A3B8" stroke="#CBD5E1" stroke-width="1.5" />
+            <circle cx="55" cy="94" r="2" fill="#0D9488" />
+            <!-- Friendly Eyes & Smile -->
+            <path d="M48 45 Q51 47.5 53 45" stroke="#475569" stroke-width="1.6" stroke-linecap="round" fill="none" />
+            <path d="M57 45 Q59 47.5 62 45" stroke="#475569" stroke-width="1.6" stroke-linecap="round" fill="none" />
+            <!-- Soft Blush -->
+            <circle cx="47" cy="49" r="3" fill="#FB7185" opacity="0.3" />
+            <circle cx="63" cy="49" r="3" fill="#FB7185" opacity="0.3" />
+            <!-- Warm Smile -->
+            <path d="M52 52 Q55 54.5 58 52" stroke="#94A3B8" stroke-width="1.4" stroke-linecap="round" fill="none" />
+            <!-- Health Monitoring Clipboard -->
+            <g transform="translate(68, 72)">
+              <rect x="0" y="0" width="18" height="24" rx="4" fill="#FFFFFF" stroke="#99F6E4" stroke-width="1.5" />
+              <rect x="3" y="4" width="12" height="2" rx="1" fill="#0D9488" />
+              <path d="M3 10 L6 10 L8 7 L10 13 L12 10 L15 10" stroke="#0D9488" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+              <circle cx="9" cy="18" r="2" fill="#14B8A6" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- Role Name & Details on Right -->
+        <div class="flex flex-col justify-center flex-1 pl-2 sm:pl-3 pr-2">
+          <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 tracking-tight leading-tight">Caregiver</h2>
+          <p class="text-[11px] sm:text-xs md:text-[13px] text-slate-500 font-medium mt-0.5 sm:mt-1 leading-snug">Nurse, ASHA & clinical staff</p>
+        </div>
+
+        <!-- Subtle Selected State Check Badge (Positioned at bottom center like reference) -->
+        <div 
+          id="badgeCaregiver"
+          class="check-badge absolute -bottom-3.5 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-white shadow-sm border border-teal-200 flex items-center justify-center opacity-0 scale-75 pointer-events-none"
+          aria-hidden="true"
+        >
+          <svg class="w-3.5 h-3.5 text-teal-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    let currentRole = null;
+    let navTimeout = null;
+
+    function handleKey(e, role) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selectRole(role);
+      }
+    }
+
+    function selectRole(role) {
+      if (currentRole === role) return;
+      currentRole = role;
+      renderSelection();
+
+      if (navTimeout) {
+        clearTimeout(navTimeout);
+        navTimeout = null;
+      }
+
+      if (role === 'parent') {
+        // Provide visual feedback with darker rose state, then navigate to parentsdashboard.html
+        navTimeout = setTimeout(() => {
+          window.location.href = '../parentsdashboard.html';
+        }, 320);
+      }
+    }
+
+    function renderSelection() {
+      const parentCard = document.getElementById('cardParent');
+      const caregiverCard = document.getElementById('cardCaregiver');
+      const badgeParent = document.getElementById('badgeParent');
+      const badgeCaregiver = document.getElementById('badgeCaregiver');
+
+      if (currentRole === 'parent') {
+        parentCard.classList.remove('bg-[#FDF2F4]', 'border-[#FCE7F0]');
+        parentCard.classList.add('bg-[#F9A8BA]', 'border-[#F472B6]');
+        parentCard.setAttribute('aria-checked', 'true');
+        badgeParent.classList.remove('opacity-0', 'scale-75');
+        badgeParent.classList.add('opacity-100', 'scale-100');
+
+        caregiverCard.classList.remove('bg-[#62DFC2]', 'border-[#14B8A6]');
+        caregiverCard.classList.add('bg-[#EBF9F6]', 'border-[#D1F4EC]');
+        caregiverCard.setAttribute('aria-checked', 'false');
+        badgeCaregiver.classList.remove('opacity-100', 'scale-100');
+        badgeCaregiver.classList.add('opacity-0', 'scale-75');
+      } else if (currentRole === 'caregiver') {
+        caregiverCard.classList.remove('bg-[#EBF9F6]', 'border-[#D1F4EC]');
+        caregiverCard.classList.add('bg-[#62DFC2]', 'border-[#14B8A6]');
+        caregiverCard.setAttribute('aria-checked', 'true');
+        badgeCaregiver.classList.remove('opacity-0', 'scale-75');
+        badgeCaregiver.classList.add('opacity-100', 'scale-100');
+
+        parentCard.classList.remove('bg-[#F9A8BA]', 'border-[#F472B6]');
+        parentCard.classList.add('bg-[#FDF2F4]', 'border-[#FCE7F0]');
+        parentCard.setAttribute('aria-checked', 'false');
+        badgeParent.classList.remove('opacity-100', 'scale-100');
+        badgeParent.classList.add('opacity-0', 'scale-75');
+      }
+    }
+  </script>
+</body>
+</html>

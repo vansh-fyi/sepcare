@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Clinical Ward Overview · NICU-B</title>
+  <meta name="description" content="SepCare Caregiver & Clinical Dashboard: Multi-infant continuous sepsis triage, real-time ankle-band telemetry, and ward-level early warning alerts.">
+
+  <!-- Google Fonts: Outfit (Strictly matching parent-dashboard.html) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Outfit"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02)',
+            'tile': '0 8px 24px -4px rgba(15, 23, 42, 0.12)',
+            'btn-urgent': '0 8px 24px -4px rgba(225, 29, 72, 0.35)',
+            'btn-warn': '0 8px 24px -4px rgba(217, 119, 6, 0.3)',
+            'btn-calm': '0 8px 24px -4px rgba(5, 150, 105, 0.25)',
+            'btn-caregiver': '0 8px 24px -4px rgba(13, 148, 136, 0.28)',
+            'dock': '0 16px 36px -6px rgba(15, 23, 42, 0.12)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    /* Ambient floating gradient orbs (Identical to parent-dashboard.html) */
+    @keyframes floatOrb1 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(25px, -18px) scale(1.12); }
+    }
+    @keyframes floatOrb2 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(-20px, 15px) scale(0.92); }
+    }
+    .sc-float-orb-1 {
+      animation: floatOrb1 9s ease-in-out infinite;
+    }
+    .sc-float-orb-2 {
+      animation: floatOrb2 11s ease-in-out infinite;
+    }
+    /* Subtle status pulse */
+    @keyframes alertPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.75; }
+    }
+    .sc-alert-pulse {
+      animation: alertPulse 1.8s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body id="clinicalBody" class="bg-[#F4FBF7] text-slate-900 font-sans min-h-screen flex flex-col items-center antialiased pb-32 relative overflow-x-hidden select-none">
+
+  <!-- =========================================================================
+       BACKGROUND FLOATING GLOW ORBS (Matching parent-dashboard.html)
+       ========================================================================= -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div id="orb1" class="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-teal-200/40 blur-3xl sc-float-orb-1 transition-colors duration-700"></div>
+    <div id="orb2" class="absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-emerald-200/40 blur-3xl sc-float-orb-2 transition-colors duration-700"></div>
+    <div id="orb3" class="absolute -bottom-20 left-10 w-72 h-72 rounded-full bg-teal-100/50 blur-3xl transition-colors duration-700"></div>
+  </div>
+
+  <!-- =========================================================================
+       TRIAGE FILTER SEGMENTED CONTROLS (ALL / CRITICAL / ATTENTION / STABLE)
+       Styled identically to parent-dashboard.html Tri-State Switcher
+       ========================================================================= -->
+  <header class="w-full max-w-[420px] pt-3 px-4 pb-1 z-50 relative">
+    <div class="bg-white/90 backdrop-blur-md rounded-full p-1 border border-slate-200/80 shadow-xs flex gap-1 w-full justify-between">
+      <button type="button" onclick="filterCots('all')" id="filterAll" class="flex-1 py-1.5 px-2 rounded-full text-xs font-bold bg-teal-700 text-white shadow-xs transition-all flex items-center justify-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+        <span>All (5)</span>
+      </button>
+
+      <button type="button" onclick="filterCots('critical')" id="filterCritical" class="flex-1 py-1.5 px-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse"></span>
+        <span>Critical (1)</span>
+      </button>
+
+      <button type="button" onclick="filterCots('attention')" id="filterAttention" class="flex-1 py-1.5 px-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+        <span>Warn (2)</span>
+      </button>
+
+      <button type="button" onclick="filterCots('stable')" id="filterStable" class="flex-1 py-1.5 px-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+        <span>Safe (2)</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN MOBILE CONTAINER (MAX 420PX)
+       ========================================================================= -->
+  <main class="w-full max-w-[420px] flex flex-col px-4 pt-1 space-y-3.5 z-10 relative" role="main">
+
+    <!-- 01 — Native Mobile Status Bar (Line Icons Only) -->
+    <div class="flex justify-between items-center px-1 text-slate-800 text-xs font-semibold select-none">
+      <span id="scLiveClock" class="font-bold tabular-nums tracking-tight">9:41</span>
+      <div class="flex items-center space-x-1.5">
+        <svg class="w-3.5 h-2.5 text-slate-800" viewBox="0 0 18 12" fill="currentColor">
+          <rect x="0" y="8" width="2.5" height="4" rx="0.5" />
+          <rect x="4" y="5.5" width="2.5" height="6.5" rx="0.5" />
+          <rect x="8" y="3" width="2.5" height="9" rx="0.5" />
+          <rect x="12" y="0.5" width="2.5" height="11.5" rx="0.5" />
+        </svg>
+        <svg class="w-3.5 h-2.5 text-slate-800" viewBox="0 0 16 12" fill="currentColor">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M8 2.2C10.5 2.2 12.8 3.1 14.5 4.6L15.6 3.4C13.5 1.5 10.9 0.4 8 0.4C5.1 0.4 2.5 1.5 0.4 3.4L1.5 4.6C3.2 3.1 5.5 2.2 8 2.2ZM8 5.6C9.7 5.6 11.2 6.2 12.4 7.2L13.5 6C12 4.7 10.1 4 8 4C5.9 4 4 4.7 2.5 6L3.6 7.2C4.8 6.2 6.3 5.6 8 5.6ZM8 9C9 9 9.8 9.4 10.4 10L8 12.6L5.6 10C6.2 9.4 7 9 8 9Z" />
+        </svg>
+        <div class="w-5 h-2.5 border border-slate-800 rounded-xs p-0.5 flex items-center">
+          <div class="h-full w-4/5 bg-slate-800 rounded-2xs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 — Clinician Identity & Ward Gateway Header -->
+    <section class="flex items-center justify-between px-1" aria-label="Clinician Profile & Ward Status">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <!-- Duty Nurse Avatar Badge -->
+        <div class="w-8 h-8 rounded-full bg-teal-100 border border-teal-200/90 shadow-2xs flex items-center justify-center shrink-0 text-teal-800">
+          <svg class="w-4 h-4 text-teal-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+            <path d="M12 9v6" stroke-width="2" />
+            <path d="M9 12h6" stroke-width="2" />
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-sm font-black text-slate-900 tracking-tight truncate">NICU Ward B</h1>
+            <span class="text-[10px] font-bold text-teal-700 bg-teal-50 border border-teal-200/60 px-1.5 py-0.5 rounded-full">Shift A</span>
+          </div>
+          <p class="text-[10px] text-slate-500 font-medium">Sister Priya S., RN • Duty In-Charge</p>
+        </div>
+      </div>
+
+      <!-- Switch Role Link & Notification Bell -->
+      <div class="flex items-center gap-1.5">
+        <a href="onboarding.html" class="text-[11px] font-bold text-teal-700 hover:text-teal-900 bg-white/90 border border-slate-200/80 px-2.5 py-1 rounded-full shadow-2xs transition-all" title="Switch role to Parent">
+          Switch Role
+        </a>
+        <a href="alert-center.html" class="w-8 h-8 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-slate-700 shadow-2xs relative active:scale-95 transition-transform" aria-label="Alerts">
+          <svg class="w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-600 animate-ping"></span>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-600"></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         03 — WARD TRIAGE STAGE HERO CARD
+         Uses exact parent-dashboard.html card radius, elevation, and typography
+         ========================================================================= -->
+    <section class="space-y-2" aria-labelledby="ward-summary-heading">
+      <div class="flex items-center justify-between px-1">
+        <h2 id="ward-summary-heading" class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Ward Triage Live Stage</h2>
+        <span class="text-[11px] font-bold text-teal-800 bg-teal-50 border border-teal-200/80 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-teal-600 animate-pulse"></span>
+          <span>Gateway Active</span>
+        </span>
+      </div>
+
+      <!-- Hero Card Container -->
+      <article class="w-full rounded-3xl overflow-hidden shadow-card border border-teal-300/60 bg-gradient-to-b from-teal-50/90 via-white to-emerald-50/70 p-4 sm:p-5 relative flex flex-col space-y-3.5">
+        
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-teal-700 block">NICU TELEMETRY BEDSIDE CORRIDOR</span>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight leading-tight mt-0.5">
+              5 Monitored Infants
+            </h3>
+            <p class="text-xs text-slate-600 font-medium mt-0.5">
+              Continuous 100Hz BLE vital acquisition active across cots.
+            </p>
+          </div>
+
+          <div class="w-10 h-10 rounded-2xl bg-teal-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Metric Breakdown Pills Row -->
+        <div class="grid grid-cols-3 gap-2">
+          <!-- Critical Metric -->
+          <div onclick="filterCots('critical')" class="cursor-pointer rounded-2xl bg-rose-50 border border-rose-200/80 p-2.5 text-center transition-transform hover:scale-[1.02]">
+            <span class="text-lg font-black text-rose-700 tabular-nums block leading-tight">1</span>
+            <span class="text-[10px] font-bold text-rose-800 uppercase tracking-tight">Critical Alert</span>
+          </div>
+          <!-- Attention Metric -->
+          <div onclick="filterCots('attention')" class="cursor-pointer rounded-2xl bg-amber-50 border border-amber-200/80 p-2.5 text-center transition-transform hover:scale-[1.02]">
+            <span class="text-lg font-black text-amber-700 tabular-nums block leading-tight">2</span>
+            <span class="text-[10px] font-bold text-amber-800 uppercase tracking-tight">Attention</span>
+          </div>
+          <!-- Stable Metric -->
+          <div onclick="filterCots('stable')" class="cursor-pointer rounded-2xl bg-emerald-50 border border-emerald-200/80 p-2.5 text-center transition-transform hover:scale-[1.02]">
+            <span class="text-lg font-black text-emerald-700 tabular-nums block leading-tight">2</span>
+            <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-tight">All Stable</span>
+          </div>
+        </div>
+
+        <!-- Immediate Shift Action Highlight Banner -->
+        <div class="w-full px-3.5 py-2.5 rounded-2xl bg-rose-500/10 border border-rose-500/25 flex items-center justify-between gap-2 shadow-2xs">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2 h-2 rounded-full bg-rose-600 animate-pulse shrink-0"></span>
+            <div class="min-w-0">
+              <span class="text-xs font-black text-rose-950 block truncate">Urgent: Cot 02 (Mira) Hypothermia Spike</span>
+              <span class="text-[11px] font-medium text-rose-900/80 block truncate">Temp 35.8°C • Heart Rate variability detected</span>
+            </div>
+          </div>
+          <a href="patient-overview.html?id=cot02" class="text-[11px] font-black text-white bg-rose-600 hover:bg-rose-700 px-3 py-1.5 rounded-xl shadow-xs shrink-0 transition-all">
+            Triage →
+          </a>
+        </div>
+
+      </article>
+    </section>
+
+    <!-- =========================================================================
+         04 — MONITORED PATIENT COTS LIST (1 SCREEN = 1 HTML FILE NAVIGATION)
+         ========================================================================= -->
+    <section class="space-y-2.5" aria-labelledby="cots-list-heading">
+      <div class="flex items-center justify-between px-1">
+        <h2 id="cots-list-heading" class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Assigned Ward Cots</h2>
+        <a href="patient-list.html" class="text-xs font-bold text-teal-700 hover:underline">Full Patient List (8) →</a>
+      </div>
+
+      <!-- COT 02: BABY MIRA (CRITICAL) -->
+      <article 
+        data-status="critical" 
+        class="cot-card w-full rounded-3xl p-4 bg-white border border-rose-300 shadow-card hover:border-rose-400 transition-all space-y-3 relative"
+      >
+        <div class="flex items-start justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-2xl bg-rose-100 border border-rose-200 text-rose-800 flex items-center justify-center font-black text-xs shrink-0">
+              COT 02
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-extrabold text-slate-900">Baby Mira</h3>
+                <span class="text-[10px] font-semibold text-slate-500">Preterm 34w • Day 6</span>
+              </div>
+              <p class="text-[11px] font-bold text-rose-700">Band #SKU-102 • Signal 100% • Batt 98%</p>
+            </div>
+          </div>
+          
+          <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200">
+            Critical Risk
+          </span>
+        </div>
+
+        <!-- 3-Tiles Telemetry Row (Matching parent-dashboard.html vitals structure) -->
+        <div class="grid grid-cols-3 gap-2">
+          <div class="rounded-2xl p-2.5 bg-rose-600 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Heart Rate</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">94</span>
+              <span class="text-[9px] font-bold ml-0.5">bpm</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-rose-100">▼ Bradycardia</span>
+          </div>
+
+          <div class="rounded-2xl p-2.5 bg-red-600 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Skin Temp</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">35.8</span>
+              <span class="text-[9px] font-bold ml-0.5">°C</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-red-100">▼ Hypothermia</span>
+          </div>
+
+          <div class="rounded-2xl p-2.5 bg-rose-700 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Sepsis Score</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">86%</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-rose-100">▲ High Risk</span>
+          </div>
+        </div>
+
+        <!-- Deep-Link Actions to Separate Screen Files -->
+        <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
+          <span class="text-[11px] text-slate-500 font-medium">Updated 30s ago</span>
+          <div class="flex items-center gap-2">
+            <a href="clinical-vitals.html?id=cot02" class="font-bold text-slate-600 hover:text-slate-900">Vitals</a>
+            <span>•</span>
+            <a href="clinical-trends.html?id=cot02" class="font-bold text-slate-600 hover:text-slate-900">Trends</a>
+            <span>•</span>
+            <a href="patient-overview.html?id=cot02" class="font-black text-rose-700 hover:text-rose-800">Full Chart →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- COT 04: BABY AARAV (ATTENTION) -->
+      <article 
+        data-status="attention" 
+        class="cot-card w-full rounded-3xl p-4 bg-white border border-amber-300 shadow-card hover:border-amber-400 transition-all space-y-3 relative"
+      >
+        <div class="flex items-start justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-2xl bg-amber-100 border border-amber-200 text-amber-800 flex items-center justify-center font-black text-xs shrink-0">
+              COT 04
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-extrabold text-slate-900">Baby Aarav</h3>
+                <span class="text-[10px] font-semibold text-slate-500">Term 39w • Day 4</span>
+              </div>
+              <p class="text-[11px] font-bold text-amber-700">Band #SKU-104 • Signal 95% • Batt 94%</p>
+            </div>
+          </div>
+          
+          <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+            Attention Needed
+          </span>
+        </div>
+
+        <!-- 3-Tiles Telemetry Row -->
+        <div class="grid grid-cols-3 gap-2">
+          <div class="rounded-2xl p-2.5 bg-amber-500 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Heart Rate</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">168</span>
+              <span class="text-[9px] font-bold ml-0.5">bpm</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-amber-100">▲ Tachycardia</span>
+          </div>
+
+          <div class="rounded-2xl p-2.5 bg-amber-600 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Skin Temp</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">37.8</span>
+              <span class="text-[9px] font-bold ml-0.5">°C</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-amber-100">▲ Elevated</span>
+          </div>
+
+          <div class="rounded-2xl p-2.5 bg-amber-700 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Sepsis Score</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">42%</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-amber-100">▲ Moderate</span>
+          </div>
+        </div>
+
+        <!-- Deep-Link Actions to Separate Screen Files -->
+        <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
+          <span class="text-[11px] text-slate-500 font-medium">Updated 1m ago</span>
+          <div class="flex items-center gap-2">
+            <a href="clinical-vitals.html?id=cot04" class="font-bold text-slate-600 hover:text-slate-900">Vitals</a>
+            <span>•</span>
+            <a href="clinical-trends.html?id=cot04" class="font-bold text-slate-600 hover:text-slate-900">Trends</a>
+            <span>•</span>
+            <a href="patient-overview.html?id=cot04" class="font-black text-amber-800 hover:text-amber-900">Full Chart →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- COT 07: BABY KABIR (STABLE) -->
+      <article 
+        data-status="stable" 
+        class="cot-card w-full rounded-3xl p-4 bg-white border border-emerald-300 shadow-card hover:border-emerald-400 transition-all space-y-3 relative"
+      >
+        <div class="flex items-start justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-100 border border-emerald-200 text-emerald-800 flex items-center justify-center font-black text-xs shrink-0">
+              COT 07
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-extrabold text-slate-900">Baby Kabir</h3>
+                <span class="text-[10px] font-semibold text-slate-500">Term 40w • Day 2</span>
+              </div>
+              <p class="text-[11px] font-bold text-emerald-700">Band #SKU-107 • Signal 100% • Batt 91%</p>
+            </div>
+          </div>
+          
+          <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+            Stable
+          </span>
+        </div>
+
+        <!-- 3-Tiles Telemetry Row -->
+        <div class="grid grid-cols-3 gap-2">
+          <div class="rounded-2xl p-2.5 bg-emerald-600 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Heart Rate</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">136</span>
+              <span class="text-[9px] font-bold ml-0.5">bpm</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-emerald-100">● Normal Sinus</span>
+          </div>
+
+          <div class="rounded-2xl p-2.5 bg-teal-600 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Skin Temp</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">36.7</span>
+              <span class="text-[9px] font-bold ml-0.5">°C</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-teal-100">● Normothermic</span>
+          </div>
+
+          <div class="rounded-2xl p-2.5 bg-emerald-700 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Sepsis Score</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">12%</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-emerald-100">● Low Baseline</span>
+          </div>
+        </div>
+
+        <!-- Deep-Link Actions to Separate Screen Files -->
+        <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
+          <span class="text-[11px] text-slate-500 font-medium">Updated 2m ago</span>
+          <div class="flex items-center gap-2">
+            <a href="clinical-vitals.html?id=cot07" class="font-bold text-slate-600 hover:text-slate-900">Vitals</a>
+            <span>•</span>
+            <a href="clinical-trends.html?id=cot07" class="font-bold text-slate-600 hover:text-slate-900">Trends</a>
+            <span>•</span>
+            <a href="patient-overview.html?id=cot07" class="font-black text-emerald-800 hover:text-emerald-900">Full Chart →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- COT 09: BABY ANANYA (STABLE) -->
+      <article 
+        data-status="stable" 
+        class="cot-card w-full rounded-3xl p-4 bg-white border border-emerald-300 shadow-card hover:border-emerald-400 transition-all space-y-3 relative"
+      >
+        <div class="flex items-start justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-100 border border-emerald-200 text-emerald-800 flex items-center justify-center font-black text-xs shrink-0">
+              COT 09
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-extrabold text-slate-900">Baby Ananya</h3>
+                <span class="text-[10px] font-semibold text-slate-500">Term 38w • Day 3</span>
+              </div>
+              <p class="text-[11px] font-bold text-emerald-700">Band #SKU-109 • Signal 100% • Batt 88%</p>
+            </div>
+          </div>
+          
+          <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+            Stable
+          </span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div class="rounded-2xl p-2.5 bg-emerald-600 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Heart Rate</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">130</span>
+              <span class="text-[9px] font-bold ml-0.5">bpm</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-emerald-100">● Stable</span>
+          </div>
+
+          <div class="rounded-2xl p-2.5 bg-teal-600 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Skin Temp</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">36.6</span>
+              <span class="text-[9px] font-bold ml-0.5">°C</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-teal-100">● Stable</span>
+          </div>
+
+          <div class="rounded-2xl p-2.5 bg-emerald-700 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Sepsis Score</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">8%</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-emerald-100">● Low Baseline</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
+          <span class="text-[11px] text-slate-500 font-medium">Updated 3m ago</span>
+          <div class="flex items-center gap-2">
+            <a href="clinical-vitals.html?id=cot09" class="font-bold text-slate-600 hover:text-slate-900">Vitals</a>
+            <span>•</span>
+            <a href="clinical-trends.html?id=cot09" class="font-bold text-slate-600 hover:text-slate-900">Trends</a>
+            <span>•</span>
+            <a href="patient-overview.html?id=cot09" class="font-black text-emerald-800 hover:text-emerald-900">Full Chart →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- COT 12: BABY ROHAN (ATTENTION) -->
+      <article 
+        data-status="attention" 
+        class="cot-card w-full rounded-3xl p-4 bg-white border border-amber-300 shadow-card hover:border-amber-400 transition-all space-y-3 relative"
+      >
+        <div class="flex items-start justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-2xl bg-amber-100 border border-amber-200 text-amber-800 flex items-center justify-center font-black text-xs shrink-0">
+              COT 12
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-extrabold text-slate-900">Baby Rohan</h3>
+                <span class="text-[10px] font-semibold text-slate-500">Preterm 35w • Day 5</span>
+              </div>
+              <p class="text-[11px] font-bold text-amber-700">Band #SKU-112 • Signal 92% • Batt 84%</p>
+            </div>
+          </div>
+          
+          <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+            Observation
+          </span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div class="rounded-2xl p-2.5 bg-amber-500 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Heart Rate</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">158</span>
+              <span class="text-[9px] font-bold ml-0.5">bpm</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-amber-100">▲ Mild Tachy</span>
+          </div>
+
+          <div class="rounded-2xl p-2.5 bg-amber-600 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Skin Temp</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">37.5</span>
+              <span class="text-[9px] font-bold ml-0.5">°C</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-amber-100">▲ Warm</span>
+          </div>
+
+          <div class="rounded-2xl p-2.5 bg-amber-700 text-white shadow-tile flex flex-col justify-between">
+            <span class="text-[10px] font-bold uppercase opacity-85">Sepsis Score</span>
+            <div class="my-0.5">
+              <span class="text-base font-black tabular-nums">38%</span>
+            </div>
+            <span class="text-[9px] font-extrabold text-amber-100">▲ Monitoring</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
+          <span class="text-[11px] text-slate-500 font-medium">Updated 4m ago</span>
+          <div class="flex items-center gap-2">
+            <a href="clinical-vitals.html?id=cot12" class="font-bold text-slate-600 hover:text-slate-900">Vitals</a>
+            <span>•</span>
+            <a href="clinical-trends.html?id=cot12" class="font-bold text-slate-600 hover:text-slate-900">Trends</a>
+            <span>•</span>
+            <a href="patient-overview.html?id=cot12" class="font-black text-amber-800 hover:text-amber-900">Full Chart →</a>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- =========================================================================
+         05 — CLINICAL WARD ACTIONS
+         Dimensions: w-full h-[52px] matching parent-dashboard.html
+         ========================================================================= -->
+    <section class="pt-1 w-full space-y-2.5">
+      <a 
+        href="select-device.html" 
+        class="w-full h-[52px] rounded-2xl bg-teal-700 hover:bg-teal-800 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-btn-caregiver active:scale-[0.98] transition-all"
+      >
+        <svg class="w-4 h-4 text-teal-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        <span>Pair New Ankle Band</span>
+      </a>
+
+      <div class="grid grid-cols-2 gap-2">
+        <a 
+          href="care-handoff.html" 
+          class="h-[46px] rounded-2xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs active:scale-[0.98] transition-all"
+        >
+          <svg class="w-4 h-4 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
+          <span>Shift Handover</span>
+        </a>
+
+        <a 
+          href="risk-timeline.html" 
+          class="h-[46px] rounded-2xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs active:scale-[0.98] transition-all"
+        >
+          <svg class="w-4 h-4 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <span>Risk Timeline</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       06 — FLOATING MINIMALIST BOTTOM DOCK (LINE ICONS ONLY)
+       Identical to parent-dashboard.html dock structure
+       ========================================================================= -->
+  <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-lg border border-slate-200/90 shadow-dock rounded-full px-5 py-2 flex items-center gap-5 z-40" aria-label="Clinical Navigation">
+    <a href="clinical-overview.html" class="p-1 text-teal-800 font-extrabold flex items-center gap-1.5 text-xs">
+      <svg class="w-4 h-4 text-teal-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" />
+        <rect x="14" y="3" width="7" height="7" />
+        <rect x="14" y="14" width="7" height="7" />
+        <rect x="3" y="14" width="7" height="7" />
+      </svg>
+      <span>Ward</span>
+    </a>
+
+    <a href="patient-list.html" class="p-1 text-slate-500 hover:text-slate-900 font-bold flex items-center gap-1.5 text-xs transition-colors">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+      <span>Patients</span>
+    </a>
+
+    <a href="alert-center.html" class="p-1 text-slate-500 hover:text-slate-900 font-bold flex items-center gap-1.5 text-xs transition-colors relative">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+      </svg>
+      <span>Alerts</span>
+      <span class="w-1.5 h-1.5 rounded-full bg-rose-600 -ml-1"></span>
+    </a>
+
+    <a href="settings.html" class="p-1 text-slate-500 hover:text-slate-900 font-bold flex items-center gap-1.5 text-xs transition-colors">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+      </svg>
+      <span>Settings</span>
+    </a>
+  </nav>
+
+  <!-- TOAST NOTIFICATION (Identical to parent-dashboard.html) -->
+  <div id="scToast" class="fixed top-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg z-50 pointer-events-none opacity-0 transition-all duration-300 flex items-center gap-2">
+    <span class="w-1.5 h-1.5 rounded-full bg-teal-400" id="toastDot"></span>
+    <span id="scToastMsg">Live update</span>
+  </div>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    // Live Clock
+    function updateClock() {
+      const clock = document.getElementById('scLiveClock');
+      if (!clock) return;
+      const now = new Date();
+      let h = now.getHours();
+      let m = now.getMinutes();
+      clock.textContent = `${h}:${m < 10 ? '0' + m : m}`;
+    }
+    setInterval(updateClock, 30000);
+    updateClock();
+
+    // Client-side Triage Filter Tabs
+    function filterCots(status) {
+      const cards = document.querySelectorAll('.cot-card');
+      const tabs = ['all', 'critical', 'attention', 'stable'];
+      
+      tabs.forEach(t => {
+        const btn = document.getElementById('filter' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (t === status) {
+          btn.className = 'flex-1 py-1.5 px-2 rounded-full text-xs font-bold bg-teal-700 text-white shadow-xs transition-all flex items-center justify-center gap-1.5';
+        } else {
+          btn.className = 'flex-1 py-1.5 px-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5';
+        }
+      });
+
+      cards.forEach(card => {
+        if (status === 'all' || card.getAttribute('data-status') === status) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      triggerToast(`Filtered: ${status.toUpperCase()} (${status === 'all' ? '5' : status === 'critical' ? '1' : '2'} Cots)`);
+    }
+
+    // Toast
+    let toastTimeout;
+    function triggerToast(msg) {
+      const toast = document.getElementById('scToast');
+      const text = document.getElementById('scToastMsg');
+      if (!toast || !text) return;
+      text.textContent = msg;
+      toast.classList.remove('opacity-0');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

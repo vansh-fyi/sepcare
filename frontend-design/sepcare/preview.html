@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SepCare — Development Device Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Realistic Smartphone Device Frame (Pure CSS, 0 Assets) */
+    .device-shell {
+      position: relative;
+      background: #0f172a;
+      border: 12px solid #0f172a;
+      outline: 2px solid #334155;
+      border-radius: 54px;
+      box-shadow: 
+        0 25px 60px -12px rgba(15, 23, 42, 0.35),
+        0 12px 24px -8px rgba(15, 23, 42, 0.2),
+        inset 0 0 4px rgba(255, 255, 255, 0.2);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease;
+      transform-origin: top center;
+    }
+
+    /* Screen display area inside phone */
+    .device-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 42px;
+      overflow: hidden;
+      background: #ffffff;
+      position: relative;
+    }
+
+    /* Dynamic Island / Top Speaker pill */
+    .device-island {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 28px;
+      background: #000000;
+      border-radius: 20px;
+      z-index: 50;
+      pointer-events: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+    }
+
+    .device-camera {
+      width: 10px;
+      height: 10px;
+      background: #0a1128;
+      border: 1.5px solid #1e293b;
+      border-radius: 50%;
+    }
+
+    /* Bottom Home Indicator Bar */
+    .device-home-bar {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      height: 4px;
+      background: #0f172a;
+      opacity: 0.35;
+      border-radius: 4px;
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: #ffffff;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col select-none overflow-x-hidden">
+
+  <!-- =====================================================================
+       PREVIEW CONTROLS TOOLBAR
+       ===================================================================== -->
+  <header class="bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between gap-4 sticky top-0 z-50 shadow-xs">
+    
+    <!-- Screen Selector -->
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Screen:</span>
+      <select id="screenSelect" onchange="changeScreen(this.value)" class="text-xs font-bold bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-hidden focus:border-slate-500 cursor-pointer">
+        <option value="../parentsdashboard.html" selected>Parent Dashboard (parentsdashboard.html)</option>
+        <option value="parent-vitals.html">Parent Vitals (parent-vitals.html)</option>
+        <option value="parent-notifications.html">Parent Notifications (parent-notifications.html)</option>
+        <option value="profile-selection.html">Profile Selection (profile-selection.html)</option>
+        <option value="splash.html">Splash Screen (splash.html)</option>
+      </select>
+    </div>
+
+    <!-- Responsive Viewport Presets -->
+    <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-medium">
+      <button type="button" onclick="setViewport(320, 667, 'Compact 320px')" id="btn-320" class="px-2.5 py-1 rounded-lg transition-all text-slate-600 hover:text-slate-900">320px</button>
+      <button type="button" onclick="setViewport(390, 844, 'iPhone 390px')" id="btn-390" class="px-2.5 py-1 rounded-lg bg-white text-slate-900 font-bold shadow-xs">390px (Primary)</button>
+      <button type="button" onclick="setViewport(430, 932, 'Large 430px')" id="btn-430" class="px-2.5 py-1 rounded-lg transition-all text-slate-600 hover:text-slate-900">430px</button>
+      <button type="button" onclick="setViewport(768, 1024, 'Tablet Portrait')" id="btn-768" class="px-2.5 py-1 rounded-lg transition-all text-slate-600 hover:text-slate-900">768px</button>
+      <button type="button" onclick="setViewport(1024, 768, 'Tablet / Desktop')" id="btn-1024" class="px-2.5 py-1 rounded-lg transition-all text-slate-600 hover:text-slate-900">1024px</button>
+    </div>
+
+    <!-- Viewport Info & Scale -->
+    <div class="flex items-center gap-3">
+      <span id="viewportLabel" class="text-xs font-semibold text-slate-500 tabular-nums">390 × 844 px</span>
+      <div class="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg p-0.5">
+        <button type="button" onclick="adjustScale(-0.1)" class="w-6 h-6 flex items-center justify-center text-xs font-bold text-slate-600 hover:bg-white rounded cursor-pointer" title="Zoom Out">−</button>
+        <span id="scaleLabel" class="text-[11px] font-semibold text-slate-700 px-1 tabular-nums">90%</span>
+        <button type="button" onclick="adjustScale(0.1)" class="w-6 h-6 flex items-center justify-center text-xs font-bold text-slate-600 hover:bg-white rounded cursor-pointer" title="Zoom In">+</button>
+      </div>
+      <button type="button" onclick="reloadPreview()" class="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1 px-2 py-1 bg-slate-50 hover:bg-white border border-slate-200 rounded-lg cursor-pointer" title="Reload live preview">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+        </svg>
+        <span>Reload</span>
+      </button>
+      <a id="directLink" href="../parentsdashboard.html" target="_blank" class="text-xs font-semibold text-slate-600 hover:text-slate-900 underline flex items-center gap-1" title="Open raw HTML in new tab">
+        Raw HTML ↗
+      </a>
+    </div>
+
+  </header>
+
+  <!-- =====================================================================
+       DEVICE STAGE: CENTERED REALISTIC SMARTPHONE VIEWPORT
+       ===================================================================== -->
+  <main class="flex-1 flex items-center justify-center p-8 overflow-auto min-h-0">
+    <div id="deviceFrame" class="device-shell" style="width: 390px; height: 844px; transform: scale(0.9);">
+      
+      <!-- Realistic Dynamic Island / Notch Bezel -->
+      <div id="deviceIsland" class="device-island">
+        <div class="device-camera"></div>
+      </div>
+
+      <!-- Live Webpage Viewport -->
+      <div class="device-screen">
+        <iframe id="previewIframe" src="../parentsdashboard.html" title="SepCare Live Preview"></iframe>
+      </div>
+
+      <!-- Bottom Home Bar -->
+      <div id="deviceHomeBar" class="device-home-bar"></div>
+
+    </div>
+  </main>
+
+  <script>
+    let currentScale = 0.9; // Default 90% scale so 844px phone fits cleanly inside 788px desktop browser windows
+    let currentWidth = 390;
+    let currentHeight = 844;
+
+    function setViewport(w, h, label) {
+      currentWidth = w;
+      currentHeight = h;
+      const frame = document.getElementById('deviceFrame');
+      const island = document.getElementById('deviceIsland');
+      const homeBar = document.getElementById('deviceHomeBar');
+      const vpLabel = document.getElementById('viewportLabel');
+
+      // Update frame dimensions
+      frame.style.width = w + 'px';
+      frame.style.height = h + 'px';
+
+      // Adjust bezel and corners for larger tablet sizes vs mobile phones
+      if (w >= 768) {
+        frame.style.borderRadius = '32px';
+        frame.style.borderWidth = '16px';
+        island.style.display = 'none';
+        homeBar.style.display = 'none';
+        frame.querySelector('.device-screen').style.borderRadius = '20px';
+        currentScale = 0.65; // Auto-fit tablet to viewport
+      } else {
+        frame.style.borderRadius = '54px';
+        frame.style.borderWidth = '12px';
+        island.style.display = 'flex';
+        homeBar.style.display = 'block';
+        frame.querySelector('.device-screen').style.borderRadius = '42px';
+        currentScale = 0.9;
+      }
+
+      applyScale();
+
+      // Update active button state
+      ['320', '390', '430', '768', '1024'].forEach(id => {
+        const btn = document.getElementById('btn-' + id);
+        if (id === String(w)) {
+          btn.className = 'px-2.5 py-1 rounded-lg bg-white text-slate-900 font-bold shadow-xs';
+        } else {
+          btn.className = 'px-2.5 py-1 rounded-lg transition-all text-slate-600 hover:text-slate-900';
+        }
+      });
+
+      vpLabel.textContent = `${w} × ${h} px (${label})`;
+    }
+
+    function adjustScale(delta) {
+      currentScale = Math.min(1.2, Math.max(0.4, currentScale + delta));
+      applyScale();
+    }
+
+    function applyScale() {
+      const frame = document.getElementById('deviceFrame');
+      frame.style.transform = `scale(${currentScale.toFixed(2)})`;
+      document.getElementById('scaleLabel').textContent = Math.round(currentScale * 100) + '%';
+    }
+
+    function changeScreen(url) {
+      document.getElementById('previewIframe').src = url;
+      document.getElementById('directLink').href = url;
+    }
+
+    function reloadPreview() {
+      const iframe = document.getElementById('previewIframe');
+      if (iframe) {
+        iframe.src = iframe.src;
+      }
+    }
+
+    // Keep screen dropdown and raw HTML link in sync whenever navigation occurs inside the iframe
+    const previewIframe = document.getElementById('previewIframe');
+    previewIframe.addEventListener('load', () => {
+      try {
+        const path = previewIframe.contentWindow.location.pathname;
+        const select = document.getElementById('screenSelect');
+        const directLink = document.getElementById('directLink');
+        if (directLink) directLink.href = previewIframe.contentWindow.location.href;
+
+        if (path.includes('parentsdashboard.html')) {
+          select.value = '../parentsdashboard.html';
+        } else if (path.includes('profile-selection.html')) {
+          select.value = 'profile-selection.html';
+        } else if (path.includes('splash.html')) {
+          select.value = 'splash.html';
+        }
+      } catch (e) {
+        // Fallback if cross-origin
+      }
+    });
+
+    // Auto-fit scale on load based on window height, and handle optional ?screen= query param
+    window.addEventListener('load', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const screenParam = urlParams.get('screen');
+      if (screenParam) {
+        changeScreen(screenParam);
+        const select = document.getElementById('screenSelect');
+        if (select) select.value = screenParam;
+      }
+
+      const availableHeight = window.innerHeight - 100;
+      if (availableHeight < 880) {
+        currentScale = Math.max(0.6, (availableHeight / 900));
+        applyScale();
+      }
+    });
+  </script>
+</body>
+</html>

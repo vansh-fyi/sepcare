@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Continuous Neonatal Health Companion</title>
+  <meta name="description" content="SepCare: Early neonatal sepsis detection and continuous physiological ankle-band telemetry for infants.">
+
+  <!-- Google Fonts: Outfit (Strictly matching parent-dashboard.html) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Outfit"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02)',
+            'tile': '0 8px 24px -4px rgba(15, 23, 42, 0.12)',
+            'btn-calm': '0 8px 24px -4px rgba(5, 150, 105, 0.28)',
+            'btn-caregiver': '0 8px 24px -4px rgba(13, 148, 136, 0.28)',
+            'btn-urgent': '0 8px 24px -4px rgba(225, 29, 72, 0.35)',
+            'dock': '0 16px 36px -6px rgba(15, 23, 42, 0.12)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      transition: background-color 0.45s ease, color 0.3s ease;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    /* Background floating gradient orbs (Identical to parent-dashboard.html) */
+    @keyframes floatOrb1 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(25px, -18px) scale(1.12); }
+    }
+    @keyframes floatOrb2 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(-20px, 15px) scale(0.92); }
+    }
+    .sc-float-orb-1 {
+      animation: floatOrb1 9s ease-in-out infinite;
+    }
+    .sc-float-orb-2 {
+      animation: floatOrb2 11s ease-in-out infinite;
+    }
+
+    /* Calming logo aura pulse */
+    @keyframes logoAura {
+      0%, 100% { transform: scale(1); opacity: 0.35; }
+      50% { transform: scale(1.08); opacity: 0.65; }
+    }
+    .sc-logo-aura {
+      animation: logoAura 3.6s ease-in-out infinite;
+    }
+
+    /* Progress bar shimmer */
+    @keyframes shimmerMove {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    .sc-shimmer {
+      animation: shimmerMove 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+  </style>
+</head>
+<body class="bg-[#F4FBF7] text-slate-900 font-sans min-h-screen flex flex-col items-center justify-between antialiased relative overflow-x-hidden select-none p-4">
+
+  <!-- =========================================================================
+       BACKGROUND FLOATING GLOW ORBS (Matching parent-dashboard.html)
+       ========================================================================= -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute -top-24 -left-20 w-80 h-80 rounded-full bg-emerald-200/50 blur-3xl sc-float-orb-1"></div>
+    <div class="absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-teal-200/40 blur-3xl sc-float-orb-2"></div>
+    <div class="absolute -bottom-24 left-10 w-80 h-80 rounded-full bg-emerald-100/60 blur-3xl"></div>
+  </div>
+
+  <!-- =========================================================================
+       MAIN MOBILE CONTAINER (MAX 420PX)
+       ========================================================================= -->
+  <div class="w-full max-w-[420px] flex flex-col justify-between flex-1 z-10 relative py-2">
+
+    <!-- 01 — Native Mobile Status Bar (Line Icons Only) -->
+    <header class="flex justify-between items-center px-1 text-slate-800 text-xs font-semibold select-none">
+      <span id="scLiveClock" class="font-bold tabular-nums tracking-tight">9:41</span>
+      <div class="flex items-center space-x-1.5">
+        <svg class="w-3.5 h-2.5 text-slate-800" viewBox="0 0 18 12" fill="currentColor">
+          <rect x="0" y="8" width="2.5" height="4" rx="0.5" />
+          <rect x="4" y="5.5" width="2.5" height="6.5" rx="0.5" />
+          <rect x="8" y="3" width="2.5" height="9" rx="0.5" />
+          <rect x="12" y="0.5" width="2.5" height="11.5" rx="0.5" />
+        </svg>
+        <svg class="w-3.5 h-2.5 text-slate-800" viewBox="0 0 16 12" fill="currentColor">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M8 2.2C10.5 2.2 12.8 3.1 14.5 4.6L15.6 3.4C13.5 1.5 10.9 0.4 8 0.4C5.1 0.4 2.5 1.5 0.4 3.4L1.5 4.6C3.2 3.1 5.5 2.2 8 2.2ZM8 5.6C9.7 5.6 11.2 6.2 12.4 7.2L13.5 6C12 4.7 10.1 4 8 4C5.9 4 4 4.7 2.5 6L3.6 7.2C4.8 6.2 6.3 5.6 8 5.6ZM8 9C9 9 9.8 9.4 10.4 10L8 12.6L5.6 10C6.2 9.4 7 9 8 9Z" />
+        </svg>
+        <div class="w-5 h-2.5 border border-slate-800 rounded-xs p-0.5 flex items-center">
+          <div class="h-full w-4/5 bg-slate-800 rounded-2xs"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 02 — Hero Centerpiece with User-Uploaded SepCare Brand Logo -->
+    <main class="flex flex-col items-center justify-center text-center my-auto px-4 py-8 space-y-6">
+
+      <!-- Elevated Brand Emblem with Soft Pulsing Aura -->
+      <div class="relative flex items-center justify-center">
+        <!-- Calming Aura Rings -->
+        <div class="absolute -inset-4 rounded-[40px] bg-rose-200/40 blur-xl sc-logo-aura"></div>
+        <div class="absolute -inset-1 rounded-[34px] bg-emerald-100/60 blur-md"></div>
+        
+        <!-- White Card housing the Official Logo -->
+        <div class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-3xl bg-white p-3 shadow-card border border-rose-100 flex items-center justify-center overflow-hidden transition-transform duration-500 hover:scale-105">
+          <img 
+            src="assets/sepcare-logo.jpg" 
+            alt="SepCare Brand Logo" 
+            class="w-full h-full object-contain"
+          />
+        </div>
+      </div>
+
+      <!-- Typography Block -->
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-800 text-[10px] font-black uppercase tracking-widest shadow-2xs">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+          <span>Continuous Neonatal Telemetry</span>
+        </div>
+        
+        <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+          SepCare
+        </h1>
+        
+        <p class="text-xs sm:text-sm text-slate-600 font-medium max-w-[280px] mx-auto leading-relaxed">
+          Real-time physiological monitoring & early sepsis triage for newborns.
+        </p>
+      </div>
+
+      <!-- Subtle Loading Bar / Auto-transition Feedback -->
+      <div class="w-full max-w-[240px] space-y-2 pt-2">
+        <div class="w-full h-1.5 bg-emerald-100/80 rounded-full overflow-hidden relative">
+          <div id="splashProgress" class="h-full bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full transition-all duration-[2600ms] w-0"></div>
+        </div>
+        <p id="splashStatus" class="text-[11px] font-bold text-slate-500 tabular-nums">
+          Initializing telemetry sensors...
+        </p>
+      </div>
+
+    </main>
+
+    <!-- 03 — Bottom Action & Medical Trust Footnote -->
+    <footer class="w-full space-y-3 pt-2">
+      <!-- Direct Navigation Button -->
+      <a 
+        href="onboarding.html" 
+        id="continueBtn"
+        class="w-full h-[52px] rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-btn-calm active:scale-[0.98] transition-all"
+        aria-label="Continue to role selection"
+      >
+        <span>Get Started</span>
+        <svg class="w-4 h-4 text-emerald-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+      </a>
+
+      <!-- Medical Trust & Security Badges -->
+      <div class="flex items-center justify-center gap-2 text-center text-[10px] font-bold text-slate-400">
+        <span>ISO 13485 Certified</span>
+        <span>•</span>
+        <span>BLE Continuous Protocol</span>
+        <span>•</span>
+        <span>AES-128 Encrypted</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPT LOGIC: CLOCK & AUTO-REDIRECT -->
+  <script>
+    // Live Clock
+    function updateClock() {
+      const clockEl = document.getElementById('scLiveClock');
+      if (!clockEl) return;
+      const now = new Date();
+      let h = now.getHours();
+      let m = now.getMinutes();
+      clockEl.textContent = `${h}:${m < 10 ? '0' + m : m}`;
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+
+    // Smooth loading bar progression & auto-redirect
+    document.addEventListener('DOMContentLoaded', () => {
+      const bar = document.getElementById('splashProgress');
+      const statusText = document.getElementById('splashStatus');
+
+      setTimeout(() => {
+        if (bar) bar.style.width = '65%';
+        if (statusText) statusText.textContent = 'Calibrating baseline algorithms...';
+      }, 700);
+
+      setTimeout(() => {
+        if (bar) bar.style.width = '100%';
+        if (statusText) statusText.textContent = 'Gateway ready. Redirecting...';
+      }, 1900);
+
+      // Auto-redirect to onboarding after 2.6 seconds
+      const redirectTimer = setTimeout(() => {
+        window.location.href = 'onboarding.html';
+      }, 2600);
+
+      // If user taps Get Started early, clear timer
+      const btn = document.getElementById('continueBtn');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          clearTimeout(redirectTimer);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Parent View · Critical State</title>
+  <meta name="description" content="SepCare Parent Screen — Critical State emergency protocol for At Home and At Hospital care settings. Immediate clinical action and ambulance dispatch.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Centralized Parent Screen & Design System CSS -->
+  <link rel="stylesheet" href="parent-screen.css">
+</head>
+<body class="sc-parent-body">
+
+  <!-- =========================================================================
+       RESPONSIVE MOBILE VIEWPORT SHELL
+       ========================================================================= -->
+  <main class="sc-parent-viewport" role="main" aria-label="SepCare Parent Monitoring — Critical State">
+
+    <!-- 01 — Mobile Status Bar -->
+    <header class="sc-parent-statusbar" aria-label="Device Status Bar">
+      <span class="sc-parent-statusbar__time" id="scLiveClock">9:41</span>
+      <div class="sc-parent-statusbar__icons" aria-label="Cellular signal full, Wi-Fi connected, Battery 90%">
+        <!-- 4-bar cellular signal -->
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
+          <rect x="0.5" y="8" width="2.5" height="4" rx="0.8" fill="#1E293B" />
+          <rect x="4.5" y="5.5" width="2.5" height="6.5" rx="0.8" fill="#1E293B" />
+          <rect x="8.5" y="3" width="2.5" height="9" rx="0.8" fill="#1E293B" />
+          <rect x="12.5" y="0.5" width="2.5" height="11.5" rx="0.8" fill="#1E293B" />
+        </svg>
+        <!-- Wi-Fi -->
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M8 2.2C10.5 2.2 12.8 3.1 14.5 4.6L15.6 3.4C13.5 1.5 10.9 0.4 8 0.4C5.1 0.4 2.5 1.5 0.4 3.4L1.5 4.6C3.2 3.1 5.5 2.2 8 2.2ZM8 5.6C9.7 5.6 11.2 6.2 12.4 7.2L13.5 6C12 4.7 10.1 4 8 4C5.9 4 4 4.7 2.5 6L3.6 7.2C4.8 6.2 6.3 5.6 8 5.6ZM8 9C9 9 9.8 9.4 10.4 10L8 12.6L5.6 10C6.2 9.4 7 9 8 9Z" fill="#1E293B" />
+        </svg>
+        <!-- Battery -->
+        <svg width="24" height="12" viewBox="0 0 24 12" fill="none" aria-hidden="true">
+          <rect x="0.5" y="0.5" width="20" height="11" rx="3.5" stroke="#1E293B" stroke-width="1.1" />
+          <rect x="2.5" y="2.5" width="15" height="7" rx="2" fill="#1E293B" />
+          <path d="M22 4C22.6 4.3 23 4.9 23 5.6V6.4C23 7.1 22.6 7.7 22 8V4Z" fill="#1E293B" />
+        </svg>
+      </div>
+    </header>
+
+    <!-- 02 — Parent Header / Baby Aarav Profile & Live Telemetry -->
+    <section class="sc-parent-header" aria-labelledby="baby-title">
+      <div class="sc-baby-profile-row">
+        
+        <!-- Live Connection Ring Avatar (Urgent halo ring with live indicator) -->
+        <div class="sc-baby-avatar-container" title="Continuous Live Telemetry Connected">
+          <div class="sc-baby-avatar-ring">
+            <div class="sc-baby-avatar-inner" aria-label="Infant profile avatar" style="background:#FFF1F2; overflow:hidden; padding:2px;">
+              <svg viewBox="0 0 36 36" fill="none" style="width:100%; height:100%;">
+                <ellipse cx="18" cy="20" rx="11" ry="10" fill="#FDE2CD"/>
+                <circle cx="13" cy="22" r="3.2" fill="#FB7185" opacity="0.45"/>
+                <circle cx="23" cy="22" r="3.2" fill="#FB7185" opacity="0.45"/>
+                <path d="M8,17 C8,10 13,6 18,6 C23,6 28,10 28,17 C25,15 21,14 18,14 C15,14 11,15 8,17 Z" fill="#E11D48"/>
+                <path d="M7,18 C11,16 16,15.5 20,15.5 C25,15.5 28,16.5 29,18 C29,19.5 26,20.5 18,20.5 C10,20.5 7,19.5 7,18 Z" fill="#FDA4AF"/>
+                <path d="M18,6 C18,3.5 20.5,3 21,4 C21.5,5.5 19.5,6 18,6 Z" fill="#881337"/>
+                <path d="M13,19 Q15.5,21.5 18,19" stroke="#78350F" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+                <path d="M19,19 Q21.5,21.5 24,19" stroke="#78350F" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+                <path d="M16.5,24 Q18.5,25.5 20.5,24" stroke="#9A3412" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Baby Details & Dual Telemetry Status Columns -->
+        <div class="sc-baby-details">
+          <h1 id="baby-title" class="sc-baby-name">Baby Aarav</h1>
+
+          <!-- Dual Telemetry Columns (From Wireframe Specification) -->
+          <div class="sc-telemetry-grid">
+            <!-- Left Column: Connection & Band Status -->
+            <div class="sc-telemetry-col">
+              <span class="sc-telemetry-item sc-telemetry-item--active" data-telemetry-status="live" title="Continuous live stream is transmitting">
+                <span class="sc-telemetry-dot sc-telemetry-dot--live"></span>
+                Monitoring live
+              </span>
+              <a class="sc-telemetry-link" data-telemetry-status="fit-check" title="Check sensor band connection">
+                check band connection
+              </a>
+            </div>
+
+            <!-- Right Column: Freshness Timestamps & Disconnect States -->
+            <div class="sc-telemetry-col">
+              <span class="sc-telemetry-item sc-telemetry-item--active" data-telemetry-status="just-now" title="Latest telemetry packet received">
+                <span class="sc-telemetry-dot sc-telemetry-dot--live"></span>
+                Updated just now
+              </span>
+              <span class="sc-telemetry-item" data-telemetry-status="4m" title="Historical sync reference">
+                updated 4 minutes ago
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 03 — Main Scrollable Content Canvas -->
+    <div class="sc-parent-content">
+
+      <!-- ===================================================================
+           HERO CARD: CRITICAL STATE
+           Houses both "At home" and "At Hospital" protocol variants with toggle
+           =================================================================== -->
+      <article class="sc-parent-card sc-parent-card--critical" aria-labelledby="critical-title">
+        
+        <div class="sc-card-top-header">
+          <div class="sc-card-title-group">
+            <h2 id="critical-title" class="sc-card-status-title sc-card-status-title--critical">
+              <!-- Urgent Emergency Alert Icon -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              Critical state
+            </h2>
+            <p id="scCareSettingSubtitle" class="sc-card-setting-subtitle">Current care setting: At home</p>
+          </div>
+        </div>
+
+        <!-- Care Setting Segmented Switcher (At Home vs At Hospital) -->
+        <div class="sc-care-toggle" role="group" aria-label="Care Setting Mode">
+          <button type="button" class="sc-care-toggle-btn active" data-care-setting="home">At home</button>
+          <button type="button" class="sc-care-toggle-btn" data-care-setting="hospital">At Hospital</button>
+        </div>
+
+        <!-- =================================================================
+             VARIATION 1: AT HOME (Exact Copy from Wireframe)
+             ================================================================= -->
+        <div id="scCriticalHomeContent">
+          <p class="sc-card-body-text">
+            <strong>Your baby needs urgent medical help.</strong><br>
+            The monitoring patterns require immediate attention.
+          </p>
+
+          <!-- Two Buttons: Connect with a doctor & Call an ambulance -->
+          <div class="sc-card-actions-row">
+            <button type="button" class="sc-btn-parent-secondary" data-open-modal="scDoctorModal" aria-label="Connect with an on-call pediatrician">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="7" r="4" />
+                <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                <path d="M12 11v4" />
+                <path d="M10 13h4" />
+              </svg>
+              Connect with a doctor
+            </button>
+
+            <button type="button" class="sc-btn-parent-primary sc-btn-parent-emergency" data-open-modal="scAmbulanceModal" aria-label="Call emergency ambulance services">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="1" y="3" width="15" height="13" rx="2" />
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                <circle cx="5.5" cy="18.5" r="2.5" />
+                <circle cx="18.5" cy="18.5" r="2.5" />
+                <line x1="8.5" y1="7" x2="8.5" y2="11" />
+                <line x1="6.5" y1="9" x2="10.5" y2="9" />
+              </svg>
+              Call an ambulance
+            </button>
+          </div>
+        </div>
+
+        <!-- =================================================================
+             VARIATION 2: AT HOSPITAL (Exact Copy from Wireframe)
+             ================================================================= -->
+        <div id="scCriticalHospitalContent" style="display:none;">
+          <p class="sc-card-body-text">
+            <strong>Contact your doctor immediately</strong><br>
+            The monitoring patterns require urgent clinical review.
+          </p>
+
+          <!-- Single Action Button Aligned Right: Call doctor -->
+          <div class="sc-card-actions-row sc-card-actions-row--right">
+            <button type="button" class="sc-btn-parent-primary" data-open-modal="scHospitalDoctorModal" aria-label="Alert on-duty ward doctor">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="7" r="4" />
+                <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                <path d="M12 11v4" />
+                <path d="M10 13h4" />
+              </svg>
+              Call doctor
+            </button>
+          </div>
+        </div>
+
+      </article>
+
+      <!-- Supportive Instruction Below Card (Exact Wireframe Copy for Home & Hospital) -->
+      <div id="scCriticalHomeCaption" class="sc-helper-caption sc-helper-caption--critical">
+        <div>Keep your baby with you and follow the emergency operator's instructions.</div>
+        <div style="color:#64748B; font-weight:450;">Do not wait for the monitoring status to improve.</div>
+      </div>
+
+      <!-- ===================================================================
+           IMMEDIATE CLINICAL ACTIONS CARD ("While help is being reached")
+           =================================================================== -->
+      <section class="sc-checklist-card" aria-labelledby="immediate-actions-title">
+        
+        <div class="sc-checklist-header">
+          <h3 id="immediate-actions-title" class="sc-checklist-title">Immediate Care Actions</h3>
+          <span style="font-size:12px; font-weight:700; color:#DC2626; background:#FEE2E2; padding:3px 8px; border-radius:6px;">
+            URGENT
+          </span>
+        </div>
+        <p class="sc-checklist-subtitle">Take these immediate steps while medical assistance connects.</p>
+
+        <div class="sc-checklist-group" role="list">
+          
+          <div class="sc-checklist-item" style="cursor:default;">
+            <div class="sc-custom-checkbox" style="background:#DC2626; border-color:#DC2626;">
+              <span style="color:#FFF; font-size:12px; font-weight:800;">1</span>
+            </div>
+            <span class="sc-checklist-label" style="text-decoration:none; color:#0F172A;">
+              <strong>Keep baby swaddled & warm:</strong> Prevent further hypothermia with clean, dry cotton blankets.
+            </span>
+          </div>
+
+          <div class="sc-checklist-item" style="cursor:default;">
+            <div class="sc-custom-checkbox" style="background:#DC2626; border-color:#DC2626;">
+              <span style="color:#FFF; font-size:12px; font-weight:800;">2</span>
+            </div>
+            <span class="sc-checklist-label" style="text-decoration:none; color:#0F172A;">
+              <strong>Keep ankle band attached:</strong> Paramedics and doctors will read the 72-hour vital telemetry timeline on arrival.
+            </span>
+          </div>
+
+          <div class="sc-checklist-item" style="cursor:default;">
+            <div class="sc-custom-checkbox" style="background:#DC2626; border-color:#DC2626;">
+              <span style="color:#FFF; font-size:12px; font-weight:800;">3</span>
+            </div>
+            <span class="sc-checklist-label" style="text-decoration:none; color:#0F172A;">
+              <strong>Keep airway clear:</strong> Position baby on back with neck neutral. Do not attempt forced bottle/breast feeding.
+            </span>
+          </div>
+
+        </div>
+
+        <div style="background:#FEF2F2; border-left:4px solid #DC2626; padding:12px 14px; border-radius:8px; font-size:12.5px; color:#991B1B; line-height:1.5;">
+          <strong>Clinical Note:</strong> Multiple vital physiological signals (heart rate variability and peripheral perfusion) are abnormal. Professional evaluation is mandatory.
+        </div>
+
+      </section>
+
+      <!-- 04 — Mini Physiological Context (Critical Vital Snapshot) -->
+      <aside class="sc-vitals-preview-card" aria-label="Critical Baby Vitals Snapshot">
+        <div class="sc-vitals-stat">
+          <span class="sc-vitals-stat__lbl">Heart Rate</span>
+          <span class="sc-vitals-stat__val" style="color:#DC2626;">178 <small style="font-size:12px; font-weight:500; color:#DC2626;">bpm</small></span>
+          <span class="sc-vitals-stat__status sc-vitals-stat__status--critical">Severe Tachycardia</span>
+        </div>
+        <div class="sc-vitals-stat">
+          <span class="sc-vitals-stat__lbl">Temperature</span>
+          <span class="sc-vitals-stat__val" style="color:#DC2626;">35.6 <small style="font-size:12px; font-weight:500; color:#DC2626;">°C</small></span>
+          <span class="sc-vitals-stat__status sc-vitals-stat__status--critical">Hypothermia Trend</span>
+        </div>
+        <div class="sc-vitals-stat">
+          <span class="sc-vitals-stat__lbl">Movement</span>
+          <span class="sc-vitals-stat__val" style="color:#DC2626;">Lethargic</span>
+          <span class="sc-vitals-stat__status sc-vitals-stat__status--critical">Decreased Reflex</span>
+        </div>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- =========================================================================
+       MODAL 1: CALL AMBULANCE DIRECT CONFIRMATION SHEET
+       ========================================================================= -->
+  <div class="sc-modal-backdrop" id="scAmbulanceModal" role="dialog" aria-modal="true" aria-labelledby="ambulance-modal-title">
+    <div class="sc-modal-sheet">
+      <div class="sc-modal-handle"></div>
+      <div class="sc-modal-header">
+        <h3 id="ambulance-modal-title" class="sc-modal-title" style="color:#DC2626; display:flex; align-items:center; gap:8px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13" rx="2" />
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+            <circle cx="5.5" cy="18.5" r="2.5" />
+            <circle cx="18.5" cy="18.5" r="2.5" />
+          </svg>
+          Call Emergency Ambulance
+        </h3>
+        <button type="button" class="sc-modal-close-btn" data-close-modal aria-label="Close modal">✕</button>
+      </div>
+      <div class="sc-modal-body">
+        
+        <div style="background:#FEE2E2; border-radius:12px; padding:14px; color:#991B1B; font-size:13.5px; line-height:1.45;">
+          <strong>Ready to transmit dispatch summary:</strong><br>
+          Baby Aarav • Age: 14 Days • Suspected Neonatal Sepsis / Severe Hypothermia • Current Heart Rate: 178 bpm.
+        </div>
+
+        <a class="sc-contact-option" href="tel:108" onclick="window.triggerParentToast('Dialing Emergency Ambulance: 108... Stay on line.')">
+          <div class="sc-contact-option-icon sc-contact-option-icon--urgent">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+          </div>
+          <div>
+            <div style="font-size:16px; font-weight:800; color:#DC2626;">Tap to Call Ambulance (108 / 102)</div>
+            <div style="font-size:12px; color:#64748B;">Government Neonatal Emergency Ambulance Service</div>
+          </div>
+        </a>
+
+        <a class="sc-contact-option" href="tel:112" onclick="window.triggerParentToast('Dialing National Emergency Dispatch 112...')">
+          <div class="sc-contact-option-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:700;">National Emergency: 112</div>
+            <div style="font-size:12px; color:#64748B;">Universal Emergency Response Center</div>
+          </div>
+        </a>
+
+        <button type="button" class="sc-btn-parent-secondary" data-close-modal style="width:100%; margin-top:8px;">
+          Cancel / Return to Screen
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: CONNECT WITH DOCTOR (HOME TELE-HEALTH)
+       ========================================================================= -->
+  <div class="sc-modal-backdrop" id="scDoctorModal" role="dialog" aria-modal="true" aria-labelledby="doctor-modal-title">
+    <div class="sc-modal-sheet">
+      <div class="sc-modal-handle"></div>
+      <div class="sc-modal-header">
+        <h3 id="doctor-modal-title" class="sc-modal-title">Connect with a Doctor</h3>
+        <button type="button" class="sc-modal-close-btn" data-close-modal aria-label="Close doctor modal">✕</button>
+      </div>
+      <div class="sc-modal-body">
+        <p style="color:#64748B; margin-top:-6px;">Instant priority video or phone connection with the on-call pediatric intensivist.</p>
+
+        <a class="sc-contact-option" href="javascript:void(0)" onclick="window.triggerParentToast('Connecting video consultation with Dr. Anita Sharma (Pediatrician)...')">
+          <div class="sc-contact-option-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7" />
+              <rect x="1" y="5" width="15" height="14" rx="2" />
+            </svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:700;">Instant Emergency Video Call</div>
+            <div style="font-size:12px; color:#64748B;">Dr. Anita Sharma • Connected with SepCare Live Telemetry</div>
+          </div>
+        </a>
+
+        <a class="sc-contact-option" href="tel:1800999000" onclick="window.triggerParentToast('Calling Pediatric On-Call Line...')">
+          <div class="sc-contact-option-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:700;">Telephone Hotline</div>
+            <div style="font-size:12px; color:#64748B;">Hospital Pediatric Emergency Desk</div>
+          </div>
+        </a>
+
+        <button type="button" class="sc-btn-parent-secondary" data-close-modal style="width:100%; margin-top:8px;">
+          Dismiss
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: IN-HOSPITAL DOCTOR ALERT CONFIRMATION
+       ========================================================================= -->
+  <div class="sc-modal-backdrop" id="scHospitalDoctorModal" role="dialog" aria-modal="true" aria-labelledby="hospital-doctor-title">
+    <div class="sc-modal-sheet">
+      <div class="sc-modal-handle"></div>
+      <div class="sc-modal-header">
+        <h3 id="hospital-doctor-title" class="sc-modal-title">Hospital Clinical Alert</h3>
+        <button type="button" class="sc-modal-close-btn" data-close-modal aria-label="Close modal">✕</button>
+      </div>
+      <div class="sc-modal-body">
+        
+        <div style="background:#FEF2F2; border-radius:12px; padding:14px; color:#991B1B; font-size:13.5px; line-height:1.45;">
+          <strong>Alert sent to Ward Neonatologist & Duty Nurse:</strong><br>
+          A clinical emergency flag has been broadcast to Ward B Station. A clinician is being dispatched to baby Aarav's crib.
+        </div>
+
+        <button type="button" class="sc-btn-parent-primary" onclick="window.triggerParentToast('Emergency audio buzzer sounded at Ward Nurse Station.'); this.closest('.sc-modal-backdrop').classList.remove('active');" style="width:100%;">
+          Sound Ward Station Buzzer Now
+        </button>
+
+        <p style="font-size:13px; color:#64748B; text-align:center; margin:4px 0 0 0;">
+          If you are beside your baby, alert the nearest nurse or hospital staff member immediately.
+        </p>
+
+        <button type="button" class="sc-btn-parent-secondary" data-close-modal style="width:100%; margin-top:4px;">
+          Close
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       FLOATING DEMO STATE SWITCHER (FOR EASY REVIEW OF BOTH SCREENS)
+       ========================================================================= -->
+  <nav class="sc-parent-demo-nav" aria-label="Prototype State Switcher">
+    <span style="font-size:11px; color:#94A3B8; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;">State:</span>
+    <a href="parent-needs-attention.html" class="sc-demo-nav-link">← Needs Attention</a>
+    <span class="sc-demo-nav-link active" style="background:#EF4444; color:#FFF;">Critical State</span>
+    <div class="sc-demo-nav-sep"></div>
+    <a href="index.html" class="sc-demo-nav-link" title="Full dashboard">Dashboard</a>
+    <a href="design-system.html" class="sc-demo-nav-link" title="Design tokens & components">System</a>
+  </nav>
+
+  <!-- External JavaScript -->
+  <script src="parent-screen.js"></script>
+</body>
+</html>

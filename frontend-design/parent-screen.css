@@ -1,0 +1,916 @@
+/**
+ * SepCare — Parent Screen Component Stylesheet
+ * Version: 1.0.0
+ * Pure CSS adhering to the SepCare Coded UI Design System.
+ * Powers parent-needs-attention.html and parent-critical.html.
+ */
+
+@import url('design-system/tokens.css');
+@import url('design-system/components.css');
+
+/* ==========================================================================
+   01 — VIEWPORT & APP SHELL
+   ========================================================================== */
+.sc-parent-body {
+  margin: 0;
+  padding: 0;
+  background-color: #EEF2F6;
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--sc-color-text-primary, #182235);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sc-parent-viewport {
+  width: 100%;
+  max-width: 440px;
+  min-height: 100vh;
+  background-color: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+  padding-bottom: 90px;
+}
+
+/* ==========================================================================
+   02 — MOBILE STATUS BAR
+   ========================================================================== */
+.sc-parent-statusbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px 8px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1E293B;
+  background: #FFFFFF;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  user-select: none;
+}
+
+.sc-parent-statusbar__time {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.sc-parent-statusbar__icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   03 — PARENT HEADER & BABY PROFILE
+   ========================================================================== */
+.sc-parent-header {
+  background: #FFFFFF;
+  padding: 20px 22px 18px 22px;
+  border-bottom: 1px solid #E6EDF5;
+}
+
+.sc-baby-profile-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+/* Avatar with Green Live Connection Ring */
+.sc-baby-avatar-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sc-baby-avatar-ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 4px solid #22C55E; /* Vibrant emerald green ring as in wireframe */
+  background: #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.16);
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.sc-baby-avatar-ring:hover {
+  transform: scale(1.04);
+}
+
+.sc-baby-avatar-inner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.sc-baby-avatar-inner svg {
+  width: 22px;
+  height: 22px;
+  stroke: #475569;
+}
+
+/* Pulse animation on the green ring to denote live monitoring */
+.sc-baby-avatar-ring::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  border: 2px solid #22C55E;
+  opacity: 0;
+  animation: scLivePulse 2.4s infinite cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes scLivePulse {
+  0% { transform: scale(0.96); opacity: 0.8; }
+  60% { transform: scale(1.24); opacity: 0; }
+  100% { transform: scale(1.24); opacity: 0; }
+}
+
+/* Profile details */
+.sc-baby-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sc-baby-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.15;
+}
+
+/* Dual Telemetry Columns (from wireframe) */
+.sc-telemetry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.sc-telemetry-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sc-telemetry-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748B;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: background-color 0.15s, color 0.15s;
+  text-decoration: none;
+}
+
+.sc-telemetry-item:hover {
+  background-color: #F1F5F9;
+  color: #0F172A;
+}
+
+.sc-telemetry-item--active {
+  color: #0F172A;
+  font-weight: 600;
+}
+
+.sc-telemetry-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #CBD5E1;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.sc-telemetry-dot--live {
+  background-color: #22C55E;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
+}
+
+.sc-telemetry-link {
+  color: #475569;
+  font-size: 11px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.sc-telemetry-link:hover {
+  color: #0F172A;
+}
+
+/* ==========================================================================
+   04 — MAIN CONTENT CANVAS
+   ========================================================================== */
+.sc-parent-content {
+  padding: 18px 18px 24px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ==========================================================================
+   05 — TRIAGE STATUS CARDS
+   ========================================================================== */
+.sc-parent-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Needs Attention Variant (Warm Amber / Slate Glow) */
+.sc-parent-card--attention {
+  background: #FFFFFF;
+  border-left: 5px solid #F59E0B;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.08), 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+/* Critical State Variant (Urgent Red / Dark Tones) */
+.sc-parent-card--critical {
+  background: #FFFFFF;
+  border-left: 5px solid #EF4444;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.12), 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+/* Header inside Triage Card */
+.sc-card-top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.sc-card-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sc-card-status-title {
+  font-size: 21px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sc-card-status-title--attention {
+  color: #92400E;
+}
+
+.sc-card-status-title--critical {
+  color: #991B1B;
+}
+
+.sc-card-setting-subtitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748B;
+  margin: 0;
+}
+
+/* Care setting toggle pill */
+.sc-care-toggle {
+  display: inline-flex;
+  background: #F1F5F9;
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid #E2E8F0;
+  margin-top: 6px;
+  margin-bottom: 12px;
+}
+
+.sc-care-toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.sc-care-toggle-btn.active {
+  background: #FFFFFF;
+  color: #0F172A;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* Main Body Paragraph */
+.sc-card-body-text {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #334155;
+  margin: 12px 0 18px 0;
+  font-weight: 450;
+}
+
+.sc-card-body-text strong {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+/* Action Buttons Row */
+.sc-card-actions-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.sc-card-actions-row--right {
+  justify-content: flex-end;
+}
+
+/* Parent App Action Buttons (Designed from wireframe) */
+.sc-btn-parent-secondary {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: #FFFFFF;
+  color: #1E293B;
+  border: 1.5px solid #CBD5E1;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.sc-btn-parent-secondary:hover {
+  background: #F8FAFC;
+  border-color: #94A3B8;
+  color: #0F172A;
+}
+
+.sc-btn-parent-secondary:active {
+  transform: translateY(1px);
+}
+
+.sc-btn-parent-primary {
+  flex: 1;
+  min-width: 150px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: #182235; /* Dark navy primary button from wireframe */
+  color: #FFFFFF;
+  border: 1.5px solid #182235;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-shadow: 0 4px 14px rgba(24, 34, 53, 0.2);
+}
+
+.sc-btn-parent-primary:hover {
+  background: #273650;
+  border-color: #273650;
+  box-shadow: 0 6px 18px rgba(24, 34, 53, 0.26);
+}
+
+.sc-btn-parent-primary:active {
+  transform: translateY(1px);
+}
+
+/* Urgent Ambulance Red Variant */
+.sc-btn-parent-emergency {
+  background: #DC2626;
+  border-color: #DC2626;
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.35);
+}
+
+.sc-btn-parent-emergency:hover {
+  background: #B91C1C;
+  border-color: #B91C1C;
+}
+
+/* Helper Caption Note Below Card (from wireframe) */
+.sc-helper-caption {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #64748B;
+  text-align: center;
+  margin: 6px 8px 12px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 450;
+}
+
+.sc-helper-caption--critical {
+  color: #991B1B;
+  font-weight: 500;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ==========================================================================
+   06 — "WHAT TO DO NEXT" CHECKLIST CARD
+   ========================================================================== */
+.sc-checklist-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+
+.sc-checklist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.sc-checklist-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.sc-info-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid #CBD5E1;
+  background: #F8FAFC;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sc-info-icon-btn:hover {
+  background: #EEF2F6;
+  color: #0F172A;
+  border-color: #94A3B8;
+}
+
+.sc-checklist-subtitle {
+  font-size: 13px;
+  color: #64748B;
+  margin: 0 0 16px 0;
+  font-weight: 500;
+}
+
+/* Progress indicator */
+.sc-checklist-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #64748B;
+  margin-bottom: 12px;
+}
+
+.sc-progress-bar-track {
+  height: 5px;
+  background: #E2E8F0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.sc-progress-bar-fill {
+  height: 100%;
+  background: #0EA5E9;
+  border-radius: 999px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Checkbox Items */
+.sc-checklist-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sc-checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #F8FAFC;
+  border: 1px solid #EDF2F7;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.sc-checklist-item:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+}
+
+.sc-checklist-item.checked {
+  background: #F0FDF4;
+  border-color: #BBF7D0;
+}
+
+/* Custom Square Checkbox (matching wireframe) */
+.sc-custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid #64748B;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sc-checklist-item.checked .sc-custom-checkbox {
+  background: #16A34A;
+  border-color: #16A34A;
+}
+
+.sc-custom-checkbox svg {
+  width: 13px;
+  height: 13px;
+  stroke: #FFFFFF;
+  stroke-width: 3;
+  fill: none;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sc-checklist-item.checked .sc-custom-checkbox svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.sc-checklist-label {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #1E293B;
+  font-weight: 500;
+  transition: color 0.18s;
+}
+
+.sc-checklist-item.checked .sc-checklist-label {
+  color: #15803D;
+  text-decoration: line-through;
+  text-decoration-color: rgba(21, 128, 61, 0.4);
+}
+
+/* Guidance Action Link */
+.sc-checklist-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+.sc-guidance-link {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.15s;
+}
+
+.sc-guidance-link:hover {
+  color: #0284C7;
+}
+
+/* ==========================================================================
+   07 — MINI VITALS SUMMARY DRAWER / CARD
+   ========================================================================== */
+.sc-vitals-preview-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 16px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sc-vitals-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sc-vitals-stat__lbl {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sc-vitals-stat__val {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0F172A;
+  font-variant-numeric: tabular-nums;
+}
+
+.sc-vitals-stat__status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.sc-vitals-stat__status--attention {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.sc-vitals-stat__status--critical {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+/* ==========================================================================
+   08 — FLOATING DEMO NAVIGATION (SWITCH BETWEEN STATES)
+   ========================================================================== */
+.sc-parent-demo-nav {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 6px 12px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  z-index: 1000;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.sc-demo-nav-link {
+  color: #E2E8F0;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.sc-demo-nav-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+}
+
+.sc-demo-nav-link.active {
+  background: #38BDF8;
+  color: #0F172A;
+  font-weight: 700;
+}
+
+.sc-demo-nav-sep {
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
+   09 — INTERACTIVE MODALS & BOTTOM SHEETS
+   ========================================================================== */
+.sc-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.sc-modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sc-modal-sheet {
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 440px;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  padding: 24px 22px 34px 22px;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+.sc-modal-backdrop.active .sc-modal-sheet {
+  transform: translateY(0);
+}
+
+.sc-modal-handle {
+  width: 36px;
+  height: 4px;
+  background: #CBD5E1;
+  border-radius: 999px;
+  margin: 0 auto 18px auto;
+}
+
+.sc-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.sc-modal-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+}
+
+.sc-modal-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #F1F5F9;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.sc-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #334155;
+}
+
+.sc-modal-step-card {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+}
+
+.sc-modal-step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #182235;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Call options list */
+.sc-contact-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  text-decoration: none;
+  color: #0F172A;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.sc-contact-option:hover {
+  background: #EEF2F6;
+  border-color: #CBD5E1;
+}
+
+.sc-contact-option-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1E293B;
+  flex-shrink: 0;
+}
+
+.sc-contact-option-icon--urgent {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+/* Toast component */
+.sc-parent-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-60px);
+  background: #0F172A;
+  color: #FFFFFF;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 3000;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sc-parent-toast.active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}

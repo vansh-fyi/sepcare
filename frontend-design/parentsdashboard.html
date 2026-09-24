@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Infant Health Monitor · Aarav</title>
+  <meta name="description" content="SepCare Parent Dashboard: Instant neonatal health triage featuring animated status stage, reference-matched vitals tiles, and purposeful floating background gradients.">
+
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Outfit"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02)',
+            'tile': '0 8px 24px -4px rgba(15, 23, 42, 0.12)',
+            'btn-urgent': '0 8px 24px -4px rgba(225, 29, 72, 0.35)',
+            'btn-warn': '0 8px 24px -4px rgba(217, 119, 6, 0.3)',
+            'btn-calm': '0 8px 24px -4px rgba(5, 150, 105, 0.25)',
+            'dock': '0 16px 36px -6px rgba(15, 23, 42, 0.12)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Smooth canvas color transition */
+    body {
+      transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    /* Purposeful floating background gradient orbs */
+    @keyframes floatOrb1 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(25px, -18px) scale(1.12); }
+    }
+    @keyframes floatOrb2 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(-20px, 15px) scale(0.92); }
+    }
+    .sc-float-orb-1 {
+      animation: floatOrb1 9s ease-in-out infinite;
+    }
+    .sc-float-orb-2 {
+      animation: floatOrb2 11s ease-in-out infinite;
+    }
+    /* Gentle breathing animation for healthy baby */
+    @keyframes babyBreathing {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-2.5px) scale(1.02); }
+    }
+    .sc-baby-breath {
+      animation: babyBreathing 3.6s ease-in-out infinite;
+      transform-origin: 190px 145px;
+    }
+
+    /* Restless subtle sway for attention baby */
+    @keyframes restlessBabySway {
+      0%, 100% { transform: rotate(0deg) translateY(0px); }
+      35% { transform: rotate(-1.2deg) translateY(-1.5px); }
+      70% { transform: rotate(1.4deg) translateY(-0.8px); }
+    }
+    .sc-baby-sway {
+      animation: restlessBabySway 3.2s ease-in-out infinite;
+      transform-origin: 190px 145px;
+    }
+
+    /* Thermal warmth shimmer */
+    @keyframes thermalWaveRise {
+      0%, 100% { transform: translateY(0px); opacity: 0.45; }
+      50% { transform: translateY(-3.5px); opacity: 0.85; }
+    }
+    .sc-thermal-wave {
+      animation: thermalWaveRise 2.4s ease-in-out infinite;
+    }
+
+    /* Smooth alert distress pulse for critical baby */
+    @keyframes babyDistressPulse {
+      0%, 100% { transform: scale(1); }
+      30% { transform: scale(1.03) translateY(-1px); }
+      60% { transform: scale(0.99) translateY(0.5px); }
+      85% { transform: scale(1.02) translateY(-0.5px); }
+    }
+    .sc-baby-alert-pulse {
+      animation: babyDistressPulse 1.8s ease-in-out infinite;
+      transform-origin: 190px 145px;
+    }
+
+    /* Distress radiating ripples */
+    @keyframes distressRipple1 {
+      0% { r: 24px; opacity: 0.85; }
+      100% { r: 38px; opacity: 0; }
+    }
+    @keyframes distressRipple2 {
+      0% { r: 38px; opacity: 0.7; }
+      100% { r: 52px; opacity: 0; }
+    }
+    .sc-distress-ripple-1 {
+      animation: distressRipple1 1.8s cubic-bezier(0.2, 0.4, 0.4, 1) infinite;
+      transform-origin: 150px 128px;
+    }
+    .sc-distress-ripple-2 {
+      animation: distressRipple2 1.8s cubic-bezier(0.2, 0.4, 0.4, 1) infinite 0.6s;
+      transform-origin: 150px 128px;
+    }
+    /* Sun orb gentle breathing pulse */
+    @keyframes sunPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    .sc-sun-pulse {
+      animation: sunPulse 4s ease-in-out infinite;
+      transform-origin: 310px 50px;
+    }
+    @keyframes sunRingPulse {
+      0%, 100% { transform: scale(0.95); opacity: 0.15; }
+      50% { transform: scale(1.25); opacity: 0.35; }
+    }
+    .sc-sun-pulse-ring {
+      animation: sunRingPulse 4s ease-in-out infinite;
+      transform-origin: 310px 50px;
+    }
+  </style>
+</head>
+<body id="appBody" class="bg-[#FDF8EB] text-slate-900 font-sans min-h-screen flex flex-col items-center antialiased pb-32 relative overflow-x-hidden select-none">
+
+  <!-- =========================================================================
+       PURPOSEFUL BACKGROUND FLOATING GRADIENT ORBS (NO EXCESSIVE WHITE SPACE)
+       Color shifts dynamically to bathe the canvas in the infant's health state
+       ========================================================================= -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div id="gradientOrb1" class="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-amber-200/50 blur-3xl sc-float-orb-1 transition-colors duration-700"></div>
+    <div id="gradientOrb2" class="absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-yellow-200/40 blur-3xl sc-float-orb-2 transition-colors duration-700"></div>
+    <div id="gradientOrb3" class="absolute -bottom-20 left-10 w-72 h-72 rounded-full bg-amber-100/50 blur-3xl transition-colors duration-700"></div>
+  </div>
+
+  <!-- =========================================================================
+       TRI-STATE PREVIEW SWITCHER (HEALTHY / ATTENTION / CRITICAL)
+       ========================================================================= -->
+  <header class="w-full max-w-[420px] md:max-w-2xl lg:max-w-5xl mx-auto pt-4 md:pt-6 px-4 md:px-0 pb-1.5 z-50 relative">
+    <div class="bg-white/90 backdrop-blur-md rounded-full p-1 border border-slate-200/80 shadow-xs flex gap-1 w-full max-w-[420px] mx-auto justify-between">
+      <button type="button" onclick="setHealthState('healthy')" id="tabHealthy" class="flex-1 py-1.5 px-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+        <span>Healthy</span>
+      </button>
+
+      <button type="button" onclick="setHealthState('attention')" id="tabAttention" class="flex-1 py-1.5 px-2 rounded-full text-xs font-bold bg-amber-500 text-white shadow-xs transition-all flex items-center justify-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+        <span>Attention</span>
+      </button>
+
+      <button type="button" onclick="setHealthState('critical')" id="tabCritical" class="flex-1 py-1.5 px-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
+        <span>Critical</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN DASHBOARD CONTAINER (RESPONSIVE: MOBILE 420PX, TABLET 2XL, DESKTOP 5XL)
+       ========================================================================= -->
+  <main class="w-full max-w-[420px] md:max-w-2xl lg:max-w-5xl mx-auto flex flex-col px-4 pt-2 sm:pt-3 mt-4 sm:mt-6 md:mt-8 space-y-3.5 sm:space-y-4 z-10 relative" role="main">
+
+    <!-- 01 — Native Mobile Status Bar (Hidden on larger tablet/desktop viewports) -->
+    <div class="flex md:hidden justify-between items-center px-1 text-slate-800 text-xs font-semibold select-none">
+      <span id="scLiveClock" class="font-bold tabular-nums tracking-tight">9:41</span>
+      <div class="flex items-center space-x-1.5">
+        <svg class="w-3.5 h-2.5 text-slate-800" viewBox="0 0 18 12" fill="currentColor">
+          <rect x="0" y="8" width="2.5" height="4" rx="0.5" />
+          <rect x="4" y="5.5" width="2.5" height="6.5" rx="0.5" />
+          <rect x="8" y="3" width="2.5" height="9" rx="0.5" />
+          <rect x="12" y="0.5" width="2.5" height="11.5" rx="0.5" />
+        </svg>
+        <svg class="w-3.5 h-2.5 text-slate-800" viewBox="0 0 16 12" fill="currentColor">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M8 2.2C10.5 2.2 12.8 3.1 14.5 4.6L15.6 3.4C13.5 1.5 10.9 0.4 8 0.4C5.1 0.4 2.5 1.5 0.4 3.4L1.5 4.6C3.2 3.1 5.5 2.2 8 2.2ZM8 5.6C9.7 5.6 11.2 6.2 12.4 7.2L13.5 6C12 4.7 10.1 4 8 4C5.9 4 4 4.7 2.5 6L3.6 7.2C4.8 6.2 6.3 5.6 8 5.6ZM8 9C9 9 9.8 9.4 10.4 10L8 12.6L5.6 10C6.2 9.4 7 9 8 9Z" />
+        </svg>
+        <div class="w-5 h-2.5 border border-slate-800 rounded-xs p-0.5 flex items-center">
+          <div class="h-full w-4/5 bg-slate-800 rounded-2xs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 — Baby Name & Minimal Line Telemetry Header -->
+    <section class="flex items-center justify-between px-1 w-full" aria-label="Infant Profile">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-full bg-amber-100/80 border border-amber-200/90 shadow-2xs flex items-center justify-center overflow-hidden shrink-0" title="Baby Aarav • Monitored with SepCare">
+          <svg viewBox="0 0 36 36" class="w-7 h-7" fill="none">
+            <!-- Cozy cloth hood -->
+            <ellipse cx="18" cy="18" rx="13" ry="13" fill="#FDE68A" />
+            <path d="M9,22 C8,12 12,7 18,7 C24,7 28,12 27,22 C24,25 21,26 18,26 C15,26 12,25 9,22 Z" fill="#F59E0B" />
+            <!-- Baby Face nestled in cloth -->
+            <ellipse cx="18" cy="19" rx="8" ry="7.5" fill="#FDE2CD" />
+            <!-- Cheeks -->
+            <circle cx="13.5" cy="20.5" r="2.2" fill="#FB7185" opacity="0.5" />
+            <circle cx="22.5" cy="20.5" r="2.2" fill="#FB7185" opacity="0.5" />
+            <!-- Sleeping eyes -->
+            <path d="M13,18.5 Q15,20.5 16.5,18.5" stroke="#78350F" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+            <path d="M19.5,18.5 Q21,20.5 23,18.5" stroke="#78350F" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+            <!-- Button nose & smile -->
+            <path d="M17.5,20 Q18,21 18.5,20" stroke="#B45309" stroke-width="0.9" stroke-linecap="round" fill="none"/>
+            <path d="M16.5,22.5 Q18,24 19.5,22.5" stroke="#9A3412" stroke-width="1" stroke-linecap="round" fill="none"/>
+            <!-- Swaddle collar fold -->
+            <path d="M11,24 C14,27 22,27 25,24" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">Baby Aarav</h1>
+        <span class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-white/85 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-slate-200/60 shadow-2xs">
+          <span id="liveDot" class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+          <span>Live BLE</span>
+        </span>
+      </div>
+
+      <a id="btnNotifications" href="sepcare/parent-notifications.html" onclick="navigateToNotifications(event)" class="w-8 h-8 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-slate-700 shadow-2xs active:scale-95 transition-transform relative" aria-label="Notifications" title="Notifications">
+        <svg class="w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+        <span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+      </a>
+    </section>
+
+    <!-- RESPONSIVE CONTENT GRID (STACKED ON MOBILE, 2-COLUMN ON DESKTOP) -->
+    <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 lg:gap-6 items-start">
+
+      <!-- =========================================================================
+           03 — HERO FULL-BLEED TONAL ANIMATION STAGE & STATUS BANNER (COL 1-7 ON DESKTOP)
+           ========================================================================= -->
+      <section class="space-y-2 lg:col-span-7 lg:row-start-1" aria-labelledby="status-card-heading">
+        <div class="flex items-center justify-between px-1">
+          <h2 id="status-card-heading" class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Infant Status</h2>
+          <button type="button" onclick="triggerToast('Telemetry active: 100 Hz sampling')" class="text-slate-400 hover:text-slate-600 p-0.5" aria-label="Status details">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="5" cy="12" r="1" />
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="19" cy="12" r="1" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Hero Full-Bleed Tonal Card -->
+        <article id="heroTonalCard" class="w-full h-52 sm:h-56 md:h-64 lg:h-72 rounded-3xl overflow-hidden shadow-card border border-amber-300/60 relative flex flex-col justify-between transition-all duration-500">
+          
+          <!-- Full-Bleed Edge-to-Edge SVG Scene -->
+          <div id="tonalSceneContainer" class="absolute inset-0 w-full h-full z-0 overflow-hidden">
+            <!-- Dynamically injected per state -->
+          </div>
+
+          <!-- Foreground Minimal Top Header -->
+          <div class="relative z-10 p-4 sm:p-5 flex items-start justify-between w-full pointer-events-none">
+            <div class="pointer-events-auto">
+              <span id="brandPill" class="text-[10px] font-black uppercase tracking-widest block opacity-70 transition-colors">
+                SepCare • Telemetry
+              </span>
+              <h3 id="cardStateTitle" class="text-base sm:text-lg font-black tracking-tight leading-tight mt-0.5 transition-colors">
+                Observation Active
+              </h3>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- 03b — Appropriate Status Context Banner -->
+        <div id="statusBanner" class="w-full px-3.5 py-2.5 rounded-2xl border transition-all flex items-center justify-between gap-2 shadow-2xs">
+          <div class="space-y-0.5 pr-2">
+            <div class="flex items-center gap-1.5">
+              <span id="statusIndicatorDot" class="w-2 h-2 rounded-full animate-pulse shrink-0"></span>
+              <h3 id="statusTitle" class="text-xs sm:text-sm font-black tracking-tight">
+                Keep a Close Eye on Baby
+              </h3>
+            </div>
+            <p id="statusSubtitle" class="text-[11px] font-medium leading-tight pl-3.5">
+              Based on the data, baby needs to be monitored.
+            </p>
+          </div>
+          <span id="statusBannerTag" class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shrink-0 border font-bold">
+            Observation
+          </span>
+        </div>
+
+      </section>
+
+      <!-- =========================================================================
+           04 — VITALS SECTION: 3 VIBRANT TILES (COL 8-12 ON DESKTOP)
+           ========================================================================= -->
+      <section class="space-y-2 lg:col-span-5 lg:row-start-1 lg:row-span-2" aria-labelledby="vitals-heading">
+        <div class="flex items-center justify-between px-1">
+          <h2 id="vitals-heading" class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Vitals</h2>
+          <a id="seeAllVitalsBtn" href="sepcare/parent-vitals.html" onclick="navigateToVitals(event)" class="text-xs font-bold text-blue-600 hover:text-blue-700">See All</a>
+        </div>
+
+        <!-- 3-Column on Mobile/Tablet Portrait -> 1-Column Stack on Desktop -->
+        <div class="grid grid-cols-3 lg:grid-cols-1 gap-2.5 sm:gap-3 lg:gap-3">
+
+          <!-- TILE 1: PULSE -->
+          <div id="tilePulse" class="rounded-3xl p-3 sm:p-3.5 lg:p-4 bg-amber-600 text-white shadow-tile flex flex-col lg:flex-row lg:items-center justify-between h-38 sm:h-40 lg:h-[88px] transition-all">
+            <div class="flex items-center justify-between lg:w-24 shrink-0">
+              <span class="text-xs font-bold text-white/95">Pulse</span>
+              <svg class="w-4 h-4 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+            </div>
+            <div class="my-auto py-1 lg:my-0 lg:py-0 lg:flex-1 lg:px-4">
+              <svg id="pulseWaveSvg" class="w-full h-7 text-white" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M0,12 L18,12 L24,2 L30,22 L36,6 L42,18 L48,12 L100,12" />
+              </svg>
+            </div>
+            <div class="leading-none lg:text-right shrink-0">
+              <span id="pulseValue" class="text-xl sm:text-2xl font-black tracking-tight tabular-nums">112.4</span>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-white/80 block mt-1">BPM</span>
+            </div>
+          </div>
+
+          <!-- TILE 2: TEMP -->
+          <div id="tileTemp" class="rounded-3xl p-3 sm:p-3.5 lg:p-4 bg-amber-500 text-white shadow-tile flex flex-col lg:flex-row lg:items-center justify-between h-38 sm:h-40 lg:h-[88px] transition-all">
+            <div class="flex items-center justify-between lg:w-24 shrink-0">
+              <span class="text-xs font-bold text-white/95">Temp</span>
+              <svg class="w-4 h-4 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
+              </svg>
+            </div>
+            <div class="my-auto py-1 lg:my-0 lg:py-0 lg:flex-1 lg:px-4">
+              <svg id="tempWaveSvg" class="w-full h-7 text-white" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M0,12 L15,12 L22,4 L30,20 L38,8 L46,16 L54,12 L100,12" />
+              </svg>
+            </div>
+            <div class="leading-none lg:text-right shrink-0">
+              <span id="tempValue" class="text-xl sm:text-2xl font-black tracking-tight tabular-nums">99.6</span>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-white/80 block mt-1">°F</span>
+            </div>
+          </div>
+
+          <!-- TILE 3: ACTIVITY -->
+          <div id="tileActivity" class="rounded-3xl p-3 sm:p-3.5 lg:p-4 bg-amber-500 text-white shadow-tile flex flex-col lg:flex-row lg:items-center justify-between h-38 sm:h-40 lg:h-[88px] transition-all">
+            <div class="flex items-center justify-between lg:w-24 shrink-0">
+              <span class="text-xs font-bold text-white/95">Activity</span>
+              <svg class="w-4 h-4 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+              </svg>
+            </div>
+            <div class="my-auto py-1 lg:my-0 lg:py-0 lg:flex-1 lg:px-4 flex items-center justify-center">
+              <div id="activityCircleBadge" class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-xs">
+                <svg id="activityInnerIcon" class="w-4 h-4 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+              </div>
+            </div>
+            <div class="leading-none lg:text-right shrink-0">
+              <span id="activityValue" class="text-base sm:text-lg font-black tracking-tight block truncate">Tremor</span>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-white/80 block mt-1">STATUS</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =========================================================================
+           05 — FULL-WIDTH PRIMARY ACTION BUTTON (COL 1-7 ROW 2 ON DESKTOP)
+           ========================================================================= -->
+      <section class="pt-1 w-full lg:col-span-7 lg:row-start-2 flex flex-col items-center justify-center">
+        <div id="primaryActionButtonContainer" class="w-full">
+          <!-- Injected dynamically per state -->
+        </div>
+        <div id="secondaryActionContainer" class="hidden">
+          <!-- Removed per user request -->
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- =========================================================================
+       06 — FLOATING MINIMALIST BOTTOM DOCK (LINE ICONS ONLY)
+       ========================================================================= -->
+  <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-lg border border-slate-200/90 shadow-dock rounded-full px-5 py-2 flex items-center gap-4 z-40" aria-label="Navigation">
+    <a href="parentsdashboard.html" class="p-1 text-slate-900 font-extrabold flex items-center gap-1.5 text-xs">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+      <span>Home</span>
+    </a>
+    <a href="sepcare/parent-vitals.html" onclick="navigateToVitals(event)" class="p-1 text-slate-500 hover:text-slate-900 font-bold flex items-center gap-1.5 text-xs transition-colors">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg>
+      <span>Vitals</span>
+    </a>
+    <button type="button" onclick="openAmbulanceModal()" class="p-1 text-slate-500 hover:text-slate-900 font-bold flex items-center gap-1.5 text-xs transition-colors">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+      <span>Help</span>
+    </button>
+  </nav>
+
+  <!-- =========================================================================
+       EMERGENCY 108 AMBULANCE MODAL (LINE ICONS ONLY, ZERO EMOJIS)
+       ========================================================================= -->
+  <div id="modalAmbulance" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-end justify-center hidden">
+    <div class="bg-white w-full max-w-[420px] rounded-t-3xl p-6 shadow-2xl space-y-4">
+      <div class="w-10 h-1 bg-slate-200 rounded-full mx-auto -mt-2 mb-1"></div>
+      
+      <div class="flex justify-between items-center">
+        <h3 class="text-base font-black text-rose-600 flex items-center gap-2">
+          <!-- Line Icon Alert -->
+          <svg class="w-5 h-5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 22 22 22 12 2" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span>Emergency Ambulance</span>
+        </h3>
+        <button type="button" onclick="closeModal('modalAmbulance')" class="text-slate-400 hover:text-slate-700 text-lg font-bold p-1">✕</button>
+      </div>
+
+      <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3 text-xs text-rose-900 font-bold flex items-center justify-between">
+        <span>Aarav (14 Days)</span>
+        <span class="bg-rose-200 text-rose-900 px-2 py-0.5 rounded-full font-black text-[10px]">PRIORITY 1 DISPATCH</span>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        <a href="tel:108" onclick="triggerToast('Calling 108 Emergency... Keep on speakerphone.')" class="w-full h-[52px] rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-black text-sm flex items-center justify-center gap-2 shadow-btn-urgent">
+          <!-- Line Icon Phone -->
+          <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+          <span>Call 108 Ambulance</span>
+        </a>
+        <button type="button" onclick="closeModal('modalAmbulance')" class="w-full py-2.5 text-slate-500 font-bold text-xs hover:bg-slate-50">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="scToast" class="fixed top-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg z-50 pointer-events-none opacity-0 transition-all duration-300 flex items-center gap-2">
+    <span class="w-1.5 h-1.5 rounded-full bg-amber-400" id="toastDot"></span>
+    <span id="scToastMsg">Live update</span>
+  </div>
+
+  <!-- =========================================================================
+       DYNAMIC STATE CONFIGURATION SCRIPT
+       ========================================================================= -->
+  <script>
+    const themeStates = {
+      healthy: {
+        bodyBg: 'bg-[#F2F8F5]',
+        orb1: 'bg-emerald-200/50',
+        orb2: 'bg-teal-200/40',
+        orb3: 'bg-emerald-100/50',
+        liveDot: 'bg-emerald-600',
+        tonalScene: `
+          <svg class="w-full h-full" viewBox="0 0 380 220" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="healthySky" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#E8F8F0"/>
+                <stop offset="65%" stop-color="#D1FAE5"/>
+                <stop offset="100%" stop-color="#A7F3D0"/>
+              </linearGradient>
+              <linearGradient id="babySkinH" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFF8F3"/>
+                <stop offset="60%" stop-color="#FDE8D7"/>
+                <stop offset="100%" stop-color="#F9CEB2"/>
+              </linearGradient>
+              <linearGradient id="swaddleH1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#E6FDF2"/>
+                <stop offset="50%" stop-color="#A7F3D0"/>
+                <stop offset="100%" stop-color="#34D399"/>
+              </linearGradient>
+              <linearGradient id="swaddleH2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#D1FAE5"/>
+                <stop offset="100%" stop-color="#059669"/>
+              </linearGradient>
+              <linearGradient id="mattressH" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="100%" stop-color="#E1F5EC"/>
+              </linearGradient>
+              <radialGradient id="cheekH" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#FB7185" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#FB7185" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="softShH" x="-10%" y="-10%" width="120%" height="130%">
+                <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#064E3B" flood-opacity="0.12"/>
+              </filter>
+              <filter id="bedShH" x="-10%" y="-10%" width="120%" height="140%">
+                <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#064E3B" flood-opacity="0.14"/>
+              </filter>
+            </defs>
+
+            <!-- Sky & Sun Background -->
+            <rect width="380" height="220" fill="url(#healthySky)" />
+            <circle cx="325" cy="45" r="22" fill="#FDE047" class="sc-sun-pulse" />
+            <circle cx="325" cy="45" r="34" fill="#FEF08A" opacity="0.35" />
+            <circle cx="325" cy="45" r="48" fill="#FEF9C3" opacity="0.2" />
+
+            <!-- Soft Clouds -->
+            <path d="M38,36 Q48,26 62,32 Q74,24 88,34 Q100,36 102,46 Q90,52 38,50 Z" fill="#FFFFFF" opacity="0.75"/>
+            <path d="M210,26 Q220,18 232,22 Q244,16 254,24 Q262,26 264,34 Q252,40 212,38 Z" fill="#FFFFFF" opacity="0.6"/>
+
+            <!-- Rolling Nursery Hills -->
+            <path d="M-20,128 Q70,96 160,114 T340,104 T400,118 L400,220 L-20,220 Z" fill="#6EE7B7" opacity="0.35" />
+            <path d="M-20,146 Q90,122 200,136 T400,128 L400,220 L-20,220 Z" fill="#34D399" opacity="0.4" />
+
+            <!-- Mattress / Cot Bed with Soft Stitching -->
+            <g filter="url(#bedShH)">
+              <ellipse cx="190" cy="176" rx="146" ry="32" fill="url(#mattressH)" />
+              <ellipse cx="190" cy="176" rx="144" ry="30" stroke="#A7F3D0" stroke-width="1.4" fill="none" opacity="0.8" />
+              <path d="M80,176 C115,170 150,170 185,176 M205,176 C240,170 275,170 300,176" stroke="#A7F3D0" stroke-width="1" stroke-dasharray="4 4" fill="none"/>
+            </g>
+
+            <!-- Soft Fluffy Baby Pillow under head -->
+            <rect x="96" y="104" width="86" height="54" rx="24" fill="#FFFFFF" opacity="0.95" filter="url(#softShH)" />
+
+            <!-- ================= BABY CHARACTER ================= -->
+            <g class="sc-baby-breath">
+              
+              <!-- 1. Swaddled Body Cocoon on Mattress -->
+              <path d="M128,122 C116,142 124,174 165,182 C210,189 262,178 276,154 C284,138 268,122 238,118 C196,112 154,112 128,122 Z" fill="url(#swaddleH1)" filter="url(#softShH)" />
+              
+              <!-- 2. Soft Swaddle Blanket Folds (Overlapping Diagonal Cloth Wrap) -->
+              <!-- Left-to-right snug fold -->
+              <path d="M134,130 C144,146 166,168 204,174 C196,158 182,142 168,132 C156,124 144,125 134,130 Z" fill="url(#swaddleH2)" opacity="0.35" />
+              <!-- Right-to-left overlapping wrap with soft fabric sheen -->
+              <path d="M236,122 C208,148 166,168 138,162 C158,146 200,132 226,120 Z" fill="#FFFFFF" opacity="0.45" />
+              <!-- Bottom tuck fold -->
+              <path d="M170,166 C204,180 248,172 264,152 C270,142 258,132 242,134 C216,138 186,154 170,166 Z" fill="url(#swaddleH2)" opacity="0.3" />
+              
+              <!-- Soft decorative embroidery / stitching seams on blanket -->
+              <path d="M140,132 Q176,158 222,140" stroke="#059669" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.35" />
+              <path d="M154,148 Q190,170 240,152" stroke="#059669" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.25" />
+
+              <!-- 3. Soft Cozy Cloth Swaddle Hood Framing Head -->
+              <!-- Outer swaddle cloth wrapping around head like a cozy hood -->
+              <path d="M118,126 C114,100 128,82 151,82 C174,82 188,100 183,126 C179,142 165,148 149,148 C132,148 120,142 118,126 Z" fill="url(#swaddleH1)" filter="url(#softShH)" />
+              <!-- Soft interior shadow fold of the cloth hood -->
+              <path d="M123,124 C119,103 131,87 151,87 C170,87 182,103 178,124 C174,138 162,144 149,144 C134,144 125,138 123,124 Z" fill="url(#swaddleH2)" opacity="0.25" />
+              <!-- Cozy soft cloth hem around hood edge -->
+              <path d="M122,124 C119,102 131,86 151,86 C170,86 181,102 178,124" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.75" />
+
+              <!-- 4. Sweet Small Baby Face Nestled Inside the Cloth -->
+              <g id="sweetBabyFaceHealthy">
+                <!-- Sweet small baby face -->
+                <ellipse cx="151" cy="117" rx="18" ry="17" fill="url(#babySkinH)" />
+
+                <!-- Delicate baby hair wisps peeking from under the cloth wrap -->
+                <path d="M146,102 C148,98 152,98 153,101 C155,99 158,99 159,102" stroke="#854D0E" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.65" />
+                <path d="M149,100 C151,97 154,97 155,100" stroke="#854D0E" stroke-width="1.1" stroke-linecap="round" fill="none" opacity="0.55" />
+
+                <!-- Soft airbrushed rosy blush cheeks -->
+                <circle cx="140" cy="121" r="6" fill="url(#cheekH)" />
+                <circle cx="162" cy="120" r="6" fill="url(#cheekH)" />
+
+                <!-- Peaceful sleeping eyes with gentle curved lashes -->
+                <path d="M139,116 Q143,119.5 147,116" stroke="#78350F" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                <line x1="141.5" y1="118" x2="140.5" y2="120.5" stroke="#78350F" stroke-width="1.1" stroke-linecap="round"/>
+                <line x1="144.5" y1="118" x2="145" y2="120.5" stroke="#78350F" stroke-width="1.1" stroke-linecap="round"/>
+
+                <path d="M155,115.5 Q159,119 163,115.5" stroke="#78350F" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                <line x1="157.5" y1="117.5" x2="157" y2="120" stroke="#78350F" stroke-width="1.1" stroke-linecap="round"/>
+                <line x1="160.5" y1="117.5" x2="161.5" y2="120" stroke="#78350F" stroke-width="1.1" stroke-linecap="round"/>
+
+                <!-- Adorable tiny button nose -->
+                <path d="M150,117.5 Q151.5,119.5 153,118" stroke="#B45309" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+
+                <!-- Sweet gentle baby smile -->
+                <path d="M147,124 Q151,127.5 155,124" stroke="#9A3412" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+                <ellipse cx="151" cy="126" rx="2.5" ry="1.2" fill="#FB7185" opacity="0.45"/>
+              </g>
+
+              <!-- 5. Blanket Collar Fold Wrapping Under Chin -->
+              <path d="M129,132 C137,138 147,142 157,138 C165,135 171,131 175,127 C168,142 144,146 129,132 Z" fill="url(#swaddleH2)" opacity="0.4" />
+              <path d="M131,130 C139,135 149,137 159,133 C166,131 170,128 173,125" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.65" />
+
+              <!-- 6. Sweet Little Baby Hand Resting on Blanket Collar -->
+              <g transform="translate(163, 126)">
+                <ellipse cx="7" cy="7" rx="5.5" ry="5" fill="url(#babySkinH)" filter="url(#softShH)" />
+                <circle cx="4" cy="4.5" r="1.8" fill="#FDE8D7" />
+                <circle cx="7" cy="3.8" r="1.8" fill="#FDE8D7" />
+                <circle cx="10" cy="4.8" r="1.7" fill="#FDE8D7" />
+                <ellipse cx="11.5" cy="8" rx="1.6" ry="1.4" fill="#FDE8D7" />
+                <path d="M3.5,8.5 Q7,11 10.5,8.5" stroke="#B45309" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.3" />
+              </g>
+
+              <!-- 7. SepCare Smart Telemetry Sensor Puck (Resting on Swaddle) -->
+              <g transform="translate(236, 138)">
+                <ellipse cx="14" cy="13" rx="14" ry="10" fill="#064E3B" opacity="0.15" filter="url(#softShH)" />
+                <ellipse cx="14" cy="12" rx="13" ry="9.5" fill="#FFFFFF" />
+                <ellipse cx="14" cy="12" rx="13" ry="9.5" stroke="#A7F3D0" stroke-width="1.2" fill="none" />
+                <ellipse cx="14" cy="12" rx="9" ry="6.5" fill="#ECFDF5" stroke="#059669" stroke-width="1.1" />
+                <circle cx="14" cy="12" r="3.6" fill="#10B981" />
+                <circle cx="14" cy="12" r="1.5" fill="#FFFFFF" />
+                <path d="M25,8 A7,7 0 0,1 25,16" stroke="#10B981" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.8" />
+                <path d="M28,6 A11,11 0 0,1 28,18" stroke="#10B981" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.5" />
+              </g>
+
+            </g>
+          </svg>
+        `,
+        cardBorder: 'border-emerald-300/60',
+        textColor: 'text-emerald-950',
+        subTextColor: 'text-emerald-900/85',
+        cardStateTitle: 'Resting Safely',
+        banner: {
+          bg: 'bg-emerald-500/10 border-emerald-500/20',
+          dot: 'bg-emerald-600',
+          tagBg: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+          tag: 'STABLE CORRIDOR',
+          title: 'Baby is Resting Safely',
+          subtitle: 'Based on data, all vitals are normal and stable.'
+        },
+        tiles: {
+          pulseBg: 'bg-emerald-600',
+          pulseVal: '78.2',
+          pulseWave: 'M0,12 L20,12 L26,4 L32,20 L38,8 L44,16 L50,12 L100,12',
+          tempBg: 'bg-emerald-500',
+          tempVal: '98.6',
+          tempWave: 'M0,12 L15,12 L22,6 L30,18 L38,10 L46,14 L54,12 L100,12',
+          activityBg: 'bg-teal-500',
+          activityVal: 'Normal',
+          activityIconColor: 'text-teal-600',
+          activityIconSvg: '<polyline points="20 6 9 17 4 12" stroke-width="3" />'
+        },
+        button: `
+          <button type="button" onclick="triggerToast('Viewing 24-hour vital corridor graphs')" class="w-full h-[52px] rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-btn-calm transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span>View Full Trends</span>
+          </button>
+        `,
+        secondary: ''
+      },
+
+      attention: {
+        bodyBg: 'bg-[#FDF8EB]',
+        orb1: 'bg-amber-200/50',
+        orb2: 'bg-yellow-200/40',
+        orb3: 'bg-amber-100/50',
+        liveDot: 'bg-amber-500',
+        tonalScene: `
+          <svg class="w-full h-full" viewBox="0 0 380 220" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="attSky" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FEF9C3"/>
+                <stop offset="65%" stop-color="#FEF08A"/>
+                <stop offset="100%" stop-color="#FDE047"/>
+              </linearGradient>
+              <linearGradient id="babySkinA" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFF5EE"/>
+                <stop offset="60%" stop-color="#FDE0CB"/>
+                <stop offset="100%" stop-color="#F7BA94"/>
+              </linearGradient>
+              <linearGradient id="swaddleA1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFBEB"/>
+                <stop offset="50%" stop-color="#FDE68A"/>
+                <stop offset="100%" stop-color="#F59E0B"/>
+              </linearGradient>
+              <linearGradient id="swaddleA2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FEF3C7"/>
+                <stop offset="100%" stop-color="#D97706"/>
+              </linearGradient>
+              <linearGradient id="mattressA" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="100%" stop-color="#FEF3C7"/>
+              </linearGradient>
+              <radialGradient id="cheekA" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#F43F5E" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#F43F5E" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="softShA" x="-10%" y="-10%" width="120%" height="130%">
+                <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#78350F" flood-opacity="0.12"/>
+              </filter>
+              <filter id="bedShA" x="-10%" y="-10%" width="120%" height="140%">
+                <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#78350F" flood-opacity="0.14"/>
+              </filter>
+            </defs>
+
+            <!-- Sky & Sun Background -->
+            <rect width="380" height="220" fill="url(#attSky)" />
+            <circle cx="325" cy="45" r="22" fill="#F59E0B" class="sc-sun-pulse" />
+            <circle cx="325" cy="45" r="34" fill="#FBBF24" opacity="0.4" />
+            <circle cx="325" cy="45" r="48" fill="#FDE68A" opacity="0.25" />
+
+            <!-- Nursery Hills Warm Tone -->
+            <path d="M-20,128 Q70,96 160,114 T340,104 T400,118 L400,220 L-20,220 Z" fill="#FDE68A" opacity="0.45" />
+            <path d="M-20,146 Q90,122 200,136 T400,128 L400,220 L-20,220 Z" fill="#FBBF24" opacity="0.45" />
+
+            <!-- Mattress / Cot Bed with Soft Stitching -->
+            <g filter="url(#bedShA)">
+              <ellipse cx="190" cy="176" rx="146" ry="32" fill="url(#mattressA)" />
+              <ellipse cx="190" cy="176" rx="144" ry="30" stroke="#FDE68A" stroke-width="1.4" fill="none" opacity="0.8" />
+              <path d="M80,176 C115,170 150,170 185,176 M205,176 C240,170 275,170 300,176" stroke="#FDE68A" stroke-width="1" stroke-dasharray="4 4" fill="none"/>
+            </g>
+
+            <!-- Soft Fluffy Baby Pillow under head -->
+            <rect x="96" y="104" width="86" height="54" rx="24" fill="#FFFFFF" opacity="0.95" filter="url(#softShA)" />
+
+            <!-- Thermal Warmth Waves -->
+            <g class="sc-thermal-wave">
+              <path d="M140,86 Q148,78 156,86 T172,86" stroke="#D97706" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6" />
+              <path d="M155,72 Q163,64 171,72 T187,72" stroke="#D97706" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.45" />
+            </g>
+
+            <!-- ================= BABY CHARACTER ================= -->
+            <g class="sc-baby-sway">
+              
+              <!-- 1. Swaddled Body Cocoon on Mattress -->
+              <path d="M128,122 C116,142 124,174 165,182 C210,189 262,178 276,154 C284,138 268,122 238,118 C196,112 154,112 128,122 Z" fill="url(#swaddleA1)" filter="url(#softShA)" />
+              
+              <!-- 2. Soft Swaddle Blanket Folds (Overlapping Diagonal Cloth Wrap) -->
+              <!-- Left-to-right snug fold -->
+              <path d="M134,130 C144,146 166,168 204,174 C196,158 182,142 168,132 C156,124 144,125 134,130 Z" fill="url(#swaddleA2)" opacity="0.35" />
+              <!-- Right-to-left overlapping wrap with soft fabric sheen -->
+              <path d="M236,122 C208,148 166,168 138,162 C158,146 200,132 226,120 Z" fill="#FFFBEB" opacity="0.55" />
+              <!-- Bottom tuck fold -->
+              <path d="M170,166 C204,180 248,172 264,152 C270,142 258,132 242,134 C216,138 186,154 170,166 Z" fill="url(#swaddleA2)" opacity="0.3" />
+              
+              <!-- Soft decorative embroidery / stitching seams on blanket -->
+              <path d="M140,132 Q176,158 222,140" stroke="#D97706" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.35" />
+              <path d="M154,148 Q190,170 240,152" stroke="#D97706" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.25" />
+
+              <!-- 3. Soft Cozy Cloth Swaddle Hood Framing Head -->
+              <!-- Outer swaddle cloth wrapping around head like a cozy hood -->
+              <path d="M118,126 C114,100 128,82 151,82 C174,82 188,100 183,126 C179,142 165,148 149,148 C132,148 120,142 118,126 Z" fill="url(#swaddleA1)" filter="url(#softShA)" />
+              <!-- Soft interior shadow fold of the cloth hood -->
+              <path d="M123,124 C119,103 131,87 151,87 C170,87 182,103 178,124 C174,138 162,144 149,144 C134,144 125,138 123,124 Z" fill="url(#swaddleA2)" opacity="0.25" />
+              <!-- Cozy soft cloth hem around hood edge -->
+              <path d="M122,124 C119,102 131,86 151,86 C170,86 181,102 178,124" stroke="#FFFBEB" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.75" />
+
+              <!-- 4. Sweet Small Baby Face Nestled Inside the Cloth (Observation / Distressed State) -->
+              <g id="sweetBabyFaceAttention">
+                <!-- Sweet small baby face -->
+                <ellipse cx="151" cy="117" rx="18" ry="17" fill="url(#babySkinA)" />
+
+                <!-- Delicate baby hair wisps peeking from under the cloth wrap -->
+                <path d="M146,102 C148,98 152,98 153,101 C155,99 158,99 159,102" stroke="#854D0E" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.65" />
+                <path d="M149,100 C151,97 154,97 155,100" stroke="#854D0E" stroke-width="1.1" stroke-linecap="round" fill="none" opacity="0.55" />
+
+                <!-- Pediatric Forehead Cooling Gel Patch -->
+                <rect x="140" y="103" width="22" height="7" rx="3.5" fill="#38BDF8" opacity="0.85" filter="url(#softShA)" />
+                <rect x="141" y="104" width="20" height="5" rx="2.5" fill="#E0F2FE" opacity="0.9" />
+                <line x1="144" y1="106.5" x2="158" y2="106.5" stroke="#38BDF8" stroke-width="0.8" stroke-dasharray="1.5 1.5" opacity="0.8" />
+
+                <!-- Soft airbrushed rosy blush cheeks -->
+                <circle cx="140" cy="121" r="6" fill="url(#cheekA)" />
+                <circle cx="162" cy="120" r="6" fill="url(#cheekA)" />
+
+                <!-- Furrowed worried brow -->
+                <path d="M138,111 Q143,114 148,113" stroke="#B45309" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.8"/>
+                <path d="M154,113 Q159,114 164,111" stroke="#B45309" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.8"/>
+
+                <!-- Distressed / uncomfortable eyes -->
+                <path d="M139,117 Q143,114 147,117" stroke="#78350F" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                <line x1="141.5" y1="118.5" x2="140.5" y2="121" stroke="#78350F" stroke-width="1.1" stroke-linecap="round"/>
+                <line x1="144.5" y1="118.5" x2="145" y2="121" stroke="#78350F" stroke-width="1.1" stroke-linecap="round"/>
+
+                <path d="M155,117 Q159,114 163,117" stroke="#78350F" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                <line x1="157.5" y1="118.5" x2="157" y2="121" stroke="#78350F" stroke-width="1.1" stroke-linecap="round"/>
+                <line x1="160.5" y1="118.5" x2="161.5" y2="121" stroke="#78350F" stroke-width="1.1" stroke-linecap="round"/>
+
+                <!-- Adorable tiny button nose -->
+                <path d="M150,117.5 Q151.5,119.5 153,118" stroke="#B45309" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+
+                <!-- Fretful distressed mouth -->
+                <path d="M147,126 Q151,123.5 155,126" stroke="#9A3412" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+                <ellipse cx="151" cy="125.5" rx="2.5" ry="1.2" fill="#FB7185" opacity="0.5"/>
+              </g>
+
+              <!-- 5. Blanket Collar Fold Wrapping Under Chin -->
+              <path d="M129,132 C137,138 147,142 157,138 C165,135 171,131 175,127 C168,142 144,146 129,132 Z" fill="url(#swaddleA2)" opacity="0.4" />
+              <path d="M131,130 C139,135 149,137 159,133 C166,131 170,128 173,125" stroke="#FFFBEB" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.65" />
+
+              <!-- 6. Sweet Little Baby Hand Resting on Blanket Collar -->
+              <g transform="translate(163, 126)">
+                <ellipse cx="7" cy="7" rx="5.5" ry="5" fill="url(#babySkinA)" filter="url(#softShA)" />
+                <circle cx="4" cy="4.5" r="1.8" fill="#FDE0CB" />
+                <circle cx="7" cy="3.8" r="1.8" fill="#FDE0CB" />
+                <circle cx="10" cy="4.8" r="1.7" fill="#FDE0CB" />
+                <ellipse cx="11.5" cy="8" rx="1.6" ry="1.4" fill="#FDE0CB" />
+                <path d="M3.5,8.5 Q7,11 10.5,8.5" stroke="#B45309" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.3" />
+              </g>
+
+              <!-- 7. SepCare Smart Telemetry Sensor Puck (Resting on Swaddle) -->
+              <g transform="translate(236, 138)">
+                <ellipse cx="14" cy="13" rx="14" ry="10" fill="#78350F" opacity="0.15" filter="url(#softShA)" />
+                <ellipse cx="14" cy="12" rx="13" ry="9.5" fill="#FFFFFF" />
+                <ellipse cx="14" cy="12" rx="13" ry="9.5" stroke="#FDE68A" stroke-width="1.2" fill="none" />
+                <ellipse cx="14" cy="12" rx="9" ry="6.5" fill="#FFFBEB" stroke="#D97706" stroke-width="1.1" />
+                <circle cx="14" cy="12" r="3.6" fill="#F59E0B" />
+                <circle cx="14" cy="12" r="1.5" fill="#FFFFFF" />
+                <path d="M25,8 A7,7 0 0,1 25,16" stroke="#F59E0B" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.8" />
+                <path d="M28,6 A11,11 0 0,1 28,18" stroke="#F59E0B" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5" />
+              </g>
+
+            </g>
+          </svg>
+        `,
+        cardBorder: 'border-amber-300/60',
+        textColor: 'text-amber-950',
+        subTextColor: 'text-amber-900/85',
+        cardStateTitle: 'Observation Active',
+        banner: {
+          bg: 'bg-amber-500/10 border-amber-500/25',
+          dot: 'bg-amber-500',
+          tagBg: 'bg-amber-100 text-amber-900 border-amber-300',
+          tag: 'OBSERVATION',
+          title: 'Keep a Close Eye on Baby',
+          subtitle: 'Based on the data, baby needs to be monitored.'
+        },
+        tiles: {
+          pulseBg: 'bg-amber-600',
+          pulseVal: '112.4',
+          pulseWave: 'M0,12 L18,12 L24,2 L30,22 L36,6 L42,18 L48,12 L100,12',
+          tempBg: 'bg-amber-500',
+          tempVal: '99.6',
+          tempWave: 'M0,12 L15,12 L22,4 L30,20 L38,8 L46,16 L54,12 L100,12',
+          activityBg: 'bg-amber-500',
+          activityVal: 'Tremor',
+          activityIconColor: 'text-amber-600',
+          activityIconSvg: '<line x1="12" y1="8" x2="12" y2="12" stroke-width="3" /><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="3" />'
+        },
+        button: `
+          <button type="button" onclick="openAmbulanceModal()" class="w-full h-[52px] rounded-2xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-btn-warn transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+            <span>Call 108 Ambulance</span>
+          </button>
+        `,
+        secondary: ''
+      },
+
+      critical: {
+        bodyBg: 'bg-[#FDF0F2]',
+        orb1: 'bg-rose-200/50',
+        orb2: 'bg-red-200/40',
+        orb3: 'bg-rose-100/50',
+        liveDot: 'bg-rose-600',
+        tonalScene: `
+          <svg class="w-full h-full" viewBox="0 0 380 220" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="critSky" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FFE4E6"/>
+                <stop offset="65%" stop-color="#FECDD3"/>
+                <stop offset="100%" stop-color="#FDA4AF"/>
+              </linearGradient>
+              <linearGradient id="babySkinC" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFF1EB"/>
+                <stop offset="60%" stop-color="#FCD5C5"/>
+                <stop offset="100%" stop-color="#F5AB94"/>
+              </linearGradient>
+              <linearGradient id="swaddleC1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFF1F2"/>
+                <stop offset="50%" stop-color="#FDA4AF"/>
+                <stop offset="100%" stop-color="#E11D48"/>
+              </linearGradient>
+              <linearGradient id="swaddleC2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FFE4E6"/>
+                <stop offset="100%" stop-color="#BE123C"/>
+              </linearGradient>
+              <linearGradient id="mattressC" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="100%" stop-color="#FFE4E6"/>
+              </linearGradient>
+              <radialGradient id="cheekC" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#E11D48" stop-opacity="0.75"/>
+                <stop offset="100%" stop-color="#E11D48" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="softShC" x="-10%" y="-10%" width="120%" height="130%">
+                <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#881337" flood-opacity="0.15"/>
+              </filter>
+              <filter id="bedShC" x="-10%" y="-10%" width="120%" height="140%">
+                <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#881337" flood-opacity="0.16"/>
+              </filter>
+            </defs>
+
+            <!-- Sky & Urgent Pulsing Sun Background -->
+            <rect width="380" height="220" fill="url(#critSky)" />
+            <circle cx="325" cy="45" r="22" fill="#E11D48" class="sc-sun-pulse" />
+            <circle cx="325" cy="45" r="34" fill="#FB7185" opacity="0.4" />
+            <circle cx="325" cy="45" r="48" fill="#FDA4AF" opacity="0.25" />
+
+            <!-- Nursery Hills Rose Tone -->
+            <path d="M-20,128 Q70,96 160,114 T340,104 T400,118 L400,220 L-20,220 Z" fill="#FDA4AF" opacity="0.45" />
+            <path d="M-20,146 Q90,122 200,136 T400,128 L400,220 L-20,220 Z" fill="#FB7185" opacity="0.45" />
+
+            <!-- Mattress / Cot Bed with Soft Stitching -->
+            <g filter="url(#bedShC)">
+              <ellipse cx="190" cy="176" rx="146" ry="32" fill="url(#mattressC)" />
+              <ellipse cx="190" cy="176" rx="144" ry="30" stroke="#FDA4AF" stroke-width="1.4" fill="none" opacity="0.8" />
+              <path d="M80,176 C115,170 150,170 185,176 M205,176 C240,170 275,170 300,176" stroke="#FDA4AF" stroke-width="1" stroke-dasharray="4 4" fill="none"/>
+            </g>
+
+            <!-- Soft Fluffy Baby Pillow under head -->
+            <rect x="96" y="104" width="86" height="54" rx="24" fill="#FFFFFF" opacity="0.95" filter="url(#softShC)" />
+
+            <!-- Distress radiating ripples -->
+            <circle cx="150" cy="128" r="24" stroke="#E11D48" stroke-width="2" stroke-dasharray="4 4" class="sc-distress-ripple-1" fill="none"/>
+            <circle cx="150" cy="128" r="38" stroke="#BE123C" stroke-width="1.8" stroke-dasharray="5 5" class="sc-distress-ripple-2" fill="none"/>
+
+            <!-- ================= BABY CHARACTER ================= -->
+            <g class="sc-baby-alert-pulse">
+              
+              <!-- 1. Swaddled Body Cocoon on Mattress -->
+              <path d="M128,122 C116,142 124,174 165,182 C210,189 262,178 276,154 C284,138 268,122 238,118 C196,112 154,112 128,122 Z" fill="url(#swaddleC1)" filter="url(#softShC)" />
+              
+              <!-- 2. Soft Swaddle Blanket Folds (Overlapping Diagonal Cloth Wrap) -->
+              <!-- Left-to-right snug fold -->
+              <path d="M134,130 C144,146 166,168 204,174 C196,158 182,142 168,132 C156,124 144,125 134,130 Z" fill="url(#swaddleC2)" opacity="0.35" />
+              <!-- Right-to-left overlapping wrap with soft fabric sheen -->
+              <path d="M236,122 C208,148 166,168 138,162 C158,146 200,132 226,120 Z" fill="#FFF1F2" opacity="0.55" />
+              <!-- Bottom tuck fold -->
+              <path d="M170,166 C204,180 248,172 264,152 C270,142 258,132 242,134 C216,138 186,154 170,166 Z" fill="url(#swaddleC2)" opacity="0.3" />
+              
+              <!-- Soft decorative embroidery / stitching seams on blanket -->
+              <path d="M140,132 Q176,158 222,140" stroke="#BE123C" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.35" />
+              <path d="M154,148 Q190,170 240,152" stroke="#BE123C" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.25" />
+
+              <!-- 3. Soft Cozy Cloth Swaddle Hood Framing Head -->
+              <!-- Outer swaddle cloth wrapping around head like a cozy hood -->
+              <path d="M118,126 C114,100 128,82 151,82 C174,82 188,100 183,126 C179,142 165,148 149,148 C132,148 120,142 118,126 Z" fill="url(#swaddleC1)" filter="url(#softShC)" />
+              <!-- Soft interior shadow fold of the cloth hood -->
+              <path d="M123,124 C119,103 131,87 151,87 C170,87 182,103 178,124 C174,138 162,144 149,144 C134,144 125,138 123,124 Z" fill="url(#swaddleC2)" opacity="0.25" />
+              <!-- Cozy soft cloth hem around hood edge -->
+              <path d="M122,124 C119,102 131,86 151,86 C170,86 181,102 178,124" stroke="#FFF1F2" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.75" />
+
+              <!-- 4. Sweet Small Baby Face Nestled Inside the Cloth (Critical Fever Alert) -->
+              <g id="sweetBabyFaceCritical">
+                <!-- Sweet small baby face -->
+                <ellipse cx="151" cy="117" rx="18" ry="17" fill="url(#babySkinC)" />
+
+                <!-- Delicate baby hair wisps peeking from under the cloth wrap -->
+                <path d="M146,102 C148,98 152,98 153,101 C155,99 158,99 159,102" stroke="#4C0519" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.65" />
+                <path d="M149,100 C151,97 154,97 155,100" stroke="#4C0519" stroke-width="1.1" stroke-linecap="round" fill="none" opacity="0.55" />
+
+                <!-- Pediatric Forehead Cooling Gel Patch -->
+                <rect x="140" y="103" width="22" height="7" rx="3.5" fill="#38BDF8" opacity="0.9" filter="url(#softShC)" />
+                <rect x="141" y="104" width="20" height="5" rx="2.5" fill="#E0F2FE" opacity="0.95" />
+                <line x1="144" y1="106.5" x2="158" y2="106.5" stroke="#0284C7" stroke-width="0.8" stroke-dasharray="1.5 1.5" opacity="0.8" />
+
+                <!-- High fever flushed rosy cheeks -->
+                <circle cx="140" cy="121" r="6.5" fill="url(#cheekC)" />
+                <circle cx="162" cy="120" r="6.5" fill="url(#cheekC)" />
+
+                <!-- Distressed furrowed brows -->
+                <path d="M137,110 Q143,114 148,112" stroke="#881337" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+                <path d="M154,112 Q159,114 165,110" stroke="#881337" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+
+                <!-- Distressed tightly squeezed feverish eyes -->
+                <path d="M138,117 Q143,113 148,117" stroke="#881337" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <line x1="140.5" y1="119" x2="139.5" y2="121.5" stroke="#881337" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="144.5" y1="119" x2="144" y2="121.5" stroke="#881337" stroke-width="1.2" stroke-linecap="round"/>
+
+                <path d="M154,117 Q159,113 164,117" stroke="#881337" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <line x1="157.5" y1="119" x2="157" y2="121.5" stroke="#881337" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="161.5" y1="119" x2="162.5" y2="121.5" stroke="#881337" stroke-width="1.2" stroke-linecap="round"/>
+
+                <!-- Adorable tiny button nose -->
+                <path d="M150,117.5 Q151.5,119.5 153,118" stroke="#9F1239" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+
+                <!-- Trembling cry mouth in major distress -->
+                <path d="M146,126 Q151,121.5 156,126 Q151,129.5 146,126 Z" fill="#881337" stroke="#881337" stroke-width="1"/>
+                <ellipse cx="151" cy="125.5" rx="2.5" ry="1.5" fill="#E11D48"/>
+              </g>
+
+              <!-- 5. Blanket Collar Fold Wrapping Under Chin -->
+              <path d="M129,132 C137,138 147,142 157,138 C165,135 171,131 175,127 C168,142 144,146 129,132 Z" fill="url(#swaddleC2)" opacity="0.4" />
+              <path d="M131,130 C139,135 149,137 159,133 C166,131 170,128 173,125" stroke="#FFF1F2" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.65" />
+
+              <!-- 6. Sweet Little Baby Hand Resting on Blanket Collar -->
+              <g transform="translate(163, 126)">
+                <ellipse cx="7" cy="7" rx="5.5" ry="5" fill="url(#babySkinC)" filter="url(#softShC)" />
+                <circle cx="4" cy="4.5" r="1.8" fill="#FCD5C5" />
+                <circle cx="7" cy="3.8" r="1.8" fill="#FCD5C5" />
+                <circle cx="10" cy="4.8" r="1.7" fill="#FCD5C5" />
+                <ellipse cx="11.5" cy="8" rx="1.6" ry="1.4" fill="#FCD5C5" />
+                <path d="M3.5,8.5 Q7,11 10.5,8.5" stroke="#9F1239" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.3" />
+              </g>
+
+              <!-- 7. SepCare Smart Telemetry Sensor Puck (Resting on Swaddle - Urgent Pulsing Red) -->
+              <g transform="translate(236, 138)">
+                <ellipse cx="14" cy="13" rx="14" ry="10" fill="#881337" opacity="0.15" filter="url(#softShC)" />
+                <ellipse cx="14" cy="12" rx="13" ry="9.5" fill="#FFFFFF" />
+                <ellipse cx="14" cy="12" rx="13" ry="9.5" stroke="#FDA4AF" stroke-width="1.2" fill="none" />
+                <ellipse cx="14" cy="12" rx="9" ry="6.5" fill="#FFF1F2" stroke="#BE123C" stroke-width="1.1" />
+                <circle cx="14" cy="12" r="3.6" fill="#EF4444" />
+                <circle cx="14" cy="12" r="1.5" fill="#FFFFFF" />
+                <path d="M25,8 A7,7 0 0,1 25,16" stroke="#EF4444" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.8" />
+                <path d="M28,6 A11,11 0 0,1 28,18" stroke="#EF4444" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5" />
+              </g>
+
+            </g>
+          </svg>
+        `,
+        cardBorder: 'border-rose-300/60',
+        textColor: 'text-rose-950',
+        subTextColor: 'text-rose-900/85',
+        cardStateTitle: 'Priority Alert',
+        banner: {
+          bg: 'bg-rose-500/10 border-rose-500/25',
+          dot: 'bg-rose-600',
+          tagBg: 'bg-rose-100 text-rose-900 border-rose-300',
+          tag: 'CRITICAL ALERT',
+          title: 'Critical: Immediate Action Needed',
+          subtitle: 'Multiple vital signals abnormal. Immediate triage required.'
+        },
+        tiles: {
+          pulseBg: 'bg-rose-600',
+          pulseVal: '178.0',
+          pulseWave: 'M0,12 L15,12 L20,1 L26,23 L32,3 L38,21 L44,8 L50,16 L56,12 L100,12',
+          tempBg: 'bg-red-600',
+          tempVal: '96.1',
+          tempWave: 'M0,12 L20,12 L30,18 L40,21 L60,22 L100,22',
+          activityBg: 'bg-rose-700',
+          activityVal: 'Critical',
+          activityIconColor: 'text-rose-600',
+          activityIconSvg: '<line x1="18" y1="6" x2="6" y2="18" stroke-width="2.5" /><line x1="6" y1="6" x2="18" y2="18" stroke-width="2.5" />'
+        },
+        button: `
+          <button type="button" onclick="openAmbulanceModal()" class="w-full h-[52px] rounded-2xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-black text-sm flex items-center justify-center gap-2 shadow-btn-urgent transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 22 22 22 12 2" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span>Call 108 Ambulance Now</span>
+          </button>
+        `,
+        secondary: ''
+      }
+    };
+
+    let currentState = 'attention';
+
+    function setHealthState(stateKey) {
+      currentState = stateKey;
+      const conf = themeStates[stateKey];
+      if (!conf) return;
+
+      // 1. Switcher Tabs
+      ['healthy', 'attention', 'critical'].forEach(k => {
+        const tab = document.getElementById('tab' + k.charAt(0).toUpperCase() + k.slice(1));
+        if (k === stateKey) {
+          tab.className = k === 'healthy' 
+            ? 'flex-1 py-1.5 px-2 rounded-full text-xs font-bold bg-emerald-700 text-white shadow-xs transition-all flex items-center justify-center gap-1.5'
+            : k === 'attention'
+            ? 'flex-1 py-1.5 px-2 rounded-full text-xs font-bold bg-amber-500 text-white shadow-xs transition-all flex items-center justify-center gap-1.5'
+            : 'flex-1 py-1.5 px-2 rounded-full text-xs font-bold bg-rose-600 text-white shadow-xs transition-all flex items-center justify-center gap-1.5';
+        } else {
+          tab.className = 'flex-1 py-1.5 px-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5';
+        }
+      });
+
+      // 2. Background Canvas & Floating Gradient Orbs
+      document.getElementById('appBody').className = `${conf.bodyBg} text-slate-900 font-sans min-h-screen flex flex-col items-center antialiased pb-32 relative overflow-x-hidden select-none`;
+      document.getElementById('gradientOrb1').className = `absolute -top-20 -left-20 w-80 h-80 rounded-full ${conf.orb1} blur-3xl sc-float-orb-1 transition-colors duration-700`;
+      document.getElementById('gradientOrb2').className = `absolute top-1/3 -right-20 w-96 h-96 rounded-full ${conf.orb2} blur-3xl sc-float-orb-2 transition-colors duration-700`;
+      document.getElementById('gradientOrb3').className = `absolute -bottom-20 left-10 w-72 h-72 rounded-full ${conf.orb3} blur-3xl transition-colors duration-700`;
+      document.getElementById('liveDot').className = `w-1.5 h-1.5 rounded-full ${conf.liveDot} animate-pulse`;
+
+      // 3. Status Card Full-Bleed Tonal Animation Stage (ZERO WHITE SPACE, 100% UNOBSTRUCTED BABY)
+      document.getElementById('tonalSceneContainer').innerHTML = conf.tonalScene;
+      document.getElementById('heroTonalCard').className = `w-full h-52 sm:h-56 rounded-3xl overflow-hidden shadow-card border ${conf.cardBorder} relative flex flex-col justify-between transition-all duration-500`;
+      
+      const brandPill = document.getElementById('brandPill');
+      brandPill.className = `text-[10px] font-black uppercase tracking-widest block opacity-70 ${conf.textColor} transition-colors`;
+      
+      const cardTitle = document.getElementById('cardStateTitle');
+      cardTitle.textContent = conf.cardStateTitle;
+      cardTitle.className = `text-base sm:text-lg font-black tracking-tight leading-tight mt-0.5 ${conf.textColor} transition-colors`;
+
+      // 3b. Appropriately Placed Status Banner (Below Animation, Never Obscuring Art)
+      const banner = document.getElementById('statusBanner');
+      banner.className = `w-full px-3.5 py-2.5 rounded-2xl border transition-all flex items-center justify-between gap-2 shadow-2xs ${conf.banner.bg}`;
+      
+      const bannerDot = document.getElementById('statusIndicatorDot');
+      bannerDot.className = `w-2 h-2 rounded-full animate-pulse shrink-0 ${conf.banner.dot}`;
+      
+      const title = document.getElementById('statusTitle');
+      title.textContent = conf.banner.title;
+      title.className = `text-xs sm:text-sm font-black tracking-tight ${conf.textColor}`;
+      
+      const sub = document.getElementById('statusSubtitle');
+      sub.textContent = conf.banner.subtitle;
+      sub.className = `text-[11px] font-medium leading-tight pl-3.5 ${conf.subTextColor}`;
+
+      const bannerTag = document.getElementById('statusBannerTag');
+      bannerTag.textContent = conf.banner.tag;
+      bannerTag.className = `text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shrink-0 border ${conf.banner.tagBg}`;
+
+      // 4. Vitals 3-Tiles (Pulse, Temp, Activity)
+      // Pulse
+      const tPulse = document.getElementById('tilePulse');
+      tPulse.className = `rounded-3xl p-3 sm:p-3.5 ${conf.tiles.pulseBg} text-white shadow-tile flex flex-col justify-between h-38 sm:h-40 transition-all`;
+      document.getElementById('pulseValue').textContent = conf.tiles.pulseVal;
+      document.getElementById('pulseWaveSvg').querySelector('path').setAttribute('d', conf.tiles.pulseWave);
+
+      // Temp
+      const tTemp = document.getElementById('tileTemp');
+      tTemp.className = `rounded-3xl p-3 sm:p-3.5 ${conf.tiles.tempBg} text-white shadow-tile flex flex-col justify-between h-38 sm:h-40 transition-all`;
+      document.getElementById('tempValue').textContent = conf.tiles.tempVal;
+      document.getElementById('tempWaveSvg').querySelector('path').setAttribute('d', conf.tiles.tempWave);
+
+      // Activity
+      const tAct = document.getElementById('tileActivity');
+      tAct.className = `rounded-3xl p-3 sm:p-3.5 ${conf.tiles.activityBg} text-white shadow-tile flex flex-col justify-between h-38 sm:h-40 transition-all`;
+      document.getElementById('activityValue').textContent = conf.tiles.activityVal;
+      const actIcon = document.getElementById('activityInnerIcon');
+      actIcon.className = `w-4 h-4 ${conf.tiles.activityIconColor}`;
+      actIcon.innerHTML = conf.tiles.activityIconSvg;
+
+      // 5. Consistently Sized Buttons
+      document.getElementById('primaryActionButtonContainer').innerHTML = conf.button;
+      document.getElementById('secondaryActionContainer').innerHTML = conf.secondary;
+
+      triggerToast(`State: ${conf.banner.title}`);
+    }
+
+    function navigateToVitals(e) {
+      if (e) e.preventDefault();
+      const stateParam = typeof currentState !== 'undefined' ? currentState : 'attention';
+      window.location.href = 'sepcare/parent-vitals.html?state=' + encodeURIComponent(stateParam);
+    }
+
+    function navigateToNotifications(e) {
+      if (e) e.preventDefault();
+      const stateParam = typeof currentState !== 'undefined' ? currentState : 'attention';
+      window.location.href = 'sepcare/parent-notifications.html?state=' + encodeURIComponent(stateParam);
+    }
+
+    function openAmbulanceModal() {
+      document.getElementById('modalAmbulance').classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    let toastTimeout;
+    function triggerToast(msg) {
+      const toast = document.getElementById('scToast');
+      const text = document.getElementById('scToastMsg');
+      const dot = document.getElementById('toastDot');
+      if (!toast || !text) return;
+      text.textContent = msg;
+
+      if (currentState === 'critical') dot.className = 'w-1.5 h-1.5 rounded-full bg-rose-500';
+      else if (currentState === 'attention') dot.className = 'w-1.5 h-1.5 rounded-full bg-amber-500';
+      else dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500';
+
+      toast.classList.remove('opacity-0');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0');
+      }, 2000);
+    }
+
+    function updateClock() {
+      const clock = document.getElementById('scLiveClock');
+      if (!clock) return;
+      const now = new Date();
+      let h = now.getHours();
+      let m = now.getMinutes();
+      clock.textContent = `${h}:${m < 10 ? '0' + m : m}`;
+    }
+    setInterval(updateClock, 30000);
+    updateClock();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const state = urlParams.get('state') || 'attention';
+      setHealthState(state);
+    });
+  </script>
+</body>
+</html>

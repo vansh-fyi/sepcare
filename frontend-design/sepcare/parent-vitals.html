@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Detailed Vitals · Baby Aarav</title>
+  <meta name="description" content="SepCare Detailed Infant Vitals: Comprehensive telemetry for Baby Aarav including Pulse, Temperature, Activity, Oxygen, and Respiration with status-adaptive guidance.">
+
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Outfit"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02)',
+            'tile': '0 8px 24px -4px rgba(15, 23, 42, 0.12)',
+            'btn-urgent': '0 8px 24px -4px rgba(225, 29, 72, 0.35)',
+            'btn-warn': '0 8px 24px -4px rgba(217, 119, 6, 0.3)',
+            'btn-calm': '0 8px 24px -4px rgba(5, 150, 105, 0.25)',
+            'dock': '0 16px 36px -6px rgba(15, 23, 42, 0.12)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Smooth canvas color transition */
+    body {
+      transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    /* Purposeful floating background gradient orbs */
+    @keyframes floatOrb1 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(25px, -18px) scale(1.12); }
+    }
+    @keyframes floatOrb2 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(-20px, 15px) scale(0.92); }
+    }
+    .sc-float-orb-1 {
+      animation: floatOrb1 9s ease-in-out infinite;
+    }
+    .sc-float-orb-2 {
+      animation: floatOrb2 11s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body id="appBody" class="bg-[#FDF8EB] text-slate-900 font-sans min-h-screen flex flex-col items-center antialiased pb-32 relative overflow-x-hidden select-none">
+
+  <!-- =========================================================================
+       PURPOSEFUL BACKGROUND FLOATING GRADIENT ORBS
+       ========================================================================= -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div id="gradientOrb1" class="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-amber-200/50 blur-3xl sc-float-orb-1 transition-colors duration-700"></div>
+    <div id="gradientOrb2" class="absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-yellow-200/40 blur-3xl sc-float-orb-2 transition-colors duration-700"></div>
+    <div id="gradientOrb3" class="absolute -bottom-20 left-10 w-72 h-72 rounded-full bg-amber-100/50 blur-3xl transition-colors duration-700"></div>
+  </div>
+
+  <!-- =========================================================================
+       TRI-STATE PREVIEW SWITCHER (HEALTHY / ATTENTION / CRITICAL)
+       ========================================================================= -->
+  <header class="w-full max-w-[420px] md:max-w-2xl lg:max-w-5xl mx-auto pt-4 md:pt-6 px-4 md:px-0 pb-1.5 z-50 relative">
+    <div class="bg-white/90 backdrop-blur-md rounded-full p-1 border border-slate-200/80 shadow-xs flex gap-1 w-full max-w-[420px] mx-auto justify-between">
+      <button type="button" onclick="setHealthState('healthy')" id="tabHealthy" class="flex-1 py-1.5 px-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+        <span>Healthy</span>
+      </button>
+
+      <button type="button" onclick="setHealthState('attention')" id="tabAttention" class="flex-1 py-1.5 px-2 rounded-full text-xs font-bold bg-amber-500 text-white shadow-xs transition-all flex items-center justify-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+        <span>Attention</span>
+      </button>
+
+      <button type="button" onclick="setHealthState('critical')" id="tabCritical" class="flex-1 py-1.5 px-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
+        <span>Critical</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTAINER (RESPONSIVE: MOBILE 420PX, TABLET 2XL, DESKTOP 5XL)
+       ========================================================================= -->
+  <main class="w-full max-w-[420px] md:max-w-2xl lg:max-w-5xl mx-auto flex flex-col px-4 pt-2 sm:pt-3 mt-2 sm:mt-4 space-y-3.5 sm:space-y-4 z-10 relative" role="main">
+
+    <!-- 01 — Native Mobile Status Bar (Hidden on tablet/desktop) -->
+    <div class="flex md:hidden justify-between items-center px-1 text-slate-800 text-xs font-semibold select-none">
+      <span id="scLiveClock" class="font-bold tabular-nums tracking-tight">9:41</span>
+      <div class="flex items-center space-x-1.5">
+        <svg class="w-3.5 h-2.5 text-slate-800" viewBox="0 0 18 12" fill="currentColor">
+          <rect x="0" y="8" width="2.5" height="4" rx="0.5" />
+          <rect x="4" y="5.5" width="2.5" height="6.5" rx="0.5" />
+          <rect x="8" y="3" width="2.5" height="9" rx="0.5" />
+          <rect x="12" y="0.5" width="2.5" height="11.5" rx="0.5" />
+        </svg>
+        <svg class="w-3.5 h-2.5 text-slate-800" viewBox="0 0 16 12" fill="currentColor">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M8 2.2C10.5 2.2 12.8 3.1 14.5 4.6L15.6 3.4C13.5 1.5 10.9 0.4 8 0.4C5.1 0.4 2.5 1.5 0.4 3.4L1.5 4.6C3.2 3.1 5.5 2.2 8 2.2ZM8 5.6C9.7 5.6 11.2 6.2 12.4 7.2L13.5 6C12 4.7 10.1 4 8 4C5.9 4 4 4.7 2.5 6L3.6 7.2C4.8 6.2 6.3 5.6 8 5.6ZM8 9C9 9 9.8 9.4 10.4 10L8 12.6L5.6 10C6.2 9.4 7 9 8 9Z" />
+        </svg>
+        <div class="w-5 h-2.5 border border-slate-800 rounded-xs p-0.5 flex items-center">
+          <div class="h-full w-4/5 bg-slate-800 rounded-2xs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 — Top Header: Return to Dashboard + Title + Device Status -->
+    <section class="flex items-center justify-between px-1 w-full" aria-label="Page Header">
+      <div class="flex items-center gap-3">
+        <!-- Back Button to Parent Dashboard -->
+        <a href="../parentsdashboard.html" onclick="returnToDashboard(event)" class="w-9 h-9 rounded-full bg-white/90 border border-slate-200/80 shadow-2xs flex items-center justify-center text-slate-700 hover:text-slate-900 active:scale-95 transition-all" title="Return to Parent Dashboard" aria-label="Return to Dashboard">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </a>
+
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-none">All Vitals</h1>
+            <span class="inline-flex items-center gap-1 text-[10px] font-bold text-slate-600 bg-white/85 px-2 py-0.5 rounded-full border border-slate-200/60 shadow-2xs">
+              <span id="liveDot" class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+              <span>Live BLE</span>
+            </span>
+          </div>
+          <p class="text-[11px] font-semibold text-slate-500 mt-0.5">Baby Aarav • Continuous 100 Hz</p>
+        </div>
+      </div>
+
+      <!-- Quick Info / Sensor Status Button -->
+      <button type="button" onclick="triggerToast('Ankle Band 94% • All sensors active')" class="w-9 h-9 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-slate-700 shadow-2xs active:scale-95 transition-transform" aria-label="Sensor status">
+        <svg class="w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+      </button>
+    </section>
+
+    <!-- 03 — Health State Summary Banner -->
+    <section id="statusBanner" class="w-full px-4 py-3 rounded-2xl border transition-all flex items-center justify-between gap-3 shadow-2xs bg-amber-500/10 border-amber-500/25" aria-label="Triage Status Summary">
+      <div class="space-y-0.5 pr-1">
+        <div class="flex items-center gap-2">
+          <span id="statusIndicatorDot" class="w-2 h-2 rounded-full animate-pulse shrink-0 bg-amber-500"></span>
+          <h2 id="statusTitle" class="text-xs sm:text-sm font-black tracking-tight text-amber-950">
+            Keep a Close Eye on Baby
+          </h2>
+        </div>
+        <p id="statusSubtitle" class="text-[11px] font-medium leading-tight pl-4 text-amber-900/85">
+          Based on the data, baby needs to be monitored.
+        </p>
+      </div>
+      <span id="statusBannerTag" class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shrink-0 border bg-amber-100 text-amber-900 border-amber-300">
+        Observation
+      </span>
+    </section>
+
+    <!-- =========================================================================
+         04 — DETAILED VITALS TILES GRID (STACKED MOBILE, 2-COLUMN DESKTOP)
+         ========================================================================= -->
+    <section class="space-y-3" aria-labelledby="all-vitals-heading">
+      <div class="flex items-center justify-between px-1">
+        <h2 id="all-vitals-heading" class="text-xs font-extrabold uppercase tracking-wider text-slate-400">
+          Monitored Signals & Metrics
+        </h2>
+        <span class="text-[11px] font-bold text-slate-500">5 signals monitored</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-3.5">
+
+        <!-- 1. PULSE (HEART RATE) -->
+        <article id="cardPulse" class="bg-white rounded-3xl p-4 sm:p-4.5 border border-slate-200/80 shadow-card flex flex-col justify-between space-y-3 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div id="badgePulseIcon" class="w-8 h-8 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xs font-black text-slate-900">Pulse</h3>
+                <p class="text-[10px] font-semibold text-slate-400">Heart Rate</p>
+              </div>
+            </div>
+            <span id="badgePulseStatus" class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-200">
+              Elevated
+            </span>
+          </div>
+
+          <div class="flex items-baseline justify-between pt-1">
+            <div>
+              <span id="valPulse" class="text-2xl sm:text-3xl font-black text-slate-900 tabular-nums tracking-tight">112.4</span>
+              <span class="text-xs font-black text-slate-400 ml-0.5">BPM</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-500">Normal: 70–110 BPM</span>
+          </div>
+
+          <!-- Trend Waveform -->
+          <div class="py-1">
+            <svg id="svgWavePulse" class="w-full h-8 text-amber-500" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M0,12 L18,12 L24,2 L30,22 L36,6 L42,18 L48,12 L100,12" />
+            </svg>
+          </div>
+
+          <!-- Simple Parent Interpretation -->
+          <p id="descPulse" class="text-[11px] font-medium leading-relaxed text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            Heart rate is slightly faster than usual resting baseline.
+          </p>
+        </article>
+
+        <!-- 2. TEMPERATURE -->
+        <article id="cardTemp" class="bg-white rounded-3xl p-4 sm:p-4.5 border border-slate-200/80 shadow-card flex flex-col justify-between space-y-3 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div id="badgeTempIcon" class="w-8 h-8 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xs font-black text-slate-900">Temperature</h3>
+                <p class="text-[10px] font-semibold text-slate-400">Skin & Core</p>
+              </div>
+            </div>
+            <span id="badgeTempStatus" class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-200">
+              Warm
+            </span>
+          </div>
+
+          <div class="flex items-baseline justify-between pt-1">
+            <div>
+              <span id="valTemp" class="text-2xl sm:text-3xl font-black text-slate-900 tabular-nums tracking-tight">99.6</span>
+              <span class="text-xs font-black text-slate-400 ml-0.5">°F</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-500">Normal: 97.7–99.5°F</span>
+          </div>
+
+          <!-- Trend Waveform -->
+          <div class="py-1">
+            <svg id="svgWaveTemp" class="w-full h-8 text-amber-500" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M0,12 L15,12 L22,4 L30,20 L38,8 L46,16 L54,12 L100,12" />
+            </svg>
+          </div>
+
+          <!-- Simple Parent Interpretation -->
+          <p id="descTemp" class="text-[11px] font-medium leading-relaxed text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            Mild warmth detected. Forehead patch applied; monitor for sweating.
+          </p>
+        </article>
+
+        <!-- 3. ACTIVITY & MOTION -->
+        <article id="cardActivity" class="bg-white rounded-3xl p-4 sm:p-4.5 border border-slate-200/80 shadow-card flex flex-col justify-between space-y-3 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div id="badgeActIcon" class="w-8 h-8 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xs font-black text-slate-900">Activity</h3>
+                <p class="text-[10px] font-semibold text-slate-400">Movement Pattern</p>
+              </div>
+            </div>
+            <span id="badgeActStatus" class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-200">
+              Tremor
+            </span>
+          </div>
+
+          <div class="flex items-baseline justify-between pt-1">
+            <div>
+              <span id="valActivity" class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Tremor</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-500">Normal: Calm / Resting</span>
+          </div>
+
+          <!-- Activity Level Visual -->
+          <div class="py-1 flex items-center gap-2">
+            <div class="h-2 flex-1 bg-amber-100 rounded-full overflow-hidden">
+              <div id="barActivity" class="h-full bg-amber-500 rounded-full" style="width: 65%;"></div>
+            </div>
+            <span id="txtActScore" class="text-[10px] font-extrabold text-amber-700">Restless</span>
+          </div>
+
+          <!-- Simple Parent Interpretation -->
+          <p id="descActivity" class="text-[11px] font-medium leading-relaxed text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            Sensor detected subtle shivering or tremors during rest.
+          </p>
+        </article>
+
+        <!-- 4. BLOOD OXYGEN (SPO2) -->
+        <article id="cardSpo2" class="bg-white rounded-3xl p-4 sm:p-4.5 border border-slate-200/80 shadow-card flex flex-col justify-between space-y-3 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div id="badgeSpo2Icon" class="w-8 h-8 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xs font-black text-slate-900">Oxygen (SpO2)</h3>
+                <p class="text-[10px] font-semibold text-slate-400">Blood Saturation</p>
+              </div>
+            </div>
+            <span id="badgeSpo2Status" class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-200">
+              Notice
+            </span>
+          </div>
+
+          <div class="flex items-baseline justify-between pt-1">
+            <div>
+              <span id="valSpo2" class="text-2xl sm:text-3xl font-black text-slate-900 tabular-nums tracking-tight">95%</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-500">Normal: 95–100%</span>
+          </div>
+
+          <!-- Saturation Bar -->
+          <div class="py-1 flex items-center gap-2">
+            <div class="h-2 flex-1 bg-slate-100 rounded-full overflow-hidden">
+              <div id="barSpo2" class="h-full bg-amber-500 rounded-full" style="width: 95%;"></div>
+            </div>
+            <span id="txtSpo2Score" class="text-[10px] font-extrabold text-amber-700">95%</span>
+          </div>
+
+          <!-- Simple Parent Interpretation -->
+          <p id="descSpo2" class="text-[11px] font-medium leading-relaxed text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            Oxygen is on the borderline of the normal corridor. Keep airways unblocked.
+          </p>
+        </article>
+
+        <!-- 5. RESPIRATION (BREATHING RATE) -->
+        <article id="cardResp" class="bg-white rounded-3xl p-4 sm:p-4.5 border border-slate-200/80 shadow-card flex flex-col justify-between space-y-3 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div id="badgeRespIcon" class="w-8 h-8 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xs font-black text-slate-900">Respiration</h3>
+                <p class="text-[10px] font-semibold text-slate-400">Breathing Rate</p>
+              </div>
+            </div>
+            <span id="badgeRespStatus" class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-200">
+              Slight Fast
+            </span>
+          </div>
+
+          <div class="flex items-baseline justify-between pt-1">
+            <div>
+              <span id="valResp" class="text-2xl sm:text-3xl font-black text-slate-900 tabular-nums tracking-tight">56</span>
+              <span class="text-xs font-black text-slate-400 ml-0.5">/min</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-500">Normal: 30–50 /min</span>
+          </div>
+
+          <!-- Respiration Waveform -->
+          <div class="py-1">
+            <svg id="svgWaveResp" class="w-full h-8 text-amber-500" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M0,12 Q12,3 25,12 T50,12 T75,12 T100,12" />
+            </svg>
+          </div>
+
+          <!-- Simple Parent Interpretation -->
+          <p id="descResp" class="text-[11px] font-medium leading-relaxed text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            Breathing is slightly quicker than standard resting rhythm.
+          </p>
+        </article>
+
+        <!-- 6. DEVICE CONNECTION & TELEMETRY HEALTH -->
+        <article class="bg-white rounded-3xl p-4 sm:p-4.5 border border-slate-200/80 shadow-card flex flex-col justify-between space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="7" y="6" width="10" height="12" rx="3" />
+                  <path d="M9 6V3.5C9 3.2 9.2 3 9.5 3H14.5C14.8 3 15 3.2 15 3.5V6" />
+                  <path d="M9 18V20.5C9 20.8 9.2 21 9.5 21H14.5C14.8 21 15 20.8 15 20.5V18" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xs font-black text-slate-900">Ankle Band Sensor</h3>
+                <p class="text-[10px] font-semibold text-slate-400">Bluetooth Low Energy</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border bg-emerald-50 text-emerald-800 border-emerald-200">
+              Active
+            </span>
+          </div>
+
+          <div class="flex items-baseline justify-between pt-1">
+            <div>
+              <span class="text-2xl sm:text-3xl font-black text-slate-900 tabular-nums tracking-tight">94%</span>
+              <span class="text-xs font-black text-slate-400 ml-0.5">Battery</span>
+            </div>
+            <span class="text-[10px] font-bold text-emerald-600">● 100 Hz Live</span>
+          </div>
+
+          <p class="text-[11px] font-medium leading-relaxed text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            Soft neonatal band securely connected on Baby Aarav's ankle.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         05 — PARENT GUIDANCE & NEXT STEPS BOX
+         ========================================================================= -->
+    <section id="guidanceBox" class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-200 shadow-card space-y-2.5">
+      <div class="flex items-center gap-2">
+        <div id="guidanceIcon" class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-black text-xs">
+          !
+        </div>
+        <h3 id="guidanceTitle" class="text-xs sm:text-sm font-black text-slate-900">
+          What Parents Should Do Now
+        </h3>
+      </div>
+      <ul id="guidanceList" class="space-y-1.5 text-xs text-slate-600 pl-1">
+        <li class="flex items-start gap-2">
+          <span class="text-amber-500 font-bold">•</span>
+          <span>Check baby's comfort and ensure nursery room temperature is between 68°F and 72°F.</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-amber-500 font-bold">•</span>
+          <span>Keep baby lightly swaddled; cooling gel patch is helping dissipate mild warmth.</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-amber-500 font-bold">•</span>
+          <span>Re-check vitals in 15 minutes. If baby remains restless or fever climbs, tap emergency ambulance below.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- =========================================================================
+         06 — PRIMARY ACTION CTA BUTTON
+         ========================================================================= -->
+    <section class="pt-1 pb-4 w-full flex flex-col items-center justify-center">
+      <div id="primaryActionButtonContainer" class="w-full">
+        <!-- Injected dynamically per state -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       07 — FLOATING MINIMALIST BOTTOM DOCK (SAME AS PARENT DASHBOARD)
+       ========================================================================= -->
+  <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-lg border border-slate-200/90 shadow-dock rounded-full px-5 py-2 flex items-center gap-4 z-40" aria-label="Navigation">
+    <a href="../parentsdashboard.html" onclick="returnToDashboard(event)" class="p-1 text-slate-500 hover:text-slate-900 font-bold flex items-center gap-1.5 text-xs transition-colors">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+      <span>Home</span>
+    </a>
+    <a href="parent-vitals.html" class="p-1 text-slate-900 font-extrabold flex items-center gap-1.5 text-xs">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg>
+      <span>Vitals</span>
+    </a>
+    <button type="button" onclick="openAmbulanceModal()" class="p-1 text-slate-500 hover:text-slate-900 font-bold flex items-center gap-1.5 text-xs transition-colors">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+      <span>Help</span>
+    </button>
+  </nav>
+
+  <!-- =========================================================================
+       08 — EMERGENCY 108 AMBULANCE MODAL (ONLY EMERGENCY CONTACT OPTION)
+       ========================================================================= -->
+  <div id="modalAmbulance" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-end justify-center hidden">
+    <div class="bg-white w-full max-w-[420px] rounded-t-3xl p-6 shadow-2xl space-y-4">
+      <div class="w-10 h-1 bg-slate-200 rounded-full mx-auto -mt-2 mb-1"></div>
+      
+      <div class="flex justify-between items-center">
+        <h3 class="text-base font-black text-rose-600 flex items-center gap-2">
+          <svg class="w-5 h-5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 22 22 22 12 2" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span>Emergency Ambulance</span>
+        </h3>
+        <button type="button" onclick="closeModal('modalAmbulance')" class="text-slate-400 hover:text-slate-700 text-lg font-bold p-1">✕</button>
+      </div>
+
+      <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3 text-xs text-rose-900 font-bold flex items-center justify-between">
+        <span>Aarav (14 Days)</span>
+        <span class="bg-rose-200 text-rose-900 px-2 py-0.5 rounded-full font-black text-[10px]">PRIORITY 1 DISPATCH</span>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        <a href="tel:108" onclick="triggerToast('Calling 108 Emergency... Keep on speakerphone.')" class="w-full h-[52px] rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-black text-sm flex items-center justify-center gap-2 shadow-btn-urgent">
+          <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+          <span>Call 108 Ambulance</span>
+        </a>
+        <button type="button" onclick="closeModal('modalAmbulance')" class="w-full py-2.5 text-slate-500 font-bold text-xs hover:bg-slate-50">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="scToast" class="fixed top-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg z-50 pointer-events-none opacity-0 transition-all duration-300 flex items-center gap-2">
+    <span class="w-1.5 h-1.5 rounded-full bg-amber-400" id="toastDot"></span>
+    <span id="scToastMsg">Live update</span>
+  </div>
+
+  <!-- =========================================================================
+       DYNAMIC STATE CONFIGURATION SCRIPT
+       ========================================================================= -->
+  <script>
+    const themeStates = {
+      healthy: {
+        bodyBg: 'bg-[#F2F8F5]',
+        orb1: 'bg-emerald-200/50',
+        orb2: 'bg-teal-200/40',
+        orb3: 'bg-emerald-100/50',
+        liveDot: 'bg-emerald-600',
+        banner: {
+          bg: 'bg-emerald-500/10 border-emerald-500/20',
+          dot: 'bg-emerald-600',
+          tagBg: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+          tag: 'STABLE CORRIDOR',
+          title: 'Baby is Resting Safely',
+          subtitle: 'Based on data, all vitals are normal and stable.'
+        },
+        pulse: {
+          val: '78.2',
+          status: 'Normal',
+          statusClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+          iconBox: 'bg-emerald-50 text-emerald-600',
+          wave: 'M0,12 L20,12 L26,4 L32,20 L38,8 L44,16 L50,12 L100,12',
+          waveColor: 'text-emerald-500',
+          desc: 'Heartbeat is calm, steady, and within the expected baseline for resting infants.'
+        },
+        temp: {
+          val: '98.6',
+          status: 'Normal',
+          statusClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+          iconBox: 'bg-emerald-50 text-emerald-600',
+          wave: 'M0,12 L15,12 L22,6 L30,18 L38,10 L46,14 L54,12 L100,12',
+          waveColor: 'text-emerald-500',
+          desc: 'Baby Aarav’s skin and core body warmth are in the healthy thermoregulation zone.'
+        },
+        activity: {
+          val: 'Normal',
+          status: 'Resting',
+          statusClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+          iconBox: 'bg-emerald-50 text-emerald-600',
+          barWidth: '35%',
+          barColor: 'bg-emerald-500',
+          barText: 'Calm Rest',
+          desc: 'Natural sleep twitches detected. Baby is resting comfortably.'
+        },
+        spo2: {
+          val: '98%',
+          status: 'Optimal',
+          statusClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+          iconBox: 'bg-emerald-50 text-emerald-600',
+          barWidth: '98%',
+          barColor: 'bg-emerald-500',
+          desc: 'Blood oxygen saturation is optimal and stable.'
+        },
+        resp: {
+          val: '42',
+          status: 'Normal',
+          statusClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+          iconBox: 'bg-emerald-50 text-emerald-600',
+          wave: 'M0,12 Q12,6 25,12 T50,12 T75,12 T100,12',
+          waveColor: 'text-emerald-500',
+          desc: 'Breathing rhythm is smooth and steady.'
+        },
+        guidance: {
+          boxBorder: 'border-emerald-200',
+          iconBox: 'bg-emerald-100 text-emerald-700',
+          iconChar: '✓',
+          title: 'Parent Observations',
+          items: [
+            'All vital signals remain comfortably in the healthy green corridor.',
+            'Continue usual swaddling, feeding, and sleep routines.',
+            'SepCare sensors are actively streaming at 100 Hz in the background.'
+          ]
+        },
+        button: `
+          <button type="button" onclick="triggerToast('Viewing 24-hour vital corridor graphs')" class="w-full h-[52px] rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-btn-calm transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span>View Full Trends</span>
+          </button>
+        `
+      },
+
+      attention: {
+        bodyBg: 'bg-[#FDF8EB]',
+        orb1: 'bg-amber-200/50',
+        orb2: 'bg-yellow-200/40',
+        orb3: 'bg-amber-100/50',
+        liveDot: 'bg-amber-500',
+        banner: {
+          bg: 'bg-amber-500/10 border-amber-500/25',
+          dot: 'bg-amber-500',
+          tagBg: 'bg-amber-100 text-amber-900 border-amber-300',
+          tag: 'OBSERVATION',
+          title: 'Keep a Close Eye on Baby',
+          subtitle: 'Based on the data, baby needs to be monitored.'
+        },
+        pulse: {
+          val: '112.4',
+          status: 'Elevated',
+          statusClass: 'bg-amber-50 text-amber-800 border-amber-200',
+          iconBox: 'bg-amber-50 text-amber-600',
+          wave: 'M0,12 L18,12 L24,2 L30,22 L36,6 L42,18 L48,12 L100,12',
+          waveColor: 'text-amber-500',
+          desc: 'Heart rate is running faster than normal resting baseline.'
+        },
+        temp: {
+          val: '99.6',
+          status: 'Warm',
+          statusClass: 'bg-amber-50 text-amber-800 border-amber-200',
+          iconBox: 'bg-amber-50 text-amber-600',
+          wave: 'M0,12 L15,12 L22,4 L30,20 L38,8 L46,16 L54,12 L100,12',
+          waveColor: 'text-amber-500',
+          desc: 'Mild warmth detected. Forehead patch applied; monitor for sweating.'
+        },
+        activity: {
+          val: 'Tremor',
+          status: 'Restless',
+          statusClass: 'bg-amber-50 text-amber-800 border-amber-200',
+          iconBox: 'bg-amber-50 text-amber-600',
+          barWidth: '65%',
+          barColor: 'bg-amber-500',
+          barText: 'Restless',
+          desc: 'Sensor detected subtle shivering or tremors during rest.'
+        },
+        spo2: {
+          val: '95%',
+          status: 'Notice',
+          statusClass: 'bg-amber-50 text-amber-800 border-amber-200',
+          iconBox: 'bg-amber-50 text-amber-600',
+          barWidth: '95%',
+          barColor: 'bg-amber-500',
+          desc: 'Borderline oxygen saturation. Keep baby’s head position clear.'
+        },
+        resp: {
+          val: '56',
+          status: 'Slight Fast',
+          statusClass: 'bg-amber-50 text-amber-800 border-amber-200',
+          iconBox: 'bg-amber-50 text-amber-600',
+          wave: 'M0,12 Q12,3 25,12 T50,12 T75,12 T100,12',
+          waveColor: 'text-amber-500',
+          desc: 'Breathing rate is slightly elevated above normal infant baseline.'
+        },
+        guidance: {
+          boxBorder: 'border-amber-200',
+          iconBox: 'bg-amber-100 text-amber-700',
+          iconChar: '!',
+          title: 'What Parents Should Do Now',
+          items: [
+            'Check baby\'s comfort and ensure nursery room temperature is between 68°F and 72°F.',
+            'Keep baby lightly swaddled; cooling gel patch is helping dissipate mild warmth.',
+            'Re-check vitals in 15 minutes. If baby remains restless or fever climbs, tap emergency ambulance below.'
+          ]
+        },
+        button: `
+          <button type="button" onclick="openAmbulanceModal()" class="w-full h-[52px] rounded-2xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-btn-warn transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+            <span>Call 108 Ambulance</span>
+          </button>
+        `
+      },
+
+      critical: {
+        bodyBg: 'bg-[#FDF0F2]',
+        orb1: 'bg-rose-200/50',
+        orb2: 'bg-red-200/40',
+        orb3: 'bg-rose-100/50',
+        liveDot: 'bg-rose-600',
+        banner: {
+          bg: 'bg-rose-500/10 border-rose-500/25',
+          dot: 'bg-rose-600',
+          tagBg: 'bg-rose-100 text-rose-900 border-rose-300',
+          tag: 'CRITICAL ALERT',
+          title: 'Critical: Immediate Action Needed',
+          subtitle: 'Multiple vital signals abnormal. Immediate triage required.'
+        },
+        pulse: {
+          val: '178.0',
+          status: 'Critical High',
+          statusClass: 'bg-rose-100 text-rose-900 border-rose-300 font-black',
+          iconBox: 'bg-rose-100 text-rose-600',
+          wave: 'M0,12 L15,12 L20,1 L26,23 L32,3 L38,21 L44,8 L50,16 L56,12 L100,12',
+          waveColor: 'text-rose-600',
+          desc: 'Severe rapid heart rate detected. Requires immediate medical attention.'
+        },
+        temp: {
+          val: '96.1',
+          status: 'Cold / Hypo',
+          statusClass: 'bg-rose-100 text-rose-900 border-rose-300 font-black',
+          iconBox: 'bg-rose-100 text-rose-600',
+          wave: 'M0,12 L20,12 L30,18 L40,21 L60,22 L100,22',
+          waveColor: 'text-rose-600',
+          desc: 'Temperature has dropped below safe infant threshold (hypothermia risk).'
+        },
+        activity: {
+          val: 'Critical',
+          status: 'Irregular',
+          statusClass: 'bg-rose-100 text-rose-900 border-rose-300 font-black',
+          iconBox: 'bg-rose-100 text-rose-600',
+          barWidth: '90%',
+          barColor: 'bg-rose-600',
+          barText: 'Abnormal',
+          desc: 'Persistent abnormal motor twitching with high distress recorded.'
+        },
+        spo2: {
+          val: '88%',
+          status: 'Low SpO2',
+          statusClass: 'bg-rose-100 text-rose-900 border-rose-300 font-black',
+          iconBox: 'bg-rose-100 text-rose-600',
+          barWidth: '88%',
+          barColor: 'bg-rose-600',
+          desc: 'Oxygen level has dropped under 90%. Immediate oxygenation triage needed.'
+        },
+        resp: {
+          val: '72',
+          status: 'Tachypnea',
+          statusClass: 'bg-rose-100 text-rose-900 border-rose-300 font-black',
+          iconBox: 'bg-rose-100 text-rose-600',
+          wave: 'M0,12 Q8,1 16,12 T32,12 T48,12 T64,12 T80,12 T100,12',
+          waveColor: 'text-rose-600',
+          desc: 'Very rapid respiratory rate with signs of infant work of breathing.'
+        },
+        guidance: {
+          boxBorder: 'border-rose-300',
+          iconBox: 'bg-rose-100 text-rose-700',
+          iconChar: '!',
+          title: 'Critical Emergency Guidance',
+          items: [
+            'Do not delay: Dispatch 108 ambulance immediately or proceed to pediatric ER.',
+            'Keep baby in warm blanket cocoon and keep airway upright and unobstructed.',
+            'Keep phone on speaker to relay real-time telemetry values to paramedics.'
+          ]
+        },
+        button: `
+          <button type="button" onclick="openAmbulanceModal()" class="w-full h-[52px] rounded-2xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-black text-sm flex items-center justify-center gap-2 shadow-btn-urgent transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 22 22 22 12 2" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span>Call 108 Ambulance Now</span>
+          </button>
+        `
+      }
+    };
+
+    let currentState = 'attention';
+
+    function setHealthState(stateKey) {
+      currentState = stateKey;
+      const conf = themeStates[stateKey];
+      if (!conf) return;
+
+      // 1. Switcher Tabs
+      ['healthy', 'attention', 'critical'].forEach(k => {
+        const tab = document.getElementById('tab' + k.charAt(0).toUpperCase() + k.slice(1));
+        if (k === stateKey) {
+          tab.className = k === 'healthy' 
+            ? 'flex-1 py-1.5 px-2 rounded-full text-xs font-bold bg-emerald-700 text-white shadow-xs transition-all flex items-center justify-center gap-1.5'
+            : k === 'attention'
+            ? 'flex-1 py-1.5 px-2 rounded-full text-xs font-bold bg-amber-500 text-white shadow-xs transition-all flex items-center justify-center gap-1.5'
+            : 'flex-1 py-1.5 px-2 rounded-full text-xs font-bold bg-rose-600 text-white shadow-xs transition-all flex items-center justify-center gap-1.5';
+        } else {
+          tab.className = 'flex-1 py-1.5 px-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5';
+        }
+      });
+
+      // 2. Background Canvas & Floating Gradient Orbs
+      document.getElementById('appBody').className = `${conf.bodyBg} text-slate-900 font-sans min-h-screen flex flex-col items-center antialiased pb-32 relative overflow-x-hidden select-none`;
+      document.getElementById('gradientOrb1').className = `absolute -top-20 -left-20 w-80 h-80 rounded-full ${conf.orb1} blur-3xl sc-float-orb-1 transition-colors duration-700`;
+      document.getElementById('gradientOrb2').className = `absolute top-1/3 -right-20 w-96 h-96 rounded-full ${conf.orb2} blur-3xl sc-float-orb-2 transition-colors duration-700`;
+      document.getElementById('gradientOrb3').className = `absolute -bottom-20 left-10 w-72 h-72 rounded-full ${conf.orb3} blur-3xl transition-colors duration-700`;
+      document.getElementById('liveDot').className = `w-1.5 h-1.5 rounded-full ${conf.liveDot} animate-pulse`;
+
+      // 3. Status Banner
+      const banner = document.getElementById('statusBanner');
+      banner.className = `w-full px-4 py-3 rounded-2xl border transition-all flex items-center justify-between gap-3 shadow-2xs ${conf.banner.bg}`;
+      
+      const bannerDot = document.getElementById('statusIndicatorDot');
+      bannerDot.className = `w-2 h-2 rounded-full animate-pulse shrink-0 ${conf.banner.dot}`;
+      
+      const title = document.getElementById('statusTitle');
+      title.textContent = conf.banner.title;
+      
+      const sub = document.getElementById('statusSubtitle');
+      sub.textContent = conf.banner.subtitle;
+
+      const bannerTag = document.getElementById('statusBannerTag');
+      bannerTag.textContent = conf.banner.tag;
+      bannerTag.className = `text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shrink-0 border ${conf.banner.tagBg}`;
+
+      // 4. Update Detailed Vitals Cards
+      // Pulse
+      document.getElementById('valPulse').textContent = conf.pulse.val;
+      const bPulse = document.getElementById('badgePulseStatus');
+      bPulse.textContent = conf.pulse.status;
+      bPulse.className = `text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border ${conf.pulse.statusClass}`;
+      document.getElementById('badgePulseIcon').className = `w-8 h-8 rounded-2xl flex items-center justify-center ${conf.pulse.iconBox}`;
+      document.getElementById('svgWavePulse').querySelector('path').setAttribute('d', conf.pulse.wave);
+      document.getElementById('svgWavePulse').setAttribute('class', `w-full h-8 ${conf.pulse.waveColor}`);
+      document.getElementById('descPulse').textContent = conf.pulse.desc;
+
+      // Temp
+      document.getElementById('valTemp').textContent = conf.temp.val;
+      const bTemp = document.getElementById('badgeTempStatus');
+      bTemp.textContent = conf.temp.status;
+      bTemp.className = `text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border ${conf.temp.statusClass}`;
+      document.getElementById('badgeTempIcon').className = `w-8 h-8 rounded-2xl flex items-center justify-center ${conf.temp.iconBox}`;
+      document.getElementById('svgWaveTemp').querySelector('path').setAttribute('d', conf.temp.wave);
+      document.getElementById('svgWaveTemp').setAttribute('class', `w-full h-8 ${conf.temp.waveColor}`);
+      document.getElementById('descTemp').textContent = conf.temp.desc;
+
+      // Activity
+      document.getElementById('valActivity').textContent = conf.activity.val;
+      const bAct = document.getElementById('badgeActStatus');
+      bAct.textContent = conf.activity.status;
+      bAct.className = `text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border ${conf.activity.statusClass}`;
+      document.getElementById('badgeActIcon').className = `w-8 h-8 rounded-2xl flex items-center justify-center ${conf.activity.iconBox}`;
+      document.getElementById('barActivity').style.width = conf.activity.barWidth;
+      document.getElementById('barActivity').className = `h-full rounded-full ${conf.activity.barColor}`;
+      document.getElementById('txtActScore').textContent = conf.activity.barText;
+      document.getElementById('descActivity').textContent = conf.activity.desc;
+
+      // SpO2
+      document.getElementById('valSpo2').textContent = conf.spo2.val;
+      const bSpo2 = document.getElementById('badgeSpo2Status');
+      bSpo2.textContent = conf.spo2.status;
+      bSpo2.className = `text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border ${conf.spo2.statusClass}`;
+      document.getElementById('badgeSpo2Icon').className = `w-8 h-8 rounded-2xl flex items-center justify-center ${conf.spo2.iconBox}`;
+      document.getElementById('barSpo2').style.width = conf.spo2.barWidth;
+      document.getElementById('barSpo2').className = `h-full rounded-full ${conf.spo2.barColor}`;
+      document.getElementById('txtSpo2Score').textContent = conf.spo2.val;
+      document.getElementById('descSpo2').textContent = conf.spo2.desc;
+
+      // Respiration
+      document.getElementById('valResp').textContent = conf.resp.val;
+      const bResp = document.getElementById('badgeRespStatus');
+      bResp.textContent = conf.resp.status;
+      bResp.className = `text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border ${conf.resp.statusClass}`;
+      document.getElementById('badgeRespIcon').className = `w-8 h-8 rounded-2xl flex items-center justify-center ${conf.resp.iconBox}`;
+      document.getElementById('svgWaveResp').querySelector('path').setAttribute('d', conf.resp.wave);
+      document.getElementById('svgWaveResp').setAttribute('class', `w-full h-8 ${conf.resp.waveColor}`);
+      document.getElementById('descResp').textContent = conf.resp.desc;
+
+      // 5. Guidance Box
+      const guideBox = document.getElementById('guidanceBox');
+      guideBox.className = `bg-white rounded-3xl p-4 sm:p-5 border shadow-card space-y-2.5 ${conf.guidance.boxBorder}`;
+      document.getElementById('guidanceIcon').className = `w-6 h-6 rounded-full flex items-center justify-center font-black text-xs ${conf.guidance.iconBox}`;
+      document.getElementById('guidanceIcon').textContent = conf.guidance.iconChar;
+      document.getElementById('guidanceTitle').textContent = conf.guidance.title;
+      
+      const listEl = document.getElementById('guidanceList');
+      listEl.innerHTML = conf.guidance.items.map(item => `
+        <li class="flex items-start gap-2">
+          <span class="font-bold text-slate-400">•</span>
+          <span>${item}</span>
+        </li>
+      `).join('');
+
+      // 6. Action Button
+      document.getElementById('primaryActionButtonContainer').innerHTML = conf.button;
+
+      triggerToast(`Vitals State: ${conf.banner.title}`);
+    }
+
+    function returnToDashboard(e) {
+      if (e) e.preventDefault();
+      const stateParam = typeof currentState !== 'undefined' ? currentState : 'attention';
+      window.location.href = '../parentsdashboard.html?state=' + encodeURIComponent(stateParam);
+    }
+
+    function openAmbulanceModal() {
+      document.getElementById('modalAmbulance').classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    let toastTimeout;
+    function triggerToast(msg) {
+      const toast = document.getElementById('scToast');
+      const text = document.getElementById('scToastMsg');
+      const dot = document.getElementById('toastDot');
+      if (!toast || !text) return;
+      text.textContent = msg;
+
+      if (currentState === 'critical') dot.className = 'w-1.5 h-1.5 rounded-full bg-rose-500';
+      else if (currentState === 'attention') dot.className = 'w-1.5 h-1.5 rounded-full bg-amber-500';
+      else dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500';
+
+      toast.classList.remove('opacity-0');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0');
+      }, 2000);
+    }
+
+    function updateClock() {
+      const clock = document.getElementById('scLiveClock');
+      if (!clock) return;
+      const now = new Date();
+      let h = now.getHours();
+      let m = now.getMinutes();
+      clock.textContent = `${h}:${m < 10 ? '0' + m : m}`;
+    }
+    setInterval(updateClock, 30000);
+    updateClock();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const state = urlParams.get('state') || 'attention';
+      setHealthState(state);
+    });
+  </script>
+</body>
+</html>
