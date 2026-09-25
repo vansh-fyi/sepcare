@@ -14,3 +14,5 @@ Files archived here by Phase 5 (Repo Cleanup & Canonicalization), Plan 01, while
 | `frontend-handoff/USER-FLOWS.md` | `archive/frontend-handoff/USER-FLOWS.md` | Duplicate — canonical copy lives at `context/frontend-handoff/USER-FLOWS.md` |
 | `context/sdg/sdg-11-details.md` | `archive/context/sdg/sdg-11-details.md` | Off-topic — Sustainable Cities brainstorm, unrelated to neonatal sepsis (CLEAN-01) |
 | `context/sdg/sdg-13-details.md` | `archive/context/sdg/sdg-13-details.md` | Off-topic — Climate Action brainstorm, unrelated to neonatal sepsis (CLEAN-01) |
+| `context/implementation-plans/heatstroke-early-warning.md` | `archive/context/implementation-plans/heatstroke-early-warning.md` | Off-topic — other-SDG brainstorm matching CLEAN-01's literal wording, confirmed in scope per D-09 |
+| `context/implementation-plans/diarrheal-dehydration-screening.md` | `archive/context/implementation-plans/diarrheal-dehydration-screening.md` | Off-topic — other-SDG brainstorm matching CLEAN-01's literal wording, confirmed in scope per D-09 |
