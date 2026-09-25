@@ -108,5 +108,6 @@ Resume file: None
 
 ## Operator Next Steps
 
-- Review the v1.1 roadmap (`.planning/ROADMAP.md`) and requirement mappings (`.planning/REQUIREMENTS.md`)
-- Start Phase 5 with `/gsd-plan-phase 5` (or `/gsd-discuss-phase 5` first if discuss-mode questions are wanted)
+- Phase 5 (Repo Cleanup & Canonicalization) shipped — `frontend-design/` is now a single canonical tree, off-topic material archived, sepsis evidence verified intact
+- Start Phase 6 (Design System) with `/gsd-discuss-phase 6` (or `/gsd-plan-phase 6` to skip discussion)
+- Security enforcement is active — no `05-SECURITY.md` exists yet; run `/gsd-secure-phase 5` before considering Phase 5 fully closed out

@@ -32,10 +32,10 @@ Reliably turn a stream of vitals from a Waveshare ESP32-S3-Tiny wearable into an
 - ✓ Device can POST a batch of buffered offline readings once connectivity returns, and they are stored with their original timestamps — Phase 3
 - ✓ A read API (or Supabase realtime) exists for the frontend/dashboard to fetch current vitals, risk status, and history — live vitals + risk status via Realtime (Phase 1 + 2); bounded historical trend range query via `GET /api/readings` (Phase 4)
 - ✓ System supports a single device/baby profile end-to-end (v1 demo scope) — device provisioning, ingest, scoring, offline batch sync, and historical trends all shipped — Phase 1–4
+- ✓ Repo cleanup — single canonical `frontend-design/` prototype tree (salvaged/deduped/rewired), off-topic SDG + implementation-plan docs archived, all sepsis-relevant evidence verified byte-identical to pre-phase state — Phase 5
 
 ### Active
 
-- [ ] Repo cleanup — archive duplicate/off-topic material
 - [ ] New Tailwind v4 design system, validated against real component states
 - [ ] Caregiver + abstracted-parent HTML prototype
 - [ ] Backend gap-fill for prototype data needs
@@ -106,6 +106,9 @@ Candidates pulled from REQUIREMENTS.md's v2 section (archived at `.planning/mile
 | Batch sync sorts and deduplicates in memory before one upsert, then rescans affected history | Preserves original chronology, avoids duplicate rows on retries, and recomputes scores whose 12-hour windows gain backfilled readings | ✓ Validated — Phase 3 |
 | `GET /api/readings` allow-lists `nb-001` and returns a strict-validated, paginated, no-store JSON envelope with an optional embedded `risk_scores` join (`risk: null` when unscored) | Matches the existing device-scoping and safe-failure patterns from Phase 1/2/3; the embedded join gives one round trip instead of a second query per reading | ✓ Validated — Phase 4, 15 passing integration tests + production build |
 | `makeRequest`'s test-helper query-param type widened to `Record<string, string \| undefined>` (filtering `undefined` before `.set()`) | A code-review follow-up fix (WR-01) added `it.each` rows that omit a key entirely, producing a union of object shapes `next build`'s `tsc` pass rejected against `Record<string, string>` — caught by phase-goal re-verification, not by `npm test` (which doesn't type-check) | ✓ Validated — Phase 4, `npm run build` green |
+| `git mv` (never plain `mv`/`rm`) for every repo-cleanup archive/salvage move, with a full-path-mirror `archive/` destination for lone off-topic files and a flattened `archive/frontend-design-{name}/` destination for whole salvaged prototype subtrees | Preserves file history (`git log --follow`); the two archive-naming shapes match what's actually being archived (a subtree vs. a single duplicate file) | ✓ Validated — Phase 5 |
+| `parentsdashboard.html` deduped in favor of `parent-dashboard.html` (not the reverse) | `parent-dashboard.html` already matched the root's hyphenated `parent-*` naming convention | ✓ Validated — Phase 5, 8 inbound references across 5 files retargeted |
+| CLEAN-01's "other SDG brainstorm" scope extended post-research to include `context/implementation-plans/heatstroke-early-warning.md` and `diarrheal-dehydration-screening.md`, not just `context/sdg/sdg-11/13-details.md` | RESEARCH.md found these implementation-plan files were the literal "heatstroke, diarrheal dehydration" files CLEAN-01's requirement text names — a gap the original discuss-phase missed | ✓ Validated — Phase 5, archived alongside sdg-11/13 |
 
 ## Evolution
 
@@ -125,4 +128,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-25 after starting v1.1 milestone*
+*Last updated: 2026-09-25 after Phase 5*
