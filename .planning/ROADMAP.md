@@ -44,7 +44,11 @@ Full detail archived at [`.planning/milestones/v1.0-ROADMAP.md`](milestones/v1.0
   1. The repo contains exactly one canonical frontend/design-prototype directory — superseded/competing trees (`frontend-design/` root loose files, `xo/`, `sepcare/`, duplicate `frontend-handoff/`) are archived, not deleted, with a pointer note explaining what moved and why
   2. All sepsis-relevant research and clinical evidence (`context/implementation-plans/neonatal-sepsis-armband.md`, `context/web-research/sepsis-vs-common-illness-differentiation.md`, competitor research, `context/sdg/sdg-3-details.md`, `context/research/*`) remains unchanged at its original path
   3. Non-sepsis, off-topic planning material (other SDG brainstorm: heatstroke, diarrheal dehydration) is archived out of the agent's working view, not deleted
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Canonicalize frontend-design/ prototype tree: salvage xo/+sepcare/ screens, rewire links, dedupe parent-dashboard.html/parentsdashboard.html, archive duplicate frontend-handoff/
+- [ ] 05-02-PLAN.md — Archive off-topic SDG/implementation-plan material and verify sepsis-evidence integrity + reference-cleanliness phase-gate
 
 ### Phase 6: Design System (Tailwind v4 Tokens)
 **Goal**: A validated Tailwind v4 token-based design system exists that can support both the caregiver and parent visual language, proven against real component states before any full screen gets built
@@ -113,7 +117,7 @@ Phases execute in numeric order: 5 → 6 → 7 → 8 → 9 → 10
 | 2. Automatic Risk Scoring & Status | v1.0 | 3/3 | Complete | 2026-09-19 |
 | 3. Offline-Buffered Batch Sync | v1.0 | 3/3 | Complete | 2026-09-19 |
 | 4. Historical Trends API | v1.0 | 1/1 | Complete | 2026-09-19 |
-| 5. Repo Cleanup & Canonicalization | v1.1 | 0/TBD | Not started | - |
+| 5. Repo Cleanup & Canonicalization | v1.1 | 0/2 | Not started | - |
 | 6. Design System (Tailwind v4 Tokens) | v1.1 | 0/TBD | Not started | - |
 | 7. HTML Prototype (Caregiver + Parent) | v1.1 | 0/TBD | Not started | - |
 | 8. Backend Gap-Fill | v1.1 | 0/TBD | Not started | - |
