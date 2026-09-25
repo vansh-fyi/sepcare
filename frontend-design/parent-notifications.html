@@ -127,7 +127,7 @@
     <section class="flex items-center justify-between px-1 w-full" aria-label="Page Header">
       <div class="flex items-center gap-3">
         <!-- Back Button to Parent Dashboard -->
-        <a href="../parentsdashboard.html" onclick="returnToDashboard(event)" class="w-9 h-9 rounded-full bg-white/90 border border-slate-200/80 shadow-2xs flex items-center justify-center text-slate-700 hover:text-slate-900 active:scale-95 transition-all" title="Return to Parent Dashboard" aria-label="Return to Dashboard">
+        <a href="parent-dashboard.html" onclick="returnToDashboard(event)" class="w-9 h-9 rounded-full bg-white/90 border border-slate-200/80 shadow-2xs flex items-center justify-center text-slate-700 hover:text-slate-900 active:scale-95 transition-all" title="Return to Parent Dashboard" aria-label="Return to Dashboard">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
@@ -457,7 +457,7 @@
        06 — FLOATING MINIMALIST BOTTOM DOCK (SAME AS PARENT DASHBOARD)
        ========================================================================= -->
   <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-lg border border-slate-200/90 shadow-dock rounded-full px-5 py-2 flex items-center gap-4 z-40" aria-label="Navigation">
-    <a href="../parentsdashboard.html" onclick="returnToDashboard(event)" class="p-1 text-slate-500 hover:text-slate-900 font-bold flex items-center gap-1.5 text-xs transition-colors">
+    <a href="parent-dashboard.html" onclick="returnToDashboard(event)" class="p-1 text-slate-500 hover:text-slate-900 font-bold flex items-center gap-1.5 text-xs transition-colors">
       <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
         <polyline points="9 22 9 12 15 12 15 22" />
@@ -528,7 +528,7 @@
        DYNAMIC LOGIC & NOTIFICATIONS DATA SCRIPT
        ========================================================================= -->
   <script>
-    // State themes matching parentsdashboard.html and parent-vitals.html
+    // State themes matching parent-dashboard.html and parent-vitals.html
     const themeStates = {
       healthy: {
         bodyBg: 'bg-[#F2F8F5]',
@@ -847,7 +847,7 @@
     function returnToDashboard(e) {
       if (e) e.preventDefault();
       const stateParam = typeof currentState !== 'undefined' ? currentState : 'attention';
-      window.location.href = '../parentsdashboard.html?state=' + encodeURIComponent(stateParam);
+      window.location.href = 'parent-dashboard.html?state=' + encodeURIComponent(stateParam);
     }
 
     function navigateToVitals(e) {
