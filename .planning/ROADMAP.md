@@ -28,7 +28,7 @@ Full detail archived at [`.planning/milestones/v1.0-ROADMAP.md`](milestones/v1.0
 - Integer phases (5, 6, 7...): Planned milestone work
 - Decimal phases (5.1, 5.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 5: Repo Cleanup & Canonicalization** - Archive duplicate/off-topic material so only sepsis-relevant, non-duplicate content remains
+- [x] **Phase 5: Repo Cleanup & Canonicalization** - Archive duplicate/off-topic material so only sepsis-relevant, non-duplicate content remains (completed 2026-09-25)
 - [ ] **Phase 6: Design System (Tailwind v4 Tokens)** - Build and validate a shared caregiver/parent token set before any full-screen build starts
 - [ ] **Phase 7: HTML Prototype (Caregiver + Parent)** - Validate the full caregiver view and abstracted parent view against the shared design system
 - [ ] **Phase 8: Backend Gap-Fill** - Close every data gap the prototype surfaced before the Next.js port begins
@@ -141,7 +141,7 @@ Phases execute in numeric order: 5 → 6 → 7 → 8 → 9 → 10
 | 2. Automatic Risk Scoring & Status | v1.0 | 3/3 | Complete | 2026-09-19 |
 | 3. Offline-Buffered Batch Sync | v1.0 | 3/3 | Complete | 2026-09-19 |
 | 4. Historical Trends API | v1.0 | 1/1 | Complete | 2026-09-19 |
-| 5. Repo Cleanup & Canonicalization | v1.1 | 2/2 | In Progress|  |
+| 5. Repo Cleanup & Canonicalization | v1.1 | 2/2 | Complete    | 2026-09-25 |
 | 6. Design System (Tailwind v4 Tokens) | v1.1 | 0/TBD | Not started | - |
 | 7. HTML Prototype (Caregiver + Parent) | v1.1 | 0/TBD | Not started | - |
 | 8. Backend Gap-Fill | v1.1 | 0/TBD | Not started | - |
