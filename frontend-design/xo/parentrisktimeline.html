@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Risk Timeline</title>
+  <meta name="description" content="SepCare Longitudinal Risk Timeline: Retrospective physiological telemetry progression from Stable to Moderate and High Suspicion alerts.">
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Outfit"', '"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          boxShadow: {
+            'phone': '0 25px 70px -15px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05)',
+            'card': '0 2px 10px -2px rgba(15, 23, 42, 0.03)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #F8FAFC;
+    }
+
+    /* Custom smooth scrolling */
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-0 sm:p-6 md:p-10 select-none antialiased">
+
+  <!-- =========================================================================
+       DEVICE FRAME WRAPPER
+       Renders exact mobile frame on tablet/desktop & native full-bleed on mobile
+       ========================================================================= -->
+  <div class="w-full sm:max-w-[390px] min-h-screen sm:min-h-[844px] bg-white sm:rounded-[52px] sm:shadow-phone sm:border-[8px] sm:border-white relative flex flex-col justify-between overflow-hidden">
+
+    <!-- Screen Content Container -->
+    <div class="w-full flex-1 flex flex-col px-6 pt-3 pb-8 relative">
+
+      <!-- =====================================================================
+           01 — STATUS BAR (0:01, Cellular, Wi-Fi, Battery)
+           ===================================================================== -->
+      <div class="w-full flex justify-between items-center py-2 text-slate-900 select-none">
+        <!-- Left: Time (0:01 as in reference image) -->
+        <span class="text-[15px] font-bold tracking-tight pl-1.5" id="liveClock">0:01</span>
+
+        <!-- Right: System Icons -->
+        <div class="flex items-center gap-1.5 pr-1">
+          <!-- Cellular Signal (4 bars) -->
+          <svg class="w-4 h-3 text-slate-900" viewBox="0 0 18 12" fill="currentColor" aria-label="Full signal">
+            <rect x="0" y="8.5" width="2.6" height="3.5" rx="0.6" />
+            <rect x="4.2" y="6" width="2.6" height="6" rx="0.6" />
+            <rect x="8.4" y="3.5" width="2.6" height="8.5" rx="0.6" />
+            <rect x="12.6" y="0.5" width="2.6" height="11.5" rx="0.6" />
+          </svg>
+
+          <!-- Wi-Fi Icon -->
+          <svg class="w-4 h-3.5 text-slate-900 ml-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-label="Wi-Fi connected">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+            <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none" />
+          </svg>
+
+          <!-- Battery Icon -->
+          <div class="flex items-center ml-0.5" aria-label="Battery">
+            <div class="w-[22px] h-[11.5px] border-[1.8px] border-slate-900 rounded-[4px] p-[1.5px] flex items-center">
+              <div class="h-full w-[90%] bg-slate-900 rounded-[1.5px]"></div>
+            </div>
+            <div class="w-[1.5px] h-[4.5px] bg-slate-900 rounded-r-[1px] ml-[1px]"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           02 — TOP NAVIGATION: BACK BUTTON & TITLE
+           ===================================================================== -->
+      <div class="flex items-center gap-4 mt-2 mb-5">
+        <!-- Back Button -->
+        <a href="../parentsdashboard.html" onclick="if(history.length>1){history.back();return false;}" class="w-11 h-11 rounded-2xl border border-slate-300/80 bg-white flex items-center justify-center text-slate-900 hover:bg-slate-50 active:scale-95 transition-all shadow-xs cursor-pointer" title="Back" aria-label="Back">
+          <svg class="w-5 h-5 -ml-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </a>
+
+        <!-- Screen Title -->
+        <h1 class="text-[23px] font-black text-slate-900 tracking-tight leading-none">
+          Risk Timeline
+        </h1>
+      </div>
+
+      <!-- =====================================================================
+           03 — CONTINUOUS RISK TIMELINE WITH GROUPED STATUS BLOCKS
+           ===================================================================== -->
+      <div class="relative flex flex-col gap-3.5 w-full">
+
+        <!-- ===================================================================
+             BLOCK 1: HIGH SUSPICION (RED / ROSE BLOCK)
+             =================================================================== -->
+        <div class="relative bg-[#FFF0F2] border border-[#FECDD3]/80 rounded-[26px] overflow-hidden shadow-card">
+          <!-- Continuous Vertical Timeline Connecting Track Segment -->
+          <div class="absolute left-[31px] top-6 -bottom-1 w-[2.5px] bg-[#F87171] z-0"></div>
+
+          <!-- Item 1: 14:30 High Suspicion -->
+          <div class="relative z-10 flex items-start gap-4 p-4 pl-5 border-b border-[#FECDD3]/60 hover:bg-white/30 transition-colors cursor-pointer" onclick="showEventDetails('14:30', 'High Suspicion', 'Multiple Signals Abnormal', 'rose')">
+            <!-- Bullseye Dot -->
+            <div class="relative z-10 w-6 h-6 rounded-full bg-[#E11D48] flex items-center justify-center shrink-0 shadow-xs mt-1">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+            </div>
+            <!-- Content -->
+            <div class="flex flex-col">
+              <span class="text-[12px] font-bold text-slate-900 leading-tight">14:30</span>
+              <h2 class="text-[17px] font-black text-slate-900 tracking-tight leading-tight mt-0.5">High Suspicion</h2>
+              <p class="text-[12px] text-slate-600 font-medium leading-tight mt-0.5">Multiple Signals Abnormal</p>
+            </div>
+          </div>
+
+          <!-- Item 2: 14:10 High Suspicion -->
+          <div class="relative z-10 flex items-start gap-4 p-4 pl-5 hover:bg-white/30 transition-colors cursor-pointer" onclick="showEventDetails('14:10', 'High Suspicion', 'Multiple Signals Abnormal', 'rose')">
+            <!-- Bullseye Dot -->
+            <div class="relative z-10 w-6 h-6 rounded-full bg-[#E11D48] flex items-center justify-center shrink-0 shadow-xs mt-1">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+            </div>
+            <!-- Content -->
+            <div class="flex flex-col">
+              <span class="text-[12px] font-bold text-slate-900 leading-tight">14:10</span>
+              <h2 class="text-[17px] font-black text-slate-900 tracking-tight leading-tight mt-0.5">High Suspicion</h2>
+              <p class="text-[12px] text-slate-600 font-medium leading-tight mt-0.5">Multiple Signals Abnormal</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             BLOCK 2: MODERATE SUSPICION (AMBER / YELLOW BLOCK)
+             =================================================================== -->
+        <div class="relative bg-[#FFFBEB] border border-[#FDE68A]/80 rounded-[26px] overflow-hidden shadow-card">
+          <!-- Continuous Vertical Timeline Connecting Track Segment -->
+          <div class="absolute left-[31px] -top-3.5 -bottom-1 w-[2.5px] bg-[#FBBF24] z-0"></div>
+
+          <!-- Item 3: 13:50 Moderate Suspicion -->
+          <div class="relative z-10 flex items-start gap-4 p-4 pl-5 border-b border-[#FDE68A]/60 hover:bg-white/30 transition-colors cursor-pointer" onclick="showEventDetails('13:50', 'Moderate Suspicion', 'Thermoregulation Declining', 'amber')">
+            <!-- Bullseye Dot -->
+            <div class="relative z-10 w-6 h-6 rounded-full bg-[#F59E0B] flex items-center justify-center shrink-0 shadow-xs mt-1">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+            </div>
+            <!-- Content -->
+            <div class="flex flex-col">
+              <span class="text-[12px] font-bold text-slate-900 leading-tight">13:50</span>
+              <h2 class="text-[17px] font-black text-slate-900 tracking-tight leading-tight mt-0.5">Moderate Suspicion</h2>
+              <p class="text-[12px] text-slate-600 font-medium leading-tight mt-0.5">Thermoregulation Declining</p>
+            </div>
+          </div>
+
+          <!-- Item 4: 12.30 Moderate Suspicion -->
+          <div class="relative z-10 flex items-start gap-4 p-4 pl-5 border-b border-[#FDE68A]/60 hover:bg-white/30 transition-colors cursor-pointer" onclick="showEventDetails('12.30', 'Moderate Suspicion', 'Thermoregulation Declining', 'amber')">
+            <!-- Bullseye Dot -->
+            <div class="relative z-10 w-6 h-6 rounded-full bg-[#F59E0B] flex items-center justify-center shrink-0 shadow-xs mt-1">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+            </div>
+            <!-- Content -->
+            <div class="flex flex-col">
+              <span class="text-[12px] font-bold text-slate-900 leading-tight">12.30</span>
+              <h2 class="text-[17px] font-black text-slate-900 tracking-tight leading-tight mt-0.5">Moderate Suspicion</h2>
+              <p class="text-[12px] text-slate-600 font-medium leading-tight mt-0.5">Thermoregulation Declining</p>
+            </div>
+          </div>
+
+          <!-- Item 5: 11:10 Moderate Suspicion -->
+          <div class="relative z-10 flex items-start gap-4 p-4 pl-5 hover:bg-white/30 transition-colors cursor-pointer" onclick="showEventDetails('11:10', 'Moderate Suspicion', 'HRV Patterns Changes', 'amber')">
+            <!-- Bullseye Dot -->
+            <div class="relative z-10 w-6 h-6 rounded-full bg-[#F59E0B] flex items-center justify-center shrink-0 shadow-xs mt-1">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+            </div>
+            <!-- Content -->
+            <div class="flex flex-col">
+              <span class="text-[12px] font-bold text-slate-900 leading-tight">11:10</span>
+              <h2 class="text-[17px] font-black text-slate-900 tracking-tight leading-tight mt-0.5">Moderate Suspicion</h2>
+              <p class="text-[12px] text-slate-600 font-medium leading-tight mt-0.5">HRV Patterns Changes</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             BLOCK 3: ALL SYSTEMS STABLE (MINT / GREEN BLOCK)
+             =================================================================== -->
+        <div class="relative bg-[#F0FDF4] border border-[#BBF7D0]/80 rounded-[26px] overflow-hidden shadow-card">
+          <!-- Continuous Vertical Timeline Connecting Track Segment -->
+          <div class="absolute left-[31px] -top-3.5 bottom-6 w-[2.5px] bg-[#34D399] z-0"></div>
+
+          <!-- Item 6: 10:50 All Systems Stable -->
+          <div class="relative z-10 flex items-center gap-4 p-4 pl-5 border-b border-[#BBF7D0]/60 hover:bg-white/30 transition-colors cursor-pointer" onclick="showEventDetails('10:50', 'Stable Condition', 'All Systems Stable', 'emerald')">
+            <!-- Bullseye Dot -->
+            <div class="relative z-10 w-6 h-6 rounded-full bg-[#10B981] flex items-center justify-center shrink-0 shadow-xs">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+            </div>
+            <!-- Content -->
+            <div class="flex flex-col">
+              <span class="text-[12px] font-bold text-slate-900 leading-tight">10:50</span>
+              <p class="text-[12px] text-slate-600 font-medium leading-tight mt-0.5">All Systems Stable</p>
+            </div>
+          </div>
+
+          <!-- Item 7: 10:30 All Systems Stable -->
+          <div class="relative z-10 flex items-center gap-4 p-4 pl-5 border-b border-[#BBF7D0]/60 hover:bg-white/30 transition-colors cursor-pointer" onclick="showEventDetails('10:30', 'Stable Condition', 'All Systems Stable', 'emerald')">
+            <!-- Bullseye Dot -->
+            <div class="relative z-10 w-6 h-6 rounded-full bg-[#10B981] flex items-center justify-center shrink-0 shadow-xs">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+            </div>
+            <!-- Content -->
+            <div class="flex flex-col">
+              <span class="text-[12px] font-bold text-slate-900 leading-tight">10:30</span>
+              <p class="text-[12px] text-slate-600 font-medium leading-tight mt-0.5">All Systems Stable</p>
+            </div>
+          </div>
+
+          <!-- Item 8: 10:10 All Systems Stable -->
+          <div class="relative z-10 flex items-center gap-4 p-4 pl-5 hover:bg-white/30 transition-colors cursor-pointer" onclick="showEventDetails('10:10', 'Stable Condition', 'All Systems Stable', 'emerald')">
+            <!-- Bullseye Dot -->
+            <div class="relative z-10 w-6 h-6 rounded-full bg-[#10B981] flex items-center justify-center shrink-0 shadow-xs">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+            </div>
+            <!-- Content -->
+            <div class="flex flex-col">
+              <span class="text-[12px] font-bold text-slate-900 leading-tight">10:10</span>
+              <p class="text-[12px] text-slate-600 font-medium leading-tight mt-0.5">All Systems Stable</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Home Indicator Bar (Mobile Bezel) -->
+    <div class="hidden sm:block absolute bottom-1.5 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-900/20 rounded-full pointer-events-none"></div>
+
+  </div>
+
+  <!-- Interactive Feedback Toast -->
+  <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg z-50 pointer-events-none opacity-0 transition-opacity duration-300 flex items-center gap-2">
+    <span class="w-1.5 h-1.5 rounded-full bg-[#00D084]" id="toastDot"></span>
+    <span id="toastMsg">Telemetry Event Selected</span>
+  </div>
+
+  <script>
+    // Maintain 0:01 presentation clock from reference mockup (or ?live=1 for live system time)
+    function updateClock() {
+      const clockEl = document.getElementById('liveClock');
+      if (!clockEl) return;
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('live') === '1') {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        clockEl.textContent = `${hours}:${minutes}`;
+      } else {
+        clockEl.textContent = '0:01';
+      }
+    }
+    updateClock();
+
+    // Event Click Interaction
+    let toastTimeout;
+    function showEventDetails(time, title, desc, color) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastDot = document.getElementById('toastDot');
+      if (!toast || !toastMsg) return;
+
+      if (color === 'rose') {
+        toastDot.className = 'w-1.5 h-1.5 rounded-full bg-rose-500';
+      } else if (color === 'amber') {
+        toastDot.className = 'w-1.5 h-1.5 rounded-full bg-amber-500';
+      } else {
+        toastDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500';
+      }
+
+      toastMsg.textContent = `${time} · ${title}: ${desc}`;
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Clinical Vitals</title>
+  <meta name="description" content="SepCare Clinical Vitals: Real-time telemetry monitoring for Thermoregulation, Cardiac Autonomic, Perfusion Index, HR/Temp Ratio, Respiratory Pattern, and Activity Level.">
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans for exact geometric typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Outfit"', '"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              mintBg: '#CEEFE7',
+              mintIcon: '#0A8F82',
+            }
+          },
+          boxShadow: {
+            'phone': '0 25px 70px -15px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05)',
+            'card': '0 2px 10px -2px rgba(15, 23, 42, 0.03)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #F8FAFC;
+    }
+
+    /* Subtle hover micro-transition */
+    .vital-card {
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .vital-card:active {
+      transform: scale(0.985);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-0 sm:p-6 md:p-10 select-none antialiased">
+
+  <!-- =========================================================================
+       DEVICE FRAME WRAPPER
+       Renders exact mobile frame on tablet/desktop & native full-bleed on mobile
+       ========================================================================= -->
+  <div class="w-full sm:max-w-[390px] min-h-screen sm:min-h-[844px] bg-white sm:rounded-[52px] sm:shadow-phone sm:border-[8px] sm:border-white relative flex flex-col justify-between overflow-hidden">
+
+    <!-- Screen Content Container -->
+    <div class="w-full flex-1 flex flex-col px-6 pt-3 pb-8 relative">
+
+      <!-- =====================================================================
+           01 — STATUS BAR (9:41, Cellular, Wi-Fi, Battery)
+           ===================================================================== -->
+      <div class="w-full flex justify-between items-center py-2 text-slate-900 select-none">
+        <!-- Left: Time -->
+        <span class="text-[15px] font-bold tracking-tight pl-1.5" id="liveClock">9:41</span>
+
+        <!-- Right: System Icons -->
+        <div class="flex items-center gap-1.5 pr-1">
+          <!-- Cellular Signal (4 bars) -->
+          <svg class="w-4 h-3 text-slate-900" viewBox="0 0 18 12" fill="currentColor" aria-label="Full signal">
+            <rect x="0" y="8.5" width="2.6" height="3.5" rx="0.6" />
+            <rect x="4.2" y="6" width="2.6" height="6" rx="0.6" />
+            <rect x="8.4" y="3.5" width="2.6" height="8.5" rx="0.6" />
+            <rect x="12.6" y="0.5" width="2.6" height="11.5" rx="0.6" />
+          </svg>
+
+          <!-- Wi-Fi Icon -->
+          <svg class="w-4 h-3.5 text-slate-900 ml-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-label="Wi-Fi connected">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+            <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none" />
+          </svg>
+
+          <!-- Battery Icon -->
+          <div class="flex items-center ml-0.5" aria-label="Battery 90%">
+            <div class="w-[22px] h-[11.5px] border-[1.8px] border-slate-900 rounded-[4px] p-[1.5px] flex items-center">
+              <div class="h-full w-[90%] bg-slate-900 rounded-[1.5px]"></div>
+            </div>
+            <div class="w-[1.5px] h-[4.5px] bg-slate-900 rounded-r-[1px] ml-[1px]"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           02 — TOP NAVIGATION: BACK BUTTON & TITLE
+           ===================================================================== -->
+      <div class="flex items-center gap-4 mt-2 mb-5">
+        <!-- Back Button -->
+        <a href="../clinical-overview.html" onclick="if(history.length>1){history.back();return false;}" class="w-11 h-11 rounded-2xl border border-slate-300/80 bg-white flex items-center justify-center text-slate-900 hover:bg-slate-50 active:scale-95 transition-all shadow-xs cursor-pointer" title="Back" aria-label="Back">
+          <svg class="w-5 h-5 -ml-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </a>
+
+        <!-- Screen Title -->
+        <h1 class="text-[23px] font-black text-slate-900 tracking-tight leading-none">
+          Clinical Vitals
+        </h1>
+      </div>
+
+      <!-- =====================================================================
+           03 — 6 CLINICAL VITALS CARDS
+           ===================================================================== -->
+      <div class="flex flex-col gap-2.5 w-full" role="list" aria-label="Clinical Vitals Parameters">
+
+        <!-- CARD 1: Thermoregulation -->
+        <div 
+          onclick="openVitalDetail('Thermoregulation', '36.8 °C', 'Stable range: 36.5 – 37.5 °C', 'Core body and peripheral sensors show normal neonatal heat equilibrium.')"
+          role="button"
+          tabindex="0"
+          class="vital-card w-full bg-white rounded-[22px] border border-slate-200/80 p-3 px-4 shadow-card flex items-center justify-between cursor-pointer hover:border-slate-300"
+        >
+          <div class="flex items-center gap-3.5">
+            <!-- Mint Squircle Icon Badge -->
+            <div class="w-11 h-11 rounded-2xl bg-[#CEEFE7] flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-[#0A8F82]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
+                <circle cx="11.5" cy="17" r="1.8" fill="currentColor" stroke="none" />
+              </svg>
+            </div>
+            <!-- Text Content -->
+            <div class="flex flex-col">
+              <h2 class="text-[15px] font-bold text-slate-900 tracking-tight leading-snug">Thermoregulation</h2>
+              <p class="text-[12px] text-slate-400 font-medium">All systems stable</p>
+            </div>
+          </div>
+          <!-- Chevron Right -->
+          <svg class="w-5 h-5 text-slate-400 stroke-[2.2] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+        <!-- CARD 2: Cardiac Autonomic -->
+        <div 
+          onclick="openVitalDetail('Cardiac Autonomic', '138 bpm', 'HRV: 42 ms (Stable)', 'Autonomic cardiac rhythm shows robust vagal modulation and low sepsis entropy.')"
+          role="button"
+          tabindex="0"
+          class="vital-card w-full bg-white rounded-[22px] border border-slate-200/80 p-3 px-4 shadow-card flex items-center justify-between cursor-pointer hover:border-slate-300"
+        >
+          <div class="flex items-center gap-3.5">
+            <!-- Mint Squircle Icon Badge -->
+            <div class="w-11 h-11 rounded-2xl bg-[#CEEFE7] flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-[#0A8F82]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 16 12 8 9 15 6 12 2 12" />
+              </svg>
+            </div>
+            <!-- Text Content -->
+            <div class="flex flex-col">
+              <h2 class="text-[15px] font-bold text-slate-900 tracking-tight leading-snug">Cardiac Autonomic</h2>
+              <p class="text-[12px] text-slate-400 font-medium">All systems stable</p>
+            </div>
+          </div>
+          <!-- Chevron Right -->
+          <svg class="w-5 h-5 text-slate-400 stroke-[2.2] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+        <!-- CARD 3: Perfusion Index -->
+        <div 
+          onclick="openVitalDetail('Perfusion Index', '2.1 %', 'Normal index: > 1.4 %', 'Microvascular capillary refill and pulse waveform volume are optimal.')"
+          role="button"
+          tabindex="0"
+          class="vital-card w-full bg-white rounded-[22px] border border-slate-200/80 p-3 px-4 shadow-card flex items-center justify-between cursor-pointer hover:border-slate-300"
+        >
+          <div class="flex items-center gap-3.5">
+            <!-- Mint Squircle Icon Badge -->
+            <div class="w-11 h-11 rounded-2xl bg-[#CEEFE7] flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-[#0A8F82]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+              </svg>
+            </div>
+            <!-- Text Content -->
+            <div class="flex flex-col">
+              <h2 class="text-[15px] font-bold text-slate-900 tracking-tight leading-snug">Perfusion Index</h2>
+              <p class="text-[12px] text-slate-400 font-medium">All systems stable</p>
+            </div>
+          </div>
+          <!-- Chevron Right -->
+          <svg class="w-5 h-5 text-slate-400 stroke-[2.2] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+        <!-- CARD 4: HR / Temp Ratio -->
+        <div 
+          onclick="openVitalDetail('HR / Temp Ratio', '3.75', 'Liebermeister baseline: 3.5 – 4.2', 'Synchronous balance between cardiac frequency and thermodynamic dissipation.')"
+          role="button"
+          tabindex="0"
+          class="vital-card w-full bg-white rounded-[22px] border border-slate-200/80 p-3 px-4 shadow-card flex items-center justify-between cursor-pointer hover:border-slate-300"
+        >
+          <div class="flex items-center gap-3.5">
+            <!-- Mint Squircle Icon Badge -->
+            <div class="w-11 h-11 rounded-2xl bg-[#CEEFE7] flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-[#0A8F82]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+                <path d="M22 12A10 10 0 0 0 12 2v10z" />
+              </svg>
+            </div>
+            <!-- Text Content -->
+            <div class="flex flex-col">
+              <h2 class="text-[15px] font-bold text-slate-900 tracking-tight leading-snug">HR / Temp Ratio</h2>
+              <p class="text-[12px] text-slate-400 font-medium">All systems stable</p>
+            </div>
+          </div>
+          <!-- Chevron Right -->
+          <svg class="w-5 h-5 text-slate-400 stroke-[2.2] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+        <!-- CARD 5: Respiratory Pattern -->
+        <div 
+          onclick="openVitalDetail('Respiratory Pattern', '44 br/min', 'Rhythm regular (No apnea)', 'Thoracoabdominal excursion is unlabored with stable tidal respiratory rate.')"
+          role="button"
+          tabindex="0"
+          class="vital-card w-full bg-white rounded-[22px] border border-slate-200/80 p-3 px-4 shadow-card flex items-center justify-between cursor-pointer hover:border-slate-300"
+        >
+          <div class="flex items-center gap-3.5">
+            <!-- Mint Squircle Icon Badge -->
+            <div class="w-11 h-11 rounded-2xl bg-[#CEEFE7] flex items-center justify-center shrink-0">
+              <!-- Lungs Icon -->
+              <svg class="w-5 h-5 text-[#0A8F82]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 4v7" />
+                <path d="M10 7l2 4 2-4" />
+                <path d="M12 11c-2 0-4.5 1-5.5 3.5-1 2.5-.5 5 1.5 5.5 2 .5 4-1.5 4-4v-5z" />
+                <path d="M12 11c2 0 4.5 1 5.5 3.5 1 2.5.5 5-1.5 5.5-2 .5-4-1.5-4-4v-5z" />
+              </svg>
+            </div>
+            <!-- Text Content -->
+            <div class="flex flex-col">
+              <h2 class="text-[15px] font-bold text-slate-900 tracking-tight leading-snug">Respiratory Pattern</h2>
+              <p class="text-[12px] text-slate-400 font-medium">All systems stable</p>
+            </div>
+          </div>
+          <!-- Chevron Right -->
+          <svg class="w-5 h-5 text-slate-400 stroke-[2.2] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+        <!-- CARD 6: Activity Level -->
+        <div 
+          onclick="openVitalDetail('Activity Level', 'Moderate Calm', 'IMU tone within baseline', 'Infant is in restful sleep state with normal periodic sleep-wake motility.')"
+          role="button"
+          tabindex="0"
+          class="vital-card w-full bg-white rounded-[22px] border border-slate-200/80 p-3 px-4 shadow-card flex items-center justify-between cursor-pointer hover:border-slate-300"
+        >
+          <div class="flex items-center gap-3.5">
+            <!-- Mint Squircle Icon Badge -->
+            <div class="w-11 h-11 rounded-2xl bg-[#CEEFE7] flex items-center justify-center shrink-0">
+              <!-- Radiating Broadcast Waves Icon -->
+              <svg class="w-5 h-5 text-[#0A8F82]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="2" fill="currentColor" />
+                <path d="M16.24 7.76a6 6 0 0 1 0 8.49" />
+                <path d="M7.76 16.24a6 6 0 0 1 0-8.49" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                <path d="M4.93 19.07a10 10 0 0 1 0-14.14" />
+              </svg>
+            </div>
+            <!-- Text Content -->
+            <div class="flex flex-col">
+              <h2 class="text-[15px] font-bold text-slate-900 tracking-tight leading-snug">Activity Level</h2>
+              <p class="text-[12px] text-slate-400 font-medium">All systems stable</p>
+            </div>
+          </div>
+          <!-- Chevron Right -->
+          <svg class="w-5 h-5 text-slate-400 stroke-[2.2] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           04 — BOTTOM ACTION: "Veiw Trends" BUTTON
+           ===================================================================== -->
+      <div class="w-full mt-6">
+        <a 
+          href="../clinical-overview.html" 
+          id="btnViewTrends"
+          class="w-full py-3.5 rounded-2xl border border-slate-300/90 bg-white hover:bg-slate-50 active:scale-[0.985] text-slate-900 font-semibold text-[17px] shadow-2xs transition-all flex items-center justify-center text-center cursor-pointer"
+        >
+          Veiw Trends
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Home Indicator Bar (Mobile Bezel) -->
+    <div class="hidden sm:block absolute bottom-1.5 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-900/20 rounded-full pointer-events-none"></div>
+
+  </div>
+
+  <!-- =========================================================================
+       CLINICAL DETAIL MODAL / DRAWER
+       ========================================================================= -->
+  <div id="vitalModalOverlay" onclick="closeVitalDetail()" class="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden opacity-0 transition-opacity duration-200">
+    <div onclick="event.stopPropagation()" class="bg-white w-full max-w-[390px] rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl space-y-4 transform translate-y-8 transition-transform duration-200" id="vitalModalContent">
+      <div class="w-10 h-1 bg-slate-200 rounded-full mx-auto sm:hidden -mt-1 mb-2"></div>
+      
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#CEEFE7] flex items-center justify-center text-[#0A8F82]">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <div>
+            <h3 id="modalVitalTitle" class="text-base font-extrabold text-slate-900">Thermoregulation</h3>
+            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Stable
+            </span>
+          </div>
+        </div>
+        <button type="button" onclick="closeVitalDetail()" class="text-slate-400 hover:text-slate-700 text-lg font-bold p-1 cursor-pointer">✕</button>
+      </div>
+
+      <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4">
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Current Value</div>
+        <div id="modalVitalValue" class="text-2xl font-black text-slate-900 mt-0.5">36.8 °C</div>
+        <div id="modalVitalRange" class="text-xs text-slate-500 font-medium mt-1">Stable range: 36.5 – 37.5 °C</div>
+      </div>
+
+      <p id="modalVitalDesc" class="text-xs text-slate-600 leading-relaxed font-medium">
+        Core body and peripheral sensors show normal neonatal heat equilibrium.
+      </p>
+
+      <button type="button" onclick="closeVitalDetail()" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer transition-colors">
+        Close Diagnostics
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive Feedback Toast -->
+  <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg z-50 pointer-events-none opacity-0 transition-opacity duration-300 flex items-center gap-2">
+    <span class="w-1.5 h-1.5 rounded-full bg-[#00D084]"></span>
+    <span id="toastMsg">Clinical Telemetry Active</span>
+  </div>
+
+  <script>
+    // Maintain 9:41 exact mockup presentation time by default (or ?live=1 for live system time)
+    function updateClock() {
+      const clockEl = document.getElementById('liveClock');
+      if (!clockEl) return;
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('live') === '1') {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        clockEl.textContent = `${hours}:${minutes}`;
+      } else {
+        clockEl.textContent = '9:41';
+      }
+    }
+    updateClock();
+
+    // Vital Detail Modal
+    function openVitalDetail(title, value, range, desc) {
+      document.getElementById('modalVitalTitle').textContent = title;
+      document.getElementById('modalVitalValue').textContent = value;
+      document.getElementById('modalVitalRange').textContent = range;
+      document.getElementById('modalVitalDesc').textContent = desc;
+
+      const overlay = document.getElementById('vitalModalOverlay');
+      const content = document.getElementById('vitalModalContent');
+      overlay.classList.remove('hidden');
+      setTimeout(() => {
+        overlay.classList.remove('opacity-0');
+        overlay.classList.add('opacity-100');
+        content.classList.remove('translate-y-8');
+        content.classList.add('translate-y-0');
+      }, 10);
+    }
+
+    function closeVitalDetail() {
+      const overlay = document.getElementById('vitalModalOverlay');
+      const content = document.getElementById('vitalModalContent');
+      overlay.classList.remove('opacity-100');
+      overlay.classList.add('opacity-0');
+      content.classList.remove('translate-y-0');
+      content.classList.add('translate-y-8');
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+      }, 200);
+    }
+  </script>
+</body>
+</html>

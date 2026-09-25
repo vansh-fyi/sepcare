@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SepCare — Baby Aarav Overview</title>
+  <meta name="description" content="SepCare Parent Overview for Baby Aarav: Instant telemetry summary, vitals readings, and stability reassurance.">
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Outfit"', '"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              mintBorder: '#A7F3D0',
+              mintDark: '#0D9488',
+              slateIcon: '#4B6B94',
+            }
+          },
+          boxShadow: {
+            'phone': '0 25px 70px -15px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05)',
+            'card': '0 2px 10px -2px rgba(15, 23, 42, 0.03)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #F8FAFC;
+    }
+
+    /* Subtle pulse animation for status ring */
+    @keyframes babyRingPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .sc-ring-pulse {
+      animation: babyRingPulse 3.5s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-0 sm:p-6 md:p-10 select-none antialiased">
+
+  <!-- =========================================================================
+       DEVICE FRAME WRAPPER
+       Renders exact mobile frame on tablet/desktop & native full-bleed on mobile
+       ========================================================================= -->
+  <div class="w-full sm:max-w-[390px] min-h-screen sm:min-h-[844px] bg-white sm:rounded-[52px] sm:shadow-phone sm:border-[8px] sm:border-white relative flex flex-col justify-between overflow-hidden">
+
+    <!-- Screen Content Container -->
+    <div class="w-full flex-1 flex flex-col px-5 pt-3 pb-8 relative">
+
+      <!-- =====================================================================
+           01 — STATUS BAR (0:01, Cellular, Wi-Fi, Battery)
+           ===================================================================== -->
+      <div class="w-full flex justify-between items-center py-2 text-slate-900 select-none">
+        <!-- Left: Time (0:01 as in reference image) -->
+        <span class="text-[15px] font-bold tracking-tight pl-1.5" id="liveClock">0:01</span>
+
+        <!-- Right: System Icons -->
+        <div class="flex items-center gap-1.5 pr-1">
+          <!-- Cellular Signal (4 bars) -->
+          <svg class="w-4 h-3 text-slate-900" viewBox="0 0 18 12" fill="currentColor" aria-label="Full signal">
+            <rect x="0" y="8.5" width="2.6" height="3.5" rx="0.6" />
+            <rect x="4.2" y="6" width="2.6" height="6" rx="0.6" />
+            <rect x="8.4" y="3.5" width="2.6" height="8.5" rx="0.6" />
+            <rect x="12.6" y="0.5" width="2.6" height="11.5" rx="0.6" />
+          </svg>
+
+          <!-- Wi-Fi Icon -->
+          <svg class="w-4 h-3.5 text-slate-900 ml-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-label="Wi-Fi connected">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+            <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none" />
+          </svg>
+
+          <!-- Battery Icon -->
+          <div class="flex items-center ml-0.5" aria-label="Battery">
+            <div class="w-[22px] h-[11.5px] border-[1.8px] border-slate-900 rounded-[4px] p-[1.5px] flex items-center">
+              <div class="h-full w-[90%] bg-slate-900 rounded-[1.5px]"></div>
+            </div>
+            <div class="w-[1.5px] h-[4.5px] bg-slate-900 rounded-r-[1px] ml-[1px]"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           02 — MINT-BORDERED INNER MAIN CARD WRAPPER
+           Matches the exact mint rounded card frame from the reference image
+           ===================================================================== -->
+      <div class="w-full flex-1 flex flex-col p-4 sm:p-5 rounded-[36px] border-2 border-[#A7F3D0] mt-2 mb-4 bg-white shadow-card">
+
+        <!-- Top Navigation: Back Button & Title (No square box around chevron) -->
+        <div class="flex items-center gap-2 mb-4">
+          <!-- Back Button Chevron -->
+          <a href="../parentsdashboard.html" onclick="if(history.length>1){history.back();return false;}" class="p-1 -ml-1 text-slate-900 hover:text-slate-600 transition-colors cursor-pointer" title="Back" aria-label="Back">
+            <svg class="w-6 h-6 stroke-[3]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </a>
+
+          <!-- Screen Title -->
+          <h1 class="text-[24px] font-black text-slate-900 tracking-tight leading-none">
+            Baby Aarav
+          </h1>
+        </div>
+
+        <!-- Monitoring & Updated Two-Column Metadata -->
+        <div class="grid grid-cols-2 gap-4 pb-5 pl-1">
+          <!-- Col 1: Monitoring Live -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+              <span class="text-[12px] font-bold text-slate-900">Monitoring live</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium mt-0.5 pl-3.5">
+              check band connection
+            </p>
+          </div>
+
+          <!-- Col 2: Updated just now -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+              <span class="text-[12px] font-bold text-slate-900">Updated just now</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium mt-0.5 pl-3.5">
+              updated 4 minutes ago
+            </p>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             03 — "Baby is currently stable" BANNER CARD
+             =================================================================== -->
+        <div class="w-full bg-[#F0FDF9] rounded-[26px] border border-[#A7F3D0] p-4 flex items-center gap-3.5 shadow-2xs mb-6">
+          <!-- Baby Face Avatar Ring -->
+          <div class="w-14 h-14 rounded-full bg-white border-[2.5px] border-[#10B981] p-1 flex items-center justify-center shrink-0 sc-ring-pulse shadow-xs">
+            <svg viewBox="0 0 60 60" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Baby Beanie Hat (Warm Orange/Amber with little pompom) -->
+              <circle cx="30" cy="11" r="3.5" fill="#F59E0B" />
+              <path d="M16 26 C16 16 22 13 30 13 C38 13 44 16 44 26 Z" fill="#F59E0B" />
+              <path d="M15 25 Q30 27 45 25" stroke="#D97706" stroke-width="2.2" stroke-linecap="round" />
+              <!-- Baby Head / Face -->
+              <ellipse cx="30" cy="34" rx="14" ry="13" fill="#FEE4D4" />
+              <!-- Gentle Eyes -->
+              <path d="M23 32 Q25.5 34 28 32" stroke="#475569" stroke-width="1.8" stroke-linecap="round" fill="none" />
+              <path d="M32 32 Q34.5 34 37 32" stroke="#475569" stroke-width="1.8" stroke-linecap="round" fill="none" />
+              <!-- Soft Blush -->
+              <circle cx="22" cy="37" r="2.2" fill="#FB7185" opacity="0.6" />
+              <circle cx="38" cy="37" r="2.2" fill="#FB7185" opacity="0.6" />
+              <!-- Happy Smile -->
+              <path d="M27 39 Q30 42 33 39" stroke="#EA580C" stroke-width="1.6" stroke-linecap="round" fill="none" />
+            </svg>
+          </div>
+
+          <!-- Stability Headline & Reassurance -->
+          <div class="flex flex-col">
+            <h2 class="text-[17px] sm:text-[18px] font-black text-[#0D9488] tracking-tight leading-snug">
+              Baby is currently stable
+            </h2>
+            <p class="text-[12px] text-slate-500 font-medium leading-relaxed mt-0.5">
+              No concerning changes detected in recent monitoting.
+            </p>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             04 — CURRENT READINGS SECTION
+             =================================================================== -->
+        <h3 class="text-[16px] font-extrabold text-slate-700 tracking-tight mb-3 pl-0.5">
+          Current Readings
+        </h3>
+
+        <!-- 3 Vitals Tiles Grid -->
+        <div class="grid grid-cols-3 gap-2.5 w-full mb-6">
+
+          <!-- TILE 1: PULSE -->
+          <div class="w-full bg-white rounded-[24px] border border-[#A7F3D0] py-4 px-1.5 flex flex-col items-center justify-center text-center shadow-2xs hover:shadow-card transition-all">
+            <!-- Blue Circular Icon Badge -->
+            <div class="w-13 h-13 rounded-full bg-[#EFF6FF] flex items-center justify-center mb-2.5">
+              <svg class="w-6 h-6 text-[#3B6699]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+            </div>
+            <!-- Label -->
+            <span class="text-[12px] font-semibold text-slate-600">Pulse</span>
+            <!-- Value & Unit -->
+            <div class="flex items-baseline justify-center gap-0.5 mt-0.5">
+              <span class="text-[19px] font-black text-slate-800 leading-none">78</span>
+              <span class="text-[9px] font-bold text-slate-500 uppercase">BPM</span>
+            </div>
+          </div>
+
+          <!-- TILE 2: TEMPERATURE -->
+          <div class="w-full bg-white rounded-[24px] border border-[#A7F3D0] py-4 px-1.5 flex flex-col items-center justify-center text-center shadow-2xs hover:shadow-card transition-all">
+            <!-- Blue Circular Icon Badge -->
+            <div class="w-13 h-13 rounded-full bg-[#EFF6FF] flex items-center justify-center mb-2.5">
+              <svg class="w-6 h-6 text-[#3B6699]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
+              </svg>
+            </div>
+            <!-- Label -->
+            <span class="text-[12px] font-semibold text-slate-600">Temperature</span>
+            <!-- Value & Unit -->
+            <div class="flex items-baseline justify-center gap-0.5 mt-0.5">
+              <span class="text-[19px] font-black text-slate-800 leading-none">98.6</span>
+              <span class="text-[10px] font-bold text-slate-500">° F</span>
+            </div>
+          </div>
+
+          <!-- TILE 3: ACTIVITY -->
+          <div class="w-full bg-white rounded-[24px] border border-[#A7F3D0] py-4 px-1.5 flex flex-col items-center justify-center text-center shadow-2xs hover:shadow-card transition-all">
+            <!-- Blue Circular Icon Badge -->
+            <div class="w-13 h-13 rounded-full bg-[#EFF6FF] flex items-center justify-center mb-2.5">
+              <!-- Triple Wavy Lines Icon -->
+              <svg class="w-6 h-6 text-[#3B6699]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 7c2.5-2 5 2 7.5 0s5-2 7.5 0 5 2 7 0" />
+                <path d="M2 12c2.5-2 5 2 7.5 0s5-2 7.5 0 5 2 7 0" />
+                <path d="M2 17c2.5-2 5 2 7.5 0s5-2 7.5 0 5 2 7 0" />
+              </svg>
+            </div>
+            <!-- Label -->
+            <span class="text-[12px] font-semibold text-slate-600">Activity</span>
+            <!-- Value -->
+            <div class="flex items-baseline justify-center mt-0.5">
+              <span class="text-[16px] font-black text-slate-800 leading-none">Normal</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ===================================================================
+             05 — "View Details →" ACTION BUTTON
+             =================================================================== -->
+        <a 
+          href="parent-vitals.html" 
+          id="btnViewDetails"
+          class="w-full py-3.5 rounded-2xl border border-[#A7F3D0] bg-white hover:bg-slate-50 active:scale-[0.985] text-slate-700 font-bold text-[15px] shadow-2xs transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
+        >
+          <span>View Details</span>
+          <span class="text-lg leading-none font-bold">→</span>
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- Home Indicator Bar (Mobile Bezel) -->
+    <div class="hidden sm:block absolute bottom-1.5 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-900/20 rounded-full pointer-events-none"></div>
+
+  </div>
+
+  <script>
+    // Maintain 0:01 presentation clock from reference mockup (or ?live=1 for live system time)
+    function updateClock() {
+      const clockEl = document.getElementById('liveClock');
+      if (!clockEl) return;
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('live') === '1') {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        clockEl.textContent = `${hours}:${minutes}`;
+      } else {
+        clockEl.textContent = '0:01';
+      }
+    }
+    updateClock();
+  </script>
+</body>
+</html>
