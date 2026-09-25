@@ -1,0 +1,680 @@
+import { describe, it, expect, afterEach } from "vitest";
+import { NextRequest } from "next/server";
+import { POST } from "@/app/api/ingest/route";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import { computeAndPersistRiskScore } from "@/lib/risk/compute";
+import { TREND_WINDOW_MS } from "@/lib/risk/thresholds";
+import { deleteReadingByTimestamp } from "./helpers/cleanup";
+
+const DEVICE_ID = "nb-001";
+const VALID_KEY = process.env.DEVICE_API_KEY!;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+function makeRequest(body: unknown, headers: Record<string, string> = {}) {
+  return new NextRequest("http://localhost/api/ingest", {
+    method: "POST",
+    headers: { "content-type": "application/json", ...headers },
+    body: typeof body === "string" ? body : JSON.stringify(body),
+  });
+}
+
+type InsertedReadingRow = {
+  id: number;
+  deviceId: string;
+  timestamp: number;
+  heartRate: number;
+  temperature: number;
+  activityScore: number;
+};
+
+/**
+ * Inserts a synthetic reading directly via supabaseAdmin (not through the
+ * route), for full control over historical spacing when building test
+ * histories.
+ */
+async function insertReading(row: {
+  timestamp: number;
+  heartRate: number;
+  temperature: number;
+  activityScore: number;
+  deviceId?: string;
+}): Promise<InsertedReadingRow> {
+  const { data, error } = await supabaseAdmin
+    .from("readings")
+    .insert({
+      deviceId: row.deviceId ?? DEVICE_ID,
+      timestamp: row.timestamp,
+      heartRate: row.heartRate,
+      spo2: 98,
+      temperature: row.temperature,
+      activityScore: row.activityScore,
+    })
+    .select("id, deviceId, timestamp, heartRate, temperature, activityScore")
+    .single();
+
+  if (error || !data) {
+    throw error ?? new Error("insertReading: no data returned");
+  }
+  return data as InsertedReadingRow;
+}
+
+describe("computeAndPersistRiskScore — core behaviors (Task 1)", () => {
+  const insertedTimestamps: number[] = [];
+
+  afterEach(async () => {
+    while (insertedTimestamps.length) {
+      const ts = insertedTimestamps.pop()!;
+      await deleteReadingByTimestamp(ts); // cascades to risk_scores via ON DELETE CASCADE
+    }
+  });
+
+  it("persists green with all 3 breakdown sub-objects non-abnormal for a fresh device history + normal reading", async () => {
+    const timestamp = Date.now() + 100 * DAY_MS;
+    insertedTimestamps.push(timestamp);
+
+    const target = await insertReading({
+      timestamp,
+      heartRate: 130,
+      temperature: 36.9,
+      activityScore: 5,
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+
+    expect(result.status).toBe("green");
+    expect(result.breakdown.temperature.abnormal).toBe(false);
+    expect(result.breakdown.hrTempProportionality.abnormal).toBe(false);
+    expect(result.breakdown.activityTrend.trending).toBe(false);
+
+    const { data, error } = await supabaseAdmin
+      .from("risk_scores")
+      .select("status, breakdown")
+      .eq("reading_id", target.id)
+      .maybeSingle();
+
+    expect(error).toBeNull();
+    expect(data?.status).toBe("green");
+  });
+
+  it("keeps status green for a single fever reading (temp 38.5) with no other abnormal signal — count=1, D-12", async () => {
+    const timestamp = Date.now() + 101 * DAY_MS;
+    insertedTimestamps.push(timestamp);
+
+    const target = await insertReading({
+      timestamp,
+      heartRate: 130,
+      temperature: 38.5,
+      activityScore: 5,
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+
+    expect(result.status).toBe("green");
+    expect(result.breakdown.temperature.abnormal).toBe(true);
+    expect(result.breakdown.hrTempProportionality.abnormal).toBe(false);
+    expect(result.breakdown.activityTrend.trending).toBe(false);
+  });
+
+  it("scores a POST /api/ingest reading automatically — a risk_scores row exists immediately after the response returns (RISK-03)", async () => {
+    const timestamp = Date.now() + 102 * DAY_MS;
+    insertedTimestamps.push(timestamp);
+
+    const payload = {
+      deviceId: DEVICE_ID,
+      timestamp,
+      vitals: { heartRate: 132, spo2: 98, temperature: 36.8, activityScore: 4 },
+    };
+
+    const res = await POST(makeRequest(payload, { "x-api-key": VALID_KEY }));
+    expect(res.status).toBe(201);
+
+    const { data: reading } = await supabaseAdmin
+      .from("readings")
+      .select("id")
+      .eq("timestamp", timestamp)
+      .maybeSingle();
+
+    expect(reading).not.toBeNull();
+
+    const { data: riskScore, error } = await supabaseAdmin
+      .from("risk_scores")
+      .select("status, breakdown")
+      .eq("reading_id", reading!.id)
+      .maybeSingle();
+
+    expect(error).toBeNull();
+    expect(riskScore).not.toBeNull();
+    expect(riskScore?.status).toBe("green");
+  });
+});
+
+describe("computeAndPersistRiskScore — temperature boundary (D-13 asymmetric >=/< , Task 2)", () => {
+  const insertedTimestamps: number[] = [];
+
+  afterEach(async () => {
+    while (insertedTimestamps.length) {
+      const ts = insertedTimestamps.pop()!;
+      await deleteReadingByTimestamp(ts);
+    }
+  });
+
+  it.each([
+    { temp: 38.0, expected: true, dayOffset: 200, label: "38.0 (fever threshold, inclusive) -> abnormal" },
+    { temp: 37.99, expected: false, dayOffset: 201, label: "37.99 -> not abnormal" },
+    { temp: 35.5, expected: false, dayOffset: 202, label: "35.5 (hypothermia threshold, exclusive) -> NOT abnormal" },
+    { temp: 35.49, expected: true, dayOffset: 203, label: "35.49 -> abnormal" },
+  ])("$label", async ({ temp, expected, dayOffset }) => {
+    const timestamp = Date.now() + dayOffset * DAY_MS;
+    insertedTimestamps.push(timestamp);
+
+    const target = await insertReading({
+      timestamp,
+      heartRate: 130,
+      temperature: temp,
+      activityScore: 5,
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.breakdown.temperature.abnormal).toBe(expected);
+  });
+});
+
+describe("computeAndPersistRiskScore — HR/temp proportionality boundary (Liebermeister band [6,14], Task 2)", () => {
+  const insertedTimestamps: number[] = [];
+
+  afterEach(async () => {
+    while (insertedTimestamps.length) {
+      const ts = insertedTimestamps.pop()!;
+      await deleteReadingByTimestamp(ts);
+    }
+  });
+
+  it.each([
+    { deltaHR: 3.0, expected: false, dayOffset: 204, label: "ratio 6 (inclusive lower bound) -> not abnormal" },
+    { deltaHR: 7.0, expected: false, dayOffset: 205, label: "ratio 14 (inclusive upper bound) -> not abnormal" },
+    { deltaHR: 2.995, expected: true, dayOffset: 206, label: "ratio 5.99 -> abnormal" },
+    { deltaHR: 7.005, expected: true, dayOffset: 207, label: "ratio 14.01 -> abnormal" },
+  ])("$label", async ({ deltaHR, expected, dayOffset }) => {
+    const baselineTimestamp = Date.now() + dayOffset * DAY_MS;
+    const targetTimestamp = baselineTimestamp + 2 * 60 * 60 * 1000; // 2h later, baseline established (>1h)
+    insertedTimestamps.push(baselineTimestamp, targetTimestamp);
+
+    await insertReading({
+      timestamp: baselineTimestamp,
+      heartRate: 120,
+      temperature: 36.0,
+      activityScore: 5,
+    });
+
+    // deltaTemp fixed at 0.5 (not fever/hypothermia), deltaHR varied per case.
+    const target = await insertReading({
+      timestamp: targetTimestamp,
+      heartRate: 120 + deltaHR,
+      temperature: 36.5,
+      activityScore: 5,
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.breakdown.hrTempProportionality.abnormal).toBe(expected);
+  });
+});
+
+describe("computeAndPersistRiskScore — breadth gate + fever-vs-sepsis demo traces (D-12, Task 2)", () => {
+  const insertedTimestamps: number[] = [];
+
+  afterEach(async () => {
+    while (insertedTimestamps.length) {
+      const ts = insertedTimestamps.pop()!;
+      await deleteReadingByTimestamp(ts);
+    }
+  });
+
+  async function buildScenario(dayOffset: number, opts: {
+    baselineHR: number;
+    baselineTemp: number;
+    baselineActivity: number;
+    targetHR: number;
+    targetTemp: number;
+    targetActivity: number;
+  }) {
+    const baselineTimestamp = Date.now() + dayOffset * DAY_MS;
+    const targetTimestamp = baselineTimestamp + 2 * 60 * 60 * 1000; // 2h later
+    insertedTimestamps.push(baselineTimestamp, targetTimestamp);
+
+    await insertReading({
+      timestamp: baselineTimestamp,
+      heartRate: opts.baselineHR,
+      temperature: opts.baselineTemp,
+      activityScore: opts.baselineActivity,
+    });
+
+    const target = await insertReading({
+      timestamp: targetTimestamp,
+      heartRate: opts.targetHR,
+      temperature: opts.targetTemp,
+      activityScore: opts.targetActivity,
+    });
+
+    return target;
+  }
+
+  it("'common fever' trace: isolated fever, in-band HR ratio, stable activity -> green (count=1)", async () => {
+    const target = await buildScenario(208, {
+      baselineHR: 120,
+      baselineTemp: 36.5,
+      baselineActivity: 5,
+      targetHR: 136, // deltaHR=16, deltaTemp=2.0 -> ratio=8 (in [6,14])
+      targetTemp: 38.5, // fever, abnormal
+      targetActivity: 5, // stable, not trending
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.breakdown.temperature.abnormal).toBe(true);
+    expect(result.breakdown.hrTempProportionality.abnormal).toBe(false);
+    expect(result.breakdown.activityTrend.trending).toBe(false);
+    expect(result.status).toBe("green");
+  });
+
+  it("'sepsis-shaped' trace: fever + proportionality break + declining activity, all within the 12h window -> red (count=3)", async () => {
+    const target = await buildScenario(209, {
+      baselineHR: 120,
+      baselineTemp: 36.5,
+      baselineActivity: 10,
+      targetHR: 170, // deltaHR=50, deltaTemp=2.5 -> ratio=20 (out of band)
+      targetTemp: 39.0, // fever, abnormal
+      targetActivity: 5, // <= 10*0.7=7 -> declining, abnormal
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.breakdown.temperature.abnormal).toBe(true);
+    expect(result.breakdown.hrTempProportionality.abnormal).toBe(true);
+    expect(result.breakdown.activityTrend.trending).toBe(true);
+    expect(result.status).toBe("red");
+  });
+
+  it("exactly 2 co-occurring abnormal features (temp + HR-ratio) -> amber", async () => {
+    const target = await buildScenario(210, {
+      baselineHR: 120,
+      baselineTemp: 36.5,
+      baselineActivity: 5,
+      targetHR: 180, // deltaHR=60, deltaTemp=2.5 -> ratio=24 (out of band)
+      targetTemp: 39.0, // fever, abnormal
+      targetActivity: 5, // stable, not trending
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.status).toBe("amber");
+  });
+
+  it("0 abnormal features with an established baseline -> green", async () => {
+    const target = await buildScenario(211, {
+      baselineHR: 120,
+      baselineTemp: 36.5,
+      baselineActivity: 5,
+      targetHR: 122, // deltaHR=2, deltaTemp=0.3 -> ratio~6.67 (in band)
+      targetTemp: 36.8, // not fever/hypothermia
+      targetActivity: 5, // stable
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.breakdown.temperature.abnormal).toBe(false);
+    expect(result.breakdown.hrTempProportionality.abnormal).toBe(false);
+    expect(result.breakdown.activityTrend.trending).toBe(false);
+    expect(result.status).toBe("green");
+  });
+
+  it("exactly 1 abnormal feature (isolated HR-ratio break) with an established baseline -> green", async () => {
+    const target = await buildScenario(212, {
+      baselineHR: 120,
+      baselineTemp: 36.5,
+      baselineActivity: 5,
+      targetHR: 122, // deltaHR=2, deltaTemp=0.1 -> ratio=20 (out of band)
+      targetTemp: 36.6, // not fever/hypothermia
+      targetActivity: 5, // stable
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.breakdown.temperature.abnormal).toBe(false);
+    expect(result.breakdown.hrTempProportionality.abnormal).toBe(true);
+    expect(result.breakdown.activityTrend.trending).toBe(false);
+    expect(result.status).toBe("green");
+  });
+});
+
+describe("computeAndPersistRiskScore — structural prohibitions P1/P2 (Task 2)", () => {
+  const insertedTimestamps: number[] = [];
+
+  afterEach(async () => {
+    while (insertedTimestamps.length) {
+      const ts = insertedTimestamps.pop()!;
+      await deleteReadingByTimestamp(ts);
+    }
+  });
+
+  it("P1: a reading inserted with a timestamp AFTER the target is never included in the target's computed window", async () => {
+    const baselineTimestamp = Date.now() + 213 * DAY_MS;
+    const targetTimestamp = baselineTimestamp + 2 * 60 * 60 * 1000;
+    const futureTimestamp = targetTimestamp + 60 * 1000; // 1 minute after target
+    insertedTimestamps.push(baselineTimestamp, targetTimestamp, futureTimestamp);
+
+    await insertReading({
+      timestamp: baselineTimestamp,
+      heartRate: 120,
+      temperature: 36.5,
+      activityScore: 5,
+    });
+
+    const target = await insertReading({
+      timestamp: targetTimestamp,
+      heartRate: 128, // deltaHR=8, deltaTemp=1.0 -> ratio=8 (in-band [6,14])
+      temperature: 37.5, // not fever/hypothermia
+      activityScore: 5,
+    });
+
+    // Extreme future reading — if this were wrongly included in the window,
+    // it would flip every feature abnormal.
+    await insertReading({
+      timestamp: futureTimestamp,
+      heartRate: 300,
+      temperature: 45,
+      activityScore: 0,
+    });
+
+    // Direct window-read assertion (not just the final status): replicate
+    // compute.ts's exact window filter and confirm the future row is absent.
+    const { data: windowRows, error } = await supabaseAdmin
+      .from("readings")
+      .select("id, timestamp")
+      .eq("deviceId", DEVICE_ID)
+      .lte("timestamp", target.timestamp)
+      .gte("timestamp", target.timestamp - TREND_WINDOW_MS)
+      .order("timestamp", { ascending: true });
+
+    expect(error).toBeNull();
+    expect(windowRows?.some((row) => row.timestamp > target.timestamp)).toBe(false);
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.status).toBe("green");
+    expect(result.breakdown.temperature.abnormal).toBe(false);
+    expect(result.breakdown.hrTempProportionality.abnormal).toBe(false);
+    expect(result.breakdown.activityTrend.trending).toBe(false);
+  });
+
+  it("P2: an extreme single-feature reading (temperature 40.0) alone still resolves green — severity never bypasses the count gate", async () => {
+    const timestamp = Date.now() + 214 * DAY_MS;
+    insertedTimestamps.push(timestamp);
+
+    const target = await insertReading({
+      timestamp,
+      heartRate: 130,
+      temperature: 40.0,
+      activityScore: 5,
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.breakdown.temperature.abnormal).toBe(true);
+    expect(result.status).toBe("green");
+  });
+});
+
+describe("computeAndPersistRiskScore — 12h window adjacency (D-26 inclusive >=, Task 2)", () => {
+  const insertedTimestamps: number[] = [];
+
+  afterEach(async () => {
+    while (insertedTimestamps.length) {
+      const ts = insertedTimestamps.pop()!;
+      await deleteReadingByTimestamp(ts);
+    }
+  });
+
+  it("a prior reading exactly TREND_WINDOW_MS old IS included; one millisecond older is excluded", async () => {
+    const targetTimestamp = Date.now() + 215 * DAY_MS;
+    const boundaryTimestamp = targetTimestamp - TREND_WINDOW_MS; // exactly 12h before
+    const justOutsideTimestamp = boundaryTimestamp - 1; // 12h + 1ms before
+    insertedTimestamps.push(targetTimestamp, boundaryTimestamp, justOutsideTimestamp);
+
+    const boundaryRow = await insertReading({
+      timestamp: boundaryTimestamp,
+      heartRate: 120,
+      temperature: 36.5,
+      activityScore: 5,
+    });
+    const outsideRow = await insertReading({
+      timestamp: justOutsideTimestamp,
+      heartRate: 999,
+      temperature: 20,
+      activityScore: 999,
+    });
+
+    const target = await insertReading({
+      timestamp: targetTimestamp,
+      heartRate: 122,
+      temperature: 36.6,
+      activityScore: 5,
+    });
+
+    const { data: windowRows, error } = await supabaseAdmin
+      .from("readings")
+      .select("id, timestamp")
+      .eq("deviceId", DEVICE_ID)
+      .lte("timestamp", target.timestamp)
+      .gte("timestamp", target.timestamp - TREND_WINDOW_MS)
+      .order("timestamp", { ascending: true });
+
+    expect(error).toBeNull();
+    const windowIds = windowRows?.map((row) => row.id) ?? [];
+    expect(windowIds).toContain(boundaryRow.id);
+    expect(windowIds).not.toContain(outsideRow.id);
+  });
+
+  it("D-33 supersedes this scenario: a live device can no longer produce two readings sharing an identical timestamp, which the DB now rejects", async () => {
+    // Phase 3's D-33 migration added a unique constraint on
+    // readings("deviceId","timestamp"). compute.ts's tie-break-by-id branch
+    // (row.timestamp === target.timestamp && row.id < target.id) was written
+    // for a same-timestamp scenario that this constraint now makes
+    // structurally impossible to construct for a single device — the
+    // original version of this test inserted two rows at an identical
+    // timestamp directly via supabaseAdmin, which the live schema rejects
+    // outright. The tie-break branch is retained as harmless defensive code
+    // (unreachable for a single device, but not incorrect), and this test is
+    // rewritten to assert the actual current invariant that makes it
+    // unreachable: the DB itself, not application logic, now guarantees
+    // timestamp uniqueness per device.
+    const timestamp = Date.now() + 216 * DAY_MS;
+    insertedTimestamps.push(timestamp);
+
+    await insertReading({
+      timestamp,
+      heartRate: 100,
+      temperature: 36.0,
+      activityScore: 5,
+    });
+
+    const { error } = await supabaseAdmin.from("readings").insert({
+      deviceId: DEVICE_ID,
+      timestamp,
+      heartRate: 200,
+      spo2: 98,
+      temperature: 36.2,
+      activityScore: 5,
+    });
+
+    expect(error).not.toBeNull();
+    expect(error?.message).toContain("readings_deviceid_timestamp_key");
+  });
+});
+
+describe("computeAndPersistRiskScore — failure isolation across requests (RISK-03, D-24)", () => {
+  const insertedTimestamps: number[] = [];
+
+  afterEach(async () => {
+    while (insertedTimestamps.length) {
+      const ts = insertedTimestamps.pop()!;
+      await deleteReadingByTimestamp(ts);
+    }
+  });
+
+  it("a forced failure for one target does not corrupt a subsequent, valid computation", async () => {
+    // Force a real failure: a target whose id has no matching readings row
+    // violates risk_scores.reading_id's FK constraint at the upsert step —
+    // this exercises the actual failure path, not just a code-inspection claim.
+    const bogusTarget = {
+      id: 999999999,
+      deviceId: DEVICE_ID,
+      timestamp: Date.now() + 300 * DAY_MS,
+      heartRate: 130,
+      temperature: 36.9,
+      activityScore: 5,
+    };
+
+    await expect(computeAndPersistRiskScore(bogusTarget)).rejects.toBeTruthy();
+
+    // Immediately after the forced failure, a normal reading must still
+    // score correctly — no leftover/corrupted state from the failed call
+    // (compute.ts holds no module-level mutable state between invocations).
+    const timestamp = Date.now() + 301 * DAY_MS;
+    insertedTimestamps.push(timestamp);
+
+    const target = await insertReading({
+      timestamp,
+      heartRate: 130,
+      temperature: 36.9,
+      activityScore: 5,
+    });
+
+    const result = await computeAndPersistRiskScore(target);
+    expect(result.status).toBe("green");
+
+    const { data: riskScore, error } = await supabaseAdmin
+      .from("risk_scores")
+      .select("status")
+      .eq("reading_id", target.id)
+      .maybeSingle();
+
+    expect(error).toBeNull();
+    expect(riskScore?.status).toBe("green");
+  });
+});
+
+describe("computeAndPersistRiskScore — window pagination past PostgREST's max_rows cap", () => {
+  it(
+    "a >1000-reading 12h window is never silently truncated to the oldest max_rows rows",
+    async () => {
+      const NORMAL_COUNT = 1000;
+      const MARKER_COUNT = 5;
+      const NORMAL_HR = 100;
+      const MARKER_HR = 100000;
+      const SPACING_MS = 30 * 1000; // 30s apart -> ~8.4h span, within the 12h window
+      const totalPrior = NORMAL_COUNT + MARKER_COUNT;
+
+      const baseTimestamp = Date.now() + 218 * DAY_MS;
+      const rangeStart = baseTimestamp;
+      const rangeEnd = baseTimestamp + (totalPrior - 1) * SPACING_MS;
+
+      // The 5 newest prior rows (closest to the target) carry an extreme,
+      // distinguishable heartRate. If the window query were silently
+      // truncated to PostgREST's oldest-1000 rows (the pre-fix bug), these
+      // markers would be excluded entirely and the computed baseline would
+      // reflect only the 1000 normal rows.
+      const bulkRows = Array.from({ length: totalPrior }, (_, i) => ({
+        deviceId: DEVICE_ID,
+        timestamp: baseTimestamp + i * SPACING_MS,
+        heartRate: i >= NORMAL_COUNT ? MARKER_HR : NORMAL_HR,
+        spo2: 98,
+        temperature: 36.5,
+        activityScore: 5,
+      }));
+
+      const { error: bulkInsertError } = await supabaseAdmin
+        .from("readings")
+        .insert(bulkRows);
+      expect(bulkInsertError).toBeNull();
+
+      try {
+        const targetTimestamp = rangeEnd + SPACING_MS;
+        const target = await insertReading({
+          timestamp: targetTimestamp,
+          heartRate: 130,
+          temperature: 37.0, // deltaTemp fixed at 0.5 vs the 36.5 baseline mean
+          activityScore: 5,
+        });
+
+        try {
+          const expectedBaselineHR =
+            (NORMAL_COUNT * NORMAL_HR + MARKER_COUNT * MARKER_HR) / totalPrior;
+          const expectedRatio = (target.heartRate - expectedBaselineHR) / 0.5;
+          // Sanity check the test's own math is actually distinguishing —
+          // the buggy (truncated) baseline would produce ratio=(130-100)/0.5=60.
+          expect(expectedRatio).toBeLessThan(-100);
+
+          const result = await computeAndPersistRiskScore(target);
+
+          expect(result.breakdown.hrTempProportionality.ratio).toBeCloseTo(
+            expectedRatio,
+            2
+          );
+        } finally {
+          await deleteReadingByTimestamp(targetTimestamp);
+        }
+      } finally {
+        await supabaseAdmin
+          .from("readings")
+          .delete()
+          .eq("deviceId", DEVICE_ID)
+          .gte("timestamp", rangeStart)
+          .lte("timestamp", rangeEnd);
+      }
+    },
+    30000
+  );
+});
+
+describe("risk_scores queryable by time range through readings (STOR-02, Plan 02-03 Task 2)", () => {
+  const insertedTimestamps: number[] = [];
+
+  afterEach(async () => {
+    while (insertedTimestamps.length) {
+      const ts = insertedTimestamps.pop()!;
+      await deleteReadingByTimestamp(ts); // cascades to risk_scores via ON DELETE CASCADE
+    }
+  });
+
+  it("a PostgREST embedded-join range query filtered by readings.timestamp returns exactly the in-range readings, each carrying its own non-null nested risk_scores, in ascending timestamp order", async () => {
+    const baseTimestamp = Date.now() + 217 * DAY_MS;
+    const spacingMs = 2 * 60 * 60 * 1000; // ~2h apart
+    const timestamps = [0, 1, 2, 3].map((offset) => baseTimestamp + offset * spacingMs);
+    insertedTimestamps.push(...timestamps);
+
+    // 4 readings, each immediately scored so every one has a linked
+    // risk_scores row — a realistic multi-reading history to query over.
+    for (const [index, timestamp] of timestamps.entries()) {
+      const reading = await insertReading({
+        timestamp,
+        heartRate: 120 + index,
+        temperature: 36.5 + index * 0.1,
+        activityScore: 5,
+      });
+      await computeAndPersistRiskScore(reading);
+    }
+
+    // Bounded window covering exactly the 2nd and 3rd readings.
+    const { data: rangeRows, error } = await supabaseAdmin
+      .from("readings")
+      .select("timestamp, risk_scores(status, breakdown)")
+      .eq("deviceId", DEVICE_ID)
+      .gte("timestamp", timestamps[1])
+      .lte("timestamp", timestamps[2])
+      .order("timestamp", { ascending: true });
+
+    expect(error).toBeNull();
+    expect(rangeRows).toHaveLength(2);
+    expect(rangeRows?.[0]?.timestamp).toBe(timestamps[1]);
+    expect(rangeRows?.[1]?.timestamp).toBe(timestamps[2]);
+
+    for (const row of rangeRows ?? []) {
+      const nested = row.risk_scores as unknown as { status: string; breakdown: unknown } | null;
+      expect(nested).not.toBeNull();
+      expect(typeof nested?.status).toBe("string");
+    }
+  });
+});

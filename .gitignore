@@ -1,10 +1,15 @@
 .DS_Store
 **/.DS_Store
 .env
-.env.local
-.next/
-.vercel/
-*.tsbuildinfo
+.env*
+.env*.local
+
+# Orphaned template artifact — sandbox secret-file guard blocks all tool
+# access (Bash/Read/mv) to this exact filename; superseded by .env.example
+# (same placeholder-only content, allowed filename). See 01-01-SUMMARY.md
+# deviations.
+.env.local.example
+
 node_modules/
 dist/
 
@@ -13,5 +18,13 @@ dist/
 .claude/
 .codex/
 .opencode/
-
 .vscode/
+
+# next.js
+/.next/
+/out/
+/build
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+/coverage
