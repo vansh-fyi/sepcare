@@ -15,3 +15,11 @@ This directory holds the static HTML/CSS/JS design prototype for SepCare, built 
 2. Reuse existing component markup/classes from `components.css` — don't reinvent styling for things that already exist (header, cards, etc.).
 3. Link `components.css` and the shared JS file(s) rather than writing new inline styles/scripts.
 4. Keep page-specific JS in its own small module file if it doesn't belong in the shared script.
+
+## Archived subtrees
+
+This directory used to contain two uncoordinated teammate snapshots, `xo/` and `sepcare/`, each duplicating parts of the screen set with its own relative-path conventions. Their unique screens were salvaged into this directory's flat structure: `parent-vitals.html`, `parent-notifications.html`, `profile-selection.html` (from `sepcare/`), and `clinical-vitals.html`, `settings.html`, `device-status.html`, `parent-risk-timeline.html` (from `xo/`). The remainder of each subtree — screens fully superseded by a canonical root file — moved to `archive/frontend-design-xo/` and `archive/frontend-design-sepcare/`. See `archive/README.md` for the full index.
+
+`parentsdashboard.html` was also deduped in favor of `parent-dashboard.html` (byte-identical content, all inbound references retargeted) and archived to `archive/frontend-design/parentsdashboard.html`.
+
+Do not recreate `xo/`, `sepcare/`, or `parentsdashboard.html` — this directory is a single flat tree, one file per screen, per the Structure conventions above.
