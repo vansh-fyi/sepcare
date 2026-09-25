@@ -9,9 +9,9 @@ Requirements for this milestone (judge-ready demo, ~2 dedicated days). Each maps
 
 ### Cleanup
 
-- [ ] **CLEAN-01**: Non-sepsis, off-topic planning material (other SDG brainstorm: heatstroke, diarrheal dehydration) is archived out of the agent's working view, not deleted
+- [x] **CLEAN-01**: Non-sepsis, off-topic planning material (other SDG brainstorm: heatstroke, diarrheal dehydration) is archived out of the agent's working view, not deleted
 - [x] **CLEAN-02**: Duplicate directories (`frontend-handoff/` vs `context/frontend-handoff/`) and superseded/competing prototype trees (`frontend-design/` root loose files, `xo/`, `sepcare/`) are consolidated to a single canonical source or archived
-- [ ] **CLEAN-03**: Sepsis-relevant research and clinical evidence (`context/implementation-plans/neonatal-sepsis-armband.md`, `context/web-research/sepsis-vs-common-illness-differentiation.md`, competitor research, `context/sdg/sdg-3-details.md`, `context/research/*`) remains fully intact and untouched — these are the judge-facing evidence base, not planning noise
+- [x] **CLEAN-03**: Sepsis-relevant research and clinical evidence (`context/implementation-plans/neonatal-sepsis-armband.md`, `context/web-research/sepsis-vs-common-illness-differentiation.md`, competitor research, `context/sdg/sdg-3-details.md`, `context/research/*`) remains fully intact and untouched — these are the judge-facing evidence base, not planning noise
 
 ### Design System
 
@@ -80,9 +80,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CLEAN-01 | Phase 5 | Pending |
+| CLEAN-01 | Phase 5 | Complete |
 | CLEAN-02 | Phase 5 | Complete |
-| CLEAN-03 | Phase 5 | Pending |
+| CLEAN-03 | Phase 5 | Complete |
 | DSYS-01 | Phase 6 | Pending |
 | DSYS-02 | Phase 6 | Pending |
 | DSYS-03 | Phase 6 | Pending |
