@@ -6,7 +6,7 @@ status: planning
 last_updated: "2026-09-25T06:06:52.205Z"
 last_activity: 2026-09-25
 progress:
-  total_phases: 0
+  total_phases: 6
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -17,17 +17,19 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-20)
+See: .planning/PROJECT.md (updated 2026-09-25)
 
 **Core value:** Reliably turn a stream of vitals from a Waveshare ESP32-S3-Tiny wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
-**Current focus:** v1.0 shipped and archived (tag `v1.0`). Planning next milestone — see PROJECT.md's "Next Milestone Goals" for candidates.
+**Current focus:** v1.1 roadmap created — 6 phases (5-10) covering cleanup, design system, HTML prototype, backend gap-fill, hardware integration, and Next.js port/deploy. Ready for `/gsd-plan-phase 5`.
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-09-25 — Milestone v1.1 started
+Phase: 5 of 10 (Repo Cleanup & Canonicalization) — first phase of v1.1
+Plan: — (not yet planned)
+Status: Roadmap created, ready to plan Phase 5
+Last activity: 2026-09-25 — v1.1 ROADMAP.md and REQUIREMENTS.md traceability written
+
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -67,7 +69,7 @@ Last activity: 2026-09-25 — Milestone v1.1 started
 
 ### Decisions
 
-Full decision log lives in PROJECT.md's Key Decisions table (carried through v1.0's milestone evolution review). Cleared here at milestone close — nothing new since the archive.
+Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant framing captured there at milestone start (2026-09-25): ESP32-S3-Tiny hardware source of truth, recommended stack (Tailwind v4 `@theme`, shadcn/ui, Motion, Recharts) from research/SUMMARY.md.
 
 ### Pending Todos
 
@@ -75,9 +77,9 @@ None yet.
 
 ### Blockers/Concerns
 
-None currently. (Resolved: the tests/risk.compute.test.ts failure caused by Plan 03-01's unique constraint was fixed during Phase 3's verification gate — see deferred-items.md. Also resolved: Phase 4's post-review `npm run build` TypeScript break, fixed and re-verified during Phase 4's own verification gate.)
+None currently for v1.1 planning. Carried forward from v1.0 (non-blocking): `GET /api/readings` has no API-key/auth gate — protected only by the hardcoded `nb-001` allow-list; fine for the single-device demo, flagged for post-v1.1 revisit. Known flake (non-blocking): `tests/realtime.subscribe.test.ts` / `tests/realtime.risk-scores.test.ts` intermittently time out under full-suite runs but pass in isolation.
 
-Known flake (not a blocker): `tests/realtime.subscribe.test.ts` and `tests/realtime.risk-scores.test.ts` intermittently time out waiting for a Realtime INSERT event under full-suite (`npm test`) runs, but pass cleanly in isolation. Documented across Phase 1, 2, and 4 verification runs — Realtime delivery timing, not a code defect.
+Time-budget risk flagged by research (research/SUMMARY.md): static HTML prototype (Phase 7) must stay timeboxed and not become a second app; Tailwind v4 tokens (Phase 6) must be validated against a real `next build`, not just dev mode; hardware checklist (Phase 9) must be re-run verbatim after the Phase 10 port/redeploy.
 
 ## Deferred Items
 
@@ -89,10 +91,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-20T06:14:57.670Z
-Stopped at: v1.0 milestone completed, archived, and tagged — awaiting /gsd-new-milestone
+Last session: 2026-09-25T06:06:52.205Z
+Stopped at: v1.1 ROADMAP.md written (Phases 5-10), REQUIREMENTS.md traceability filled in, 26/26 requirements mapped
 Resume file: None
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Review the v1.1 roadmap (`.planning/ROADMAP.md`) and requirement mappings (`.planning/REQUIREMENTS.md`)
+- Start Phase 5 with `/gsd-plan-phase 5` (or `/gsd-discuss-phase 5` first if discuss-mode questions are wanted)

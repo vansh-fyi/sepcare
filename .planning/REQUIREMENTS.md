@@ -80,38 +80,38 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CLEAN-01 | TBD | Pending |
-| CLEAN-02 | TBD | Pending |
-| CLEAN-03 | TBD | Pending |
-| DSYS-01 | TBD | Pending |
-| DSYS-02 | TBD | Pending |
-| DSYS-03 | TBD | Pending |
-| CARE-01 | TBD | Pending |
-| CARE-02 | TBD | Pending |
-| CARE-03 | TBD | Pending |
-| CARE-04 | TBD | Pending |
-| CARE-05 | TBD | Pending |
-| CARE-06 | TBD | Pending |
-| PARENT-01 | TBD | Pending |
-| PARENT-02 | TBD | Pending |
-| PARENT-03 | TBD | Pending |
-| PARENT-04 | TBD | Pending |
-| PARENT-05 | TBD | Pending |
-| API-01 | TBD | Pending |
-| API-02 | TBD | Pending |
-| HW-01 | TBD | Pending |
-| HW-02 | TBD | Pending |
-| HW-03 | TBD | Pending |
-| PORT-01 | TBD | Pending |
-| PORT-02 | TBD | Pending |
-| PORT-03 | TBD | Pending |
-| PORT-04 | TBD | Pending |
+| CLEAN-01 | Phase 5 | Pending |
+| CLEAN-02 | Phase 5 | Pending |
+| CLEAN-03 | Phase 5 | Pending |
+| DSYS-01 | Phase 6 | Pending |
+| DSYS-02 | Phase 6 | Pending |
+| DSYS-03 | Phase 6 | Pending |
+| CARE-01 | Phase 7 | Pending |
+| CARE-02 | Phase 7 | Pending |
+| CARE-03 | Phase 7 | Pending |
+| CARE-04 | Phase 7 | Pending |
+| CARE-05 | Phase 7 | Pending |
+| CARE-06 | Phase 7 | Pending |
+| PARENT-01 | Phase 7 | Pending |
+| PARENT-02 | Phase 7 | Pending |
+| PARENT-03 | Phase 7 | Pending |
+| PARENT-04 | Phase 7 | Pending |
+| PARENT-05 | Phase 7 | Pending |
+| API-01 | Phase 8 | Pending |
+| API-02 | Phase 8 | Pending |
+| HW-01 | Phase 9 | Pending |
+| HW-02 | Phase 9 | Pending |
+| HW-03 | Phase 10 | Pending |
+| PORT-01 | Phase 10 | Pending |
+| PORT-02 | Phase 10 | Pending |
+| PORT-03 | Phase 10 | Pending |
+| PORT-04 | Phase 10 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 26 total
-- Mapped to phases: 0 (pending roadmap creation)
-- Unmapped: 26 ⚠️ (expected — roadmapper fills this in)
+- Mapped to phases: 26/26 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-09-25*
-*Last updated: 2026-09-25 after initial v1.1 definition*
+*Last updated: 2026-09-25 after v1.1 roadmap creation (Phases 5-10)*
