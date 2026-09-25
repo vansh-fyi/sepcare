@@ -8,6 +8,19 @@ SepCare is a low-cost wearable armband for newborns (0–28 days) that continuou
 
 Reliably turn a stream of vitals from a Waveshare ESP32-S3-Tiny wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
 
+## Current Milestone: v1.1 Frontend Rebuild + Design System + Hardware Integration
+
+**Goal:** Ship a judge-ready demo — real armband data flowing through a redesigned, consistent caregiver-first (+ abstracted parent) dashboard, ported to Next.js and live on Vercel, in ~2 working days.
+
+**Target features:**
+- Repo cleanup — archive duplicate/off-topic material so only sepsis-relevant, non-duplicate content remains
+- New Tailwind v4 token-based design system, informed by Figma (Segue 3.0) + salvaged pieces of the students' `frontend-design/`, validated with ≥3 sample HTML pages exercising real states before full prototype build
+- HTML prototype with a caregiver view (bottom nav, full vitals/graph/risk/device detail) and an abstracted parent view (same system, no nav, "See All" links), flow decided collaboratively before building, checked against what the backend can realistically supply
+- Backend gap-fill for whatever the prototype needs that the current API/schema doesn't yet support
+- Hardware integration — real ESP32 armband wired into the deployed pipeline, live data validated end-to-end
+- Port to Next.js on `main`, merged with backend, deployed to Vercel, hardware-validated against the live deployment
+- Lean on existing libraries (shadcn/ui, Radix, Recharts/Tremor, Framer Motion) instead of building components from scratch, in both the prototype and the Next.js port
+
 ## Requirements
 
 ### Validated
@@ -22,7 +35,12 @@ Reliably turn a stream of vitals from a Waveshare ESP32-S3-Tiny wearable into an
 
 ### Active
 
-*(none — all v1 backend requirements validated; remaining work is the hardware build track and the Next.js frontend port on `main`)*
+- [ ] Repo cleanup — archive duplicate/off-topic material
+- [ ] New Tailwind v4 design system, validated against real component states
+- [ ] Caregiver + abstracted-parent HTML prototype
+- [ ] Backend gap-fill for prototype data needs
+- [ ] Hardware (ESP32 armband) integration with the live pipeline
+- [ ] Next.js port merged with backend, deployed to Vercel, hardware-validated
 
 ### Out of Scope
 
@@ -107,4 +125,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-20 after v1.0 milestone*
+*Last updated: 2026-09-25 after starting v1.1 milestone*
