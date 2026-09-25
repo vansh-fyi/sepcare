@@ -12,3 +12,5 @@ Files archived here by Phase 5 (Repo Cleanup & Canonicalization), Plan 01, while
 | `frontend-handoff/PRD.md` | `archive/frontend-handoff/PRD.md` | Duplicate — canonical copy lives at `context/frontend-handoff/PRD.md` |
 | `frontend-handoff/SCREEN-CONTENT.md` | `archive/frontend-handoff/SCREEN-CONTENT.md` | Duplicate — canonical copy lives at `context/frontend-handoff/SCREEN-CONTENT.md` |
 | `frontend-handoff/USER-FLOWS.md` | `archive/frontend-handoff/USER-FLOWS.md` | Duplicate — canonical copy lives at `context/frontend-handoff/USER-FLOWS.md` |
+| `context/sdg/sdg-11-details.md` | `archive/context/sdg/sdg-11-details.md` | Off-topic — Sustainable Cities brainstorm, unrelated to neonatal sepsis (CLEAN-01) |
+| `context/sdg/sdg-13-details.md` | `archive/context/sdg/sdg-13-details.md` | Off-topic — Climate Action brainstorm, unrelated to neonatal sepsis (CLEAN-01) |
