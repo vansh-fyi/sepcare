@@ -71,7 +71,7 @@ Plans:
   3. At least 3 sample HTML pages exercise real component states (e.g. Green/Amber/Red status, empty/loading, nested component variants) using only the token set, and this validation checkpoint is reviewed before full prototype work starts
   4. The same token set is demonstrably reused across sample pages representing both the caregiver and parent visual language — one shared source, not two
 
-**Plans**: 3/5 plans executed
+**Plans**: 4/5 plans executed
 **UI hint**: yes
 
 Plans:
@@ -89,7 +89,7 @@ Plans:
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 06-04-PLAN.md — Build the 3 D-10 sample validation pages (states / empty-loading / nested) + final DSYS-03 regression + full test-suite phase gate
+- [x] 06-04-PLAN.md — Build the 3 D-10 sample validation pages (states / empty-loading / nested) + final DSYS-03 regression + full test-suite phase gate
 
 **Wave 5** *(blocked on Wave 4 completion — additive, user-requested)*
 
@@ -165,7 +165,7 @@ Phases execute in numeric order: 5 → 6 → 7 → 8 → 9 → 10
 | 3. Offline-Buffered Batch Sync | v1.0 | 3/3 | Complete | 2026-09-19 |
 | 4. Historical Trends API | v1.0 | 1/1 | Complete | 2026-09-19 |
 | 5. Repo Cleanup & Canonicalization | v1.1 | 2/2 | Complete    | 2026-09-25 |
-| 6. Design System (Tailwind v4 Tokens) | v1.1 | 3/5 | In Progress|  |
+| 6. Design System (Tailwind v4 Tokens) | v1.1 | 4/5 | In Progress|  |
 | 7. HTML Prototype (Caregiver + Parent) | v1.1 | 0/TBD | Not started | - |
 | 8. Backend Gap-Fill | v1.1 | 0/TBD | Not started | - |
 | 9. Hardware Integration | v1.1 | 0/TBD | Not started | - |
