@@ -44,6 +44,17 @@ Every render always shows the icon (from `src/components/icon.tsx`, ported from 
 `status` only accepts `"safe" | "caution" | "critical"` (the `BadgeStatus` type exported from
 `badge.tsx`). Any other string literal is a compile-time error.
 
+## Figma verification (06-08, 2026-09-27)
+
+No dedicated Figma frame was found for Badge as of 2026-09-27 — the three card nodes already
+inspected for this phase's status-adjacent context (`266-9323` Status Hero Card, `266-9387`
+Instruction Row Card, `266-9344` Vital Stat Card) show icon tiles, headline/subtitle text, and
+gradient/sparkline treatments, but no distinct badge/status-pill sub-element inside any of them.
+D-12's own component table lists Badge/StatusPill as "existing, carries forward" with no node ID,
+confirming this isn't an oversight. Visual treatment is carried forward unchanged from the prior
+extraction — no deviation identified, and the locked 3-value `icon+label+color` contract is
+unaffected either way.
+
 ## Overflow / long-text (backstop)
 
 The label is expected to truncate/ellipsis rather than resize the Badge, and to wrap or truncate

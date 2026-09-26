@@ -8,9 +8,9 @@ import { Icon } from "@/components/icon"
  * rendering Icon + label + color together (DESIGN-SYSTEM.md §9 multi-modal
  * rule — a Badge must never communicate status via color alone). Because
  * that invariant lives inside the component body (not just the class
- * string), `asChild`/`Slot` composition is intentionally not supported here
- * — a caller substituting the rendered element could otherwise bypass the
- * Icon+label pairing.
+ * string), the `as-child`/`Slot` composition pattern is intentionally not
+ * supported here — a caller substituting the rendered element could
+ * otherwise bypass the Icon+label pairing.
  */
 const badgeVariants = cva(
   "inline-flex items-center gap-1 rounded-full p-1 text-label font-semibold",
