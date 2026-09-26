@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 6
 current_phase_name: Design System (Tailwind v4 Tokens)
 status: executing
-stopped_at: Completed 06-02-PLAN.md
-last_updated: "2026-09-26T12:43:11.979Z"
+stopped_at: Completed 06-03-PLAN.md
+last_updated: "2026-09-26T12:57:22.786Z"
 last_activity: 2026-09-26
 last_activity_desc: Phase 6 execution started
-state_head: f374c5cce46f46f6f21be0620f8d82c8a9bd49bd
+state_head: 1ebb661d86c55aa015bc98707f471a241a983e28
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 7
-  completed_plans: 4
+  completed_plans: 5
   percent: 17
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 6 (Design System (Tailwind v4 Tokens)) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 Status: Ready to execute
 Last activity: 2026-09-26 — Phase 6 execution started
 
@@ -74,6 +74,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 05 P02 | 2min | 3 tasks | 5 files |
 | Phase 06 P01 | 45min | 4 tasks | 10 files |
 | Phase 06 P02 | 20min | 2 tasks | 4 files |
+| Phase 06 P03 | 35min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -87,6 +88,8 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 06]: Added AGENTS.md documentation instructing agents to verify shadcn CLI flags and the cn package's API against live docs rather than training data, requested live by the user mid-execution as a new Task 4.
 - [Phase 06]: shadcn CLI 4.21.0's add subcommand has no -b/--base flag (only init does); it already resolves Button to Radix via the unified radix-ui meta-package (pinned to @radix-ui/react-slot@1.3.3) rather than Base UI, verified via --dry-run/--view before installing.
 - [Phase 6]: shadcn CLI 4.21.0's add generates Card/Input with no primitive-library import at all (plain wrappers); only Badge imports Radix's unified radix-ui package for asChild — D-07's Radix-not-Base-UI intent verified via zero @base-ui-components/* in package-lock.json, not a per-file Radix-import requirement.
+- [Phase 6]: Phase 06: Tailwind v4 has no --duration-* theme namespace for utility generation — named duration-normal/duration-slow classes silently compile to nothing; use arbitrary-value syntax (duration-[var(--duration-normal)]) to reference the same tokens.
+- [Phase 6]: Phase 06: Badge intentionally drops shadcn asChild/Slot composition — its Icon+label+color multi-modal invariant lives in the component body, and asChild would let a caller bypass it.
 
 ### Pending Todos
 
@@ -108,8 +111,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-26T12:43:11.898Z
-Stopped at: Completed 06-02-PLAN.md
+Last session: 2026-09-26T12:57:22.710Z
+Stopped at: Completed 06-03-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
