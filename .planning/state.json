@@ -1,12 +1,63 @@
 {
   "contract": "1.0.0",
   "flavor": "core",
-  "milestone": "v1.1",
-  "phases": [],
+  "milestone": "v1.1 — Frontend Rebuild + Design System + Hardware Integration",
+  "phases": [
+    {
+      "number": "1",
+      "name": "Device Ingest & Live Readout",
+      "status": "complete"
+    },
+    {
+      "number": "2",
+      "name": "Automatic Risk Scoring & Status",
+      "status": "complete"
+    },
+    {
+      "number": "3",
+      "name": "Offline-Buffered Batch Sync",
+      "status": "complete"
+    },
+    {
+      "number": "4",
+      "name": "Historical Trends API",
+      "status": "complete"
+    },
+    {
+      "number": "5",
+      "name": "Repo Cleanup & Canonicalization",
+      "status": "complete"
+    },
+    {
+      "number": "6",
+      "name": "Design System (Tailwind v4 Tokens)",
+      "status": "pending"
+    },
+    {
+      "number": "7",
+      "name": "HTML Prototype (Caregiver + Parent)",
+      "status": "pending"
+    },
+    {
+      "number": "8",
+      "name": "Backend Gap-Fill",
+      "status": "pending"
+    },
+    {
+      "number": "9",
+      "name": "Hardware Integration",
+      "status": "pending"
+    },
+    {
+      "number": "10",
+      "name": "Next.js Port + Deploy",
+      "status": "pending"
+    }
+  ],
   "next": {
-    "command": "/gsd:discuss-phase",
-    "label": "Discuss the first phase",
-    "reason": "Project initialized — plan your first phase"
+    "command": "/gsd:progress --next",
+    "label": "Advance to the next step (plan phase 6)",
+    "reason": "Phase 6 of 6 — needs a plan"
   },
-  "updated_at": "2026-09-25T06:06:52.207Z"
+  "updated_at": "2026-09-25T18:18:34.309Z"
 }
