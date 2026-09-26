@@ -17,13 +17,13 @@
 ## Implementation Decisions
 
 ### Tailwind install location & scope (unchanged from original discussion)
-- **D-01** `[informational]`: Tailwind v4 + `@theme` token set installed directly into the existing Next.js app on `main`. *(Already done — `src/app/globals.css` exists — no new task needed, nothing in this rework touches install location.)*
-- **D-02** `[informational]`: Sample validation pages are real Next.js App Router routes, not static HTML. *(Already done — `src/app/design-system/*` — no new task needed, the rework extends these routes, doesn't relocate them.)*
+- **D-01 [informational]:** Tailwind v4 + `@theme` token set installed directly into the existing Next.js app on `main`. *(Already done — `src/app/globals.css` exists — no new task needed, nothing in this rework touches install location.)*
+- **D-02 [informational]:** Sample validation pages are real Next.js App Router routes, not static HTML. *(Already done — `src/app/design-system/*` — no new task needed, the rework extends these routes, doesn't relocate them.)*
 
 ### Palette origin — Figma Segue 3.0 + salvaged tokens (unchanged, confirmed correct)
 - **D-03:** Canonical color/type reference is Figma Segue 3.0. User confirmed the current token extraction (`src/app/globals.css` primitives) is the **one thing that came out right** — do not re-derive colors from scratch, keep `--color-pink/green/blue/neutral/yellow-*` as-is.
 - **D-04:** Pink reserved for Critical/Red status only; brand stays blue, safe stays green, caution stays amber. *(Unchanged, confirmed still correct.)*
-- **D-05** `[informational]`: Font stack: Inter, per existing config. *(Unchanged — no new task needed, nothing in this rework touches font selection.)*
+- **D-05 [informational]:** Font stack: Inter, per existing config. *(Unchanged — no new task needed, nothing in this rework touches font selection.)*
 
 ### Component system methodology (unchanged principle, D-08 superseded by D-12)
 - **D-06:** Strict, agent-legible system — finite typed variants, a `DESIGN.md` per component. *(Principle unchanged; existing `button.DESIGN.md` / `card.DESIGN.md` / `badge.DESIGN.md` / `input.DESIGN.md` exist but need a content/quality pass alongside the visual rebuild.)*
@@ -78,7 +78,7 @@ User flagged the current set is missing obvious things ("doesn't even have diffe
 Both the fresh RESEARCH.md and UI-SPEC.md independently flagged a tension: the Home-screen screenshot shows the bottom nav's active "Home" tab in red/pink, while D-04 reserves pink/red exclusively for Critical/danger status. User's explicit call: **match the screenshot exactly** — the nav's active-indicator uses the same red/pink as Critical status. This is a deliberate choice, not an oversight: navigation-selected-state and critical-health-status are treated as two different semantic dimensions (location vs. health), both allowed to use the same hue. Downstream agents should NOT "fix" this to blue — implement it exactly as shown in the screenshot and Figma nav bar node (`279-320`).
 
 ### Roadmap-restructuring flag (raised in original discussion — still not formally resolved)
-- **D-11** `[informational]`: **Not a Phase 6 implementation decision — cross-phase roadmap flag, intentionally uncovered by any Phase 6 plan.** User wants to skip a separate static-HTML prototype phase and build the real Next.js frontend directly; Phase 10 becomes a "plug frontend into deployed backend" step. This is a **roadmap-level change** (ROADMAP.md Phases 7/8/10, REQUIREMENTS.md PARENT-05 wording) that a discuss-phase session cannot lock on its own.
+- **D-11 [informational]:** Not a Phase 6 implementation decision — cross-phase roadmap flag, intentionally uncovered by any Phase 6 plan. User wants to skip a separate static-HTML prototype phase and build the real Next.js frontend directly; Phase 10 becomes a "plug frontend into deployed backend" step. This is a **roadmap-level change** (ROADMAP.md Phases 7/8/10, REQUIREMENTS.md PARENT-05 wording) that a discuss-phase session cannot lock on its own.
   - **Status update:** D-14 (Home screen proof-of-concept) is already operating under this assumption. Recommend resolving D-11 formally (roadmap edit) before or immediately after this Phase 6 rework lands, so Phase 7's actual scope reflects reality.
 
 ### Claude's Discretion
