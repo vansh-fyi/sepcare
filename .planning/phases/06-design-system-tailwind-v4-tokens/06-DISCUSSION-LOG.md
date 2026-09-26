@@ -93,3 +93,38 @@
 - **Roadmap restructuring:** User wants to skip Phase 7's static HTML prototype entirely and build the real Next.js frontend directly, making Phase 10's "port" a "plug frontend into deployed backend" step. This is a roadmap-level change (affects Phase 7/8/10 in ROADMAP.md, PARENT-05 in REQUIREMENTS.md) that can't be locked in during a Phase 6 discussion. Flagged as the recommended immediate next step before `/gsd-plan-phase 6`.
 - Composite/domain components (VitalCard, StatusHeroCard, BottomNav, TrendGraph) — deferred to the phase that builds full screens.
 - Whether `frontend-design/`'s static HTML gets updated or archived — moot pending the roadmap-restructuring decision.
+
+---
+
+## Rework session — 2026-09-27
+
+**Trigger:** All 5 Phase 6 plans executed, but the user rejected the result as low quality across the board.
+
+**Question:** Is Phase 6 verified/done, or is this a rework?
+
+**User's answer (free text):** "Phase 6 is not verified at all. In fact, the execution was so horrible that I am re-running this phase right now... it just sucks, like sucks badly... we need to make it to a very beautiful and proper design system right now."
+
+| Option | Description | Selected |
+|--------|-------------|----------|
+| Iterate on current base | Keep token architecture + file structure, fix visual/quality issues on top | ✓ |
+| Scrap and rebuild from zero | Start the component/token layer over completely | |
+
+**User's choice:** Iterate on current base.
+
+**Question:** What specifically makes it suck?
+
+**User's answer:** All four offered categories selected (doesn't match Figma vision, cheap look/feel, wrong/incomplete components, bad docs pages), plus free text: "Basically everything looks so so fucking horrible... The only thing that is correct is the colours... it's a shit show... I wanted a very beautiful fancy design system documentation and I got a single page bunch of crap... I am scared because I gave Figma nodes so many times but nothing happened out of it."
+
+**Question:** Does Figma Segue 3.0 have real component frames, or just palette swatches?
+
+**User's answer:** Has real component frames.
+
+**Locked mechanism (D-15):** Extract exact values from the actual Figma node via MCP before writing code, then screenshot-diff the built result against Figma before calling any component done. User agreed to lock this in as mandatory.
+
+**User then provided 14 specific Figma node links** (Home screen, nav link, nav bar, 6 card types, 4 button types, a "components with graphs" node, a time-scale toggle node) plus a screenshot of the target Home dashboard screen, and asked for a websearch on what components a healthcare/general app typically needs, and for the `/emil-design-vocabulary`, `/emil-ui-polish`, `/emil-animations` skills to be used to make the docs site "awesome, functional, insightful."
+
+**Verification performed during this discussion:** `get_metadata` called on Home screen node `266:9257` — resolved successfully, confirming the mechanism works and the node IDs are real, valid Figma nodes (not broken links). Full extraction of every node is left to the researcher/planner/executor, per normal phase-op boundaries.
+
+**Websearch performed:** healthcare dashboard/vitals-monitoring UI component conventions — findings folded into CONTEXT.md D-16 (dual-axis vitals charts, existing color convention already industry-aligned, WCAG 2.1 AA relevance).
+
+**Result:** CONTEXT.md rewritten with D-12 (expanded component set) through D-16 (research findings), superseding the original D-08's 4-component boundary. D-11 (roadmap restructuring) remains formally unresolved but is now being acted on in practice via D-14 (Home screen proof-of-concept).
