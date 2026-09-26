@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 06
 current_phase_name: Design System (Tailwind v4 Tokens)
 status: executing
-stopped_at: Phase 06 rework context captured (D-12..D-16, expanded scope)
-last_updated: "2026-09-26T20:22:15.605Z"
-last_activity: 2026-09-26
-last_activity_desc: Phase 6 execution started
-state_head: fb1597848b64e4e6aecf08bb6302610f4d1a3492
+stopped_at: Completed 06-06-PLAN.md (Button archetype expansion; screenshot-diff deferred to orchestrator)
+last_updated: "2026-09-26T23:30:27.270Z"
+last_activity: 2026-09-27
+last_activity_desc: Phase 06 execution started
+state_head: 09cf9581992d152bbec7a5889e4ffc563833bbd4
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 18
-  completed_plans: 7
+  completed_plans: 3
   percent: 0
 ---
 
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-25)
 
 **Core value:** Reliably turn a stream of vitals from a Waveshare ESP32-S3-Tiny wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
-**Current focus:** Phase 6 — Design System (Tailwind v4 Tokens)
+**Current focus:** Phase 06 — Design System (Tailwind v4 Tokens)
 
 ## Current Position
 
-Phase: 06 (Design System (Tailwind v4 Tokens)) — READY TO EXECUTE
-Plan: 5 of 5
+Phase: 06 (Design System (Tailwind v4 Tokens)) — EXECUTING
+Plan: 2 of 16
 Status: Ready to execute
-Last activity: 2026-09-26 — Phase 6 execution started
+Last activity: 2026-09-27 — Phase 06 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -77,6 +77,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P03 | 35min | 2 tasks | 8 files |
 | Phase 06 P04 | 25min | 2 tasks | 3 files |
 | Phase 06 P05 | 20min | 2 tasks | 1 files |
+| Phase 06 P06 | 25min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,9 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 6]: Phase 06-04: Used plain <h2> with text-heading/text-text tokens for Card headings in sample pages instead of the still-unstyled shadcn-stock CardTitle (deferred in 06-03)
 - [Phase 6]: Phase 06-04: Sample-page header comments must avoid the literal string "@theme" in prose — the plan's own grep-based verify instrument matches any occurrence, not just an actual @theme block
 - [Phase 6]: [Phase 06-05]: readFileSync calls at Server Component render time must use fully static literal path arguments (not template-literal/dynamic-property paths) to avoid Next.js/Turbopack's whole-project file-tracing warning, a real deployment-size risk on Vercel free-tier hosting
+- [Phase 06]: Phase 06-06: The 4 D-12 "Button treatment" Figma nodes are not 4 variants of one family — they resolve to 3 distinct archetypes (gradient CTA pill x2, bordered icon-only, filled icon-only), all added as new CVA variants (cta/cta-critical/icon-outline/icon-filled) rather than folded/renamed.
+- [Phase 06]: Phase 06-06: Resolved the cta/cta-critical pink-for-non-critical tension with D-04 by matching the Figma screenshot exactly (same reasoning D-17 already established for Nav) — device-connectivity and health-status treated as separate semantic dimensions, both allowed the pink hue.
+- [Phase 06]: Phase 06-06: New Figma-revealed radius/gradient/shadow/color values were promoted into 6 small additive semantic tokens in globals.css (no existing token value changed) rather than hardcoded literals in button.tsx, per the codebase's primitive/semantic layering convention.
 
 ### Pending Todos
 
@@ -117,9 +121,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-26T18:52:03.894Z
-Stopped at: Phase 06 rework context captured (D-12..D-16, expanded scope)
-Resume file: .planning/phases/06-design-system-tailwind-v4-tokens/06-CONTEXT.md
+Last session: 2026-09-26T23:30:27.248Z
+Stopped at: Completed 06-06-PLAN.md (Button archetype expansion; screenshot-diff deferred to orchestrator)
+Resume file: None
 
 ## Operator Next Steps
 
