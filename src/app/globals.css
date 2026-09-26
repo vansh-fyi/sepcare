@@ -1,3 +1,9 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-fill: oklch(0.56 0.095 252.1);
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
