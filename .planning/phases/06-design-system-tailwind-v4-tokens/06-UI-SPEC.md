@@ -1,7 +1,7 @@
 ---
 phase: "6"
 slug: "design-system-tailwind-v4-tokens"
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: "2026-09-26"
@@ -244,18 +244,30 @@ Easing: `cubic-bezier(0.4, 0, 0.2, 1)` for all three (unchanged). Respect
 
 ## UI Considerations
 
-Applicable state considerations resolved: 4 covered, 2 backstop, 3 unresolved
+> Ran against `ui-consideration-probe.cjs` (23 applicable element×category combinations across
+> the 4 atomic components) after checker approval — expanded from the researcher's original 9-row
+> draft to close 6 combinations the deterministic engine flagged that the prose pass had skipped
+> (all resolved by direct application of this system's already-locked rules, not new preference
+> decisions — see each row's reason).
+
+Applicable state considerations resolved: 6 covered, 2 backstop, 3 dismissed, 4 unresolved (23 element×category combinations total)
 
 | Category | Element(s) | Status | Resolution / Reason |
 |----------|------------|--------|---------------------|
 | empty | Card (list-collection override — will hold vitals/feed content in later phases) | ✅ covered | Sample page 2 (D-10) renders Card's empty-state treatment; copy = Empty state row above |
+| empty | Input | ✅ covered | Empty `Input` shows its native `placeholder` text in `--color-text-muted`; no separate empty-state treatment needed beyond standard placeholder styling |
+| empty | Badge/StatusPill | 🚫 dismissed | Badge is a fixed 3-value enum (`safe`\|`caution`\|`critical`, D-08) — there is no "no status" rendering in this phase's atomic scope; an unscored/pending state, if ever needed, is a future composite-screen concern, not this component's |
 | loading | Card, Button | ✅ covered | Sample page 2 renders Card's skeleton/spinner loading treatment (D-10); `Button` ships its own `loading` sub-state (label hides, centered spinner shows — no new size/weight) documented in Button's DESIGN.md |
+| loading | Input | ✅ covered | `Input` renders a disabled visual treatment (reduced opacity, `cursor-not-allowed`) while locked during an in-flight async operation; no spinner-in-field pattern needed at this phase's atomic scope |
+| loading | Badge/StatusPill | 🚫 dismissed | Badge renders synchronously from an already-resolved status value; it has no async loading state of its own — deferred to whatever composite fetches/computes the status |
 | error | Input | ✅ covered | Input error state = critical-colored border + inline message; copy = Error state row above |
 | error | Button | ⚠ unresolved | Action-failure handling (e.g. toast/retry after a Button-triggered request fails) belongs to the composite screen that owns the request, not the atomic Button — deferred to Phase 7 |
+| error | Card | ⚠ unresolved | Same reasoning as Button error — a data-fetch failure inside a Card is a composite-screen concern (the fetching component owns retry/error UI), not the atomic Card's own — deferred to Phase 7 |
+| error | Badge/StatusPill | 🚫 dismissed | No async operation belongs to the Badge itself; a status-computation failure is a composite/backend concern surfaced elsewhere, never a Badge visual state |
 | populated | StatusPill/Badge, Card | ✅ covered | Sample page 1 (D-10) shows Safe/Caution/Critical StatusPill + Card variants side by side at typical content volume |
 | zero-one-many | Card (as future list container) | ⚠ unresolved | Phase 6 ships Card as a bare surface only; a real one/many content collection inside it is a composite-component concern deferred to Phase 7 |
-| overflow | StatusPill/Badge label, Card heading | 🧪 backstop | Pill/Card must truncate long custom text with ellipsis rather than resize the fixed shape (DESIGN-SYSTEM.md §9 "layout never changes" rule) — held-out long-string render test |
-| long-text | Button label, Input label/value | 🧪 backstop | Button/Input must wrap or truncate unexpectedly long text without breaking their token-driven height/radius — held-out long-string render test |
+| overflow | Button label, StatusPill/Badge label, Card heading | 🧪 backstop | All three must truncate/ellipsis their fixed-shape content rather than resize (DESIGN-SYSTEM.md §9 "layout never changes" rule) — held-out long-string render test |
+| long-text | Button label, StatusPill/Badge label, Input label/value | 🧪 backstop | Button/Badge/Input must wrap or truncate unexpectedly long text without breaking their token-driven height/radius — held-out long-string render test |
 | partial | Input (as future multi-field form) | ⚠ unresolved | Multi-field partial-fill states are a form-assembly concern; the atomic Input alone has no partial state of its own — deferred to the phase that builds real forms |
 
 ---
@@ -272,12 +284,12 @@ No third-party registries declared for this phase.
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
-- [ ] Dimension 7 Inventory Provenance: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: FLAG (non-blocking — no focal-point declared per sample page; add during Phase 7 page authoring)
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
+- [x] Dimension 7 Inventory Provenance: FLAG (non-blocking — re-enumerate via `npx shadcn info` once D-07's install lands)
 
-**Approval:** pending
+**Approval:** approved 2026-09-26
