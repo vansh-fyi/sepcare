@@ -5,7 +5,7 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card"
-      className={cn("rounded-card bg-surface shadow-card p-6", className)}
+      className={cn("rounded-card bg-surface shadow-card p-4", className)}
       {...props}
     />
   )
@@ -25,7 +25,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-title"
-      className={cn("leading-none font-semibold", className)}
+      className={cn("text-sm font-bold leading-tight text-text-strong", className)}
       {...props}
     />
   )
@@ -35,12 +35,16 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-body text-text-secondary", className)}
+      className={cn("text-xs leading-normal text-text-subtle", className)}
       {...props}
     />
   )
 }
 
+// No confirmed Figma node in this plan's card family shows a rendered CardAction
+// slot's own content (e.g. an icon/button in the header corner) — the grid
+// placement below is the pre-existing compositional contract and is kept
+// as-is; not Figma-verified in this pass, unlike Title/Description/Footer.
 function CardAction({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -65,10 +69,14 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+  // Rule 1 bug fix (06-07 Task 1): the stock scaffold's own px-6 double-counted
+  // against Card's own p-4 wrapper padding (Card already insets every child on
+  // all sides — unlike stock shadcn's Card, which has no built-in horizontal
+  // padding of its own). Dropped px-6/pt-6 -> pt-4 to match Card's real inset.
   return (
     <div
       data-slot="card-footer"
-      className={cn("flex items-center px-6 [.border-t]:pt-6", className)}
+      className={cn("flex items-center [.border-t]:pt-4", className)}
       {...props}
     />
   )

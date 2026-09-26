@@ -112,7 +112,13 @@
   --radius-input: 12px;
   --radius-btn: 14px;
   --radius-card-sm: 16px;
-  --radius-card: 20px;
+  /* --radius-card corrected 20px -> 24px (06-07 Task 1): Figma nodes 266-9387
+     (Instruction Row Card) and 266-9344 (Vital Stat Card) both extract to a
+     24px corner radius, not 20px as originally guessed — the "20px standard
+     card" assumption predated any real Figma extraction. Now numerically
+     identical to --radius-hero; kept as a distinct semantic name since the
+     hero treatment may diverge again later (D-15 bug fix, not a rename). */
+  --radius-card: 24px;
   --radius-hero: 24px;
   --radius-modal: 28px;
   --radius-full: 9999px;
@@ -135,11 +141,35 @@
   --radius-icon-btn: 12px;
   --color-icon-fill-dark: var(--color-neutral-700);
 
-  --shadow-card: 0 4px 20px rgba(10, 10, 17, 0.06);
+  /* --shadow-card corrected (06-07 Task 1): Figma nodes 266-9387/266-9344 both
+     extract to a plain, barely-tinted neutral shadow (0px 2px 8px
+     rgba(0,0,0,0.05)), not the deeper/darker value originally guessed —
+     another D-15 bug fix, not a stylistic preference. */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.05);
   --shadow-floating: 0 8px 30px rgba(10, 10, 17, 0.10);
   --shadow-critical: 0 10px 32px rgba(193, 3, 3, 0.14);
   --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.25);
   --shadow-cta: 0px 2px 2px var(--color-neutral-200);
+
+  /* Card typography (06-07 Task 1) — Figma nodes 266-9387/266-9344 both show a
+     card title color one step lighter than --color-text (neutral-900) and a
+     description/subtitle color one step darker than --color-text-muted
+     (neutral-500). Neither existing text-* token matches; additive-only,
+     nothing above changed. */
+  --color-text-strong: var(--color-neutral-800);
+  --color-text-subtle: var(--color-neutral-400);
+
+  /* Card type-map compositions (06-07 Task 2) — one small additive token per
+     genuinely new Figma-extracted value, following the primitive/semantic
+     layering convention (06-06 precedent). See card.DESIGN.md's Card Type Map
+     for per-node provenance. */
+  --color-text-hero-muted: #7B82A0; /* 266-9323 hero subtitle — distinct from neutral-500 (#808699) */
+  --color-icon-tile-neutral: var(--color-neutral-100); /* 266-9387 icon tile bg */
+  --color-icon-tile-green: var(--color-green-100); /* 203-13605 icon tile bg */
+  --gradient-card-hero-icon: linear-gradient(135deg, var(--color-green-700) 0%, var(--color-green-500) 100%); /* 266-9323 icon tile */
+  --gradient-card-device-icon: linear-gradient(180deg, var(--color-pink-500) 0%, var(--color-pink-300) 100%); /* 203-13559 / 203-11669 icon tile */
+  --shadow-card-device: 0 2px 8px var(--color-neutral-200); /* 203-13559 / 203-11669 — Figma authored this one directly against the token, not an rgba literal */
+  --gradient-metric-pulse: linear-gradient(132.5deg, var(--color-blue-500) 0%, var(--color-blue-400) 100%); /* 266-9344 Pulse tone only — Temp/Activity gradients not extracted this plan, see card.DESIGN.md */
 
   --duration-fast: 150ms;
   --duration-normal: 250ms;
