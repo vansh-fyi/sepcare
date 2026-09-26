@@ -71,7 +71,26 @@ Plans:
   3. At least 3 sample HTML pages exercise real component states (e.g. Green/Amber/Red status, empty/loading, nested component variants) using only the token set, and this validation checkpoint is reviewed before full prototype work starts
   4. The same token set is demonstrably reused across sample pages representing both the caregiver and parent visual language — one shared source, not two
 
-**Plans**: TBD
+**Plans**: 4 plans
+**UI hint**: yes
+
+Plans:
+**Wave 1**
+
+- [ ] 06-01-PLAN.md — Tailwind v4 `@theme` foundation: tracer (one token → rendered Radix Button → green `next build`) + full locked token set + Inter font swap
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 06-02-PLAN.md — Install Card/Badge/Input via shadcn CLI (`-b radix`) + port `icons.js` to a real React `Icon` component
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 06-03-PLAN.md — Restyle all 4 components to their exact D-08 variant contracts + author a DESIGN.md per component
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 06-04-PLAN.md — Build the 3 D-10 sample validation pages (states / empty-loading / nested) + final DSYS-03 regression + full test-suite phase gate
+
 **UI hint**: yes
 
 ### Phase 7: HTML Prototype (Caregiver + Parent)
@@ -142,7 +161,7 @@ Phases execute in numeric order: 5 → 6 → 7 → 8 → 9 → 10
 | 3. Offline-Buffered Batch Sync | v1.0 | 3/3 | Complete | 2026-09-19 |
 | 4. Historical Trends API | v1.0 | 1/1 | Complete | 2026-09-19 |
 | 5. Repo Cleanup & Canonicalization | v1.1 | 2/2 | Complete    | 2026-09-25 |
-| 6. Design System (Tailwind v4 Tokens) | v1.1 | 0/TBD | Not started | - |
+| 6. Design System (Tailwind v4 Tokens) | v1.1 | 0/4 | Planned    |  |
 | 7. HTML Prototype (Caregiver + Parent) | v1.1 | 0/TBD | Not started | - |
 | 8. Backend Gap-Fill | v1.1 | 0/TBD | Not started | - |
 | 9. Hardware Integration | v1.1 | 0/TBD | Not started | - |
