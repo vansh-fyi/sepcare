@@ -1,19 +1,71 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @theme {
+  --color-bg: oklch(0.981 0.005 258.3);
+  --color-surface: oklch(1 0 0);
+  --color-surface-soft-blue: oklch(0.967 0.012 248);
+  --color-surface-soft-lavender: oklch(0.960 0.014 300);
+  --color-surface-soft-blush: oklch(0.966 0.011 10.3);
+  --color-surface-soft-peach: oklch(0.971 0.016 73.7);
+  --color-border: oklch(0.936 0.009 258.3);
+  --color-border-subtle: oklch(0.957 0.009 258.3);
+  --color-border-focus: oklch(0.69 0.095 252.1);
+
+  --color-text: oklch(0.252 0.039 262.6);
+  --color-text-secondary: oklch(0.523 0.028 254.1);
+  --color-text-muted: oklch(0.673 0.024 256.8);
+  --color-text-disabled: oklch(0.8 0.014 258.4);
+  --color-text-inverse: oklch(1 0 0);
+
+  --color-brand: oklch(0.69 0.095 252.1);
   --color-brand-fill: oklch(0.56 0.095 252.1);
-}
+  --color-brand-fill-hover: oklch(0.50 0.095 252.1);
+  --color-brand-fill-active: oklch(0.44 0.095 252.1);
+  --color-brand-soft: oklch(0.954 0.015 248);
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --color-safe: oklch(0.681 0.123 155.9);
+  --color-safe-soft: oklch(0.962 0.016 160.6);
+  --color-safe-dark: oklch(0.498 0.099 156.7);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-caution: oklch(0.751 0.141 83.2);
+  --color-caution-soft: oklch(0.974 0.032 89.1);
+  --color-caution-dark: oklch(0.539 0.100 85.0);
+
+  --color-critical: oklch(0.626 0.164 352);
+  --color-critical-fill: oklch(0.58 0.164 352);
+  --color-critical-fill-hover: oklch(0.50 0.164 352);
+  --color-critical-fill-active: oklch(0.46 0.164 352);
+  --color-critical-soft: oklch(0.956 0.017 352);
+  --color-critical-dark: oklch(0.472 0.128 352);
+
+  --text-heading: 1.125rem;
+  --text-heading--line-height: 1.3;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5;
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.4;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.4;
+
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --radius-input: 12px;
+  --radius-btn: 14px;
+  --radius-card-sm: 16px;
+  --radius-card: 20px;
+  --radius-hero: 24px;
+  --radius-modal: 28px;
+  --radius-full: 9999px;
+
+  --shadow-card: 0 4px 20px rgba(24, 34, 53, 0.05);
+  --shadow-floating: 0 8px 30px rgba(24, 34, 53, 0.08);
+  --shadow-critical: 0 10px 32px rgba(207, 87, 146, 0.12);
+  --shadow-focus: 0 0 0 3px rgba(111, 159, 213, 0.25);
+
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
 }
 
 html {
@@ -30,8 +82,8 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--color-text);
+  background: var(--color-bg);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -46,10 +98,4 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }
