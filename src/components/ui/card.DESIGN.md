@@ -92,6 +92,32 @@ this plan's second confirmed base-verification node. Extracted values:
 `/design-system/nested` or `/design-system/states`, the same deferral pattern `button.DESIGN.md`
 already documents for 06-06.
 
+## Card Type Map (D-12, resolved — Task 2 of 06-07)
+
+All 6 D-12 Figma card-type nodes were inspected (via the orchestrator's `06-FIGMA-EXTRACTS.md`
+relay, same D-15 workaround as above). **Finding: all 6 are genuinely distinct visual patterns —
+none collapse into a shared generic `Card` variant prop.** Common ground across all 6: `24px`
+corner radius, `16px` padding, `16px` gap between icon-tile/content — i.e. exactly the base
+`Card` primitive Task 1 just corrected. Everything else (background treatment, icon-tile color,
+title/subtitle size, shadow tint) is composition, not a base-primitive concern.
+
+| # | Figma node | Working name | Disposition | Composition |
+|---|-----------|--------------|-------------|--------------|
+| 1 | `266-9323` | **Status Hero Card** ("Baby is Resting Safely") | (b) composition | `Card` + a 72px `rounded-16` icon tile using the new `--gradient-card-hero-icon` token (green-700→green-500, 135deg) + `<CardTitle className="text-base">` override (16px Bold neutral-800, base default is 14px) + `<CardDescription className="text-sm text-text-hero-muted">` override (14px, new `--color-text-hero-muted` token — `#7b82a0` is distinct from `--color-text-muted`'s `#808699`, close but not identical) + a green-tinted shadow override (`shadow-[0px_2px_8px_rgba(208,241,237,0.5)]` at the usage site — this specific tint is a one-off, not promoted to a token, since no other card type shares it) |
+| 2 | `266-9387` | **Instruction Row Card** | base primitive (Task 1) | `Card` (default, unmodified) + a 48px `rounded-16` icon tile using the new `--color-icon-tile-neutral` token + default `CardTitle`/`CardDescription` — this is the base-case default the whole primitive was tuned against |
+| 3 | `266-9344` | **Vital Stat Card** (Pulse/Temp/Activity) | (b) composition, deliberately *not* promoted to a new component | A plain full-bleed-gradient `<div>` (not `Card` — it has no separate white surface, so `bg-surface` doesn't apply) sharing `Card`'s `rounded-card p-4` shell, using the new `--gradient-metric-pulse` token for the Pulse tone specifically; label+icon row, a sparkline slot (children — the actual `Sparkline` component is a separate UI-SPEC composite, out of this plan's scope), and a number+unit row (`tabular-nums`, per UI-SPEC's Vital-metric typography role). **Temp/Activity tones are not implemented in this plan** — the Figma node only gave an exact gradient for Pulse ("other vitals follow the same pattern with their respective status hue" per `06-FIGMA-EXTRACTS.md`, without exact stops). Considered promoting this to a `CardMetric` export in `card.tsx` (the plan's own example of a legitimate disposition-(a) case), but with only one of three tones' exact values extracted, a formal 3-tone component would either fabricate two gradients or ship an incomplete enum — deferred to whichever later plan builds the real vitals row (Home-proof or its own dedicated plan), which will have fresh Figma access to extract Temp/Activity exactly |
+| 4 | `203-13605` | **Metric Row Card** ("Perfusion Index") | (c) duplicate of #2 (Instruction Row Card), with two swapped tokens | Identical shape to `266-9387` — icon tile bg swapped to the new `--color-icon-tile-green` token (green-100) instead of neutral-100, and `<CardDescription className="text-text-muted">` override (12px, existing `--color-text-muted`/neutral-500 — this card's subtitle color is an *exact* match to that existing token, unlike `266-9387`'s, which needed the new `--color-text-subtle`/neutral-400) |
+| 5 | `203-13559` | **Device Status Card** (no progress) | (b) composition | `Card` + a 72px `rounded-16` icon tile using the new `--gradient-card-device-icon` token (pink-500→pink-300, 180deg — vertical, not diagonal like the CTA-button gradients) + `<CardTitle className="text-xl">` override (20px Bold) + `<CardDescription>` with an inline `<strong>`/`font-bold` span for the bolded "SKU-1234" segment + the new `--shadow-card-device` token (Figma authored this shadow directly against `--color-neutral-200`, not an rgba literal) |
+| 6 | `203-11669` | **Device Status Card** (with progress) | (b) composition, same base as #5 | Same composition as `203-13559` plus an edit-pencil icon (`tabler:edit`, 20px) beside the title, and a percentage-driven horizontal bar slot. **Per `06-FIGMA-EXTRACTS.md`'s explicit disposition guidance, this resolves D-16's open question: name the future component `progress` (a generic horizontal bar), not a battery-shaped indicator** — none of the 6 card nodes show an actual battery glyph. Building that `Progress` primitive itself is **06-08's job, not this plan's** (`item.tsx`/`card.tsx` are this plan's only files) — resolved here means "given a working name and composition shape," not "implemented" |
+
+Every row above has a resolved disposition — none is left open. Each follows the same reasoning already established
+twice elsewhere in this phase (06-06's `cta` gradient reconciliation, D-17's Nav active-color call):
+match the real extracted Figma value, even when it conflicts with an earlier draft's guess, and
+only add a token/component when the value is genuinely new — never fabricate precision (see the
+Vital Stat Card's Temp/Activity gap above) and never force a shared token where the extracted
+values actually differ (see Metric Row Card's `--color-text-muted` vs Instruction Row's
+`--color-text-subtle`).
+
 ## The "layout never changes" rule (DESIGN-SYSTEM.md §9)
 
 Card's structural DOM nesting — `Card > CardHeader? > CardContent` — must be identical across
