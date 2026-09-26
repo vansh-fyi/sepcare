@@ -46,10 +46,21 @@ function Button({
     /** Hides the label (space reserved) and shows a centered spinner. Height/padding/width never change. */
     loading?: boolean
   }) {
-  const Comp = asChild ? Slot.Root : "button"
+  if (asChild) {
+    return (
+      <Slot.Root
+        data-slot="button"
+        data-variant={variant}
+        className={cn(buttonVariants({ variant, className }))}
+        {...props}
+      >
+        {children}
+      </Slot.Root>
+    )
+  }
 
   return (
-    <Comp
+    <button
       data-slot="button"
       data-variant={variant}
       data-loading={loading || undefined}
@@ -67,7 +78,7 @@ function Button({
           className="absolute inline-flex size-4 items-center justify-center rounded-full border-2 border-current border-t-transparent motion-safe:animate-spin [animation-duration:var(--duration-slow)]"
         />
       )}
-    </Comp>
+    </button>
   )
 }
 
