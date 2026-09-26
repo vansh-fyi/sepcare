@@ -26,7 +26,13 @@
 
 **Core:**
 - Next.js 16.3.5 (App Router) - full backend service; API routes under `src/app/api/*/route.ts`, `package.json`
-- React 19.2.8 / React DOM 19.2.8 - present as a Next.js dependency; only a default landing page exists at `src/app/page.tsx` (real UI lives in a separate frontend track, not this repo per `.claude/CLAUDE.md`)
+- React 19.2.8 / React DOM 19.2.8 - Phase 6 (06-01) begins building real UI directly in this repo: `src/app/design-system/*` sample routes, `src/components/ui/*` shadcn components
+- Tailwind CSS v4.3.3 (`@tailwindcss/postcss`) - CSS-first `@theme` token pipeline, no `tailwind.config.js`; single token block in `src/app/globals.css` (Phase 6, 06-01)
+- shadcn/ui (CLI, dev-only, invoked via `npx`) + Radix primitives (via the unified `radix-ui` meta-package, itself pinned to `@radix-ui/react-slot@1.3.3`) - component scaffolding for `src/components/ui/*` (Phase 6, 06-01); every `add`/`init` invocation targets the Radix base, not the CLI's newer Base UI default
+- `class-variance-authority` 0.7.1 - finite, typed CVA variant unions for shadcn components (Phase 6, 06-01)
+- `cn` 0.4.0 (github.com/shadcn-ui/cn) - `cn()` className-merge helper, re-exported from `src/lib/utils.ts`; replaces the shadcn-standard `clsx`+`tailwind-merge` combo (Phase 6, 06-01)
+- `tw-animate-css` 1.4.0 - animation utility classes, imported directly in `globals.css` (supersedes the deprecated `tailwindcss-animate` config-file plugin)
+- `next/font/google` (`Inter`) - active font, replacing the `create-next-app` default `Geist`/`Geist_Mono` pair (Phase 6, 06-01, D-05)
 
 **Testing:**
 - Vitest 4.1.11 - `vitest.config.ts`, `environment: "node"`, tests in `tests/*.test.ts`

@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 6
 current_phase_name: Design System (Tailwind v4 Tokens)
 status: executing
-stopped_at: Phase 6 UI-SPEC approved
-last_updated: "2026-09-26T10:07:27.565Z"
-last_activity: 2026-09-25
-last_activity_desc: Phase 05 complete, transitioned to Phase 6
-state_head: 20c75c5ea027c55cbd930a50e9c8bb491ff51180
+stopped_at: Completed 06-01-PLAN.md
+last_updated: "2026-09-26T12:35:05.461Z"
+last_activity: 2026-09-26
+last_activity_desc: Phase 6 execution started
+state_head: fcef3fd6f216879dfbf24da47920de6bb8c5ee78
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 7
-  completed_plans: 2
+  completed_plans: 3
   percent: 17
 ---
 
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-25)
 
 **Core value:** Reliably turn a stream of vitals from a Waveshare ESP32-S3-Tiny wearable into an accurate, trustworthy sepsis risk signal (Green/Amber/Red) that reaches a caregiver in time to act — even through WiFi/power outages.
-**Current focus:** Phase 05 — Repo Cleanup & Canonicalization
+**Current focus:** Phase 6 — Design System (Tailwind v4 Tokens)
 
 ## Current Position
 
-Phase: 6 (Design System (Tailwind v4 Tokens)) — READY TO EXECUTE
-Plan: Not started
+Phase: 6 (Design System (Tailwind v4 Tokens)) — EXECUTING
+Plan: 2 of 5
 Status: Ready to execute
-Last activity: 2026-09-25 — Phase 05 complete, transitioned to Phase 6
+Last activity: 2026-09-26 — Phase 6 execution started
 
 Progress: [██░░░░░░░░] 17%
 
@@ -72,6 +72,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 03 P03 | 12min | 1 tasks | 2 files |
 | Phase 05 P01 | 5min | 3 tasks | 18 files |
 | Phase 05 P02 | 2min | 3 tasks | 5 files |
+| Phase 06 P01 | 45min | 4 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,9 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 
 - [Phase 05]: Deduped parentsdashboard.html in favor of parent-dashboard.html (D-12); archived xo/ and sepcare/ subtrees into archive/ with full README index
 - [Phase 05]: Phase 05: Archived sdg-11/sdg-13 (SDG brainstorms) and heatstroke/diarrheal-dehydration implementation plans (D-09) via git mv, closing CLEAN-01's literal-wording gap; phase-gate verification confirmed CLEAN-03 evidence-integrity and Plan 01 reference-cleanliness both hold
+- [Phase 06]: Swapped clsx+tailwind-merge for the official shadcn-ui cn package, approved live at the Task 1 checkpoint after human npmjs.com review of both shadcn and cn provenance.
+- [Phase 06]: Added AGENTS.md documentation instructing agents to verify shadcn CLI flags and the cn package's API against live docs rather than training data, requested live by the user mid-execution as a new Task 4.
+- [Phase 06]: shadcn CLI 4.21.0's add subcommand has no -b/--base flag (only init does); it already resolves Button to Radix via the unified radix-ui meta-package (pinned to @radix-ui/react-slot@1.3.3) rather than Base UI, verified via --dry-run/--view before installing.
 
 ### Pending Todos
 
@@ -102,9 +106,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-26T09:11:04.754Z
-Stopped at: Phase 6 UI-SPEC approved
-Resume file: .planning/phases/06-design-system-tailwind-v4-tokens/06-UI-SPEC.md
+Last session: 2026-09-26T12:35:05.431Z
+Stopped at: Completed 06-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 
