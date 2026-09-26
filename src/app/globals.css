@@ -2,42 +2,101 @@
 @import "tw-animate-css";
 
 @theme {
-  --color-bg: oklch(0.981 0.005 258.3);
-  --color-surface: oklch(1 0 0);
-  --color-surface-soft-blue: oklch(0.967 0.012 248);
-  --color-surface-soft-lavender: oklch(0.960 0.014 300);
-  --color-surface-soft-blush: oklch(0.966 0.011 10.3);
-  --color-surface-soft-peach: oklch(0.971 0.016 73.7);
-  --color-border: oklch(0.936 0.009 258.3);
-  --color-border-subtle: oklch(0.957 0.009 258.3);
-  --color-border-focus: oklch(0.69 0.095 252.1);
+  /* ==========================================================================
+     PRIMITIVES — verbatim from Figma Segue 3.0 (203-9098..9138), do not hand-edit.
+     Components never reference these directly — only the semantic layer below does.
+     ========================================================================== */
+  --color-pink-100: #FEE3E3;
+  --color-pink-200: #FCC6C6;
+  --color-pink-300: #FBAAAA;
+  --color-pink-400: #F98D8D;
+  --color-pink-500: #F87171;
+  --color-pink-600: #EF4444;
+  --color-pink-700: #EF0C0C;
+  --color-pink-800: #C10303;
+  --color-pink-900: #590101;
 
-  --color-text: oklch(0.252 0.039 262.6);
-  --color-text-secondary: oklch(0.523 0.028 254.1);
-  --color-text-muted: oklch(0.673 0.024 256.8);
-  --color-text-disabled: oklch(0.8 0.014 258.4);
-  --color-text-inverse: oklch(1 0 0);
+  --color-green-100: #D0F1ED;
+  --color-green-200: #A1E3DB;
+  --color-green-300: #72D4CA;
+  --color-green-400: #70D4C9;
+  --color-green-500: #27E4D0;
+  --color-green-600: #08D7BF;
+  --color-green-700: #01A18E;
+  --color-green-800: #006458;
+  --color-green-900: #042521;
 
-  --color-brand: oklch(0.69 0.095 252.1);
-  --color-brand-fill: oklch(0.56 0.095 252.1);
-  --color-brand-fill-hover: oklch(0.50 0.095 252.1);
-  --color-brand-fill-active: oklch(0.44 0.095 252.1);
-  --color-brand-soft: oklch(0.954 0.015 248);
+  --color-blue-100: #D3E0FB;
+  --color-blue-200: #A8C1F7;
+  --color-blue-300: #5195EF;
+  --color-blue-400: #3B82F6;
+  --color-blue-500: #2563EB;
+  --color-blue-600: #1A4DC0;
+  --color-blue-700: #103891;
+  --color-blue-800: #0A2662;
+  --color-blue-900: #041437;
 
-  --color-safe: oklch(0.681 0.123 155.9);
-  --color-safe-soft: oklch(0.962 0.016 160.6);
-  --color-safe-dark: oklch(0.498 0.099 156.7);
+  --color-neutral-100: #F5F5F8;
+  --color-neutral-200: #DADCE0;
+  --color-neutral-300: #C1C4D0;
+  --color-neutral-400: #9AA0AF;
+  --color-neutral-500: #808699;
+  --color-neutral-600: #626B81;
+  --color-neutral-700: #42475E;
+  --color-neutral-800: #222737;
+  --color-neutral-900: #0A0A11;
 
-  --color-caution: oklch(0.751 0.141 83.2);
-  --color-caution-soft: oklch(0.974 0.032 89.1);
-  --color-caution-dark: oklch(0.539 0.100 85.0);
+  --color-yellow-100: #FAF5DF;
+  --color-yellow-200: #F7EDC1;
+  --color-yellow-300: #F2E08E;
+  --color-yellow-400: #F3DB74;
+  --color-yellow-500: #F3CB3B;
+  --color-yellow-600: #F5C724;
+  --color-yellow-700: #CBA003;
+  --color-yellow-800: #6D5000;
+  --color-yellow-900: #473700;
 
-  --color-critical: oklch(0.626 0.164 352);
-  --color-critical-fill: oklch(0.58 0.164 352);
-  --color-critical-fill-hover: oklch(0.50 0.164 352);
-  --color-critical-fill-active: oklch(0.46 0.164 352);
-  --color-critical-soft: oklch(0.956 0.017 352);
-  --color-critical-dark: oklch(0.472 0.128 352);
+  /* ==========================================================================
+     SEMANTIC — the only layer components touch. Named by ROLE, not appearance,
+     so a future re-tone of the primitives never requires touching component code.
+     ========================================================================== */
+  --color-bg: var(--color-neutral-100);
+  --color-surface: #FFFFFF;
+  --color-surface-soft-blue: var(--color-blue-100);
+  --color-border: var(--color-neutral-300);
+  --color-border-subtle: var(--color-neutral-200);
+  --color-border-focus: var(--color-blue-400);
+
+  --color-text: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-700);
+  --color-text-muted: var(--color-neutral-500);
+  --color-text-disabled: var(--color-neutral-300);
+  --color-text-inverse: #FFFFFF;
+
+  /* Brand/interaction — Blue family only. Never used to denote health status (D-04). */
+  --color-brand: var(--color-blue-600);
+  --color-brand-fill: var(--color-blue-600);
+  --color-brand-fill-hover: var(--color-blue-700);
+  --color-brand-fill-active: var(--color-blue-800);
+  --color-brand-soft: var(--color-blue-100);
+
+  /* Safe status — Green family. */
+  --color-safe: var(--color-green-700);
+  --color-safe-soft: var(--color-green-100);
+  --color-safe-dark: var(--color-green-800);
+
+  /* Caution status — Yellow family. */
+  --color-caution: var(--color-yellow-800);
+  --color-caution-soft: var(--color-yellow-100);
+  --color-caution-dark: var(--color-yellow-900);
+
+  /* Critical status — Pink family (D-04: reserved for critical/danger only, never brand). */
+  --color-critical: var(--color-pink-700);
+  --color-critical-fill: var(--color-pink-800);
+  --color-critical-fill-hover: var(--color-pink-900);
+  --color-critical-fill-active: var(--color-pink-900);
+  --color-critical-soft: var(--color-pink-100);
+  --color-critical-dark: var(--color-pink-900);
 
   --text-heading: 1.125rem;
   --text-heading--line-height: 1.3;
@@ -58,10 +117,10 @@
   --radius-modal: 28px;
   --radius-full: 9999px;
 
-  --shadow-card: 0 4px 20px rgba(24, 34, 53, 0.05);
-  --shadow-floating: 0 8px 30px rgba(24, 34, 53, 0.08);
-  --shadow-critical: 0 10px 32px rgba(207, 87, 146, 0.12);
-  --shadow-focus: 0 0 0 3px rgba(111, 159, 213, 0.25);
+  --shadow-card: 0 4px 20px rgba(10, 10, 17, 0.06);
+  --shadow-floating: 0 8px 30px rgba(10, 10, 17, 0.10);
+  --shadow-critical: 0 10px 32px rgba(193, 3, 3, 0.14);
+  --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.25);
 
   --duration-fast: 150ms;
   --duration-normal: 250ms;
