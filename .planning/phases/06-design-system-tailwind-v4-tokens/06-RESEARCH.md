@@ -334,17 +334,19 @@ const chartConfig = {
 
 **If this table is empty:** N/A — see rows above; all other CLI/package claims in this document were verified live this session via `npx shadcn --version`, `--help`, `--dry-run`, `--diff`, `npm view`, and the package-legitimacy seam.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Which of the 6 Figma "card type" nodes are genuinely distinct components vs. compositions of the existing `Card` + new primitives?**
    - What we know: CONTEXT.md's own spot-check of the Home screen node already identifies at least 3 distinct patterns (status hero card, 3-column vital stat card, instruction-row card) among the 6 listed nodes.
    - What's unclear: Whether the remaining 3 card-type nodes (`203-13605`, `203-13559`, `203-11669`) are additional genuinely distinct types or variations reachable via existing Card composition.
    - Recommendation: The planner should schedule a Figma-inspection task per remaining card node before committing to exactly 6 new Card-family component files; D-12 explicitly permits collapsing this number.
+   - **RESOLVED:** deferred to plan `06-07`'s Card Type Map disposition task — each of the 6 nodes is inspected via Figma MCP and disposed as either a distinct Card-family component or a documented Card composition, per D-15's extraction mechanism.
 
 2. **Exact prop/variant names for the new form fields and progress indicator.**
    - What we know: D-12 lists the components (select, textarea, checkbox, radio, switch, progress) but explicitly defers exact naming to Figma-informed discretion, not the user (who couldn't articulate exact names).
    - What's unclear: Whether the battery/progress indicator needs a distinct "battery" visual treatment (segmented/notched, matching a physical battery icon) vs. a generic rounded progress bar/ring — this depends on what the Home screen's battery icon area actually looks like in Figma.
    - Recommendation: Treat as a D-15-covered per-component Figma extraction task; name the component `progress` (shadcn-aligned) with a `variant="battery" | "bar" | "ring"` (or similar) CVA axis if the Figma frame shows more than one visual treatment is actually needed.
+   - **RESOLVED:** deferred to plan `06-08`'s progress/`battery-indicator` split task — exact prop/variant naming is decided there from the live Figma frame, per the same D-15 mechanism.
 
 ## Environment Availability
 
