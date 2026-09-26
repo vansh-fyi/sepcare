@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { PageShell } from "@/components/page-shell";
 
 /**
  * D-10 sample page 1 (DSYS-02/DSYS-03). Renders the three Badge/Card status
@@ -9,26 +10,41 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
  * restyled Card + Badge components (Plan 06-03).
  */
 const STATUS_ROWS = [
-  { status: "safe", label: "Stable" },
-  { status: "caution", label: "Monitor" },
-  { status: "critical", label: "Critical" },
+  {
+    status: "safe",
+    label: "Stable",
+    copy: "All monitored vitals are within the expected baseline range.",
+  },
+  {
+    status: "caution",
+    label: "Monitor",
+    copy: "A trend is developing — keep a close eye over the next few hours.",
+  },
+  {
+    status: "critical",
+    label: "Critical",
+    copy: "Multiple systems abnormal and trending together — escalate now.",
+  },
 ] as const;
 
 export default function StatesDesignSystemPage() {
   return (
-    <div className="flex flex-col gap-6 p-8 md:flex-row">
-      {STATUS_ROWS.map(({ status, label }) => (
-        <Card key={status} className="flex-1">
-          <CardHeader>
-            <Badge status={status}>{label}</Badge>
-          </CardHeader>
-          <CardContent>
-            <p className="text-body text-text-secondary">
-              Example {status} status card.
-            </p>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
+    <PageShell
+      title="Status states"
+      description="Safe, Caution, and Critical rendered side by side through the real Card + Badge components and the shared token set — never color alone."
+    >
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {STATUS_ROWS.map(({ status, label, copy }) => (
+          <Card key={status}>
+            <CardHeader>
+              <Badge status={status}>{label}</Badge>
+            </CardHeader>
+            <CardContent>
+              <p className="text-body text-text-secondary">{copy}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </PageShell>
   );
 }

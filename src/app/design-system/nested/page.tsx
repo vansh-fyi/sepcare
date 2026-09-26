@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PageShell } from "@/components/page-shell";
 
 /**
  * D-10 sample page 3 (DSYS-02/DSYS-03) — completed. Nests an Input and two
@@ -14,15 +15,18 @@ import { Input } from "@/components/ui/input";
  */
 export default function NestedDesignSystemPage() {
   return (
-    <div className="p-8">
-      <Card className="max-w-md">
+    <PageShell
+      title="Nested composition"
+      description="Button and Input rendered inside Card inside the page layout — proving the token set cascades correctly three layers deep."
+    >
+      <Card className="mx-auto max-w-md">
         <CardHeader>
           <h2 className="text-heading font-semibold text-text">
             Device Sync
           </h2>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-1">
+        <CardContent className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="device-id"
               className="text-label font-semibold text-text"
@@ -37,6 +41,6 @@ export default function NestedDesignSystemPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PageShell>
   );
 }

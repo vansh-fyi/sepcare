@@ -1,17 +1,22 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { PageShell } from "@/components/page-shell";
 
 /**
  * Phase 6 design-system reference page — user-requested additive scope
  * beyond DSYS-01/02/03 (not a locked roadmap requirement). Presents the
  * artifacts Plans 06-01 through 06-04 already produced: the live compiled
- * @theme token set (color/typography), parsed straight from globals.css at
- * request time, plus the locked Spacing Scale, all four component
- * DESIGN.md docs (read verbatim, never re-authored), and links to the
- * three existing sample pages — so the team can see the whole design
- * system's current state on one page without opening five separate files
- * by hand.
+ * @theme token set (primitive ramps, semantic roles, typography), parsed
+ * straight from globals.css at request time, live-rendered previews of
+ * every component variant, all four component DESIGN.md docs (read
+ * verbatim, never re-authored), and links to the three existing sample
+ * pages — one page presenting the whole design system's current state,
+ * in the spirit of a real component-doc site (e.g. ui.shadcn.com), scoped
+ * to what this phase actually ships.
  */
 
 const GLOBALS_CSS_PATH = join(process.cwd(), "src/app/globals.css");
@@ -59,19 +64,35 @@ function parseThemeTokens(themeBlock: string, prefix: string): ThemeToken[] {
   return tokens;
 }
 
+const PRIMITIVE_RAMPS = ["pink", "green", "blue", "neutral", "yellow"] as const;
+const RAMP_STEPS = [100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
+
+/** Live-parsed primitive ramps (--color-{ramp}-{step}), sourced from Figma Segue 3.0. */
+function parsePrimitiveRamps(themeBlock: string) {
+  const colorTokens = parseThemeTokens(themeBlock, "--color-");
+  return PRIMITIVE_RAMPS.map((ramp) => ({
+    ramp,
+    steps: RAMP_STEPS.map((step) => {
+      const token = colorTokens.find((t) => t.name === `--color-${ramp}-${step}`);
+      return { step, value: token?.value ?? "—" };
+    }),
+  }));
+}
+
 interface ColorTokenGroup {
   title: string;
   tokens: ThemeToken[];
 }
 
 /**
- * Groups the live-parsed --color-* tokens by role prefix (surface/border,
- * text, brand, safe, caution, critical) — the same grouping 06-UI-SPEC.md's
- * Color section uses, but built from what globals.css actually contains,
- * never retyped from the spec by hand.
+ * Groups the live-parsed semantic --color-* tokens by role (surface/border,
+ * text, brand, safe, caution, critical) — excludes the raw primitive ramps,
+ * which get their own swatch section above.
  */
-function groupColorTokens(themeBlock: string): ColorTokenGroup[] {
-  const colorTokens = parseThemeTokens(themeBlock, "--color-");
+function groupSemanticColorTokens(themeBlock: string): ColorTokenGroup[] {
+  const colorTokens = parseThemeTokens(themeBlock, "--color-").filter(
+    (t) => !PRIMITIVE_RAMPS.some((ramp) => t.name.startsWith(`--color-${ramp}-`)),
+  );
   const groupDefs: { title: string; test: (name: string) => boolean }[] = [
     {
       title: "Surface / Border",
@@ -96,6 +117,7 @@ interface TypographyRole {
   size: string;
   lineHeight: string;
   weight: string;
+  weightValue: 400 | 600;
 }
 
 const TYPOGRAPHY_ROLES = ["heading", "body", "label", "caption"] as const;
@@ -106,12 +128,12 @@ const TYPOGRAPHY_ROLES = ["heading", "body", "label", "caption"] as const;
 // This lookup is legitimately hand-authored, not live-parsed.
 const TYPOGRAPHY_WEIGHT_BY_ROLE: Record<
   (typeof TYPOGRAPHY_ROLES)[number],
-  string
+  { label: string; value: 400 | 600 }
 > = {
-  heading: "600 (semibold)",
-  body: "400 (regular)",
-  label: "600 (semibold)",
-  caption: "400 (regular)",
+  heading: { label: "600 (semibold)", value: 600 },
+  body: { label: "400 (regular)", value: 400 },
+  label: { label: "600 (semibold)", value: 600 },
+  caption: { label: "400 (regular)", value: 400 },
 };
 
 /** Pairs each --text-{role} size token with its --text-{role}--line-height sibling. */
@@ -122,11 +144,13 @@ function parseTypographyRoles(themeBlock: string): TypographyRole[] {
     const lineHeightToken = textTokens.find(
       (t) => t.name === `--text-${role}--line-height`,
     );
+    const weight = TYPOGRAPHY_WEIGHT_BY_ROLE[role];
     return {
       role,
       size: sizeToken?.value ?? "—",
       lineHeight: lineHeightToken?.value ?? "—",
-      weight: TYPOGRAPHY_WEIGHT_BY_ROLE[role],
+      weight: weight.label,
+      weightValue: weight.value,
     };
   });
 }
@@ -225,94 +249,155 @@ const SAMPLE_PAGES: { href: string; label: string }[] = [
   { href: "/design-system/nested", label: "Nested composition" },
 ];
 
+function SectionCard({
+  id,
+  title,
+  description,
+  children,
+}: {
+  id: string;
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section id={id} className="scroll-mt-8">
+      <Card>
+        <CardHeader>
+          <h2 className="text-heading font-semibold text-text">{title}</h2>
+          {description ? (
+            <p className="text-body text-text-secondary">{description}</p>
+          ) : null}
+        </CardHeader>
+        <CardContent>{children}</CardContent>
+      </Card>
+    </section>
+  );
+}
+
 export default function DesignSystemDocsPage() {
   const themeBlock = readThemeBlock();
-  const colorGroups = groupColorTokens(themeBlock);
+  const primitiveRamps = parsePrimitiveRamps(themeBlock);
+  const semanticGroups = groupSemanticColorTokens(themeBlock);
   const typographyRoles = parseTypographyRoles(themeBlock);
   const componentDocs = readComponentDocs();
 
   return (
-    <div className="flex flex-col gap-8 p-8">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-heading font-semibold text-text">
-          SepCare Design System Reference
-        </h1>
-        <p className="text-body text-text-secondary">
-          Live token summary plus full component usage docs — Phase 6,
-          user-requested additive scope beyond DSYS-01/02/03.
-        </p>
-      </header>
+    <PageShell
+      title="SepCare Design System"
+      description="Live token summary, rendered component previews, and full usage docs — Phase 6, user-requested additive scope beyond DSYS-01/02/03."
+    >
+      <nav className="mb-10 flex flex-wrap gap-x-6 gap-y-2 border-b border-border pb-4 text-label font-semibold text-text-secondary">
+        <a href="#colors" className="hover:text-brand hover:underline">
+          Colors
+        </a>
+        <a href="#typography" className="hover:text-brand hover:underline">
+          Typography
+        </a>
+        <a href="#spacing" className="hover:text-brand hover:underline">
+          Spacing
+        </a>
+        <a href="#components" className="hover:text-brand hover:underline">
+          Components
+        </a>
+        <a href="#sample-pages" className="hover:text-brand hover:underline">
+          Sample Pages
+        </a>
+      </nav>
 
-      <Card>
-        <CardHeader>
-          <h2 className="text-heading font-semibold text-text">
-            Color Tokens
-          </h2>
-        </CardHeader>
-        <CardContent>
-          {colorGroups.map((group) => (
-            <div key={group.title} className="flex flex-col gap-2">
-              <h3 className="text-label font-semibold text-text">
-                {group.title}
-              </h3>
-              <table className="w-full text-body text-text-secondary">
-                <thead>
-                  <tr className="text-left text-label font-semibold text-text">
-                    <th>Token</th>
-                    <th>Compiled Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {group.tokens.map((token) => (
-                    <tr key={token.name}>
-                      <td>{token.name}</td>
-                      <td>{token.value}</td>
-                    </tr>
+      <div className="flex flex-col gap-8">
+        <SectionCard
+          id="colors"
+          title="Color"
+          description="Primitive ramps sourced verbatim from Figma Segue 3.0, live-parsed from globals.css — never retyped by hand. Semantic roles below are the ones components actually consume."
+        >
+          <div className="flex flex-col gap-8">
+            {primitiveRamps.map(({ ramp, steps }) => (
+              <div key={ramp} className="flex flex-col gap-2">
+                <h3 className="text-label font-semibold text-text capitalize">
+                  {ramp}
+                </h3>
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-9">
+                  {steps.map(({ step, value }) => (
+                    <div key={step} className="flex flex-col gap-1">
+                      <div
+                        className="h-14 w-full rounded-card-sm border border-border-subtle"
+                        style={{ backgroundColor: value }}
+                        title={value}
+                      />
+                      <span className="text-caption text-text-muted">
+                        {step}
+                      </span>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+                </div>
+              </div>
+            ))}
 
-      <Card>
-        <CardHeader>
-          <h2 className="text-heading font-semibold text-text">
-            Typography Scale
-          </h2>
-        </CardHeader>
-        <CardContent>
-          <table className="w-full text-body text-text-secondary">
-            <thead>
-              <tr className="text-left text-label font-semibold text-text">
-                <th>Role</th>
-                <th>Size</th>
-                <th>Weight</th>
-                <th>Line Height</th>
-              </tr>
-            </thead>
-            <tbody>
-              {typographyRoles.map((role) => (
-                <tr key={role.role}>
-                  <td className="capitalize">{role.role}</td>
-                  <td>{role.size}</td>
-                  <td>{role.weight}</td>
-                  <td>{role.lineHeight}</td>
-                </tr>
+            <div className="mt-4 flex flex-col gap-6 border-t border-border pt-6">
+              {semanticGroups.map((group) => (
+                <div key={group.title} className="flex flex-col gap-2">
+                  <h3 className="text-label font-semibold text-text">
+                    {group.title}
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {group.tokens.map((token) => (
+                      <div
+                        key={token.name}
+                        className="flex items-center gap-2 rounded-card-sm border border-border-subtle p-2"
+                      >
+                        <div
+                          className="h-8 w-8 shrink-0 rounded-full border border-border-subtle"
+                          style={{ backgroundColor: token.value }}
+                          title={token.value}
+                        />
+                        <code className="truncate text-caption text-text-secondary">
+                          {token.name}
+                        </code>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
+            </div>
+          </div>
+        </SectionCard>
 
-      <Card>
-        <CardHeader>
-          <h2 className="text-heading font-semibold text-text">
-            Spacing Scale
-          </h2>
-        </CardHeader>
-        <CardContent>
+        <SectionCard
+          id="typography"
+          title="Typography"
+          description="Every role rendered at its real compiled size/weight/line-height, not just described in a table."
+        >
+          <div className="flex flex-col gap-6">
+            {typographyRoles.map((role) => (
+              <div
+                key={role.role}
+                className="flex flex-col gap-1 border-b border-border-subtle pb-4 last:border-0 last:pb-0"
+              >
+                <p
+                  className="text-text"
+                  style={{
+                    fontSize: role.size,
+                    lineHeight: role.lineHeight,
+                    fontWeight: role.weightValue,
+                  }}
+                >
+                  The quick brown fox jumps over the lazy dog
+                </p>
+                <p className="text-caption text-text-muted">
+                  {role.role} · {role.size} · {role.weight} · line-height{" "}
+                  {role.lineHeight}
+                </p>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+
+        <SectionCard
+          id="spacing"
+          title="Spacing"
+          description="Tailwind v4's stock spacing primitive covers this scale — no custom --spacing-* token is declared (D-01)."
+        >
           <table className="w-full text-body text-text-secondary">
             <thead>
               <tr className="text-left text-label font-semibold text-text">
@@ -331,36 +416,108 @@ export default function DesignSystemDocsPage() {
               ))}
             </tbody>
           </table>
-        </CardContent>
-      </Card>
+        </SectionCard>
 
-      <section className="flex flex-col gap-4">
-        <h2 className="text-heading font-semibold text-text">
-          Component Reference
-        </h2>
-        {componentDocs.map((doc) => (
-          <Card key={doc.name}>
+        <div id="components" className="flex flex-col gap-6 scroll-mt-8">
+          <h2 className="text-2xl font-semibold text-text">Components</h2>
+
+          <Card>
             <CardHeader>
-              <h3 className="text-label font-semibold text-text capitalize">
-                {doc.name}
-              </h3>
+              <h3 className="text-heading font-semibold text-text">Button</h3>
+              <p className="text-body text-text-secondary">
+                Exactly four variants — no size axis this phase.
+              </p>
             </CardHeader>
             <CardContent>
-              <pre className="whitespace-pre-wrap break-words text-body text-text">
-                {doc.content}
-              </pre>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="primary">Sync Now</Button>
+                <Button variant="secondary">Dismiss</Button>
+                <Button variant="tertiary">View Details →</Button>
+                <Button variant="critical">Call Clinician</Button>
+                <Button variant="primary" loading>
+                  Sync Now
+                </Button>
+              </div>
             </CardContent>
           </Card>
-        ))}
-      </section>
 
-      <Card>
-        <CardHeader>
-          <h2 className="text-heading font-semibold text-text">
-            Sample Pages
-          </h2>
-        </CardHeader>
-        <CardContent>
+          <Card>
+            <CardHeader>
+              <h3 className="text-heading font-semibold text-text">
+                Badge (StatusPill)
+              </h3>
+              <p className="text-body text-text-secondary">
+                Always icon + label + color together — never color alone.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-3">
+                <Badge status="safe">Stable</Badge>
+                <Badge status="caution">Monitor</Badge>
+                <Badge status="critical">Critical</Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <h3 className="text-heading font-semibold text-text">Input</h3>
+              <p className="text-body text-text-secondary">
+                Default, error, and disabled treatments.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <Input placeholder="Device ID" />
+                <Input placeholder="Device ID" defaultValue="bad-id" error />
+                <Input placeholder="Device ID" disabled />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <h3 className="text-heading font-semibold text-text">Card</h3>
+              <p className="text-body text-text-secondary">
+                Structure never changes between content states — see the{" "}
+                <a
+                  href="/design-system/empty-loading"
+                  className="text-brand underline-offset-2 hover:underline"
+                >
+                  empty/loading sample page
+                </a>
+                .
+              </p>
+            </CardHeader>
+            <CardContent>
+              <Card className="bg-surface-soft-blue shadow-none">
+                <CardContent>
+                  <p className="text-body text-text-secondary">
+                    A Card, nested inside a Card, to show the surface/shadow
+                    tokens compose without fighting each other.
+                  </p>
+                </CardContent>
+              </Card>
+            </CardContent>
+          </Card>
+
+          {componentDocs.map((doc) => (
+            <Card key={doc.name}>
+              <CardHeader>
+                <h3 className="text-label font-semibold text-text capitalize">
+                  {doc.name}.DESIGN.md
+                </h3>
+              </CardHeader>
+              <CardContent>
+                <pre className="whitespace-pre-wrap break-words text-caption text-text-secondary">
+                  {doc.content}
+                </pre>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <SectionCard id="sample-pages" title="Sample Pages">
           <ul className="flex flex-col gap-2">
             {SAMPLE_PAGES.map((page) => (
               <li key={page.href}>
@@ -373,8 +530,8 @@ export default function DesignSystemDocsPage() {
               </li>
             ))}
           </ul>
-        </CardContent>
-      </Card>
-    </div>
+        </SectionCard>
+      </div>
+    </PageShell>
   );
 }
