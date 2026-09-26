@@ -1,306 +1,199 @@
-# Phase 6: Design System (Tailwind v4 Tokens) - Pattern Map
+# Phase 6: Design System (Tailwind v4 Tokens) — REWORK — Pattern Map
 
-**Mapped:** 2026-09-26
-**Files analyzed:** 13 (new/modified)
-**Analogs found:** 9 / 13 (4 have no in-repo analog — new-to-this-repo shadcn-generated files; RESEARCH.md Code Examples serve as their pattern source instead)
+**Mapped:** 2026-09-27
+**Files analyzed:** ~30 (4 restyle-in-place, ~13 new `ui/*.tsx`+`*.DESIGN.md` pairs, 1 icon-file edit, 4 docs-site route files + N per-component doc routes, 1 Home-proof route, package.json)
+**Analogs found:** all — every new file has a same-repo analog; there is no "no analog" bucket this pass (the repo already contains the exact skeletons D-12 expands on)
 
 ## File Classification
 
 | New/Modified File | Role | Data Flow | Closest Analog | Match Quality |
-|--------------------|------|-----------|-----------------|----------------|
-| `src/app/globals.css` | config (styles) | transform (CSS token authoring → compiled utilities) | `src/app/globals.css` (itself — modified in place) | exact (same file, modified) |
-| `postcss.config.mjs` | config | transform | *(none — new file, no PostCSS config exists yet)* | no analog — use RESEARCH.md Code Examples verbatim |
-| `components.json` | config | transform | *(none — shadcn not yet installed)* | no analog — hand-author per RESEARCH.md primary recommendation |
-| `src/app/layout.tsx` | provider/root-layout | request-response (SSR shell) | `src/app/layout.tsx` (itself — modified in place) | exact (same file, modified) |
-| `src/components/ui/button.tsx` | component | request-response (client interaction) | `frontend-design/design-system/components.css`/`components.js` (interaction-state reference only, not carried as classes per D-07/D-08) | role-match (cross-format: CSS/JS reference → shadcn CVA/TSX target) |
-| `src/components/ui/card.tsx` | component | request-response | `frontend-design/design-system/components.css` (Card surface rules) | role-match |
-| `src/components/ui/badge.tsx` | component | request-response | `frontend-design/design-system/components.css` (StatusPill/Badge rules) + `frontend-design/design-system/icons.js` (icon+label+color multi-modal rule) | role-match |
-| `src/components/ui/input.tsx` | component | request-response | `frontend-design/design-system/components.css` (form/Input rules) | role-match |
-| `src/lib/utils.ts` | utility | transform | `src/lib/risk/compute.ts` (existing `src/lib/` utility-module convention: named export, no default export, pure function) | role-match (different domain, same module-shape convention) |
-| `src/components/icon.tsx` | component (presentational) | transform (data → JSX) | `frontend-design/design-system/icons.js` (`SepCareIcons` object + `renderSepCareIcon()`) | exact (direct 1:1 port target) |
-| `src/app/design-system/states/page.tsx` | route (page) | request-response (SSR page) | `src/app/page.tsx` (only existing App Router page; also `src/app/api/health/route.ts` for the project's route-file header-comment convention) | role-match |
-| `src/app/design-system/empty-loading/page.tsx` | route (page) | request-response | `src/app/page.tsx` | role-match |
-| `src/app/design-system/nested/page.tsx` | route (page) | request-response | `src/app/page.tsx` | role-match |
+|---|---|---|---|---|
+| `src/components/ui/button.tsx` (restyle+expand variants) | component | request-response (client-interactive) | itself (existing file, git history) | exact — same file, visual/variant rework only |
+| `src/components/ui/card.tsx` (restyle, keep structure) | component | CRUD-display | itself | exact |
+| `src/components/ui/badge.tsx` | component | CRUD-display | itself | exact (contract unchanged) |
+| `src/components/ui/input.tsx` | component | request-response (form) | itself | exact |
+| `src/components/ui/label.tsx` (new, shadcn `add label`) | component | display | `src/components/ui/input.tsx` (nearest hand-styled form primitive) | role-match |
+| `src/components/ui/field.tsx` (new, shadcn `add field`) | component | request-response (form wrapper) | `src/components/ui/input.tsx` (error-slot/state pattern to retire in favor of Field) | role-match |
+| `src/components/ui/select.tsx` (new, shadcn `add select`) | component | request-response (form) | `src/components/ui/input.tsx` | role-match |
+| `src/components/ui/textarea.tsx` (new) | component | request-response (form) | `src/components/ui/input.tsx` | role-match |
+| `src/components/ui/checkbox.tsx` (new) | component | event-driven (toggle) | `src/components/ui/input.tsx` (state/disabled treatment) | partial |
+| `src/components/ui/radio-group.tsx` (new) | component | event-driven | `src/components/ui/input.tsx` | partial |
+| `src/components/ui/switch.tsx` (new) | component | event-driven | `src/components/ui/input.tsx` | partial |
+| `src/components/ui/progress.tsx` (new, restyled as battery/level) | component | streaming/display | `src/components/ui/badge.tsx` (CVA + `data-slot` pattern) | role-match |
+| `src/components/ui/toggle-group.tsx` + `toggle.tsx` (new) | component | event-driven | `src/components/ui/button.tsx` (press-state, CVA variant pattern) | role-match |
+| `src/components/ui/chart.tsx` (new, via `add chart`, Card-overwrite guarded) | component | streaming/transform | `src/components/ui/card.tsx` (surface/container conventions) + Recharts upstream | partial — genuinely new capability, styling conventions borrowed from Card |
+| `src/components/ui/sparkline.tsx` (new, hand-authored, thin Recharts wrapper) | component | streaming/transform | Pattern 1 in RESEARCH.md (already concrete code) + `chart.tsx` once installed | partial |
+| `src/components/ui/item.tsx` (new, shadcn `add item`) | component | CRUD-display (list row) | `src/components/ui/card.tsx` (CardHeader/CardContent composition style) | role-match |
+| `src/components/ui/nav-link.tsx` (new, hand-authored) | component | event-driven (route state) | `src/components/ui/badge.tsx` (multi-modal icon+label+color rule, CVA `data-slot`/`data-status` pattern) | role-match |
+| `src/components/ui/nav-bar.tsx` (new, hand-authored) | component | event-driven | `src/components/ui/card.tsx` (fixed-container primitive) + composes `nav-link.tsx` | role-match |
+| `src/components/ui/battery-indicator.tsx` (new, hand-authored, wraps Progress) | component | display | `src/components/ui/badge.tsx` (Icon-pairing convention) + `progress.tsx` | role-match |
+| Every new `*.DESIGN.md` (label, field, select, textarea, checkbox, radio-group, switch, progress, toggle-group, chart, sparkline, item, nav-link, nav-bar, battery-indicator) | doc | static content | `src/components/ui/button.DESIGN.md` (structure: Variants table → Correct usage → Incorrect usage → Overflow/backstop) | exact — this is the mandated pairing pattern (D-06) |
+| `src/components/icon.tsx` (add `smartwatch-dot`, `bottle-baby`, `baby-02`, sort-direction entries) | utility | transform | itself (existing file, same 24px/1.75px-stroke convention) | exact |
+| `src/app/design-system/docs/page.tsx` → split into a docs shell + per-component routes | route/component | request-response (SSR) | itself (existing file) — **but flagged as the anti-pattern to abandon**, see below | exact-file-to-replace |
+| `src/app/design-system/docs/layout.tsx` (new — sidebar shell) | route | request-response (SSR) | `src/components/page-shell.tsx` (existing shared shell pattern) | role-match |
+| `src/app/design-system/docs/[component]/page.tsx` (new, one route per component or static per-folder pages) | route | request-response (SSR + client islands) | `src/app/design-system/states/page.tsx` (PageShell usage, live-rendered real components, not static screenshots) | role-match |
+| `src/app/design-system/states/page.tsx` (visual-quality pass w/ expanded set) | route | request-response (SSR) | itself | exact |
+| `src/app/design-system/empty-loading/page.tsx` (visual-quality pass) | route | request-response (SSR) | `src/app/design-system/states/page.tsx` (same PageShell + grid pattern) | exact-sibling |
+| `src/app/design-system/nested/page.tsx` (visual-quality pass) | route | request-response (SSR) | `src/app/design-system/states/page.tsx` | exact-sibling |
+| `src/app/design-system/home-proof/page.tsx` (new, D-14) | route | request-response (SSR) + client islands (Sparkline, ToggleGroup) | `src/app/design-system/states/page.tsx` (PageShell wrapper, composes real `ui/*` components, no mock-data-fetching layer) | role-match |
+| `src/components/page-shell.tsx` (likely unchanged, maybe extended for docs sidebar variant) | component | display | itself | exact |
+| `package.json` (add `recharts`; optionally strip transitive unused `lucide-react`) | config | batch (install) | itself (existing dependency block, e.g. how `cn`/`radix-ui`/`class-variance-authority` are declared) | exact |
 
 ## Pattern Assignments
 
-### `src/app/globals.css` (config, modified in place)
+### `src/components/ui/*.tsx` — the component + DESIGN.md pairing (applies to every new component)
 
-**Analog:** itself (current state below) — this is a rewrite, not an extension.
+**Analog:** `src/components/ui/button.tsx` + `src/components/ui/button.DESIGN.md` (best exemplar: CVA variant union, `data-slot`/`data-variant`, exported `type XVariant`, and a paired DESIGN.md with Variants table → Correct usage → Incorrect usage → Overflow/backstop section).
 
-**Current full content** (`src/app/globals.css` lines 1-49):
-```css
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html { height: 100%; }
-html, body { max-width: 100vw; overflow-x: hidden; }
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-* { box-sizing: border-box; padding: 0; margin: 0; }
-a { color: inherit; text-decoration: none; }
-@media (prefers-color-scheme: dark) { html { color-scheme: dark; } }
-```
-
-**Required changes (per RESEARCH.md Anti-Patterns + UI-SPEC Color/Surface Tokens sections):**
-1. Add `@import "tailwindcss";` and `@import "tw-animate-css";` at the top (RESEARCH.md Pattern 1 + Code Examples).
-2. **Delete** the entire `@media (prefers-color-scheme: dark) { ... }` blocks (both of them) — RESEARCH.md's Anti-Patterns section explicitly flags this as fighting the new `@theme` tokens; UI-SPEC's palette is light-mode only.
-3. Add a single `@theme { ... }` block containing every token from `06-UI-SPEC.md`'s Color, Typography, Surface Tokens (Radius/Shadow/Motion) sections — copy the OKLCH values verbatim from UI-SPEC lines 150-188 (Color) and 94-104 (Typography `--text-*` pairs) and 192-229 (Radius/Shadow/Motion tables, converted to `--radius-*`/`--shadow-*`/`--duration-*` custom properties).
-4. Do **not** declare a custom `--spacing-*` scale (UI-SPEC Spacing Scale section + RESEARCH.md Pattern 1 explicitly warn against this — Tailwind v4's stock `--spacing: 0.25rem` primitive already covers the full 4/8/12/16/24/32/48/64px ladder).
-5. Keep the existing generic reset rules (`html`, `body`, `*`, `a`) — those are layout mechanics, not tokens; only the `:root` color-scheme variables and dark-mode media queries are being replaced by `@theme`.
-
-**Source of the token values to paste in** — `06-UI-SPEC.md` lines 150-188 (Color, verbatim OKLCH block) and lines 94-104, 198-229 (Typography/Radius/Shadow/Motion tables).
-
----
-
-### `postcss.config.mjs` (config, new file)
-
-**No in-repo analog** — no PostCSS config exists yet in this repo.
-
-**Pattern source:** RESEARCH.md Pattern 2 / Code Examples (verified against this repo's installed `next@16.3.5` docs bundle):
-```js
-// Source: node_modules/next/dist/docs/01-app/01-getting-started/11-css.md
-export default {
-  plugins: {
-    '@tailwindcss/postcss': {},
-  },
-}
-```
-
----
-
-### `components.json` (config, new file)
-
-**No in-repo analog** — shadcn not yet installed (`shadcn_initialized: false` per UI-SPEC frontmatter).
-
-**Pattern source:** RESEARCH.md "Primary recommendation" + Code Examples — hand-author rather than run interactive `init` (sidesteps the missing `--base-color` CLI flag, RESEARCH.md Pitfall #2):
-```json
-{
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
-  "rsc": true,
-  "tsx": true,
-  "tailwind": {
-    "config": "",
-    "css": "src/app/globals.css",
-    "baseColor": "slate",
-    "cssVariables": true
-  },
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
-  }
-}
-```
-Then: `npx shadcn@latest add button card badge input -b radix -y` — **must** pass `-b radix` explicitly (RESEARCH.md Pitfall #1: CLI 4.21.0 defaults to Base UI, not Radix, when `-b` is omitted; this would silently violate D-07).
-
----
-
-### `src/app/layout.tsx` (provider/root-layout, modified in place)
-
-**Analog:** itself (current state) — swap font import only, per D-05.
-
-**Current content** (`src/app/layout.tsx`, full file, 27 lines):
+**Imports pattern** (button.tsx lines 1-4):
 ```tsx
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "Create Next App",
-  description: "Generated by create next app",
-};
-
-export default function RootLayout({ children }: LayoutProps<"/">) {
-  return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>{children}</body>
-    </html>
-  );
-}
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+import { Slot } from "radix-ui"
 ```
+`cn` is imported from the project's own `@/lib/utils` wrapper (`src/lib/utils.ts`: `import { cn } from "cn"; export { cn }`) — never import `cn` (or a hand-rolled clsx/tailwind-merge combo) directly in a component file; always go through `@/lib/utils`.
 
-**Required change:** Replace `Geist`/`Geist_Mono` imports and variables with a single `Inter` import (`next/font/google`, `variable` mode) per D-05/UI-SPEC "Font" row:
-```tsx
-import { Inter } from "next/font/google";
-const inter = Inter({ variable: "--font-sans", subsets: ["latin"] });
-// ... className={inter.variable}
-```
-Keep the `LayoutProps<"/">` typed-props convention and the overall structure — only the font import/variable and `className` binding change. Update `metadata` title/description if in scope (not required by DSYS-01/02/03, discretionary).
-
----
-
-### `src/components/ui/{button,card,badge,input}.tsx` (component, new files via shadcn CLI)
-
-**No in-repo analog** (first shadcn install in this repo). Two pattern sources instead:
-
-1. **Structural/CVA shape** — RESEARCH.md Pattern 3 (illustrative, executor confirms exact class strings against UI-SPEC's locked tokens):
+**CVA variant-union pattern** (button.tsx lines 15-32):
 ```tsx
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-btn text-body font-semibold transition-colors",
+  "relative inline-flex items-center justify-center rounded-btn px-5 py-3 text-body font-semibold transition-colors duration-[var(--duration-normal)] disabled:opacity-50 disabled:pointer-events-none",
   {
     variants: {
       variant: {
-        primary: "bg-brand-fill text-text-inverse hover:bg-brand-fill-hover",
-        secondary: "border border-border text-text",
-        tertiary: "text-brand underline-offset-4 hover:underline",
-        critical: "bg-critical-fill text-text-inverse hover:bg-critical-fill-hover",
+        "primary": "bg-brand-fill text-text-inverse hover:bg-brand-fill-hover active:bg-brand-fill-active",
+        ...
       },
     },
     defaultVariants: { variant: "primary" },
   }
 )
+export type ButtonVariant = NonNullable<VariantProps<typeof buttonVariants>["variant"]>
 ```
-2. **Exact variant contract (finite, no invented variants — D-06/D-08):** `06-UI-SPEC.md` Component Inventory table (lines 41-46) — Button: `variant: "primary" | "secondary" | "tertiary" | "critical"` only; Badge: `status: "safe" | "caution" | "critical"` only, each rendering icon+label+color together (never color alone); Card: structural layout must not change across content states (empty/loading/populated); Input: paired with `Label` + helper/error text slot, no search/select variants.
-3. **Interaction-state reference (do NOT carry forward as classes, D-07/D-08 — reference only for what states to reproduce):** `frontend-design/design-system/components.css` and `components.js` document exact hover/active/disabled/loading state behavior for the pre-shadcn version of these same components — read these before finalizing each shadcn component's `hover:`/`disabled:`/`data-[state=loading]` variants so no documented interaction state gets dropped in the port.
-4. **Error-state and loading-state specifics** — UI-SPEC "UI Considerations" table (lines 253-271): Input error = critical-colored border + inline message (copy: "Couldn't load this. Check your connection and try again."); Button/Card loading = skeleton/spinner per D-10 sample page 2; Button `loading` sub-state hides label, shows centered spinner, no size/weight change.
+Copy this exact shape for every new component with a variant axis (Button expansion, Progress `variant="battery"|"bar"|"ring"`, NavLink `state="active"|"inactive"`). Always export the derived `type XVariant` — this is what makes the variant surface a compile-time-closed union (per D-06), not a runtime string.
 
----
+**`data-slot` + optional `Slot.Root`/`asChild` pattern** (button.tsx lines 34-59): every primitive sets `data-slot="<name>"` on its root element (also `data-variant`/`data-status`/`data-loading` where relevant) for CSS/test hookability. Only add `asChild`/`Slot.Root` support where composability doesn't undermine an enforced multi-modal rule — Badge explicitly **omits** `asChild` (see badge.tsx's own doc-comment, lines 6-12) because it must guarantee Icon+label+color together; the same reasoning applies to `nav-link.tsx` (must guarantee icon+label+color for the active state) — do not add `asChild` there either.
 
-### `src/lib/utils.ts` (utility, new file — `cn()` helper)
-
-**Analog:** `src/lib/risk/compute.ts` — establishes this repo's `src/lib/` module convention (named export, no default export, pure function, no side effects).
-
-**Convention to follow** (module shape, not domain logic):
-```ts
-// src/lib/risk/compute.ts convention: named exports, pure functions, typed params/return
-export function computeRiskScore(/* ... */): /* ... */ { /* ... */ }
-```
-
-**Actual content re-exports the `cn` npm package** (per a checkpoint-time user decision recorded in `06-01-PLAN.md` Task 2, made before any install ran — supersedes the shadcn-standard clsx+tailwind-merge combo originally documented in RESEARCH.md's Don't-Hand-Roll table):
-```ts
-import { cn } from "cn"
-
-export { cn }
-```
-`cn` (github.com/shadcn-ui/cn) ships a `cn` export confirmed via its shipped type declarations to be a drop-in replacement for `twMerge(clsx(...))`, alongside `clsx`/`twMerge`/`twJoin` re-exports for compatibility. The shadcn CLI still generates `src/lib/utils.ts` in its default clsx+tailwind-merge form regardless of which packages are installed — do not hand-roll a custom `classNames()` helper, and do not leave that CLI-generated file's original imports in place; replace them immediately after generation, per `06-01-PLAN.md` Task 2.
-
----
-
-### `src/components/icon.tsx` (component, new file — port of `icons.js`)
-
-**Analog:** `frontend-design/design-system/icons.js` (direct 1:1 port target, full file read — 120 lines).
-
-**Source pattern** (`icons.js` lines 7-91, 100-103):
-- `SepCareIcons` object: icon-name key → raw inner-SVG path/circle/line markup string (40+ entries across Navigation/Baby-Care/Vitals/Device/Status/Actions categories).
-- `renderSepCareIcon(name, size=24, className='')` (lines 100-103): builds a full `<svg>` string with `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"`, falling back to `SepCareIcons.information` for unknown names.
-
-**Required port shape (per RESEARCH.md "Don't Hand-Roll" + Security Domain sections — do NOT use `dangerouslySetInnerHTML`):**
+**Multi-modal color rule (icon + label + color, never color alone)** — `src/components/ui/badge.tsx` lines 8-13 (doc comment) and 30-46 (implementation): this exact pattern must be replicated by `nav-link.tsx`'s active/inactive state per UI-SPEC's explicit instruction ("Must follow Badge's multi-modal rule").
 ```tsx
-// Port each SepCareIcons[name] string into real JSX children, not raw HTML injection
-export function Icon({ name, size = 24, className = "" }: { name: keyof typeof icons; size?: number; className?: string }) {
-  const content = icons[name] ?? icons.information;
+function Badge({ className, status, children, ...props }: BadgeProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round"
-         aria-hidden="true" className={className}>
-      {content /* real JSX <path>/<circle>/<line> elements, not a string */}
-    </svg>
-  );
-}
-```
-Preserve the exact `viewBox`/`stroke-width`/`stroke-linecap`/`stroke-linejoin` attribute values from `renderSepCareIcon` — only the fallback-to-string-templating mechanism changes, not the visual output. The `safe`/`caution`/`critical` icon keys (lines 64-66) map directly onto Badge/StatusPill's 3 status variants.
-
----
-
-### `src/app/design-system/{states,empty-loading,nested}/page.tsx` (route/page, new files)
-
-**Analog:** `src/app/page.tsx` (only existing App Router page — establishes this repo's default-export page-component shape) + `src/app/api/health/route.ts` (establishes this repo's file-header-comment convention referencing which plan/phase a file belongs to).
-
-**Page shape convention** (`src/app/page.tsx` lines 1-6, structural pattern only — content is the default Next.js scaffold and will be fully replaced):
-```tsx
-export default function Home() {
-  return (
-    <div /* ... */>
-      {/* page content */}
-    </div>
-  );
+    <span data-slot="badge" data-status={status} className={cn(badgeVariants({ status }), className)} {...props}>
+      <Icon name={status} size={16} />
+      {children}
+    </span>
+  )
 }
 ```
 
-**Header-comment convention** (`src/app/api/health/route.ts` lines 1-6):
-```ts
-/**
- * Deployment smoke-check endpoint. Used by Plan 04 to confirm the Vercel
- * deployment is live and serving traffic before wiring the real ingest path.
- */
-```
-Apply the same "what this file is for + which plan/decision it satisfies" comment style to each `design-system/*/page.tsx`, e.g. referencing D-10's sample-page assignment (states=safe/caution/critical, empty-loading=Card states, nested=composition).
+**Icon usage pattern** — `import { Icon } from "@/components/icon"` (badge.tsx line 4); every new hand-authored icon need (smartwatch-dot, bottle-baby, baby-02, sort-direction) gets added as a new entry inside `src/components/icon.tsx`'s `icons` object (see `src/components/icon.tsx` lines 17-60 for the exact `<path>`/`<circle>` entry shape and the file's own doc-comment on preserving `viewBox="0 0 24 24"`, `strokeWidth={1.75}` conventions) — never `import ... from "lucide-react"` even though it becomes transitively available after `shadcn add chart` (RESEARCH.md Pitfall 5).
 
-**Content contract per page (D-10, UI-SPEC "Component Inventory" + "UI Considerations"):**
-- `states/page.tsx` — render Safe/Caution/Critical `Badge` + `Card` variants side by side, using `Icon` for the multi-modal icon+label+color rule.
-- `empty-loading/page.tsx` — one `Card` in empty-state (copy: "No readings yet" / "Vitals will appear here once the device starts sending data.") and one in loading-state (skeleton/spinner, respecting `prefers-reduced-motion`).
-- `nested/page.tsx` — `Button`s and `Input`s nested inside a `Card` inside the page layout, proving token cascade through real nesting (DSYS-03 validation).
+**Card composition — "layout never changes" rule** — `src/components/ui/card.tsx` (full file) + `card.DESIGN.md` "The layout never changes rule" section: every new Card *type* (vital stat card, status hero card, instruction-row card) must be a **composition** of the existing `Card`/`CardHeader`/`CardContent` primitives (do not add a new outer wrapper that appears only in some content states). Only add new named subcomponents (e.g. a `CardMetric` for the Vital-metric number) if Figma extraction proves the visual can't be expressed via the existing four; do not add a `variant` prop to `Card` itself — `card.DESIGN.md` states "Card is the single surface-container primitive... no variants."
+
+**DESIGN.md structure to replicate exactly** — `src/components/ui/button.DESIGN.md` (full file, 4 sections: table of variants/values, a named sub-state section like "Loading sub-state", "Correct usage" fenced code block, "Incorrect usage" fenced code block showing what TypeScript rejects, and a closing "Overflow / long-text (backstop)" paragraph referencing the UI-SPEC's held-out render test). Every new component's DESIGN.md must record **which Figma node it was verified against** (per D-15/Pitfall 4) — none of the existing 4 DESIGN.md files currently do this (they predate D-15); the rebuilt ones should add a line like "Verified against Figma node `203-11745` on 2026-09-27" near the top.
+
+---
+
+### `src/components/ui/nav-link.tsx` / `nav-bar.tsx` (new, hand-authored)
+
+**Analog:** `src/components/ui/badge.tsx` (multi-modal icon+label+color, CVA `data-status`-style variant keyed by state) for NavLink; `src/components/ui/card.tsx` (fixed-surface container, `rounded-*`/`shadow-*` token usage) for NavBar's outer shell.
+
+**Pattern to follow for NavLink's active/inactive CVA axis** (mirrors badge.tsx lines 19-28):
+```tsx
+const navLinkVariants = cva(
+  "inline-flex flex-col items-center gap-1 min-h-11 min-w-11 justify-center transition-colors duration-[var(--duration-fast)] active:scale-[0.96]",
+  {
+    variants: {
+      state: {
+        active: "text-critical", // per D-17: nav active state intentionally reuses critical/pink hue
+        inactive: "text-text-muted",
+      },
+    },
+    defaultVariants: { state: "inactive" },
+  }
+)
+```
+Note the `min-h-11 min-w-11` (44px) touch-target floor — UI-SPEC's Spacing Scale section calls this out explicitly for every NavLink row. `aria-current="page"` (or equivalent) should be set on the active link per the UI-SPEC's accessibility row (`aria-current` on active NavLink).
+
+**D-17 color resolution:** unlike a normal "flag before implementing" tension, D-17 (CONTEXT.md) has already resolved the red/pink-vs-brand tension from UI-SPEC's "Flagged tension" section in the user's favor of matching the screenshot exactly — implement `active: "text-critical"` (or the closest fill-equivalent token) directly, do not re-flag this as unresolved during planning.
+
+---
+
+### `src/components/ui/sparkline.tsx` / `chart.tsx` (new)
+
+**Analog:** RESEARCH.md's own Pattern 1 (Recharts sparkline) and Pattern 2 (dual-axis chart) code blocks — already concrete, ready to copy verbatim as a starting point — plus `src/components/ui/card.tsx` for the surrounding stat-card composition style once `VitalStatCard` wraps `Sparkline`.
+
+**Client-boundary pattern** (RESEARCH.md lines 184-211): `sparkline.tsx` needs `"use client"` at the top (Recharts' `ResponsiveContainer` requires DOM measurement); the composing card component itself (e.g. a Home-proof vital-stat card) stays a Server Component and only imports the client `Sparkline`. Mirror this "client leaf, server wrapper" split for `chart.tsx`/`DualAxisVitalsChart` too.
+
+**Mandatory install-order guard** (RESEARCH.md Pitfall 1, Common Pitfalls section): before running `npx shadcn add chart`, run `npx shadcn add chart --diff` first and confirm whether `card.tsx` is in the diff; if so, install into a scratch dir and hand-copy only `chart.tsx`, preserving the already-restyled `src/components/ui/card.tsx`. Do not skip this — it is the single highest-risk install step in the whole file list.
+
+---
+
+### `src/app/design-system/docs/page.tsx` — the anti-pattern to abandon, and its replacement shape
+
+**What's wrong, concretely (not just described):** `src/app/design-system/docs/page.tsx` lines 1-19 (doc comment) confirm the current page reads `globals.css` via `readFileSync` and (per RESEARCH.md Pitfall 3, independently confirmed) renders `.DESIGN.md` content through a `<pre>` block rather than any markdown rendering — this is the literal "single page bunch of crap" the user rejected. The file also mixes token-parsing logic (`readThemeBlock`/`parseThemeTokens`/`parsePrimitiveRamps`, lines 21-80) directly into the page component — a 537-line single file with no per-component routing.
+
+**What's reusable from it:** the `readThemeBlock`/`parseThemeTokens`/`parsePrimitiveRamps` helper functions (lines 21-80) are legitimately reusable for the new docs site's "Color and type reference" pages (D-13 requirement #2) — keep this parsing logic, move it to a shared `src/app/design-system/docs/_lib/tokens.ts`-style module, and feed its output into real styled swatch/type-sample components instead of raw text.
+
+**Replacement structure (per D-13 + RESEARCH.md Architecture diagram):** a persistent sidebar shell (`docs/layout.tsx`, new — pattern-borrow from `src/components/page-shell.tsx`'s consistent-header approach, but add a left nav rail) wrapping one route per component (or grouped folder), each rendering: a live interactive preview (import the real `ui/*.tsx` component and a client-side variant picker, not a static grid), the parsed color/type tokens via the reused helpers above rendered as real swatches, and the component's `.DESIGN.md` "Correct/Incorrect usage" sections rendered through a markdown-to-JSX pass (e.g. a minimal markdown renderer or manually mapped sections) — never through `<pre>{rawMarkdownString}</pre>`.
+
+**Analog for the per-component page's PageShell/composition style:** `src/app/design-system/states/page.tsx` (full file) — note it imports and renders the *real* `Badge`/`Card` components live, wrapped in the shared `PageShell`, exactly the "live, interactive preview" pattern D-13 wants generalized to every component's own docs route.
+
+---
+
+### `src/app/design-system/home-proof/page.tsx` (new, D-14)
+
+**Analog:** `src/app/design-system/states/page.tsx` — same `PageShell` wrapper + real-component-composition pattern, scaled up to a full composite screen. Copy the file's top-of-file doc-comment convention (explaining which decision/plan the page satisfies) and its default-export-function shape:
+```tsx
+import { PageShell } from "@/components/page-shell";
+export default function StatesDesignSystemPage() {
+  return (
+    <PageShell title="..." description="...">
+      {/* real components, no mock-fetching layer */}
+    </PageShell>
+  );
+}
+```
+For Home-proof specifically: header + status-hero Card + 3-column vitals row (each a Card composing `Sparkline`) + Instructions list (`Card` + `Item`/`ItemContent`/`ItemTitle`) + fixed `NavBar` — each of these is a real, already-classified component from the table above; this page is pure composition, introduces no new primitive of its own.
 
 ---
 
 ## Shared Patterns
 
-### Token compilation (Tailwind v4 `@theme`, no config file)
-**Source:** `06-UI-SPEC.md` Color/Typography/Surface Tokens sections + `06-RESEARCH.md` Pattern 1
-**Apply to:** `src/app/globals.css` only — single source of truth, consumed by every component and page (DSYS-03's "one shared token set" requirement is satisfied by having exactly one `@theme` block in the repo).
+### `cn()` className merge
+**Source:** `src/lib/utils.ts` (2-line re-export of the `cn` npm package)
+**Apply to:** every new component file — always `import { cn } from "@/lib/utils"`, never import `cn` directly from the `cn` package or reintroduce `clsx`/`tailwind-merge`.
 
-### Radix-explicit shadcn installs
-**Source:** `06-RESEARCH.md` Pitfall #1 + Code Examples
-**Apply to:** every `shadcn add`/`init` invocation — always pass `-b radix`; verify post-install that generated files import from `@radix-ui/react-*`, not `@base-ui-components/react`.
+### CVA variant-union + exported type
+**Source:** `src/components/ui/button.tsx` lines 15-32
+**Apply to:** every component with a variant/state axis (expanded Button, Progress, ToggleGroup items, NavLink, Card-type discrimination if any turns out to need a prop rather than pure composition).
 
-### Finite CVA variant unions (no invented variants)
-**Source:** `06-RESEARCH.md` Pattern 3 + `06-UI-SPEC.md` Component Inventory (D-06/D-08)
-**Apply to:** `button.tsx` (`variant: "primary"|"secondary"|"tertiary"|"critical"`), `badge.tsx` (`status: "safe"|"caution"|"critical"`) — no `ghost`/`destructive`/`link`/`outline` names anywhere.
+### `data-slot` (+ `data-variant`/`data-status`/`data-state`) attribute convention
+**Source:** `src/components/ui/button.tsx` line 36, `src/components/ui/badge.tsx` line 33
+**Apply to:** every new component's root element, for consistent hookability/testability across the whole set.
 
-### Multi-modal status rule (icon + label + color, never color alone)
-**Source:** `frontend-design/design-system/DESIGN-SYSTEM.md` (§9, cited in CONTEXT.md D-08) + `frontend-design/design-system/icons.js` `safe`/`caution`/`critical` icon keys
-**Apply to:** `badge.tsx` — every status render must pair the `Icon` component with the text label and the status color; this also applies to any Card treatment that surfaces a status.
+### Icon pairing (never color alone)
+**Source:** `src/components/ui/badge.tsx` lines 30-46, doc-comment lines 6-12
+**Apply to:** `nav-link.tsx` (active/inactive), `battery-indicator.tsx` (battery/charging glyph), any new status-adjacent component.
 
-### `cn()` className merging
-**Source:** the `cn` npm package (github.com/shadcn-ui/cn), re-exported from `src/lib/utils.ts` per a checkpoint-time user decision (`06-01-PLAN.md` Task 2) — originally shadcn-standard clsx+tailwind-merge per `06-RESEARCH.md`'s Don't-Hand-Roll table, now superseded.
-**Apply to:** all 4 component files — every conditional className composition goes through `src/lib/utils.ts`'s `cn()`, never a hand-rolled `classNames()`.
+### Token-only styling — no raw hex/px in component classes
+**Source:** every existing component file (button/card/badge/input) exclusively references `bg-brand-fill`, `text-critical-dark`, `rounded-card`, `--duration-normal`, etc. — never a literal hex or px value inline.
+**Apply to:** all new components; any not-yet-declared token (`--radius-nav-bar`, additional card-tint colors) must be added to `src/app/globals.css`'s `@theme` block following the exact naming convention already used (`--radius-*`, `--color-*-soft`/`-dark`/`-fill`) before being consumed, never hardcoded as an arbitrary Tailwind value in the component itself except as a documented, explicit exception (the project already tolerates one such exception: `duration-[var(--duration-normal)]`, per button.tsx's own doc-comment on Tailwind v4's `--duration-*` utility-generation gap).
 
-### No raw HTML string injection for icons
-**Source:** `06-RESEARCH.md` Security Domain ("Known Threat Patterns") + `frontend-design/design-system/icons.js`'s current string-templating shape
-**Apply to:** `src/components/icon.tsx` — port `SepCareIcons` path data into real JSX elements, never `dangerouslySetInnerHTML`.
+### Shared page shell for every `/design-system/*` route
+**Source:** `src/components/page-shell.tsx` (full file)
+**Apply to:** `states`, `empty-loading`, `nested`, `home-proof`, and (with a sidebar-extended variant) the rebuilt `docs` site.
+
+### Press/hover/focus micro-interaction rules (UI-SPEC, not yet in any existing file — net-new shared rule this pass)
+**Source:** `06-UI-SPEC.md` "Surface tokens (Radius, Shadow, Motion)" section — `active:scale-[0.96]` + `150ms ease-out`, hover only transitions `color`/`background-color`/`box-shadow` (never `transition-all`), no font-weight change to signal state.
+**Apply to:** every new interactive component (Button variants, NavLink, ToggleGroup items, Switch, Checkbox) — none of the 4 existing components currently apply `active:scale-[0.96]` (spot-checked: button.tsx has no such class), so this is a **new** convention to introduce consistently across the whole expanded set, not one to copy from an existing file.
 
 ## No Analog Found
 
-| File | Role | Data Flow | Reason |
-|------|------|-----------|--------|
-| `postcss.config.mjs` | config | transform | No PostCSS config exists yet in this repo (Tailwind not yet installed) — use RESEARCH.md Code Examples verbatim (verified against installed `next@16.3.5` docs) |
-| `components.json` | config | transform | shadcn not yet installed — hand-author per RESEARCH.md's Primary Recommendation (avoids the CLI's missing `--base-color` flag, Pitfall #2) |
-| `src/components/ui/{button,card,badge,input}.tsx` | component | request-response | First shadcn/Radix install in this repo — no prior shadcn-generated component exists to copy structurally; use RESEARCH.md Pattern 3 (CVA shape) + UI-SPEC Component Inventory (exact variant contract) + `frontend-design/design-system/components.css`/`components.js` (interaction-state reference only) |
+None — every file in the expanded D-12/D-13/D-14 scope has at least a role-match analog already in the repo (the four existing components, their DESIGN.md pairing, the `page-shell.tsx` + `design-system/*` route pattern, and RESEARCH.md's own already-concrete Recharts code blocks for the genuinely new charting capability).
 
 ## Metadata
 
-**Analog search scope:** `src/` (entire tree, 13 files — small enough for exhaustive read), `frontend-design/design-system/` (tokens.css, icons.js, DESIGN-SYSTEM.md, components.css, components.js), root config files (`tsconfig.json`, `package.json`, no existing `postcss.config.*` or `components.json`)
-**Files scanned:** 13 in `src/`, 8 in `frontend-design/design-system/`, plus `package.json`/`tsconfig.json`
-**Pattern extraction date:** 2026-09-26
-**Tracked-source verification:** all analog paths above (`src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/api/health/route.ts`, `src/lib/risk/compute.ts`, `frontend-design/design-system/tokens.css`, `frontend-design/design-system/icons.js`, `frontend-design/design-system/DESIGN-SYSTEM.md`) confirmed via `git ls-files` — all git-tracked source, no gitignored mirrors.
+**Analog search scope:** `src/components/ui/`, `src/components/`, `src/app/design-system/`, `src/app/globals.css`, `package.json`, `src/lib/utils.ts`
+**Files scanned:** button.tsx/.DESIGN.md, card.tsx/.DESIGN.md, badge.tsx/.DESIGN.md, input.tsx/.DESIGN.md, icon.tsx, utils.ts, page-shell.tsx, design-system/docs/page.tsx (partial, first ~80 of 537 lines + doc-comment), design-system/states/page.tsx (full), globals.css (`@theme` block), package.json
+**Pattern extraction date:** 2026-09-27
