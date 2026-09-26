@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Icon } from "@/components/icon";
 import { Input } from "@/components/ui/input";
 import { PageShell } from "@/components/page-shell";
 
@@ -12,6 +13,13 @@ import { PageShell } from "@/components/page-shell";
  * tracer's manual `bg-brand-fill text-white` override is replaced here by
  * the `primary` variant now that Button carries its own restyled contract
  * (Plan 06-03).
+ *
+ * The "Figma-verified Button archetypes" block below (06-06) is additive —
+ * it does not touch the original Device Sync card — and exists so the
+ * orchestrator has a real rendered instance of each new/reconciled Button
+ * variant to screenshot-diff against Figma per the D-15 mechanism (see
+ * button.DESIGN.md's "Figma extraction" section; this executor has no
+ * browser/screenshot tool, so that comparison happens after this file lands).
  */
 export default function NestedDesignSystemPage() {
   return (
@@ -39,6 +47,20 @@ export default function NestedDesignSystemPage() {
             <Button variant="primary">Sync Now</Button>
             <Button variant="secondary">Cancel</Button>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card className="mx-auto mt-6 max-w-md">
+        <CardHeader>
+          <h2 className="text-heading font-semibold text-text">
+            Figma-verified Button archetypes (06-06)
+          </h2>
+        </CardHeader>
+        <CardContent className="flex flex-wrap items-center gap-3">
+          <Button variant="cta">
+            <Icon name="signal" className="size-5" />
+            Connect Device
+          </Button>
         </CardContent>
       </Card>
     </PageShell>

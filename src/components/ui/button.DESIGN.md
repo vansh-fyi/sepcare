@@ -1,9 +1,44 @@
 # Button — DESIGN.md
 
-`Button` is the single interactive-action primitive for the SepCare design system. It exposes
-exactly **four** locked variants and no separate size axis — an agent cannot invent a `ghost`,
-`destructive`, `link`, or `outline` variant; TypeScript's closed union rejects anything outside
-the four names below at compile time.
+`Button` is the single interactive-action primitive for the SepCare design system. D-08's
+original "exactly four variants, no size axis" lock is **superseded by D-12**: real Figma
+component frames revealed additional button archetypes beyond the original flat-fill set, and
+this file's variant table now grows to match what those frames actually show (D-15), not a
+guessed 1:1 rename of the old four names. TypeScript's closed union (the exported `ButtonVariant`
+type) still rejects anything outside the currently-listed variants at compile time — the surface
+stays finite, it just isn't frozen at exactly four anymore.
+
+## Figma extraction (D-15, Task 1 of 06-06)
+
+**Verified against Figma node `203-11745` on 2026-09-27** — "Connect Device", the first of four
+button-treatment nodes D-12 flagged for reconciliation (file key `4J2wGl4C6QG4yyeOnldRwl`).
+Extracted values (via the orchestrator's `get_design_context`/`get_metadata` call, relayed to
+this executor per the D-15 Figma-extraction workaround — see
+`.planning/phases/06-design-system-tailwind-v4-tokens/06-FIGMA-EXTRACTS.md`):
+
+- Shape: pill, `border-radius: 10px` (not `--radius-btn`'s 14px — a genuinely distinct radius,
+  added as new token `--radius-cta`)
+- Background: `linear-gradient(127deg, rgb(248,113,113) 2.3%, rgb(249,141,141) 94.9%)` — i.e.
+  `pink-500` → `pink-400`, added as new token `--gradient-cta` (referencing only existing pink
+  primitives, no new hex introduced)
+- Shadow: `drop-shadow(0px 2px 2px rgba(218,220,224,1))` — `rgba(218,220,224,1)` is exactly
+  `--color-neutral-200`; implemented as a new semantic token `--shadow-cta` (box-shadow, not a
+  `filter: drop-shadow`, for consistency with every other shadow token in this codebase)
+- Padding: 10px all sides, `gap-[10px]` between icon and label
+- Icon: 20px, "glyphs:signal-bold" (connectivity/signal glyph — `<Icon name="signal" />` is the
+  closest existing match in `src/components/icon.tsx`)
+- Text: 12px **Bold** (`--text-caption`), color `--color-text-inverse`
+- **Reconciliation finding:** this node does NOT map 1:1 onto the existing `primary` variant as
+  the plan's own action text speculated it "likely" would — it is pink/gradient, not
+  `brand-fill` blue, and uses a 10px radius the existing `primary` variant does not. Per D-12's
+  explicit instruction to reconcile against what the frame actually shows rather than assume a
+  rename, this is implemented as a new variant, `cta`, leaving `primary`/`secondary`/`tertiary`/
+  `critical` untouched.
+- **Screenshot comparison:** deferred to the orchestrator. This executor has no Figma MCP or
+  browser/screenshot tool access (see the D-15 Figma-extraction workaround note in
+  `06-FIGMA-EXTRACTS.md`); the orchestrator will screenshot the rendered `cta` variant (demoed on
+  `/design-system/nested`) against the Figma `get_screenshot` output for node `203-11745` after
+  this plan's SUMMARY.md lands, and record the comparison result at that time.
 
 ## Variants
 
@@ -13,10 +48,13 @@ the four names below at compile time.
 | `secondary` | A dismiss or alternate action alongside a `primary` (e.g. "Cancel", "Not Now") | White/soft surface, bordered, default text color |
 | `tertiary` | An in-card or in-line text link (e.g. "View Details →") | Text-only, brand-colored, underlines on hover |
 | `critical` | An urgent clinical action only (e.g. "Call Clinician") — never a generic destructive/delete action | Filled `critical-fill` background, inverse text |
+| `cta` | A device/connectivity CTA rendered as a standalone pill (e.g. "Connect Device") — Figma node `203-11745` | Pink gradient fill (`--gradient-cta`), 10px radius, 12px Bold label, neutral-tinted shadow |
 
-There is no separate `size` prop this phase — every Button renders at one fixed size
-(`px-5 py-3`, `rounded-btn`, `text-body`/`font-semibold`). A future phase that genuinely needs a
-compact/icon-only size must extend this contract deliberately, not have an agent invent one ad hoc.
+There is no separate `size` prop this phase for the flat-fill variants — `primary`/`secondary`/
+`tertiary`/`critical` still render at one fixed size (`px-5 py-3`, `rounded-btn`,
+`text-body`/`font-semibold`). The `cta` variant intentionally overrides padding/radius/text-size
+per its own Figma spec (10px/10px, `rounded-cta`, `text-caption`) — this is not a generic `size`
+prop, it is that specific archetype's locked visual treatment.
 
 ## Loading sub-state
 
@@ -32,6 +70,10 @@ is token-driven (`--duration-slow`), not a hardcoded literal.
 <Button variant="primary">Sync Now</Button>
 <Button variant="critical">Call Clinician</Button>
 <Button variant="primary" loading>Sync Now</Button>
+<Button variant="cta">
+  <Icon name="signal" className="size-5" />
+  Connect Device
+</Button>
 ```
 
 ## Incorrect usage
@@ -41,9 +83,11 @@ is token-driven (`--duration-slow`), not a hardcoded literal.
 <Button variant="outline">Learn More</Button>
 ```
 
-`variant` only accepts `"primary" | "secondary" | "tertiary" | "critical"` (the `ButtonVariant`
-type exported from `button.tsx`). Any other string literal is a compile-time error, not a runtime
-fallback — this is deliberate: it is the mechanism that keeps the variant surface finite.
+`variant` only accepts the finite union exported as `ButtonVariant` from `button.tsx` (currently
+`"primary" | "secondary" | "tertiary" | "critical" | "cta"`, growing as Task 2 of 06-06
+reconciles the remaining Figma button-treatment nodes). Any other string literal is a
+compile-time error, not a runtime fallback — this is deliberate: it is the mechanism that keeps
+the variant surface finite.
 
 ## Overflow / long-text (backstop)
 

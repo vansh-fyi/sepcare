@@ -117,10 +117,19 @@
   --radius-modal: 28px;
   --radius-full: 9999px;
 
+  /* Button archetype A — gradient CTA pill (D-12 Figma nodes 203-11745, 203-14032).
+     Extracted verbatim from Figma, additive only — no existing token value changed
+     (DSYS-01/03 lock, 06-06-PLAN.md). Not a --color-* namespace value (it's a
+     background-image gradient, not a flat color), so it stays outside Tailwind's
+     color-utility auto-generation and is referenced via bg-[image:var(--gradient-cta)]. */
+  --radius-cta: 10px;
+  --gradient-cta: linear-gradient(127deg, var(--color-pink-500) 2.3%, var(--color-pink-400) 94.9%);
+
   --shadow-card: 0 4px 20px rgba(10, 10, 17, 0.06);
   --shadow-floating: 0 8px 30px rgba(10, 10, 17, 0.10);
   --shadow-critical: 0 10px 32px rgba(193, 3, 3, 0.14);
   --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  --shadow-cta: 0px 2px 2px var(--color-neutral-200);
 
   --duration-fast: 150ms;
   --duration-normal: 250ms;
