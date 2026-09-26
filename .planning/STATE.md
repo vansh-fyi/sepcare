@@ -4,17 +4,17 @@ milestone: v1.1
 milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 6
 current_phase_name: Design System (Tailwind v4 Tokens)
-status: executing
-stopped_at: Completed 06-04-PLAN.md
-last_updated: "2026-09-26T13:04:52.397Z"
+status: verifying
+stopped_at: Completed 06-05-PLAN.md
+last_updated: "2026-09-26T13:13:22.023Z"
 last_activity: 2026-09-26
 last_activity_desc: Phase 6 execution started
-state_head: 41f706c78178f8687642f78a4fc9a7e9125c2946
+state_head: 8af2358136f6e4860ca40aae160d027f3719aff3
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
   percent: 0
 ---
 
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 
 Phase: 6 (Design System (Tailwind v4 Tokens)) — EXECUTING
 Plan: 5 of 5
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-09-26 — Phase 6 execution started
 
 Progress: [░░░░░░░░░░] 0%
@@ -76,6 +76,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P02 | 20min | 2 tasks | 4 files |
 | Phase 06 P03 | 35min | 2 tasks | 8 files |
 | Phase 06 P04 | 25min | 2 tasks | 3 files |
+| Phase 06 P05 | 20min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -94,6 +95,7 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 6]: Phase 06-04: Replaced Plan 06-01's tracer-era manual bg-brand-fill/text-white Button override with variant="primary" now that Button carries its own restyled CVA contract
 - [Phase 6]: Phase 06-04: Used plain <h2> with text-heading/text-text tokens for Card headings in sample pages instead of the still-unstyled shadcn-stock CardTitle (deferred in 06-03)
 - [Phase 6]: Phase 06-04: Sample-page header comments must avoid the literal string "@theme" in prose — the plan's own grep-based verify instrument matches any occurrence, not just an actual @theme block
+- [Phase 6]: [Phase 06-05]: readFileSync calls at Server Component render time must use fully static literal path arguments (not template-literal/dynamic-property paths) to avoid Next.js/Turbopack's whole-project file-tracing warning, a real deployment-size risk on Vercel free-tier hosting
 
 ### Pending Todos
 
@@ -115,8 +117,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-26T13:04:41.584Z
-Stopped at: Completed 06-04-PLAN.md
+Last session: 2026-09-26T13:13:22.006Z
+Stopped at: Completed 06-05-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
