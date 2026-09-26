@@ -358,10 +358,11 @@ npx shadcn@latest add button card badge input -b radix -y
 
 ## Open Questions
 
-1. **Does `shadcn add -b radix` on a hand-authored `components.json` (no prior `init` run) actually succeed, or does it require an `init`-created marker beyond the file's existence?**
+1. **(RESOLVED — handled via fallback in 06-01 Task 2) Does `shadcn add -b radix` on a hand-authored `components.json` (no prior `init` run) actually succeed, or does it require an `init`-created marker beyond the file's existence?**
    - What we know: The CLI's error path explicitly checks for `components.json`'s *existence*, not for an `init`-run flag inside it.
    - What's unclear: Whether `add`'s dependency-installation step (Tailwind, CVA, Radix packages) assumes `init` already ran, or performs a full fresh install when it detects those deps are missing from `package.json`.
    - Recommendation: The plan should run this as its first task and check output before committing to the rest of the install sequence in code examples above; if it errors, fall back to interactive `init` with `-b radix` and manually answer the base-color prompt with `slate`.
+   - RESOLVED: `06-01-PLAN.md` Task 2's `<action>` already encodes this exact fallback (attempt `shadcn add -b radix`; on an error expecting a prior `init`, run `npx shadcn@4.21.0 init -b radix -y` first, then retry) — execution will not stall on this uncertainty regardless of which path the CLI takes.
 
 ## Environment Availability
 
