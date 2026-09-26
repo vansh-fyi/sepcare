@@ -187,7 +187,7 @@ const buttonVariants = cva(
 
 ---
 
-### `src/lib/utils.ts` (utility, new file — shadcn's `cn()` helper)
+### `src/lib/utils.ts` (utility, new file — `cn()` helper)
 
 **Analog:** `src/lib/risk/compute.ts` — establishes this repo's `src/lib/` module convention (named export, no default export, pure function, no side effects).
 
@@ -197,16 +197,13 @@ const buttonVariants = cva(
 export function computeRiskScore(/* ... */): /* ... */ { /* ... */ }
 ```
 
-**Actual content is shadcn-standard** (not project-specific), per RESEARCH.md Don't-Hand-Roll table:
+**Actual content re-exports the `cn` npm package** (per a checkpoint-time user decision recorded in `06-01-PLAN.md` Task 2, made before any install ran — supersedes the shadcn-standard clsx+tailwind-merge combo originally documented in RESEARCH.md's Don't-Hand-Roll table):
 ```ts
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { cn } from "cn"
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+export { cn }
 ```
-Do not hand-roll a custom `classNames()` helper — this is exactly the shadcn-generated shape every future `shadcn add` run expects to find.
+`cn` (github.com/shadcn-ui/cn) ships a `cn` export confirmed via its shipped type declarations to be a drop-in replacement for `twMerge(clsx(...))`, alongside `clsx`/`twMerge`/`twJoin` re-exports for compatibility. The shadcn CLI still generates `src/lib/utils.ts` in its default clsx+tailwind-merge form regardless of which packages are installed — do not hand-roll a custom `classNames()` helper, and do not leave that CLI-generated file's original imports in place; replace them immediately after generation, per `06-01-PLAN.md` Task 2.
 
 ---
 
@@ -286,7 +283,7 @@ Apply the same "what this file is for + which plan/decision it satisfies" commen
 **Apply to:** `badge.tsx` — every status render must pair the `Icon` component with the text label and the status color; this also applies to any Card treatment that surfaces a status.
 
 ### `cn()` className merging
-**Source:** shadcn-standard (`06-RESEARCH.md` Don't-Hand-Roll table)
+**Source:** the `cn` npm package (github.com/shadcn-ui/cn), re-exported from `src/lib/utils.ts` per a checkpoint-time user decision (`06-01-PLAN.md` Task 2) — originally shadcn-standard clsx+tailwind-merge per `06-RESEARCH.md`'s Don't-Hand-Roll table, now superseded.
 **Apply to:** all 4 component files — every conditional className composition goes through `src/lib/utils.ts`'s `cn()`, never a hand-rolled `classNames()`.
 
 ### No raw HTML string injection for icons

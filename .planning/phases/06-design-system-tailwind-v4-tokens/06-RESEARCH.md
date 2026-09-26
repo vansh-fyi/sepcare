@@ -74,8 +74,9 @@ Everything else — the Tailwind v4 `@theme` directive syntax, the Turbopack/Pos
 | `@tailwindcss/postcss` | 4.3.3 [VERIFIED: npm registry, published 2026-07-16] | PostCSS plugin that Turbopack invokes to process Tailwind | Official, required install path per Next.js's own bundled docs — see Architecture Patterns |
 | `shadcn` (CLI, dev-only) | 4.21.0 [VERIFIED: npm registry, published 2026-09-04 — matches UI-SPEC's stated version] | Scaffolds Button/Card/Badge/Input source files + `components.json` | Locked by D-07/D-06; not a runtime dependency, only a codegen CLI |
 | `class-variance-authority` | 0.7.1 [VERIFIED: npm registry] | Finite, typed CVA variant unions for the 4 components | Already shadcn's own variant mechanism (D-06's "an agent can't invent a variant that doesn't exist" requirement maps directly onto CVA's discriminated variant keys) |
-| `clsx` | 2.1.1 [VERIFIED: npm registry] | Conditional className joining | shadcn's generated `lib/utils.ts` `cn()` helper always composes `clsx` + `tailwind-merge` |
-| `tailwind-merge` | 3.7.0 [VERIFIED: npm registry, published 2026-09-12] | De-duplicates conflicting Tailwind classes inside `cn()` | Same as above — required by every shadcn-generated component file's `cn()` import |
+| `clsx` | 2.1.1 [VERIFIED: npm registry] — **SUPERSEDED, not installed** | Conditional className joining | Originally required by shadcn's generated `cn()` helper; superseded by the `cn` package per a checkpoint-time user decision recorded in `06-01-PLAN.md` (made before any install ran) — see `cn` row below |
+| `tailwind-merge` | 3.7.0 [VERIFIED: npm registry, published 2026-09-12] — **SUPERSEDED, not installed** | De-duplicates conflicting Tailwind classes inside `cn()` | Same as above — superseded by `cn`, which provides full clsx+tailwind-merge parity as a single zero-dependency package |
+| `cn` | 0.4.0 [VERIFIED: npm registry, `latest` dist-tag, published 2026-09-22T10:43:46Z] | Drop-in replacement for `clsx`+`tailwind-merge` inside shadcn's `cn()` helper — official shadcn-ui utility | Adopted per checkpoint-time user decision (before any install ran): zero runtime dependencies, no postinstall script, repo confirmed at github.com/shadcn-ui/cn (org-owned, created 2026-08-31, 1,594 stars [VERIFIED: GitHub API, 2026-09-26]), current npm maintainer is the `shadcn` account (m@shadcn.com). **Notable provenance:** the `cn` npm package name previously belonged to an unrelated, dormant 2013-era "Chuck Norris jokes" CLI (versions 0.1.0-0.1.1, maintainer `rumpl`); it was reassigned to the shadcn-ui maintainer starting at v0.2.0 (published 2026-09-01) — confirmed intentional npm name reuse via the registry's own version history, not a hijack of an active package, but a materially different provenance shape than `tailwind-merge`'s single continuous-publisher history. Weekly downloads: 4,627,335 [VERIFIED: npm downloads API, 2026-09-26] — already substantial despite under one month under this ownership. |
 | `tw-animate-css` | 1.4.0 [VERIFIED: npm registry] | Animation utility classes shadcn now ships against | shadcn's own docs state `tailwindcss-animate` is deprecated in favor of this package for Tailwind v4 projects [CITED: ui.shadcn.com/docs/tailwind-v4] |
 | `@radix-ui/react-slot` (+ per-component Radix packages pulled by `shadcn add`) | 1.3.3 [VERIFIED: npm registry] | Unstyled, accessible primitives underneath Button/Card/Badge/Input | Locked by D-07; confirmed to support React 19 via its own `peerDependencies` (`react: '^16.8 \|\| ... \|\| ^19.0'`) [VERIFIED: npm view @radix-ui/react-slot peerDependencies] |
 
@@ -97,7 +98,7 @@ Everything else — the Tailwind v4 `@theme` directive syntax, the Turbopack/Pos
 
 ```bash
 npm install -D tailwindcss @tailwindcss/postcss
-npm install class-variance-authority clsx tailwind-merge tw-animate-css
+npm install class-variance-authority cn tw-animate-css
 # shadcn CLI itself is invoked via npx, not installed as a project dependency
 npx shadcn@latest add button card badge input -b radix -y
 ```
@@ -112,14 +113,15 @@ npx shadcn@latest add button card badge input -b radix -y
 | `@tailwindcss/postcss` | npm | published 2026-07-16 | 34.8M/wk | github.com/tailwindlabs/tailwindcss | OK | Approved |
 | `shadcn` | npm | published 2026-09-04 | 8.8M/wk | github.com/shadcn-ui/ui | **SUS** (`too-new`) | Flagged — see note below |
 | `class-variance-authority` | npm | published 2024-11-26 | 62.0M/wk | github.com/joe-bell/cva | OK | Approved |
-| `clsx` | npm | published 2024-04-23 | 116.7M/wk | github.com/lukeed/clsx | OK | Approved |
-| `tailwind-merge` | npm | published 2026-09-12 | 79.7M/wk | github.com/dcastil/tailwind-merge | **SUS** (`too-new`) | Flagged — see note below |
+| `clsx` | npm | published 2024-04-23 | 116.7M/wk | github.com/lukeed/clsx | OK | **Superseded — not installed** (see `cn` row; checkpoint-time user decision, `06-01-PLAN.md`) |
+| `tailwind-merge` | npm | published 2026-09-12 | 79.7M/wk | github.com/dcastil/tailwind-merge | OK | **Superseded — not installed** (see `cn` row; checkpoint-time user decision, `06-01-PLAN.md`) |
+| `cn` | npm | current ownership since 2026-09-01 (v0.2.0); latest v0.4.0 published 2026-09-22; package name itself registered 2013 under an unrelated prior maintainer | 4.6M/wk [VERIFIED: npm downloads API, 2026-09-26] | github.com/shadcn-ui/cn (org-owned, created 2026-08-31 [VERIFIED: GitHub API, 2026-09-26]) | **SUS** (`unproven-under-current-ownership`) | Flagged — human-verify checkpoint added in `06-01-PLAN.md` Task 1 |
 | `tw-animate-css` | npm | published 2025-09-24 | 37.7M/wk | github.com/Wombosvideo/tw-animate-css | OK | Approved |
 | `@radix-ui/react-slot` | npm | published 2026-07-24 | 166.0M/wk | github.com/radix-ui/primitives | OK | Approved |
 
 **Packages removed due to `[SLOP]` verdict:** none.
 
-**Packages flagged as suspicious `[SUS]`:** `shadcn`, `tailwind-merge`. Both trip the legitimacy gate's `too-new` heuristic purely on **publish-date recency of the current version**, not on any structural red flag — both have no `postinstall` script, both resolve to their well-known official GitHub repos, and both carry tens-to-hundreds-of-millions of weekly downloads (inconsistent with a slopsquat/hallucination, consistent with an actively-maintained popular package that happened to ship a new version recently). **The planner must still insert a `checkpoint:human-verify` task before installing either**, per protocol — the automated signal is real even if the most likely explanation is a routine release, not a supply-chain issue.
+**Packages flagged as suspicious `[SUS]`:** `shadcn`, `cn`. `shadcn` trips the legitimacy gate's `too-new` heuristic purely on **publish-date recency of the current version**, not on any structural red flag — no `postinstall` script, resolves to its well-known official GitHub repo, tens of millions of weekly downloads (inconsistent with a slopsquat/hallucination, consistent with an actively-maintained popular package that happened to ship a new version recently). `cn` was added to this table during a checkpoint-time revision that swapped it in for `clsx`+`tailwind-merge` (see Standard Stack) and is a genuinely different case, not a routine recency false positive: it is zero-dependency, has no postinstall script, and resolves to a real, org-owned GitHub repo (github.com/shadcn-ui/cn, created 2026-08-31), but it has under one month of history under its current shadcn-ui ownership — the npm package name itself is old (a dormant, unrelated 2013 CLI) and was reassigned to the shadcn-ui maintainer only in September 2026. The available evidence (real repo, zero deps, no install scripts, ~4.6M weekly downloads already) points toward a legitimate, deliberately-adopted official utility rather than a supply-chain attack, but the provenance shape is materially thinner than `tailwind-merge`'s own long continuous-publisher history. **The planner has kept a `checkpoint:human-verify` task before installing either `shadcn` or `cn`**, per protocol, with `cn`'s verification step specifically asking the human to review its name-reuse history on npmjs.com/package/cn before approving.
 
 ## Architecture Patterns
 
@@ -170,7 +172,7 @@ src/
 │   ├── ui/                       # shadcn-generated (button.tsx, card.tsx, badge.tsx, input.tsx)
 │   └── icon.tsx                  # ported React wrapper around icons.js (D-09)
 └── lib/
-    └── utils.ts                  # shadcn's cn() helper (clsx + tailwind-merge)
+    └── utils.ts                  # cn() helper, re-exported from the cn package (supersedes clsx+tailwind-merge)
 ```
 
 ### Pattern 1: `@theme` token block (Tailwind v4, no `tailwind.config.js`)
@@ -247,7 +249,7 @@ const buttonVariants = cva(
 
 | Problem | Don't Build | Use Instead | Why |
 |---------|-------------|--------------|-----|
-| Conditional/merged Tailwind class strings | A custom `classNames()`-style helper | `clsx` + `tailwind-merge` via shadcn's generated `cn()` in `lib/utils.ts` | Already the exact mechanism every shadcn-generated component file imports; reinventing it breaks drop-in compatibility with future `shadcn add` runs |
+| Conditional/merged Tailwind class strings | A custom `classNames()`-style helper | `cn` (the official shadcn-ui package, github.com/shadcn-ui/cn) re-exported as `cn()` in `lib/utils.ts` | Adopted per a checkpoint-time user decision as a zero-dependency, drop-in replacement for shadcn's originally-generated clsx+tailwind-merge combo; reinventing either breaks compatibility, and the shadcn CLI still generates clsx/tailwind-merge-based files by default that must be replaced immediately (`06-01-PLAN.md` Task 2) |
 | Finite component variant typing | Hand-rolled `switch`/ternary prop branching | `class-variance-authority` (`cva()`) | D-06's entire "agent can't invent a variant" requirement is CVA's discriminated-union design, not a custom pattern |
 | Accessible primitive behavior (focus trap, ARIA roles, keyboard nav) for Button/Input | Custom `onKeyDown`/`aria-*` wiring | Radix primitives (`@radix-ui/react-*`, pulled in via `shadcn add ... -b radix`) | This is D-07's entire rationale — Radix already solves the a11y edge cases a 2-day-budget custom build would get wrong |
 | SVG icon rendering | Re-implement `icons.js`'s `renderSepCareIcon()` string-templating approach in React | A thin `<Icon name="..." />` React component that maps the same `SepCareIcons` keys to real JSX `<svg>` elements | `icons.js`'s current form returns an HTML *string* [VERIFIED: frontend-design/design-system/icons.js — `function renderSepCareIcon(name, size = 24, className = '') { ... return `<svg ...>${content}</svg>`; }`], which is a `dangerouslySetInnerHTML` shape in React — porting to real JSX avoids that risk entirely for near-zero extra work since the source paths are static |
@@ -461,3 +463,5 @@ npx shadcn@latest add button card badge input -b radix -y
 
 **Research date:** 2026-09-26
 **Valid until:** 7 days (fast-moving stack — shadcn CLI and Tailwind v4 are both under active, frequent-release development; re-verify package versions and CLI flags if planning is delayed beyond this window)
+
+**Revision note (2026-09-26):** Per a checkpoint-time user decision made before any installs in this phase ran, `clsx`+`tailwind-merge` were swapped for the official shadcn-ui `cn` package (github.com/shadcn-ui/cn) throughout this document's Standard Stack and Package Legitimacy Audit sections. All `cn`-specific facts above (repo creation date, star count, download count, version/name-reuse history) were verified live against the npm registry and GitHub API in the same session as this revision.
