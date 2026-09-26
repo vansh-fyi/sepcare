@@ -171,6 +171,17 @@
   --shadow-card-device: 0 2px 8px var(--color-neutral-200); /* 203-13559 / 203-11669 — Figma authored this one directly against the token, not an rgba literal */
   --gradient-metric-pulse: linear-gradient(132.5deg, var(--color-blue-500) 0%, var(--color-blue-400) 100%); /* 266-9344 Pulse tone only — Temp/Activity gradients not extracted this plan, see card.DESIGN.md */
 
+  /* Progress/BatteryIndicator (06-08) — Figma node 203-11669 (Device Status Card
+     WITH progress bar; D-16's resolved disposition, a generic percentage-driven
+     horizontal bar, not a battery glyph). Track/label colors reuse the existing
+     --color-safe/-soft aliases exactly (green-100 track, green-700 label — both
+     already-defined semantic values); only the fill (green-600) has no existing
+     alias, hence this one additive token. Radius uses the existing --radius-full
+     (UI-SPEC.md's Radius table already assigns "BatteryIndicator track" to it) —
+     Figma's exact 5px value is visually indistinguishable from full-round on this
+     component's 6px-tall track, so no near-duplicate 5px token was added. */
+  --color-safe-fill: var(--color-green-600);
+
   --duration-fast: 150ms;
   --duration-normal: 250ms;
   --duration-slow: 350ms;
