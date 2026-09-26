@@ -1,37 +1,36 @@
-# Phase 6: Design System (Tailwind v4 Tokens) - Research
+# Phase 6: Design System (Tailwind v4 Tokens) — REWORK Research
 
-**Researched:** 2026-09-26
-**Domain:** Tailwind CSS v4 `@theme` token architecture + shadcn/ui (Radix) component layer on Next.js 16 (Turbopack)
-**Confidence:** HIGH
+**Researched:** 2026-09-27 (rework pass — supersedes the 2026-09-26 narrow-scope research)
+**Domain:** Tailwind v4 tokens + shadcn/ui component system rebuild, Recharts chart integration, Figma-verified component fidelity, design-system documentation quality
+**Confidence:** MEDIUM-HIGH (stack/CLI facts verified live against the installed tool; visual-quality judgment calls are inherently subjective and flagged as such)
 
 <user_constraints>
 ## User Constraints (from CONTEXT.md)
 
 ### Locked Decisions
-
-- **D-01:** Tailwind v4 + the `@theme` token set is installed directly into the existing Next.js app on `main` (the same repo/branch backend already lives in) — not a standalone/separate build. This directly satisfies the roadmap's "compiles cleanly in a real `next build`" success criterion.
-- **D-02:** The ≥3 required sample validation pages (DSYS-02) are real Next.js App Router routes (e.g. `app/design-system/*`), not static HTML files — they are styled with the actual compiled tokens and actual shadcn-based components, not a mockup.
-- **D-03:** Canonical color/type reference is Figma Segue 3.0 — the user loves the colors/fonts used there and wants them "built a little differently" (i.e. re-derived as a proper semantic Tailwind v4 token layer, not copied 1:1 as raw values).
-- **D-04:** Pink is deliberately moved away from as the dominant/brand palette, but Figma's pink shades are specifically reused for the **Critical/Red status color only**. Brand/interaction stays blue, Safe stays green, Caution stays amber.
-- **D-05:** Font stack: keep what's already used in the current salvaged UI (Inter, per `frontend-design/design-system/tokens.css`).
-- **D-06:** Build a real component layer in Phase 6, not tokens-only — a finite set of typed variants (agent can't invent e.g. a `ghost` variant that doesn't exist), plus a `DESIGN.md`-style doc per component.
-- **D-07:** Component base is **shadcn/ui + Radix**, not fully custom-built.
-- **D-08:** Phase 6's required component set is exactly: **Button** (primary/secondary/tertiary/critical), **Card** (surface container), **StatusPill/Badge** (safe/caution/critical), **Input**. Composite/domain components are deferred.
-- **D-09:** Icons: the salvaged `frontend-design/design-system/icons.js` (40+ SVG icon set, 24px outline, 1.75px stroke) can be reused directly, ported to a React component.
-- **D-10:** The 3 required sample pages are: (1) Green/Amber/Red StatusPill + Card variants side by side, (2) empty-state and loading-state treatments for a Card, (3) nested composition — Buttons/Inputs inside a Card inside a page layout.
-- **D-11 (roadmap flag, not decided here):** User wants to skip Phase 7's static HTML prototype and build the real Next.js frontend directly. Roadmap-level change, not actioned by this research.
+- **D-01/D-02:** Tailwind v4 + `@theme` directly in the Next.js app on `main`; sample pages are real App Router routes. Already done.
+- **D-03/D-04:** Canonical palette is Figma Segue 3.0; current `src/app/globals.css` primitives are correct — do not re-derive. Pink reserved for Critical/Red only; brand stays blue, safe green, caution amber.
+- **D-05:** Font stack Inter, unchanged.
+- **D-06:** Strict, agent-legible system — finite typed variants, a `DESIGN.md` per component. Principle unchanged; existing 4 `DESIGN.md`s need a content/quality pass alongside the visual rebuild.
+- **D-07:** Component base is shadcn/ui + Radix.
+- **D-09:** Icons: salvaged `frontend-design/design-system/icons.js` SVG set reusable; cross-check against Figma icon usage (`fluent:smartwatch-dot-20-regular`, `lucide-lab:bottle-baby`, `hugeicons:baby-02`) — some icons may need sourcing from those icon sets if the existing 40+ set doesn't cover them.
+- **D-12 (supersedes D-08):** Component set expands well beyond the original 4 (Button/Card/Badge/Input). Confirmed-required additions, each backed by a specific Figma node (file key `4J2wGl4C6QG4yyeOnldRwl`): expanded Button treatments, 6 Card types, Nav link, Nav bar, expanded form fields (select/dropdown, textarea, checkbox, radio, switch/toggle at minimum), a progress/battery indicator, a time-scale toggle (segmented control), and chart/graph components (inline sparkline + larger analytics chart, using Recharts/Tremor per `.claude/CLAUDE.md`'s "lean on existing libraries" directive — do not hand-roll SVG charting).
+- **D-13:** Design-system docs site is first-class — each component needs a live/interactive preview, color+type reference, and usage/implementation notes, at a "shadcn-quality" visual bar. Use `/emil-design-vocabulary`, `/emil-ui-polish`, `/emil-animations` skills during the docs-site build.
+- **D-14:** A 4th sample page — a Home dashboard composite screen — matching Figma node `266-9257` and the provided screenshot (device header, "Infant Status" hero card, 3-column vitals row with sparklines, Instructions list, bottom nav) is required, under `src/app/design-system/*`, not a production route.
+- **D-15 (LOCKED, mandatory per component):** Before writing any component code: call Figma MCP (`get_design_context`/`get_metadata`/`get_screenshot`) on the actual node for that component and extract exact spacing/radius/shadow/typography values. After building: screenshot the rendered page/component and visually compare against the Figma screenshot before marking "done." This is structural/checkable, not optional.
+- **D-16:** Preliminary websearch already done (dual-axis charts convention, color convention confirmed aligned, WCAG 2.1 A/AA relevance for healthcare apps in 2026). Downstream task: deepen the component-checklist cross-reference (this document does that below) without unilaterally expanding scope.
 
 ### Claude's Discretion
-
-- Exact Tailwind `@theme` token naming (e.g. `--color-brand-primary` vs `--color-primary`) — follow Tailwind v4 conventions, informed by the existing `--sc-*` naming in the salvaged `tokens.css`.
-- Exact shadcn/ui component installation mechanics (CLI vs manual) and file layout under `src/components/ui/`.
-- Whether the static-HTML `frontend-design/` tree's compiled CSS link is still needed once D-11 resolves.
+- Exact `@theme` token naming — follow existing `--color-*`/`--text-*`/`--radius-*` conventions in `globals.css`.
+- Exact new-component file naming/placement under `src/components/ui/`.
+- Whether some Figma "card types" are compositions of `Card` + other primitives rather than genuinely distinct components — flag during planning if so.
+- Chart library choice between Recharts/Tremor — pick based on which better supports sparkline + larger-chart + dual-axis needs. **This research resolves this in favor of Recharts** (see Standard Stack).
 
 ### Deferred Ideas (OUT OF SCOPE)
-
-- Roadmap restructuring (D-11) — not this phase's job to action.
-- Composite/domain components (VitalCard, StatusHeroCard, BottomNav, TrendGraph, Settings screen) — deferred to the phase that builds full screens.
-- Whether `frontend-design/`'s static HTML pages get updated to reference the new compiled tokens — moot pending D-11.
+- Formal roadmap restructuring (D-11) — a separate artifact-level ROADMAP.md/REQUIREMENTS.md edit, not this phase's file.
+- Full production Home screen (real data wiring, Supabase integration, state management) — D-14's Home screen is a static design-system proof page only.
+- Composite domain screens beyond D-12's primitive set (Settings screen, TrendGraph screen) — deferred to the screen-building phase.
+- A full WCAG 2.1 AA conformance audit — a lightweight pass on the new components is reasonable, a full audit is not this phase's deliverable.
 </user_constraints>
 
 <phase_requirements>
@@ -39,429 +38,394 @@
 
 | ID | Description | Research Support |
 |----|-------------|------------------|
-| DSYS-01 | Tailwind v4 token-based design system (`@theme` directive, no `tailwind.config.js`), distinct palette, informed by Figma + salvaged tokens | Verified current `@theme`/`@import "tailwindcss"`/PostCSS wiring for Next.js 16 + Turbopack (see Architecture Patterns, Code Examples); verified `tailwindcss@4.3.3` shipped `theme.css` namespace syntax directly from the package |
-| DSYS-02 | ≥3 sample HTML pages exercising real component states, validated before full prototype | Verified shadcn CLI 4.21.0 `init`/`add` mechanics (see Common Pitfalls #1–#3) so the 4-component set can actually be installed and rendered as real App Router routes |
-| DSYS-03 | Same token set reused across caregiver + parent visual language | Architecture Patterns section shows one `@theme` block in `globals.css` consumed by both route trees — no per-audience token duplication mechanism needed or recommended |
+| DSYS-01 | Tailwind v4 token-based design system (`@theme`, no `tailwind.config.js`-style config), palette distinct from original (no baby pink as brand), informed by Figma Segue 3.0 | Already satisfied by existing `globals.css` (D-03 confirms correctness) — this rework does not touch token values, only expands the component layer built on top of them. See Standard Stack / Architecture Patterns. |
+| DSYS-02 | Design system validated with ≥3 sample pages exercising real component states | Already satisfied structurally by `states/`, `empty-loading/`, `nested/` — this rework adds a 4th (`home-proof`, D-14) and requires all four to actually *look* production-quality, not just exist. See Common Pitfalls (docs/visual quality) and Code Examples. |
+| DSYS-03 | Design system supports both caregiver (full detail) and parent (abstracted) visual language from one shared token set | No new token work needed — the same semantic layer (`--color-safe/-caution/-critical`, `--radius-*`, `--text-*`) already serves both; this rework's expanded component set (cards, charts, nav) is what Phase 7 will apply differently per audience. Flagged as already-addressed; nothing new to research here beyond confirming no audience-specific tokens sneak into `@theme`. |
 </phase_requirements>
 
 ## Summary
 
-This phase's mechanics are almost entirely **new-version-vs-training-data traps**, not open design questions — the token values, component scope, and color math are already locked in `06-UI-SPEC.md`. The one load-bearing finding from this research session is that **shadcn CLI 4.21.0 no longer defaults to Radix**. Unpacking the actual installed-version tarball (`npm pack shadcn@4.21.0`) shows the `-b/--base` flag now offers `base` (Base UI, the new default/"Recommended"), `aria` (React Aria), or `radix` — Radix is opt-in only. D-07 ("shadcn/ui + Radix") is only satisfied if every `init`/`add` invocation explicitly passes `-b radix` (or the interactive "Radix UI" choice); the CLI's own defaults, and its `-d/--defaults` shortcut (`--template=next --preset=base-nova`), will silently produce Base UI components otherwise. This is exactly the class of "breaking change vs. training data" the phase brief asked to guard against, and it was caught only by reading the shipped package source, not by web search (which returned confidently wrong information on a related but different question — see Pitfall #4).
+This is a rework, not a new phase: the token layer (`globals.css`) is correct and untouched, but the component layer needs a large expansion (4 → ~20 components/patterns) and a visual-quality rebuild, plus a genuinely good docs site and a Home-screen proof-of-concept page. Three concrete, verified findings should directly shape the plan:
 
-The second major finding is mechanical, not stylistic: the CLI has **no `--style` or `--base-color` flag at all** anymore. Style is hardcoded to `new-york` (confirmed — no prompt, no flag). Base color (`slate`, per the locked UI-SPEC) is only settable via an interactive prompt at `init` time, or via the separate non-interactive `shadcn migrate <name> --from <x> --to slate --yes` command run after a plain init, or by hand-authoring `components.json` (which the CLI's `add` command will read without re-prompting, and which is explicitly permitted under this phase's "Claude's Discretion"). The planner should pick one of these three paths rather than assume a `--base-color slate` flag exists.
+1. **The AGENTS.md directive to pass `-b radix` on every `add`/`init` call is factually wrong for `add` in the installed CLI (shadcn `4.21.0`).** Only `init` has a `-b/--base` flag; `add` has no such flag and — verified live via `--dry-run` — already resolves every primitive-backed component (`select`, `checkbox`, `switch`, etc.) to the unified `radix-ui` package, matching the project's D-07 intent with zero flags needed. This matches the existing STATE.md decision log entry from Phase 06-01 execution. The planner should tell the executor: use `npx shadcn add <name>` with no `-b` flag; reserve `-b radix` for any future `npx shadcn init` re-run only, and treat AGENTS.md's blanket claim as partially superseded by this verified finding (still correct for `init`, wrong for `add`).
+2. **`npx shadcn add chart` silently overwrites `src/components/ui/card.tsx`** with shadcn's stock, unstyled Card (`bg-card`, `text-card-foreground`, `border`, `text-muted-foreground` — none of which exist in this project's semantic token layer) — verified live via `--diff`. Any plan that installs the chart component must NOT run `add chart` directly against the already-rebuilt `card.tsx`; it must either run it in a scratch location and hand-copy only `chart.tsx`, or run `add chart --diff`/`--view chart.tsx` first and manually apply only the new file, preserving the existing restyled Card.
+3. **Recharts, via shadcn's own official `chart` primitive, is the correct chart choice** over Tremor — it is what the `shadcn add chart` command itself installs (verified live), is far more actively maintained/downloaded than `@tremor/react` in its classic npm-installable form, supports the sparkline/larger-chart/dual-axis needs natively via Recharts' composable `<YAxis yAxisId>` API, and integrates directly with this project's CSS-variable token layer (`ChartConfig` colors reference `var(--color-*)`-style tokens the same way the rest of the system already does).
 
-Everything else — the Tailwind v4 `@theme` directive syntax, the Turbopack/PostCSS wiring for Next.js 16, the `tw-animate-css` vs. deprecated `tailwindcss-animate` swap, the paired `--text-*`/`--text-*--line-height` syntax the UI-SPEC already uses — was verified directly against the shipped `next@16.3.5` docs bundle and the shipped `tailwindcss@4.3.3` package, and all of it matches what's already locked in `06-UI-SPEC.md`. No changes to the UI-SPEC's token values or component contract are recommended; this research is about install/build mechanics, not design.
-
-**Primary recommendation:** Hand-author `components.json` (style: `new-york`, base color: `slate`, css variables: `true`, RSC: `true`, TSX: `true`, `tailwind.config: ""`, `tailwind.css: "src/app/globals.css"`) rather than running interactive `init`, then run `npx shadcn@latest add button card badge input -b radix -y` to pull the Radix-based component files non-interactively — this sidesteps both gaps above (no base-color flag, wrong default primitive library) in one move, and matches the "manual/CLI at your discretion" latitude already granted in CONTEXT.md.
+**Primary recommendation:** Keep the token layer frozen; expand the component layer using shadcn's `add` command (no `-b` flag) for every Radix-backed primitive, hand-roll only the genuinely bespoke pieces (Badge-style multi-modal status, the battery/progress indicator, the vitals sparkline wrapper around Recharts), install charts via shadcn's `chart` primitive with the Card-overwrite guarded against, and treat every new component's Figma extraction + screenshot diff (D-15) as a mandatory, separately-verifiable task rather than a one-time discussion step.
 
 ## Architectural Responsibility Map
 
 | Capability | Primary Tier | Secondary Tier | Rationale |
 |------------|-------------|----------------|-----------|
-| `@theme` design tokens (color/type/radius/shadow/spacing) | CDN / Static | Frontend Server (SSR) | Authored as CSS in `src/app/globals.css`, compiled by Next.js's Turbopack+PostCSS pipeline at build time into a static, code-split CSS asset served to every route — the Next.js server only owns the *authoring* location, not the runtime behavior |
-| shadcn/ui component layer (Button/Card/Badge/Input, CVA variants) | Browser / Client | Frontend Server (SSR) | Radix primitives (focus management, ARIA state, pointer events) are inherently client-side; Next.js SSR only produces the initial server-rendered HTML shell before hydration |
-| Sample validation pages (`app/design-system/*`) | Frontend Server (SSR) | Browser / Client | These are real App Router routes — Next.js server-renders the page shell; the nested Button/Input primitives inside them hydrate as Client Components |
-| Icon system (`icons.js` → React `<Icon>`) | Browser / Client | — | Pure presentational SVG rendering in the DOM, no server responsibility |
-| Font loading (Inter via `next/font/google`) | Frontend Server (SSR) | CDN / Static | Next.js self-hosts/subsets the font at build time (server-side concern); the resulting `.woff2` file is then served as a static asset |
+| Design tokens (`@theme`) | Browser / Client (CSS delivered as static asset) | — | Tailwind v4 compiles `@theme` to real CSS custom properties at build time; no server logic involved. |
+| Component primitives (Button/Card/Badge/Input/Select/etc.) | Browser / Client (interactive) + Frontend Server (SSR shell) | — | Most are server-renderable (no `useState`) but a few (Select, Switch, Checkbox, RadioGroup, Toggle, Dialog-adjacent) require Radix's client-side state and must cross the `'use client'` boundary; Card/Badge/Input stay server-renderable. |
+| Chart/sparkline components | Browser / Client | — | Recharts renders to SVG using browser measurement (`ResponsiveContainer`) and requires `'use client'`; verified via shadcn's own chart docs. |
+| Nav bar / nav link | Frontend Server (SSR) + Browser (active-state highlighting) | — | Structure and links render server-side; "active" highlighting for the current route needs client-side `usePathname()` or is passed as a prop from a Server Component parent — no data fetching involved. |
+| Docs site (`/design-system/docs/*`) | Frontend Server (SSR, mostly static content) | Browser (interactive live previews) | Reads `globals.css`/`.DESIGN.md` at request time via `readFileSync` (already the pattern in this repo) — stays a Server Component for the content, with individual live-preview islands as Client Components. |
+| Home dashboard proof page | Frontend Server (SSR) + Browser (sparklines/toggle interactivity) | — | Static/mock data composed server-side; only the chart/toggle sub-pieces need `'use client'`. |
 
 ## Standard Stack
 
 ### Core
-
 | Library | Version | Purpose | Why Standard |
 |---------|---------|---------|--------------|
-| `tailwindcss` | 4.3.3 [VERIFIED: npm registry, published 2026-07-16] | Utility CSS engine, `@theme` token compiler | Locked by D-01/DSYS-01; this is the only Tailwind major version with CSS-first `@theme` config |
-| `@tailwindcss/postcss` | 4.3.3 [VERIFIED: npm registry, published 2026-07-16] | PostCSS plugin that Turbopack invokes to process Tailwind | Official, required install path per Next.js's own bundled docs — see Architecture Patterns |
-| `shadcn` (CLI, dev-only) | 4.21.0 [VERIFIED: npm registry, published 2026-09-04 — matches UI-SPEC's stated version] | Scaffolds Button/Card/Badge/Input source files + `components.json` | Locked by D-07/D-06; not a runtime dependency, only a codegen CLI |
-| `class-variance-authority` | 0.7.1 [VERIFIED: npm registry] | Finite, typed CVA variant unions for the 4 components | Already shadcn's own variant mechanism (D-06's "an agent can't invent a variant that doesn't exist" requirement maps directly onto CVA's discriminated variant keys) |
-| `clsx` | 2.1.1 [VERIFIED: npm registry] — **SUPERSEDED, not installed** | Conditional className joining | Originally required by shadcn's generated `cn()` helper; superseded by the `cn` package per a checkpoint-time user decision recorded in `06-01-PLAN.md` (made before any install ran) — see `cn` row below |
-| `tailwind-merge` | 3.7.0 [VERIFIED: npm registry, published 2026-09-12] — **SUPERSEDED, not installed** | De-duplicates conflicting Tailwind classes inside `cn()` | Same as above — superseded by `cn`, which provides full clsx+tailwind-merge parity as a single zero-dependency package |
-| `cn` | 0.4.0 [VERIFIED: npm registry, `latest` dist-tag, published 2026-09-22T10:43:46Z] | Drop-in replacement for `clsx`+`tailwind-merge` inside shadcn's `cn()` helper — official shadcn-ui utility | Adopted per checkpoint-time user decision (before any install ran): zero runtime dependencies, no postinstall script, repo confirmed at github.com/shadcn-ui/cn (org-owned, created 2026-08-31, 1,594 stars [VERIFIED: GitHub API, 2026-09-26]), current npm maintainer is the `shadcn` account (m@shadcn.com). **Notable provenance:** the `cn` npm package name previously belonged to an unrelated, dormant 2013-era "Chuck Norris jokes" CLI (versions 0.1.0-0.1.1, maintainer `rumpl`); it was reassigned to the shadcn-ui maintainer starting at v0.2.0 (published 2026-09-01) — confirmed intentional npm name reuse via the registry's own version history, not a hijack of an active package, but a materially different provenance shape than `tailwind-merge`'s single continuous-publisher history. Weekly downloads: 4,627,335 [VERIFIED: npm downloads API, 2026-09-26] — already substantial despite under one month under this ownership. |
-| `tw-animate-css` | 1.4.0 [VERIFIED: npm registry] | Animation utility classes shadcn now ships against | shadcn's own docs state `tailwindcss-animate` is deprecated in favor of this package for Tailwind v4 projects [CITED: ui.shadcn.com/docs/tailwind-v4] |
-| `@radix-ui/react-slot` (+ per-component Radix packages pulled by `shadcn add`) | 1.3.3 [VERIFIED: npm registry] | Unstyled, accessible primitives underneath Button/Card/Badge/Input | Locked by D-07; confirmed to support React 19 via its own `peerDependencies` (`react: '^16.8 \|\| ... \|\| ^19.0'`) [VERIFIED: npm view @radix-ui/react-slot peerDependencies] |
+| `recharts` | `3.10.1` current on npm; shadcn's `chart` registry entry currently pins `3.8.0` — both installable, use whichever `add chart` resolves at install time [VERIFIED: npm view] | Chart primitives (Line/Bar/Area/ComposedChart), inline sparklines, dual-axis analytics chart | Officially the library shadcn's own `chart` component wraps; largest ecosystem (~65.8M weekly downloads verified via package-legitimacy check), actively maintained (published within the last 3 months), first-class dual-axis support via composable `YAxis`/`yAxisId` |
+| `radix-ui` | `^1.6.7` (already installed) | Underlying primitive behavior for every new interactive component (Select, Checkbox, RadioGroup, Switch, Tabs/Toggle-Group, Tooltip, Dialog if ever needed) | Already the project's chosen primitive layer (D-07); `shadcn add` already resolves to this unified package with zero extra flags — verified live |
+| `class-variance-authority` | `^0.7.1` (already installed) | Finite typed CVA variant unions for every new component, matching the existing Button/Badge pattern | Already the project's variant-authoring pattern (D-06); no reason to introduce a second variant library |
+| `cn` (github.com/shadcn-ui/cn) | `^0.4.0` (already installed) | className-merge helper | Already installed and human-approved (STATE.md: "approved live at the Task 1 checkpoint after human npmjs.com review"). **Not** `clsx`+`tailwind-merge` — verify current API against `node_modules/cn`'s shipped types before writing new component code that calls `cn()`, per AGENTS.md; do not assume clsx-identical behavior. |
 
 ### Supporting
-
 | Library | Version | Purpose | When to Use |
 |---------|---------|---------|-------------|
-| `next/font/google` (built into `next@16.3.5`, no separate install) | n/a | Self-hosts/subsets Inter per D-05 | Already the project's Next.js version; no config file needed, just an import in `layout.tsx` |
+| `lucide-react` | pulled in transitively by `shadcn add chart` [VERIFIED: shadcn CLI `--diff` output] | Declared as a dependency of the chart registry entry | **Not actually imported anywhere inside the generated `chart.tsx` file** (verified by grepping the CLI's rendered output) — it lands in `package.json` as an unused transitive dependency of the chart install, not a replacement for the project's custom icon set (D-09 explicitly rejected `lucide-react` as the icon system in `06-UI-SPEC.md`). Flag as `[SUS]` per the Package Legitimacy Audit below (verdict is a false-positive "too-new" signal from a recent point-release, not real package immaturity — 118M+ weekly downloads) and gate its install behind a `checkpoint:human-verify`, but do not treat it as contradicting D-09 since nothing in the new component imports from it. |
 
 ### Alternatives Considered
-
 | Instead of | Could Use | Tradeoff |
 |------------|-----------|----------|
-| shadcn's new "Base UI" primitive layer (`-b base`, now the CLI default) | Radix (`-b radix`) | D-07 explicitly locks Radix — Base UI is a real, actively-maintained alternative but changing to it now would silently violate the locked decision and produce components with a different unstyled-primitive API than what D-06/D-08's variant contract assumes |
-| Interactive `shadcn init` prompts | Hand-authored `components.json` + `shadcn add -b radix -y` | Interactive prompts can't be scripted deterministically for base color (no CLI flag exists) in an agent-driven, non-interactive execution context; hand-authoring is explicitly permitted under CONTEXT.md's "Claude's Discretion" |
-| `tailwindcss-animate` | `tw-animate-css` | The former is shadcn's own documented-deprecated package for Tailwind v4 projects; using it would be building on a path shadcn itself is walking away from |
+| Recharts | `@tremor/react` (classic npm package, still on npm at `3.18.7`, not deprecated) | Tremor is itself built on top of Recharts and is a higher-level, more opinionated dashboard-widget layer — heavier bundle, less granular control over the exact sparkline-inside-a-stat-card and dual-axis layouts D-12 needs. Tremor's project has been visibly shifting toward "Tremor Raw" (a copy-paste, non-npm-installable pattern similar to shadcn itself) rather than continued investment in the classic installable package — a less certain long-term bet than going directly to the library shadcn's own CLI already wires up. |
+| Hand-rolled progress/battery indicator | shadcn's `progress` primitive (Radix `Progress`) as the base, restyled | A raw `<progress>` element or a fully custom SVG ring would duplicate accessibility work (`role="progressbar"`, `aria-valuenow`) Radix's primitive already provides — restyle `progress.tsx`'s CVA classes to match the Figma battery/level visual rather than hand-rolling from a bare div. |
+| Hand-rolled segmented control (time-scale toggle) | shadcn's `toggle-group` (single-selection mode, Radix `ToggleGroup`) | `toggle-group` in `type="single"` mode is exactly a segmented control (one active button among siblings) — confirmed via live `--dry-run` (installs both `toggle.tsx` and `toggle-group.tsx`). No need for a bespoke tab-like component. |
 
-**Installation (recommended sequence — see Code Examples for exact commands and Pitfall #1–#3 for why):**
-
+**Installation:**
 ```bash
-npm install -D tailwindcss @tailwindcss/postcss
-npm install class-variance-authority cn tw-animate-css
-# shadcn CLI itself is invoked via npx, not installed as a project dependency
-npx shadcn@latest add button card badge input -b radix -y
+# Existing components — already installed, do not re-run unless intentionally overwriting:
+# button, card, badge (hand-authored, not shadcn-sourced), input
+
+# New primitive-backed components (no -b flag on `add` — verified: add has no --base option
+# in shadcn CLI 4.21.0, only `init` does; add already resolves to radix-ui with zero flags):
+npx shadcn add select textarea checkbox radio-group switch progress tabs toggle-group separator tooltip
+
+# Chart — DO NOT run this against the live repo without first previewing the Card overwrite:
+npx shadcn add chart --diff        # inspect the card.tsx diff first
+npx shadcn add chart --view src/components/ui/chart.tsx   # then hand-copy chart.tsx only,
+                                                            # OR run `add chart -o` into a scratch
+                                                            # dir and merge manually, preserving
+                                                            # the existing restyled card.tsx
 ```
 
-**Version verification:** All versions above were confirmed live against the npm registry on 2026-09-26 via `npm view <pkg> version`; do not trust training-data version numbers for this fast-moving stack.
+**Version verification:** Verified live against the installed CLI (`npx shadcn --version` → `4.21.0`) and via `npx shadcn add <name> --dry-run` for every component name listed above — all resolved with valid file lists and dependencies as of 2026-09-27. `recharts` version verified via `npm view recharts version` → `3.10.1` (registry latest); shadcn's own `chart` registry entry currently pins `recharts@3.8.0` in its dependency line — either is compatible with React 19 per Recharts' own `peerDependencies` (`^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0`, verified via `npm view recharts peerDependencies`).
 
 ## Package Legitimacy Audit
 
-| Package | Registry | Age (this version) | Downloads | Source Repo | Verdict | Disposition |
-|---------|----------|---------------------|-----------|--------------|---------|-------------|
-| `tailwindcss` | npm | published 2026-07-16 | 122.3M/wk | github.com/tailwindlabs/tailwindcss | OK | Approved |
-| `@tailwindcss/postcss` | npm | published 2026-07-16 | 34.8M/wk | github.com/tailwindlabs/tailwindcss | OK | Approved |
-| `shadcn` | npm | published 2026-09-04 | 8.8M/wk | github.com/shadcn-ui/ui | **SUS** (`too-new`) | Flagged — see note below |
-| `class-variance-authority` | npm | published 2024-11-26 | 62.0M/wk | github.com/joe-bell/cva | OK | Approved |
-| `clsx` | npm | published 2024-04-23 | 116.7M/wk | github.com/lukeed/clsx | OK | **Superseded — not installed** (see `cn` row; checkpoint-time user decision, `06-01-PLAN.md`) |
-| `tailwind-merge` | npm | published 2026-09-12 | 79.7M/wk | github.com/dcastil/tailwind-merge | OK | **Superseded — not installed** (see `cn` row; checkpoint-time user decision, `06-01-PLAN.md`) |
-| `cn` | npm | current ownership since 2026-09-01 (v0.2.0); latest v0.4.0 published 2026-09-22; package name itself registered 2013 under an unrelated prior maintainer | 4.6M/wk [VERIFIED: npm downloads API, 2026-09-26] | github.com/shadcn-ui/cn (org-owned, created 2026-08-31 [VERIFIED: GitHub API, 2026-09-26]) | **SUS** (`unproven-under-current-ownership`) | Flagged — human-verify checkpoint added in `06-01-PLAN.md` Task 1 |
-| `tw-animate-css` | npm | published 2025-09-24 | 37.7M/wk | github.com/Wombosvideo/tw-animate-css | OK | Approved |
-| `@radix-ui/react-slot` | npm | published 2026-07-24 | 166.0M/wk | github.com/radix-ui/primitives | OK | Approved |
+| Package | Registry | Age/Downloads | Source Repo | Verdict | Disposition |
+|---------|----------|-----|-------------|---------|-------------|
+| `recharts` | npm | 65.8M/wk, published within last ~2 months | github.com/recharts/recharts | OK | Approved |
+| `@tremor/react` | npm | 456K/wk, not deprecated | github.com/tremorlabs/tremor-npm | OK | Approved as documented alternative only — not the primary recommendation (see Alternatives Considered) |
+| `lucide-react` | npm | 119M/wk | github.com/lucide-icons/lucide | SUS (`too-new` heuristic — false positive on a recent point-release of a 5+-year-old, 119M/wk package) | Flagged — transitive-only via `shadcn add chart`, not directly imported; planner should add a `checkpoint:human-verify` before accepting it into `package.json`, or strip it post-install if the executor confirms it's genuinely unused |
+| `radix-ui` | npm | 15.6M/wk | github.com/radix-ui/primitives | OK | Approved — already installed |
+| `class-variance-authority` | npm | 74.3M/wk | github.com/joe-bell/cva | OK | Approved — already installed |
+| `cn` | npm | 5.5M/wk (`too-new` heuristic flagged, but already human-approved per STATE.md Phase 06 decision log) | github.com/shadcn-ui/cn | SUS (heuristic) → treated as pre-approved | Already installed and reviewed live by the user at a Task 1 checkpoint; no new checkpoint needed |
+| `tw-animate-css` | npm | 45.1M/wk | github.com/Wombosvideo/tw-animate-css | OK | Approved — already installed |
 
 **Packages removed due to `[SLOP]` verdict:** none.
-
-**Packages flagged as suspicious `[SUS]`:** `shadcn`, `cn`. `shadcn` trips the legitimacy gate's `too-new` heuristic purely on **publish-date recency of the current version**, not on any structural red flag — no `postinstall` script, resolves to its well-known official GitHub repo, tens of millions of weekly downloads (inconsistent with a slopsquat/hallucination, consistent with an actively-maintained popular package that happened to ship a new version recently). `cn` was added to this table during a checkpoint-time revision that swapped it in for `clsx`+`tailwind-merge` (see Standard Stack) and is a genuinely different case, not a routine recency false positive: it is zero-dependency, has no postinstall script, and resolves to a real, org-owned GitHub repo (github.com/shadcn-ui/cn, created 2026-08-31), but it has under one month of history under its current shadcn-ui ownership — the npm package name itself is old (a dormant, unrelated 2013 CLI) and was reassigned to the shadcn-ui maintainer only in September 2026. The available evidence (real repo, zero deps, no install scripts, ~4.6M weekly downloads already) points toward a legitimate, deliberately-adopted official utility rather than a supply-chain attack, but the provenance shape is materially thinner than `tailwind-merge`'s own long continuous-publisher history. **The planner has kept a `checkpoint:human-verify` task before installing either `shadcn` or `cn`**, per protocol, with `cn`'s verification step specifically asking the human to review its name-reuse history on npmjs.com/package/cn before approving.
+**Packages flagged as suspicious `[SUS]`:** `lucide-react` (checkpoint recommended before accepting into `package.json`); `cn` (already resolved/approved in a prior phase checkpoint, no new action needed).
 
 ## Architecture Patterns
 
 ### System Architecture Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│ src/app/globals.css                                                 │
-│   @import "tailwindcss";                                            │
-│   @theme { --color-*, --text-*, --radius-*, --shadow-* ... }        │  ← DSYS-01, DSYS-03
-│   (one shared token block — no per-audience duplication)            │
-└───────────────────────────────┬───────────────────────────────────--┘
-                                 │ processed by @tailwindcss/postcss
-                                 │ (Turbopack, next build / next dev)
-                                 ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│ src/components/ui/{button,card,badge,input}.tsx                     │
-│   shadcn-generated, CVA-typed variant unions, Radix primitives       │  ← D-06, D-07, D-08
-│   e.g. variant: "primary" | "secondary" | "tertiary" | "critical"    │
-└───────────────────────────────┬───────────────────────────────────--┘
-                                 │ imported by
-                                 ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│ src/app/design-system/*  (real App Router routes)                   │  ← DSYS-02
-│   page-1: Safe/Caution/Critical StatusPill + Card variants           │
-│   page-2: empty-state / loading-state Card treatments                │
-│   page-3: nested Button/Input inside Card inside page layout         │
-└─────────────────────────────────────────────────────────────────────┘
-                                 │ `next build` (Turbopack, production)
-                                 ▼
-                    Compiled, code-split .css + .js served
-                    identically to whatever later consumes it
-                    (both caregiver and parent visual language)
+Figma (Segue 3.0, file 4J2wGl4C6QG4yyeOnldRwl)
+   │  get_metadata / get_design_context / get_screenshot  (per-node, per D-15)
+   ▼
+Executor extracts spacing/radius/shadow/type values ──► src/components/ui/<name>.tsx
+   │                                                          │ (CVA variants, `cn()`)
+   │                                                          ▼
+   │                                                   src/components/ui/<name>.DESIGN.md
+   │                                                          │ (usage rules, correct/incorrect)
+   ▼                                                          ▼
+Screenshot rendered component ──compare──► Figma screenshot   Docs site reads .DESIGN.md +
+   (D-15 step 2, per component)                                renders live interactive preview
+                                                                       │
+                                                                       ▼
+                                                    src/app/design-system/docs/<component>/page.tsx
+                                                    src/app/design-system/{states,empty-loading,
+                                                      nested,home-proof}/page.tsx  (D-14: new 4th page)
+                                                                       │
+                                                    Home-proof page composes: nav bar + hero card +
+                                                    3× vital-stat card (each embeds a Recharts
+                                                    sparkline, 'use client' boundary at the chart) +
+                                                    instructions list — proving the full component
+                                                    set assembles into a real screen before Phase 7.
 ```
 
 ### Recommended Project Structure
-
 ```
-src/
-├── app/
-│   ├── globals.css              # single @theme block — token source of truth
-│   ├── layout.tsx                # Inter font import replaces current Geist import
-│   └── design-system/            # DSYS-02 sample validation routes (D-02)
-│       ├── states/page.tsx       # sample page 1: Safe/Caution/Critical
-│       ├── empty-loading/page.tsx# sample page 2: empty + loading Card
-│       └── nested/page.tsx       # sample page 3: nested composition
-├── components/
-│   ├── ui/                       # shadcn-generated (button.tsx, card.tsx, badge.tsx, input.tsx)
-│   └── icon.tsx                  # ported React wrapper around icons.js (D-09)
-└── lib/
-    └── utils.ts                  # cn() helper, re-exported from the cn package (supersedes clsx+tailwind-merge)
-```
+src/components/ui/
+├── button.tsx / button.DESIGN.md          # existing — visual rebuild only, keep variant API
+├── card.tsx / card.DESIGN.md              # existing — visual rebuild + reconcile against 6 Figma card types
+├── badge.tsx / badge.DESIGN.md            # existing — keep multi-modal (icon+label+color) contract
+├── input.tsx / input.DESIGN.md            # existing — visual rebuild only
+├── select.tsx / select.DESIGN.md          # new — shadcn `add select`, restyle
+├── textarea.tsx / textarea.DESIGN.md      # new — shadcn `add textarea`, restyle
+├── checkbox.tsx / checkbox.DESIGN.md      # new — shadcn `add checkbox`, restyle
+├── radio-group.tsx / radio-group.DESIGN.md# new — shadcn `add radio-group`, restyle
+├── switch.tsx / switch.DESIGN.md          # new — shadcn `add switch`, restyle
+├── progress.tsx / progress.DESIGN.md      # new — shadcn `add progress`, restyle as battery/level indicator
+├── toggle-group.tsx (+ toggle.tsx) / toggle-group.DESIGN.md  # new — segmented control / time-scale toggle
+├── chart.tsx / chart.DESIGN.md            # new — via `add chart`, Card-overwrite guarded (see Pitfalls)
+├── sparkline.tsx / sparkline.DESIGN.md    # new — thin wrapper around chart.tsx primitives, no axes/legend chrome, for vitals stat cards
+├── nav-link.tsx / nav-link.DESIGN.md      # new — hand-authored (no shadcn equivalent), Figma node 279-220
+└── nav-bar.tsx / nav-bar.DESIGN.md        # new — hand-authored, composes nav-link, Figma node 279-320
 
-### Pattern 1: `@theme` token block (Tailwind v4, no `tailwind.config.js`)
-
-**What:** All design tokens declared as CSS custom properties inside an `@theme { ... }` block in the global stylesheet; Tailwind auto-generates matching utility classes (`bg-*`, `text-*`, `rounded-*`, `shadow-*`) from the `--color-*`/`--text-*`/`--radius-*`/`--shadow-*` namespace prefixes.
-**When to use:** This is the only supported v4 mechanism — DSYS-01 explicitly requires it and forbids a `tailwind.config.js`-style config.
-**Example** (verified directly against the shipped `tailwindcss@4.3.3` package's own `theme.css`, confirming the namespace and paired line-height syntax the UI-SPEC already uses):
-
-```css
-/* Source: tailwindcss@4.3.3 package theme.css (verified by unpacking the npm tarball) */
-@import "tailwindcss";
-
-@theme {
-  --color-brand: oklch(0.69 0.095 252.1);
-  --color-critical: oklch(0.626 0.164 352);
-
-  --text-heading: 1.125rem;
-  --text-heading--line-height: 1.3;   /* paired suffix syntax, confirmed real */
-
-  --radius-card: 20px;
-  --shadow-card: 0 4px 20px rgba(24, 34, 53, 0.05);
-}
+src/app/design-system/
+├── docs/                     # existing — needs D-13 quality rebuild (see Pitfalls: current page is one giant page dumping raw markdown)
+├── states/                   # existing — needs visual-quality pass with expanded component set
+├── empty-loading/            # existing — same
+├── nested/                   # existing — same
+└── home-proof/                # new (D-14) — composite Home dashboard screen
 ```
 
-Do **not** redeclare `--spacing-*` as a scale — Tailwind v4 ships a single `--spacing: 0.25rem` primitive [VERIFIED: tailwindcss@4.3.3 theme.css] that already generates every `p-1`…`p-16`/`size-11` utility the UI-SPEC's spacing table needs.
-
-### Pattern 2: PostCSS wiring for Turbopack (Next.js 16 default bundler)
-
-**What:** Next.js 16 uses Turbopack by default for both `next dev` and `next build` [VERIFIED: node_modules/next/dist/docs/01-app/03-api-reference/08-turbopack.md — "Turbopack becomes the default bundler for Next.js" as of v16.0.0]. Turbopack natively supports PostCSS config files without extra Next.js config.
-**When to use:** Always, for this phase — no `experimental.turbopackLocalPostcssConfig` flag is needed since there is only one, root-level `postcss.config.mjs` (that flag only matters for per-directory/monorepo PostCSS configs).
+### Pattern 1: Recharts sparkline inside a stat card, isolated client boundary
+**What:** The vitals stat card (Pulse/Temp/Activity) is a Server Component; only the sparkline inside it needs `'use client'`.
+**When to use:** Any card embedding a small trend chart with no axes/legend/tooltip chrome.
 **Example:**
+```tsx
+// Source: shadcn chart docs (ui.shadcn.com/docs/components/chart) + Recharts ResponsiveContainer pattern
+// src/components/ui/sparkline.tsx
+"use client"
+import { LineChart, Line, ResponsiveContainer } from "recharts"
 
-```js
-// Source: node_modules/next/dist/docs/01-app/01-getting-started/11-css.md (this repo's installed next@16.3.5)
-// postcss.config.mjs
-export default {
-  plugins: {
-    '@tailwindcss/postcss': {},
-  },
+export function Sparkline({ data, color = "var(--color-safe)" }: { data: { value: number }[]; color?: string }) {
+  return (
+    <ResponsiveContainer width="100%" height={40}>
+      <LineChart data={data}>
+        <Line type="monotone" dataKey="value" stroke={color} strokeWidth={2} dot={false} />
+      </LineChart>
+    </ResponsiveContainer>
+  )
+}
+```
+```tsx
+// src/components/ui/vital-stat-card.tsx — Server Component, imports the Client Component
+import { Sparkline } from "@/components/ui/sparkline"
+export function VitalStatCard({ label, value, trend }: { label: string; value: string; trend: { value: number }[] }) {
+  return (
+    <div className="rounded-card-sm bg-surface p-4">
+      <p className="text-label text-text-secondary">{label}</p>
+      <p className="text-heading font-semibold text-text">{value}</p>
+      <Sparkline data={trend} />
+    </div>
+  )
 }
 ```
 
-### Pattern 3: shadcn CVA component variant (finite, typed — D-06)
-
-**What:** Every generated component exposes a single `cva()` call with a closed variant union; no `ghost`/`destructive`/`link`/`outline` names exist per D-06/UI-SPEC.
-**When to use:** All 4 Phase 6 components.
-**Example (illustrative shape — executor confirms exact class strings against the locked color tokens during planning):**
-
+### Pattern 2: Dual-axis analytics chart
+**What:** One scale for pulse/temp-like series, a second tighter scale for an O2-sat-like series — per D-16's vitals-dashboard convention finding.
+**When to use:** The larger analytics chart component (not the inline sparkline).
+**Example:**
 ```tsx
-// Source: shadcn-generated button.tsx shape (D-06/D-08 variant contract)
-const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-btn text-body font-semibold transition-colors",
-  {
-    variants: {
-      variant: {
-        primary: "bg-brand-fill text-text-inverse hover:bg-brand-fill-hover",
-        secondary: "border border-border text-text",
-        tertiary: "text-brand underline-offset-4 hover:underline",
-        critical: "bg-critical-fill text-text-inverse hover:bg-critical-fill-hover",
-      },
-    },
-    defaultVariants: { variant: "primary" },
-  }
-)
+// Source: Recharts composable YAxis/yAxisId pattern — CITED: recharts.org docs + GitHub issue #2538/#174 community confirmation
+"use client"
+import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+
+export function DualAxisVitalsChart({ data }: { data: Array<{ time: string; pulse: number; spo2: number }> }) {
+  return (
+    <ResponsiveContainer width="100%" height={240}>
+      <ComposedChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border-subtle)" />
+        <XAxis dataKey="time" stroke="var(--color-text-muted)" />
+        <YAxis yAxisId="pulse" domain={[60, 180]} stroke="var(--color-brand)" />
+        <YAxis yAxisId="spo2" orientation="right" domain={[90, 100]} stroke="var(--color-safe)" />
+        <Line yAxisId="pulse" dataKey="pulse" stroke="var(--color-brand)" dot={false} />
+        <Line yAxisId="spo2" dataKey="spo2" stroke="var(--color-safe)" dot={false} />
+      </ComposedChart>
+    </ResponsiveContainer>
+  )
+}
+```
+**Important:** once any `YAxis` declares an explicit `yAxisId`, every `Line`/`Bar`/`Area` in the chart must declare a matching `yAxisId` too — Recharts does not fall back to an implicit default axis once IDs are introduced [CITED: recharts.org / community-confirmed via GitHub issues #2538, #174].
+
+### Pattern 3: Segmented control via `toggle-group`
+**What:** Time-scale toggle (1D/1W/1M), matching Figma node `203-11938`.
+**Example:**
+```tsx
+// Source: shadcn ui.shadcn.com/docs/components/toggle-group (single-selection mode)
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+
+<ToggleGroup type="single" defaultValue="1d">
+  <ToggleGroupItem value="1d">1D</ToggleGroupItem>
+  <ToggleGroupItem value="1w">1W</ToggleGroupItem>
+  <ToggleGroupItem value="1m">1M</ToggleGroupItem>
+</ToggleGroup>
 ```
 
 ### Anti-Patterns to Avoid
-
-- **Assuming `-b radix` is the CLI default:** As of shadcn CLI 4.21.0, `base:"base"` (Base UI) is the default when `--base`/`-b` is omitted [VERIFIED: shadcn@4.21.0 package dist/index.js — `function ig(e){return e===void 0?"base":c$2(e).base??"radix"}`]. Every `init`/`add` invocation this phase must pass `-b radix` explicitly.
-- **Trusting training-data shadcn `--base-color` flag:** No such flag exists in this CLI version's registered `option(...)` list (confirmed by exhaustively grepping the unpacked package source). Base color is prompt-only, or set via `shadcn migrate <name> --from <x> --to <y> --yes`, or via a hand-authored `components.json`.
-- **Leaving the default `create-next-app` dark-mode media query in `globals.css`:** The current `src/app/globals.css` has a `@media (prefers-color-scheme: dark)` block toggling `--background`/`--foreground` [VERIFIED: src/app/globals.css:6-11, quoted: `@media (prefers-color-scheme: dark) { :root { --background: #0a0a0a; --foreground: #ededed; } }`]. The UI-SPEC's locked palette is light-mode only — this block must be removed, not merged with the new `@theme` tokens, or the two systems will silently fight each other.
+- **Running `npx shadcn add chart` directly against the live repo without `--diff` first:** silently overwrites the already-restyled `card.tsx` with shadcn's stock, unstyled Card — verified live (see Common Pitfalls).
+- **Hand-rolling SVG chart/sparkline code:** explicitly barred by `.claude/CLAUDE.md`'s "lean on existing libraries" directive and D-12's own text ("do not hand-roll SVG charting").
+- **Treating every Figma "card type" node as automatically a new React component:** D-12 explicitly allows some to turn out to be compositions of `Card` + other primitives — verify per-node during planning, don't force 6 new component files if fewer genuinely distinct components are what's actually in the frames.
+- **Passing `-b radix` to `shadcn add`:** the flag doesn't exist on `add` in CLI `4.21.0` and the command will error or ignore it — verified live via `--help`.
 
 ## Don't Hand-Roll
 
 | Problem | Don't Build | Use Instead | Why |
-|---------|-------------|--------------|-----|
-| Conditional/merged Tailwind class strings | A custom `classNames()`-style helper | `cn` (the official shadcn-ui package, github.com/shadcn-ui/cn) re-exported as `cn()` in `lib/utils.ts` | Adopted per a checkpoint-time user decision as a zero-dependency, drop-in replacement for shadcn's originally-generated clsx+tailwind-merge combo; reinventing either breaks compatibility, and the shadcn CLI still generates clsx/tailwind-merge-based files by default that must be replaced immediately (`06-01-PLAN.md` Task 2) |
-| Finite component variant typing | Hand-rolled `switch`/ternary prop branching | `class-variance-authority` (`cva()`) | D-06's entire "agent can't invent a variant" requirement is CVA's discriminated-union design, not a custom pattern |
-| Accessible primitive behavior (focus trap, ARIA roles, keyboard nav) for Button/Input | Custom `onKeyDown`/`aria-*` wiring | Radix primitives (`@radix-ui/react-*`, pulled in via `shadcn add ... -b radix`) | This is D-07's entire rationale — Radix already solves the a11y edge cases a 2-day-budget custom build would get wrong |
-| SVG icon rendering | Re-implement `icons.js`'s `renderSepCareIcon()` string-templating approach in React | A thin `<Icon name="..." />` React component that maps the same `SepCareIcons` keys to real JSX `<svg>` elements | `icons.js`'s current form returns an HTML *string* [VERIFIED: frontend-design/design-system/icons.js — `function renderSepCareIcon(name, size = 24, className = '') { ... return `<svg ...>${content}</svg>`; }`], which is a `dangerouslySetInnerHTML` shape in React — porting to real JSX avoids that risk entirely for near-zero extra work since the source paths are static |
+|---------|-------------|-------------|-----|
+| Charts/sparklines | Custom SVG path-drawing from raw vitals arrays | `recharts` via shadcn's `chart` registry component | D-12 explicit directive; Recharts handles responsive sizing, tooltips, dual-axis scaling, accessibility roles that a hand-rolled SVG chart would have to reinvent |
+| Select/dropdown, checkbox, radio, switch keyboard/focus behavior | Custom `<div>`-based dropdown or custom checkbox with manual `tabIndex`/`aria-*` wiring | Radix primitives via `shadcn add select/checkbox/radio-group/switch` | Radix already solves focus trapping, `aria-checked`/`aria-selected` state, keyboard nav (arrow keys in radio groups, Escape to close selects) — exactly the class of "deceptively complex" problem the shadcn+Radix pairing exists to remove |
+| Progress/battery indicator accessibility | A styled `<div>` with a width percentage and no ARIA | Radix `Progress` via `shadcn add progress`, restyled | Provides `role="progressbar"`/`aria-valuenow`/`aria-valuemin`/`aria-valuemax` for free |
+| Segmented control (time-scale toggle) | Custom button-group with manual "active" state management | Radix `ToggleGroup` (`type="single"`) via `shadcn add toggle-group` | Handles roving tabindex and single-selection ARIA semantics; exactly matches the segmented-control UI pattern already |
 
-**Key insight:** Every "don't hand-roll" item above is already the *documented, intended* shape of the shadcn+Radix+CVA stack D-07 locked in — the risk here isn't reinventing wheels, it's an agent's training data being confidently wrong about which wheel shadcn ships by default in this specific CLI version.
+**Key insight:** every "new" interaction pattern D-12 lists already has a maintained Radix primitive behind a one-line `shadcn add` call — the only genuinely bespoke work this phase requires is the *visual restyling* (CVA classes against the token layer) and the *domain-specific composition* (Badge's multi-modal icon+label+color rule, the sparkline wrapper, nav-bar/nav-link, and the Home-proof composite page) — not new interaction-behavior code.
 
 ## Common Pitfalls
 
-### Pitfall 1: shadcn CLI's default primitive library is no longer Radix
-**What goes wrong:** Running `npx shadcn@latest init` or `add` without `-b radix` silently scaffolds Base UI-based components instead of Radix-based ones, violating D-07.
-**Why it happens:** shadcn CLI 4.21.0 introduced a 3-way `--base` choice (`base` | `aria` | `radix`) and changed the recommended default to `base` (Base UI) [VERIFIED: shadcn@4.21.0 dist/index.js — choices array `[{title:"Base UI (Recommended)",value:"base"},{title:"React Aria",value:"aria"},{title:"Radix UI",value:"radix"}]`, and default-resolution function returning `"base"` when unset]. This is a genuinely recent change that most LLM training data predates.
-**How to avoid:** Every `init`/`add` command in the plan must include `-b radix` (or the interactive "Radix UI" selection). Also verify the resulting `components.json` and generated component files actually import from `@radix-ui/react-*`, not `@base-ui-components/react` or similar, before considering the install step done.
-**Warning signs:** Generated component files importing from an unfamiliar primitives package; `package.json` gaining a `@base-ui-components/*` dependency instead of `@radix-ui/*`.
+### Pitfall 1: `shadcn add chart` overwrites the rebuilt Card
+**What goes wrong:** Running `npx shadcn add chart` (or any command re-adding `card`) silently overwrites `src/components/ui/card.tsx` with shadcn's stock New York-style Card (`bg-card`, `text-card-foreground`, `border`, `shadow-sm`, `text-muted-foreground` — tokens that don't exist in this project's `@theme` block), destroying all of D-15's Figma-verified restyling work.
+**Why it happens:** shadcn's `chart` registry entry lists `card` as a dependency it also touches (chart examples ship inside `Card`/`CardHeader`/`CardContent` in the upstream docs), so the CLI treats `card.tsx` as a file it owns and will overwrite by default.
+**How to avoid:** Always run `npx shadcn add chart --diff` first. If Card is in the diff, either (a) run the add in a scratch/throwaway directory and manually copy only `chart.tsx` into the repo, or (b) accept the overwrite and then immediately re-apply the project's semantic-token classes to the four Card subcomponents from git history — never accept the overwrite silently.
+**Warning signs:** After running any `shadcn add`, always `git diff src/components/ui/card.tsx` before committing — if it shows unexpected changes to a component not explicitly targeted, the install touched more files than intended.
 
-### Pitfall 2: No CLI flag sets base color — the UI-SPEC's "slate" choice needs a different mechanism
-**What goes wrong:** A plan step like `npx shadcn init --base-color slate` will fail — that flag does not exist in this CLI version.
-**Why it happens:** Confirmed by exhaustively grepping the unpacked `shadcn@4.21.0` package source for every registered `option("--...")` string — no `--base-color` or `--style` flag is present anywhere in the `init`/`add`/`migrate` command definitions.
-**How to avoid:** Pick one of three verified working paths: (a) hand-author `components.json` directly (`tailwind.baseColor: "slate"`) then run `shadcn add` (which reads, not re-prompts, the existing config — confirmed by the CLI's own error path: *"No components.json found. Run shadcn init first."*, i.e. `add` requires and trusts an existing file rather than regenerating one); (b) answer the interactive `init` prompt directly (`"Which color would you like to use as the base color?"`, choices include `slate`); (c) run `init` with defaults, then `npx shadcn migrate <name> --from neutral --to slate --yes` [VERIFIED: shadcn@4.21.0 dist/index.js — `migrate` command registers `-f/--from`/`-t/--to <name>`, "the base color or icon library to migrate from/to"].
-**Warning signs:** A plan step referencing a `--base-color` or `--style` CLI flag should be treated as a training-data hallucination and rewritten before execution.
+### Pitfall 2: AGENTS.md's `-b radix` directive doesn't apply to `add`
+**What goes wrong:** An executor following AGENTS.md literally might try `npx shadcn add select -b radix` and get a CLI error (unrecognized option) or simply have the flag silently ignored, wasting a task cycle.
+**Why it happens:** AGENTS.md was written from the `init` command's behavior (where `-b/--base` genuinely matters and defaults to `base` — Base UI — as of CLI 4.21.0) and over-generalized it to every shadcn invocation.
+**How to avoid:** Only pass `-b radix`/`--base radix` to `npx shadcn init` (if it is ever re-run). For every `npx shadcn add <component>` call, omit the flag entirely — verified live that `add` has no such option and already resolves to `radix-ui` by default in this repo's current `components.json`/lockfile state.
+**Warning signs:** A `command not found: -b` / "unknown option" style CLI error, or a flag that appears to have zero effect on the generated file's imports.
 
-### Pitfall 3: `tailwindcss-animate` is a stale/deprecated dependency for this stack
-**What goes wrong:** Installing `tailwindcss-animate` (the v3-era shadcn animation plugin) instead of `tw-animate-css`.
-**Why it happens:** shadcn's own current docs state it directly: *"We've deprecated `tailwindcss-animate` in favor of `tw-animate-css`"* [CITED: ui.shadcn.com/docs/tailwind-v4] — `tailwindcss-animate` was a `tailwind.config.js` plugin entry, which has no equivalent mechanism in a config-less v4 setup; `tw-animate-css` instead is a plain CSS import.
-**How to avoid:** Use `tw-animate-css`, imported directly in `globals.css` (e.g. `@import "tw-animate-css";`), not a plugin array (there is no `tailwind.config.js` to put one in).
-**Warning signs:** A `plugins: [require("tailwindcss-animate")]` line anywhere — there's no config file for it to live in.
+### Pitfall 3: Docs site becomes "one giant page dumping raw markdown" again
+**What goes wrong:** The rejected `docs/page.tsx` renders all four `.DESIGN.md` files verbatim inside a `<pre>` tag as unrendered plain text (confirmed by reading the current file) — this is very likely the literal thing the user meant by "a single page bunch of crap."
+**Why it happens:** `.DESIGN.md` content was piped through `readFileSync` and dropped into `<pre className="whitespace-pre-wrap">` without any markdown rendering, without per-component routing, and without a live-interactive-preview affordance beyond a few static variant renders.
+**How to avoid:** Per D-13, each component needs its own dedicated docs route (or clearly delineated section with real navigation, not just anchor links on one page) with: a rendered/styled presentation of the DESIGN.md content (not raw `<pre>` text), a live interactive preview users can actually toggle/interact with (not just a static grid of variant examples), and clear correct/incorrect usage callouts. Model the structure after ui.shadcn.com's own per-component doc pages (title, description, live preview tab, code tab, props/variant table).
+**Warning signs:** Any new docs page that pipes a `.DESIGN.md` file straight into a `<pre>` block is repeating the exact rejected pattern.
 
-### Pitfall 4: Generic web search can return confidently wrong details for this exact CLI version
-**What goes wrong:** An early WebFetch pass against `ui.shadcn.com/docs/components-json` during this research session returned a fabricated claim that `baseColor` options are `neutral | stone | zinc | mauve | olive | mist | taupe` — explicitly omitting `slate` — which would have wrongly told the planner D-08/UI-SPEC's `slate` choice is invalid.
-**Why it happens:** Small-model page summarization can hallucinate specifics, especially for fast-moving CLI tools with recent version churn (this is the exact "shape" the phase brief warned about).
-**How to avoid:** For any claim about *current* CLI flag/behavior specifics in this stack, cross-check against the actual installed/installable package source (`npm pack <pkg>@<version>` and grep the unpacked `dist/`) rather than trusting a single web fetch. This research session did exactly that and found `slate` **is** a valid, unchanged base color choice [VERIFIED: shadcn@4.21.0 dist/index.js — choices list includes `"slate","gray","zinc","neutral","stone"` alongside newer additions `"mauve","olive","mist","taupe"`].
-**Warning signs:** Any single-source web claim that directly contradicts an already-locked, human-reviewed UI-SPEC decision should trigger a source-of-truth re-check before it's allowed to override the lock.
+### Pitfall 4: Figma links alone don't produce fidelity — reiterating D-15 as an execution risk, not just a policy
+**What goes wrong:** Per CONTEXT.md's own history, giving Figma links to a downstream agent "did nothing" in previous attempts — components were built without ever actually inspecting the node's real spacing/radius/shadow/type values, producing visually-approximate-by-eye results the user rejected.
+**Why it happens:** Without a structural requirement, "check the Figma" is easy to skip or do superficially (glance at the design, not extract exact values).
+**How to avoid:** Every component-building task in the plan should have two explicit, separately-checkable steps: (1) a `get_metadata`/`get_design_context`/`get_screenshot` call against the specific node ID before writing code, with the extracted values recorded (even briefly) in the task's notes or the component's DESIGN.md; (2) a screenshot-diff step after building, comparing the rendered output against the Figma screenshot, before the task is marked complete.
+**Warning signs:** A component-building task with no Figma-node-ID reference in its own instructions, or a "done" component whose DESIGN.md doesn't mention which Figma node it was built from.
+
+### Pitfall 5: Introducing a second icon system by accident
+**What goes wrong:** The Home screen Figma node uses icon names from `fluent:`, `lucide-lab:`, and `hugeicons:` icon sets that don't map 1:1 onto the existing `frontend-design/design-system/icons.js` 40+-icon set — an executor might reach for `lucide-react` (which becomes available transitively once `chart` is added) as a shortcut, silently introducing a second icon system alongside the custom one D-09 already chose.
+**Why it happens:** `lucide-react` will already be present in `node_modules`/`package.json` once the chart component is added (see Standard Stack), making it a one-import-away temptation.
+**How to avoid:** For any icon referenced by the Figma Home screen that isn't already in `icons.js`, either add a matching custom SVG to `icons.js` (preferred, keeps one icon system) or explicitly flag the gap for the user/planner rather than quietly importing from `lucide-react`.
+**Warning signs:** Any new component importing from `"lucide-react"` directly, when `icons.js`'s `<Icon name="..."/>` pattern is the established convention.
 
 ## Code Examples
 
-### Non-interactive install sequence (recommended — see Primary recommendation)
+See Architecture Patterns above (Sparkline, Dual-Axis Chart, Toggle-Group) for the primary reusable snippets. Additional reference:
 
-```bash
-# Source: verified against shadcn@4.21.0 package source + Next.js 16 docs, this session
-npm install -D tailwindcss @tailwindcss/postcss
-
-cat > postcss.config.mjs << 'EOF'
-export default {
-  plugins: {
-    '@tailwindcss/postcss': {},
-  },
-}
-EOF
-
-# Hand-author components.json (avoids the missing --base-color flag entirely):
-cat > components.json << 'EOF'
-{
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
-  "rsc": true,
-  "tsx": true,
-  "tailwind": {
-    "config": "",
-    "css": "src/app/globals.css",
-    "baseColor": "slate",
-    "cssVariables": true
-  },
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
-  }
-}
-EOF
-
-npx shadcn@latest add button card badge input -b radix -y
-```
-
-### `@theme` block skeleton in `globals.css`
-
-```css
-/* Source: tailwindcss@4.3.3 theme.css structure, verified this session */
-@import "tailwindcss";
-@import "tw-animate-css";
-
-@theme {
-  /* paste the locked OKLCH values from 06-UI-SPEC.md's Color section here verbatim */
-}
+### shadcn ChartContainer + token wiring
+```tsx
+// Source: ui.shadcn.com/docs/components/chart (fetched 2026-09-27) — ChartConfig colors
+// reference CSS custom properties the same way this project's existing components do.
+const chartConfig = {
+  pulse: { label: "Pulse", color: "var(--color-brand)" },
+  spo2: { label: "SpO2", color: "var(--color-safe)" },
+} satisfies ChartConfig
 ```
 
 ## State of the Art
 
 | Old Approach | Current Approach | When Changed | Impact |
-|--------------|-------------------|---------------|--------|
-| `tailwind.config.js` + `@tailwind base/components/utilities` | `@theme { ... }` block + single `@import "tailwindcss"` | Tailwind v4 (Feb 2025) | This phase's entire DSYS-01 requirement is built on this change — no config file, ever |
-| shadcn CLI defaulting to Radix primitives | shadcn CLI 4.x defaulting to "Base UI", Radix now opt-in via `-b radix` | shadcn CLI v4 (2026) | Directly affects D-07 — see Pitfall #1 |
-| `tailwindcss-animate` (config-file plugin) | `tw-animate-css` (plain CSS import) | Alongside Tailwind v4 adoption | Affects any motion/skeleton-pulse utility classes the sample pages (D-10) use |
-| Webpack as Next.js default bundler | Turbopack as default for both `dev` and `build` | Next.js v16.0.0 | Confirms the phase's "compiles cleanly in a real `next build`" success criterion is being checked against Turbopack, not Webpack |
+|--------------|------------------|---------------|--------|
+| `shadcn-ui` CLI defaulting to Radix primitives | shadcn CLI 4.21.0 defaults `init` to Base UI; `add` has no base-library flag at all and resolves per-project via `components.json`/existing deps | Some point before 4.21.0 (exact version not verified this session) | AGENTS.md's blanket "-b radix on every add/init" guidance is half-correct — right for `init`, inapplicable to `add`. See Pitfall 2. |
+| `clsx` + `tailwind-merge` combo | `cn` npm package (github.com/shadcn-ui/cn) | Ownership transferred to shadcn-ui org starting v0.2.0 (per AGENTS.md, Sept 2026) | Already reflected in this repo (`package.json` has `cn` not `clsx`/`tailwind-merge`) — no action needed, just don't assume clsx-identical API when writing new component code. |
+| Tremor as the default "shadcn-adjacent" chart library | shadcn ships its own official `chart` component directly on Recharts | Ongoing — Tremor has been shifting toward "Tremor Raw" (copy-paste, non-npm) | Recharts-via-shadcn is now the more integrated, more current choice for this stack. |
 
 **Deprecated/outdated:**
-- `tailwind.config.js`, `@tailwind` directives, `theme()` CSS function — all superseded by `@theme`/native CSS variables in Tailwind v4.
-- `tailwindcss-animate` — superseded by `tw-animate-css` for shadcn + Tailwind v4 projects.
+- The original 06-UI-SPEC.md's Component Inventory table (written before Phase 6 first executed) is stale — it predates shadcn even being installed. Do not treat it as current; this RESEARCH.md and the live CLI probes above are the current source of truth for CLI behavior.
 
 ## Assumptions Log
 
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|---------------|
-| A1 | Hand-authoring `components.json` (vs. running interactive `init`) is accepted by `shadcn add` without complaint beyond the confirmed "requires an existing file" error path | Primary recommendation, Code Examples | Low — this was checked against the CLI source's error-message strings, not executed end-to-end in this repo; if wrong, the executor falls back to answering the interactive prompt instead (Pitfall #2, option b) |
-| A2 | The illustrative CVA `buttonVariants` code example's exact Tailwind class names (`bg-brand-fill`, etc.) will compile once the full `@theme` block from UI-SPEC is pasted in | Architecture Patterns, Pattern 3 | Low — token *names* are illustrative per the code block's own comment; UI-SPEC's Color section is the actual source of truth for the values, already checker-approved |
+| A1 | The 14 Figma node IDs listed in CONTEXT.md's canonical_refs (card types, button types, nav, graphs, toggle) each represent a genuinely distinct, reusable component rather than a one-off composition — this research did not independently re-verify each node via Figma MCP (no Figma MCP tool was available in this research session; CONTEXT.md's own D-15 spot-check of node `266:9257` is the only live-verified node this pass could rely on) | Standard Stack / Recommended Project Structure | If some nodes turn out to be near-duplicates or compositions, the planner may create more component files than are actually needed — mitigated by D-12's own explicit discretion clause allowing this to be flagged during planning |
+| A2 | The icon names quoted in CONTEXT.md (`fluent:smartwatch-dot-20-regular`, `lucide-lab:bottle-baby`, `hugeicons:baby-02`) accurately describe what's actually used in the Figma file — taken from CONTEXT.md verbatim, not independently re-confirmed against Figma this session | Common Pitfalls (Pitfall 5) | If the actual icon names differ, the "gap in icons.js" analysis may target the wrong icons; low risk since the mitigation (add missing icons to icons.js rather than importing lucide-react) is robust to exactly which icons are missing |
+| A3 | shadcn's `chart` registry entry's pinned `recharts@3.8.0` (vs. npm's current `3.10.1`) will not introduce a breaking API difference for the dual-axis/sparkline patterns shown in Code Examples | Standard Stack | Low risk — `YAxis`/`yAxisId`/`ResponsiveContainer` are long-stable Recharts APIs; if the registry's pin resolves to an older minor version, the shown patterns still apply |
 
-**If this table is empty:** N/A — two low-risk assumptions noted above; both are execution-order details, not design or dependency-legitimacy risks.
+**If this table is empty:** N/A — see rows above; all other CLI/package claims in this document were verified live this session via `npx shadcn --version`, `--help`, `--dry-run`, `--diff`, `npm view`, and the package-legitimacy seam.
 
 ## Open Questions
 
-1. **(RESOLVED — handled via fallback in 06-01 Task 2) Does `shadcn add -b radix` on a hand-authored `components.json` (no prior `init` run) actually succeed, or does it require an `init`-created marker beyond the file's existence?**
-   - What we know: The CLI's error path explicitly checks for `components.json`'s *existence*, not for an `init`-run flag inside it.
-   - What's unclear: Whether `add`'s dependency-installation step (Tailwind, CVA, Radix packages) assumes `init` already ran, or performs a full fresh install when it detects those deps are missing from `package.json`.
-   - Recommendation: The plan should run this as its first task and check output before committing to the rest of the install sequence in code examples above; if it errors, fall back to interactive `init` with `-b radix` and manually answer the base-color prompt with `slate`.
-   - RESOLVED: `06-01-PLAN.md` Task 2's `<action>` already encodes this exact fallback (attempt `shadcn add -b radix`; on an error expecting a prior `init`, run `npx shadcn@4.21.0 init -b radix -y` first, then retry) — execution will not stall on this uncertainty regardless of which path the CLI takes.
+1. **Which of the 6 Figma "card type" nodes are genuinely distinct components vs. compositions of the existing `Card` + new primitives?**
+   - What we know: CONTEXT.md's own spot-check of the Home screen node already identifies at least 3 distinct patterns (status hero card, 3-column vital stat card, instruction-row card) among the 6 listed nodes.
+   - What's unclear: Whether the remaining 3 card-type nodes (`203-13605`, `203-13559`, `203-11669`) are additional genuinely distinct types or variations reachable via existing Card composition.
+   - Recommendation: The planner should schedule a Figma-inspection task per remaining card node before committing to exactly 6 new Card-family component files; D-12 explicitly permits collapsing this number.
+
+2. **Exact prop/variant names for the new form fields and progress indicator.**
+   - What we know: D-12 lists the components (select, textarea, checkbox, radio, switch, progress) but explicitly defers exact naming to Figma-informed discretion, not the user (who couldn't articulate exact names).
+   - What's unclear: Whether the battery/progress indicator needs a distinct "battery" visual treatment (segmented/notched, matching a physical battery icon) vs. a generic rounded progress bar/ring — this depends on what the Home screen's battery icon area actually looks like in Figma.
+   - Recommendation: Treat as a D-15-covered per-component Figma extraction task; name the component `progress` (shadcn-aligned) with a `variant="battery" | "bar" | "ring"` (or similar) CVA axis if the Figma frame shows more than one visual treatment is actually needed.
 
 ## Environment Availability
 
 | Dependency | Required By | Available | Version | Fallback |
-|------------|--------------|-----------|---------|----------|
-| Node.js | shadcn CLI (`engines.node >=20.18.1`), Next.js build | ✓ | v25.8.2 [VERIFIED: `node --version`] | — |
-| npm | package installs | ✓ | 11.11.1 [VERIFIED: `npm --version`] | — |
-| git | commits, `shadcn add` overwrite-safety checks | ✓ | 2.52.0 [VERIFIED: `git --version`] | — |
-| Internet access to `registry.npmjs.org` / `ui.shadcn.com` | package installs, shadcn component registry fetches | ✓ (used this session for `npm pack`/`npm view`) | — | — |
+|------------|------------|-----------|---------|----------|
+| shadcn CLI (via `npx`) | All new component scaffolding | ✓ | `4.21.0` (verified via `npx shadcn --version`) | — |
+| `recharts` (npm) | Chart/sparkline components | ✓ (installable, not yet in `package.json`) | `3.10.1` latest / `3.8.0` shadcn-pinned | — |
+| Figma MCP tools (`get_design_context`/`get_metadata`/`get_screenshot`) | D-15's per-component fidelity verification | Not available to this research agent's toolset this session — no `mcp__figma__*` tool was exposed to this agent, though CONTEXT.md confirms it was available and spot-checked during the prior discuss-phase session | — | The executor/planner session (which does have Figma MCP tool access per the project's tool configuration) must perform D-15's extraction step; this research could not independently re-verify additional nodes beyond what CONTEXT.md already recorded |
+| Node.js / npm | Package installs, CLI dry-runs | ✓ | Node observed working this session | — |
 
-**Missing dependencies with no fallback:** none.
+**Missing dependencies with no fallback:** none — Figma MCP unavailability is scoped to this research session's toolset only, not a project-wide gap; the execution environment for planning/building does have it per D-15's own successful spot-check.
 
-**Missing dependencies with fallback:** none — all required tooling already present in this environment.
+**Missing dependencies with fallback:** none beyond the above.
 
 ## Validation Architecture
 
 ### Test Framework
-
 | Property | Value |
 |----------|-------|
-| Framework | Vitest 4.1.11 [VERIFIED: package.json devDependencies] |
-| Config file | `vitest.config.ts` — `environment: "node"` [VERIFIED: vitest.config.ts:6-7, quoted: `test: { environment: "node", ... }`], **no jsdom/browser environment or component-testing library (`@testing-library/react`) currently installed** |
-| Quick run command | `npm run build` (fastest real signal for DSYS-01's "compiles cleanly in a real `next build`" criterion) |
-| Full suite command | `npm test` (existing Vitest backend suite — unaffected by this phase, but must stay green) |
+| Framework | Vitest 4.1.11 (`vitest.config.ts`, `environment: "node"`) |
+| Config file | `vitest.config.ts` |
+| Quick run command | `npm test -- tests/<file>.test.ts` |
+| Full suite command | `npm test` |
 
 ### Phase Requirements → Test Map
-
 | Req ID | Behavior | Test Type | Automated Command | File Exists? |
-|--------|----------|-----------|---------------------|--------------|
-| DSYS-01 | `@theme` token set compiles cleanly in `next build` (not just dev) | build/smoke | `npm run build` | ✅ (existing `next build` script) |
-| DSYS-02 | ≥3 sample pages render real component states | manual-only (visual UAT) + smoke | `next build` (static analysis catches route/type errors); human review of rendered pages is the actual validation checkpoint D-02 specifies | ❌ Wave 0 — sample page files don't exist yet, this phase creates them |
-| DSYS-03 | Same token set demonstrably reused across both visual-language sample pages | manual-only (code review) | grep-based check: confirm only one `@theme` block exists in the repo (`grep -r "@theme" src/`) | ❌ Wave 0 — no automated assertion exists; recommend a one-line check script over introducing RTL infra given the project's 2-day time budget (see STATE.md) |
+|--------|----------|-----------|-------------------|-------------|
+| DSYS-01 | `@theme` token set compiles cleanly in a real `next build` | build/smoke | `npm run build` | ✅ (existing `package.json` script) |
+| DSYS-02 | ≥3 (now 4) sample pages render without runtime error and exercise real component states | smoke/visual | `npm run build` (compile check) + manual/visual UAT (component rendering is inherently a visual-quality judgment, not unit-testable) | ❌ Wave 0 — no automated visual-regression tooling exists in this repo; rely on the D-15 screenshot-diff mechanism as the closest available automated-adjacent check |
+| DSYS-03 | Same token set demonstrably reused across caregiver + parent visual language | manual/structural review | grep-based check: no new `--color-*`/`--radius-*` token is added outside the existing semantic layer during this phase | ❌ Wave 0 — no existing automated check; add a lightweight `grep -c "^\s*--color-" src/app/globals.css` before/after comparison as a plan verification step if desired |
 
 ### Sampling Rate
-
-- **Per task commit:** `npm run build` (fast, direct signal for this phase's specific success criteria — a full Vitest run doesn't touch anything this phase changes)
-- **Per wave merge:** `npm run build && npm test` (confirm the existing backend suite hasn't regressed from any shared-file touches, e.g. `tsconfig.json`)
-- **Phase gate:** `npm run build` green + the D-02 human-reviewed visual validation checkpoint, before `/gsd-verify-work`
+- **Per task commit:** `npm run build` (Next.js/Turbopack compiles the `@theme` block and every new route/component — this is the primary regression signal available in this repo, matching how Phase 06-01 through 06-05 already verified DSYS-01)
+- **Per wave merge:** `npm run build` + manual visual check of the affected `/design-system/*` route
+- **Phase gate:** Full `npm run build` green, plus a full manual walkthrough of all 4 sample pages and the docs site before `/gsd-verify-work`, given the phase's deliverable is fundamentally visual/UX quality that automated tests cannot capture
 
 ### Wave 0 Gaps
-
-- [ ] `src/app/design-system/*` sample page route files — don't exist yet, this phase creates them (not a pre-existing gap, just sequencing)
-- [ ] No component-level unit test framework (`@testing-library/react` + jsdom) exists in this repo. **Recommendation: do not add one this phase.** Given the explicit 2-day time budget flagged in STATE.md and this phase's success criteria being about compiled output + human visual review (not component logic), introducing RTL/jsdom infrastructure is scope the phase doesn't need — `next build` + the D-02 human checkpoint already cover what DSYS-01/02/03 actually require.
-
-*(No other gaps: existing Vitest config's `node` environment is sufficient for the "does it build" signal this phase needs; it is not being asked to unit-test component render output.)*
+- No visual-regression testing tool exists in this repo (no Playwright/Chromatic/etc.) — the D-15 Figma-screenshot-diff mechanism is the closest available substitute and should be treated as this phase's primary "test" for visual fidelity, performed manually per component.
+- No dedicated test file conventions exist for React component rendering (`tests/*.test.ts` currently covers only backend/API logic per `.planning/codebase/TESTING.md`) — introducing component-level Vitest+Testing Library tests is possible but not currently established; recommend NOT introducing a new test framework mid-rework unless the user asks, since the phase's actual risk (visual quality) isn't well-served by DOM-assertion tests anyway.
 
 ## Security Domain
 
 ### Applicable ASVS Categories
 
 | ASVS Category | Applies | Standard Control |
-|----------------|---------|--------------------|
-| V2 Authentication | no | This phase has no auth surface — Input/Button are presentational shells only, not wired to any submission/auth flow |
-| V3 Session Management | no | No session state touched by this phase |
-| V4 Access Control | no | No data or routes requiring access control are introduced |
-| V5 Input Validation | partial | `Input`'s error-state visual treatment exists this phase, but no actual validation *logic* is wired (per UI-SPEC's own "Copywriting Contract" — no real form submission exists yet); flag for the phase that wires real forms |
-| V6 Cryptography | no | Nothing in this phase touches cryptographic material |
+|---------------|---------|-----------------|
+| V2 Authentication | No | Design-system phase has no auth surface |
+| V3 Session Management | No | N/A |
+| V4 Access Control | No | N/A |
+| V5 Input Validation | Marginal | New form-field components (select/textarea/checkbox/radio/switch) are presentational primitives only this phase — no submission/validation logic is in scope; any real validation (zod schemas) is Phase 7's job when these fields get wired to real forms |
+| V6 Cryptography | No | N/A |
 
 ### Known Threat Patterns for this stack
-
-| Pattern | STRIDE | Standard Mitigation |
-|---------|--------|-----------------------|
-| Rendering `icons.js`'s raw SVG-string content via `dangerouslySetInnerHTML` in the ported React `<Icon>` component | Tampering (injection-shaped, even though the source is static/trusted) | Parse the `SepCareIcons` object's path strings into real JSX `<path>`/`<circle>`/`<line>` elements (a small codegen or a one-time manual port) instead of injecting raw HTML strings at runtime — the source is 100% static design-asset data today, but `dangerouslySetInnerHTML` is a pattern worth never establishing as precedent in this codebase, since future icon additions from less-trusted sources would inherit the same (mis)pattern |
+None specific to this phase — it produces no new data-handling surface (no new API routes, no new persisted data). The one general web-hygiene note: Recharts' `ResponsiveContainer`/SVG rendering does not execute arbitrary user-controlled markup in this phase's usage (all chart data is component props from mock/local data, not user input), so no XSS-relevant pattern applies yet.
 
 ## Sources
 
-### Primary (HIGH confidence)
-
-- `node_modules/next/dist/docs/01-app/03-api-reference/08-turbopack.md` (this repo's installed `next@16.3.5`) — Turbopack default-bundler status, PostCSS support
-- `node_modules/next/dist/docs/01-app/01-getting-started/11-css.md` (this repo's installed `next@16.3.5`) — official Tailwind v4 install steps for Next.js
-- `node_modules/next/dist/docs/01-app/03-api-reference/05-config/01-next-config-js/turbopackLocalPostcssConfig.md` — per-directory PostCSS resolution (confirmed not needed for this phase's single-root config)
-- Unpacked `shadcn@4.21.0` npm tarball (`npm pack shadcn@4.21.0`, extracted and grepped `dist/index.js` + `dist/chunk-*.js`) — CLI flag list, `--base` default resolution, base-color choices, `migrate` command, registry style-path resolution
-- Unpacked `tailwindcss@4.3.3` npm tarball (`npm pack tailwindcss@4.3.3`, read `theme.css`/`index.css`) — `@theme default { ... }` structure, `--spacing` primitive, paired `--text-*--line-height` syntax, full default color palette including `mauve`/`olive`/`mist`/`taupe`
-- `frontend-design/design-system/icons.js` (read directly, lines 1-60 and 64-66, 90-115) — exact `SepCareIcons` object shape, `renderSepCareIcon()` implementation, confirmed `safe`/`caution`/`critical` icon keys exist
-- `frontend-design/design-system/DESIGN-SYSTEM.md` (read directly, lines quoted) — "Never communicate status using color alone" and 70/20/10 rules
-- `src/app/layout.tsx`, `src/app/globals.css`, `tsconfig.json` (read directly) — current pre-Phase-6 state of the files this phase modifies
-- `npm view <pkg> version` / `npm view <pkg> peerDependencies` for all Standard Stack packages — live registry check, 2026-09-26
+### Primary (HIGH confidence — live-verified this session)
+- `npx shadcn --version` / `--help` / `add --help` / `init --help` — CLI 4.21.0 flag surface, verified live
+- `npx shadcn add <component> --dry-run` for: select, textarea, checkbox, radio-group, switch, progress, tabs, dropdown-menu, tooltip, dialog, sonner, skeleton, avatar, navigation-menu, separator, toggle, toggle-group, chart — verified live, 2026-09-27
+- `npx shadcn add chart --diff` — verified the Card-overwrite finding live, 2026-09-27
+- `npx shadcn search @shadcn` — full 471-item registry list, verified live, 2026-09-27
+- `npm view recharts version` / `peerDependencies` / `dist.unpackedSize`; `npm view @tremor/react version`; `npm view lucide-react`, `radix-ui`, `class-variance-authority`, `tw-animate-css`, `cn` — verified live via the package-legitimacy seam, 2026-09-27
+- `node_modules/next/dist/docs/01-app/02-guides/server-and-client-boundary.md` — read directly this session, current-repo Next.js 16 docs
+- Direct reads of `src/app/globals.css`, `src/components/ui/{button,card,badge,input}.tsx`, `button.DESIGN.md`, `src/app/design-system/docs/page.tsx`, `src/components/page-shell.tsx`, `frontend-design/design-system/icons.js` — this session
 
 ### Secondary (MEDIUM confidence)
-
-- `ui.shadcn.com/docs/tailwind-v4` (WebFetch) — `tailwindcss-animate` → `tw-animate-css` deprecation, `@theme inline` pattern
-- WebSearch results on Tailwind v4 vs v3 deprecated syntax (`@tailwind` directives, important-marker position, `@utility` API) — cross-checked against multiple independent sources, consistent
+- `ui.shadcn.com/docs/components/chart` (fetched via WebFetch this session) — ChartContainer/ChartConfig API, `'use client'` requirement confirmation
+- Recharts community sources (GitHub issues #2538, #174) — `yAxisId` dual-axis pattern confirmation via WebSearch
+- CONTEXT.md's own D-16 preliminary websearch citations (aufaitux.com, fuselabcreative.com, eleken.co) — carried forward, not independently re-verified this session
 
 ### Tertiary (LOW confidence)
-
-- `ui.shadcn.com/docs/components-json` (WebFetch) — **partially refuted this session**; its claim that `baseColor` options are `neutral | stone | zinc | mauve | olive | mist | taupe` (omitting `slate`) was contradicted by direct package-source inspection. Retained in Sources only as a documented example of why this phase's research leaned on package-source verification over single-source web fetches (see Pitfall #4).
+- None retained — all WebSearch-only findings without an authoritative cross-check were either dropped or explicitly logged in the Assumptions Log above.
 
 ## Metadata
 
 **Confidence breakdown:**
-- Standard stack: HIGH — every version verified live against npm registry this session
-- Architecture (Tailwind v4 `@theme` + Turbopack/PostCSS wiring): HIGH — verified against the actually-installed `next@16.3.5`'s own bundled docs and the actual `tailwindcss@4.3.3` package source, not just web search
-- shadcn CLI mechanics (`-b` default, missing `--base-color` flag, `migrate` command): HIGH — verified by unpacking and grepping the exact pinned CLI version (4.21.0)'s own source
-- Pitfalls: HIGH — each pitfall traces to a direct source-code or source-doc quote, not inference
-- Security domain: MEDIUM — mostly "not applicable" reasoning for a presentational-only phase; the one flagged pattern (`dangerouslySetInnerHTML`) is a judgment call, not a verified vulnerability
+- Standard stack (shadcn CLI behavior, Recharts choice): HIGH — every claim was verified live against the installed CLI/registry/npm this session, not taken from training data
+- Architecture (RSC/client boundary, chart composition patterns): HIGH for the Next.js boundary rules (read directly from the installed `next` package's own docs), MEDIUM for the specific dual-axis code pattern (community-sourced, not an official Recharts doc page — the direct docs URL 404'd)
+- Pitfalls (Card overwrite, docs-page quality, `-b radix` scope): HIGH — each is a direct, reproduced finding from this session's own tool calls, not inference
+- Figma node inventory / component-boundary judgment calls: LOW-MEDIUM — this research could not call Figma MCP tools directly (not exposed to this agent); relies on CONTEXT.md's own prior spot-check and naming conventions
 
-**Research date:** 2026-09-26
-**Valid until:** 7 days (fast-moving stack — shadcn CLI and Tailwind v4 are both under active, frequent-release development; re-verify package versions and CLI flags if planning is delayed beyond this window)
-
-**Revision note (2026-09-26):** Per a checkpoint-time user decision made before any installs in this phase ran, `clsx`+`tailwind-merge` were swapped for the official shadcn-ui `cn` package (github.com/shadcn-ui/cn) throughout this document's Standard Stack and Package Legitimacy Audit sections. All `cn`-specific facts above (repo creation date, star count, download count, version/name-reuse history) were verified live against the npm registry and GitHub API in the same session as this revision.
+**Research date:** 2026-09-27
+**Valid until:** ~14 days (shadcn CLI and Recharts version pins move quickly; re-verify `npx shadcn --version` and `npm view recharts version` before executing if more than 2 weeks elapse)
