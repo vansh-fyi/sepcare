@@ -61,6 +61,16 @@ export default function NestedDesignSystemPage() {
             <Icon name="signal" className="size-5" />
             Connect Device
           </Button>
+          <Button variant="cta-critical">
+            <Icon name="phone" className="size-5" />
+            Call Ambulance
+          </Button>
+          <Button variant="icon-outline" aria-label="Back">
+            <Icon name="back" className="size-6" />
+          </Button>
+          <Button variant="icon-filled" aria-label="Sort">
+            <Icon name="sort" className="size-6" />
+          </Button>
         </CardContent>
       </Card>
     </PageShell>

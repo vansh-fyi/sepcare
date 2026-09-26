@@ -124,6 +124,16 @@
      color-utility auto-generation and is referenced via bg-[image:var(--gradient-cta)]. */
   --radius-cta: 10px;
   --gradient-cta: linear-gradient(127deg, var(--color-pink-500) 2.3%, var(--color-pink-400) 94.9%);
+  --gradient-cta-critical: linear-gradient(135deg, var(--color-pink-600) 2.3%, var(--color-pink-500) 94.9%);
+
+  /* Button archetype C — filled dark icon button (D-12 Figma node 266-9285).
+     12px radius is distinct from both --radius-btn (14px) and --radius-cta (10px).
+     --color-icon-fill-dark aliases neutral-700 rather than reusing
+     --color-text-secondary directly — same current hex, but a distinct semantic
+     role (icon-button fill vs. secondary text color) so the two can diverge later
+     without coupling. */
+  --radius-icon-btn: 12px;
+  --color-icon-fill-dark: var(--color-neutral-700);
 
   --shadow-card: 0 4px 20px rgba(10, 10, 17, 0.06);
   --shadow-floating: 0 8px 30px rgba(10, 10, 17, 0.10);
