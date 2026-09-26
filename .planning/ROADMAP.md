@@ -71,7 +71,7 @@ Plans:
   3. At least 3 sample HTML pages exercise real component states (e.g. Green/Amber/Red status, empty/loading, nested component variants) using only the token set, and this validation checkpoint is reviewed before full prototype work starts
   4. The same token set is demonstrably reused across sample pages representing both the caregiver and parent visual language — one shared source, not two
 
-**Plans**: 4 plans
+**Plans**: 5 plans
 **UI hint**: yes
 
 Plans:
@@ -90,6 +90,10 @@ Plans:
 **Wave 4** *(blocked on Wave 3 completion)*
 
 - [ ] 06-04-PLAN.md — Build the 3 D-10 sample validation pages (states / empty-loading / nested) + final DSYS-03 regression + full test-suite phase gate
+
+**Wave 5** *(blocked on Wave 4 completion — additive, user-requested)*
+
+- [ ] 06-05-PLAN.md — Design-system docs page (`/design-system/docs`): live-parsed token summary + all 4 component DESIGN.md docs, presented in-app (additive scope, no new REQ-ID)
 
 **UI hint**: yes
 
