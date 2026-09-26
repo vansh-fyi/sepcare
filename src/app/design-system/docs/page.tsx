@@ -7,9 +7,11 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
  * beyond DSYS-01/02/03 (not a locked roadmap requirement). Presents the
  * artifacts Plans 06-01 through 06-04 already produced: the live compiled
  * @theme token set (color/typography), parsed straight from globals.css at
- * request time, plus the locked Spacing Scale — so the team can see the
- * design system's current token state on one page without opening
- * globals.css by hand.
+ * request time, plus the locked Spacing Scale, all four component
+ * DESIGN.md docs (read verbatim, never re-authored), and links to the
+ * three existing sample pages — so the team can see the whole design
+ * system's current state on one page without opening five separate files
+ * by hand.
  */
 
 const GLOBALS_CSS_PATH = join(process.cwd(), "src/app/globals.css");
@@ -170,10 +172,64 @@ const SPACING_SCALE: { token: string; value: string; usage: string }[] = [
   },
 ];
 
+// The four component DESIGN.md files this page renders verbatim — read live
+// from src/components/ui/*.DESIGN.md, never re-authored or paraphrased into
+// a second location. Each readFileSync call below uses a fully static,
+// literal path (not built via string interpolation or dynamic property
+// lookup) so Next.js's build-time file tracer can scope each read to its
+// single target file rather than tracing the whole project into the
+// deployment output — relevant on this project's Vercel free-tier hosting.
+interface ComponentDoc {
+  name: "button" | "card" | "badge" | "input";
+  content: string;
+}
+
+function readComponentDocs(): ComponentDoc[] {
+  return [
+    {
+      name: "button",
+      content: readFileSync(
+        join(process.cwd(), "src/components/ui/button.DESIGN.md"),
+        "utf-8",
+      ),
+    },
+    {
+      name: "card",
+      content: readFileSync(
+        join(process.cwd(), "src/components/ui/card.DESIGN.md"),
+        "utf-8",
+      ),
+    },
+    {
+      name: "badge",
+      content: readFileSync(
+        join(process.cwd(), "src/components/ui/badge.DESIGN.md"),
+        "utf-8",
+      ),
+    },
+    {
+      name: "input",
+      content: readFileSync(
+        join(process.cwd(), "src/components/ui/input.DESIGN.md"),
+        "utf-8",
+      ),
+    },
+  ];
+}
+
+// Outbound-only links to the existing D-10 sample pages (Plan 06-04) —
+// read-only references, no changes to any of these routes.
+const SAMPLE_PAGES: { href: string; label: string }[] = [
+  { href: "/design-system/states", label: "States (Safe/Caution/Critical)" },
+  { href: "/design-system/empty-loading", label: "Empty + Loading" },
+  { href: "/design-system/nested", label: "Nested composition" },
+];
+
 export default function DesignSystemDocsPage() {
   const themeBlock = readThemeBlock();
   const colorGroups = groupColorTokens(themeBlock);
   const typographyRoles = parseTypographyRoles(themeBlock);
+  const componentDocs = readComponentDocs();
 
   return (
     <div className="flex flex-col gap-8 p-8">
@@ -275,6 +331,48 @@ export default function DesignSystemDocsPage() {
               ))}
             </tbody>
           </table>
+        </CardContent>
+      </Card>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-heading font-semibold text-text">
+          Component Reference
+        </h2>
+        {componentDocs.map((doc) => (
+          <Card key={doc.name}>
+            <CardHeader>
+              <h3 className="text-label font-semibold text-text capitalize">
+                {doc.name}
+              </h3>
+            </CardHeader>
+            <CardContent>
+              <pre className="whitespace-pre-wrap break-words text-body text-text">
+                {doc.content}
+              </pre>
+            </CardContent>
+          </Card>
+        ))}
+      </section>
+
+      <Card>
+        <CardHeader>
+          <h2 className="text-heading font-semibold text-text">
+            Sample Pages
+          </h2>
+        </CardHeader>
+        <CardContent>
+          <ul className="flex flex-col gap-2">
+            {SAMPLE_PAGES.map((page) => (
+              <li key={page.href}>
+                <a
+                  href={page.href}
+                  className="text-body text-brand underline-offset-2 hover:underline"
+                >
+                  {page.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </CardContent>
       </Card>
     </div>
