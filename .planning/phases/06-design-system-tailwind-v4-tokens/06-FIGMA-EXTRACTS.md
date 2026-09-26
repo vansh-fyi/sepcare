@@ -89,4 +89,99 @@ a small `variant`/`size` axis on the existing Button (or a thin wrapper) is reas
 
 ---
 
+## Card-family nodes (06-07 — Card + Item)
+
+**Finding: all 6 nodes are genuinely distinct card types** — none collapse into a shared
+generic `Card` variant prop; each has a different content shape. Common ground across all 6:
+white (or gradient) bg, `border-radius: 24px`, `padding: 16px`, `gap: 16px` between
+icon-tile and text block, drop-shadow soft (`0px 2px 8px`, tint varies).
+
+### Node `266:9323` — Status Hero Card ("Baby is Resting Safely")
+- Icon tile: 72px, `rounded-16`, green gradient 135deg `rgb(1,161,142)`→`rgb(39,228,208)`
+  (green-700→green-500), centered 50px icon
+- Title: 16px Bold "Plus Jakarta Sans", color `#222737` (neutral-800)
+- Subtitle: 14px Regular, color `#7b82a0` (a muted blue-gray, close to but not exactly
+  `--color-neutral-500` — check against existing tokens, may need a new subtle-muted token)
+- Shadow: `0px 2px 8px rgba(208,241,237,0.5)` (green-tinted, not plain neutral)
+- Layout: icon left, text block right, single row
+
+### Node `266:9387` — Instruction Row Card ("Continue Regular Feeding")
+- Icon tile: 48px, `rounded-16`, flat neutral-100 bg (`#f5f5f8`), 20px icon centered
+- Title: 14px Bold, color neutral-800
+- Subtitle: 12px Regular, color `#9aa0af` (neutral-400)
+- Shadow: `0px 2px 8px rgba(0,0,0,0.05)` (plain neutral, not tinted)
+
+### Node `266:9344` — Vital Stat Card (Pulse/Temp/Activity — matches earlier `HeartWaveform` spot-check)
+- Full-bleed gradient background (NOT white card + icon tile — the whole card is the
+  gradient), 132.5deg `rgb(37,99,235)`→`rgb(59,130,246)` (blue-500→blue-400) for the Pulse
+  variant specifically — other vitals (Temp=red/pink gradient per earlier screenshot,
+  Activity=green/teal gradient) follow the same pattern with their respective status hue
+- `rounded-24`, `padding: 16px`, content vertically split: label+icon row top, sparkline
+  middle (`HeartWaveform`, 76×26px), big number+unit row bottom
+- Label: 14px SemiBold, white
+- Number: 21px Inter Extra Bold, white; unit: 10px Inter Medium, white
+- This IS the vitals/sparkline card the D-14 Home-screen proof needs — sparkline sits at a
+  fixed 76×26px slot within it
+
+### Node `203:13605` — Metric Row Card ("Perfusion Index")
+- Same row-card shape as `266:9387` (Instruction Row) but icon tile bg is green-100
+  (`#d0f1ed`) instead of flat neutral-100 — icon itself is `ph:drop-bold`
+- Title: 14px Bold neutral-800, subtitle: 12px Regular neutral-500 (`#808699` — NOT the same
+  muted color as the hero card's `#7b82a0`, and NOT neutral-400 either — check against
+  `--color-neutral-500` in globals.css, it's an exact match: `#808699`)
+- Shadow: `0px 2px 8px rgba(0,0,0,0.05)` (plain, like the instruction row)
+
+### Node `203:13559` — Device Status Card (no progress bar)
+- Icon tile: 72px, `rounded-16`, gradient-to-b pink-500→pink-300 (top to bottom, NOT the
+  same diagonal-gradient direction as the CTA buttons), 36px icon (`fluent:smartwatch-dot-20-regular`)
+- Title: 20px Bold neutral-800 ("Device-SKU-1234")
+- Subtitle: 12px Regular neutral-400, with "SKU-1234" portion bold within the same line
+- Shadow: `0px 2px 8px var(--neutral-200)` (uses the token directly, not an rgba literal)
+
+### Node `203:11669` — Device Status Card WITH progress bar (also the Progress/Battery-indicator spec, D-16's open question resolved)
+- Same shape as `203:13559` plus: an edit-pencil icon (`tabler:edit`, 20px) next to the
+  title, and — **this is the battery/progress indicator visual (D-12/D-16):**
+  - Track: `height: 6px`, `border-radius: 5px`, bg green-100 (`#d0f1ed`)
+  - Fill: same height/radius, bg green-600 (`#08d7bf`), width driven by percentage
+    (88.27% width shown for a "90%" label — i.e. the fill bar's rendered width isn't
+    literally the percentage number, there's a small track inset; don't hardcode 88.27%,
+    compute width from the percentage prop)
+  - Label: 10px Bold, green-700 (`#01a18e`), e.g. "90%"
+  - **Disposition: this is a generic horizontal progress bar, not a battery-shaped/notched
+    icon.** Name the component `progress` (shadcn-aligned, matches D-16's recommendation)
+    with a percentage-driven fill; a separate `battery-indicator` component is likely
+    unnecessary unless another Figma frame shows an actual battery-glyph treatment — none
+    of the 6 card nodes show one. Flag this to the user/planner if a dedicated battery icon
+    treatment turns out to be needed elsewhere.
+
+---
+
+## Nav-family nodes (06-10 — NavLink + NavBar)
+
+### Node `279:220`-area — NavLink component (2 states: "Open"/active and "Deselected"/inactive)
+- **Active ("Open") state:** pill, `h-44px`, `rounded-10`, `px-10`, gradient background
+  116deg `rgb(248,113,113)`→`rgb(249,141,141)` (pink-500→pink-400) — note this is a
+  DIFFERENT angle (116deg) from the Button `cta` gradient (127deg) despite using the same
+  two color stops; keep them as distinct token values, don't collapse into one shared
+  gradient token. Drop-shadow `0px 2px 2px neutral-200`. Content: 20px icon (white) + label
+  "Home" 12px Bold white. Below the pill: a `5px`-tall, full-width, `rounded-5` indicator bar,
+  gradient-to-top pink-300→pink-500.
+- **Inactive ("Deselected") state:** white bg, `1px solid neutral-100` border, same
+  `h-44px`/`rounded-10`/`px-10` shape, icon only (no label) in neutral gray. Indicator bar
+  below: flat neutral-100, no gradient.
+- Confirms **D-17**: active nav state uses the pink/critical gradient family, exactly as the
+  user specified — do not change to blue.
+
+### Node `279:320` — NavBar (bottom tab bar)
+- Outer container: white bg, `rounded-20`, `px-36`, drop-shadow **upward**
+  (`0px -2px 2px neutral-200` — negative Y offset, shadow casts above the bar since it sits
+  at the screen bottom), fixed width `375px` (mobile viewport), `py-16` inner row
+- Contains exactly 4 `NavLink` instances in a row, evenly spaced (`flex-1` each): Home,
+  Vitals, Stats, Settings — exactly ONE is ever in the "Open"/active state at a time, driven
+  by current route; the other 3 render "Deselected". Labels are route-specific ("Home",
+  "Vitals", "Stats", "Settings") — build `NavBar` to accept a `currentRoute`/`active` prop
+  rather than hardcoding which tab is active.
+
+---
+
 *(Additional node extractions will be appended here as later plans in this phase are dispatched.)*
