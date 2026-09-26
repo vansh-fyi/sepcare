@@ -71,29 +71,58 @@ Plans:
   3. At least 3 sample HTML pages exercise real component states (e.g. Green/Amber/Red status, empty/loading, nested component variants) using only the token set, and this validation checkpoint is reviewed before full prototype work starts
   4. The same token set is demonstrably reused across sample pages representing both the caregiver and parent visual language — one shared source, not two
 
-**Plans**: 5/5 plans executed
+**Plans**: 0/16 plans executed (rework, D-12..D-17 — supersedes the original 5-plan execution below,
+kept for history with `status: superseded` in their own frontmatter, not deleted)
 **UI hint**: yes
 
-Plans:
+Superseded (original narrow-scope execution, rejected by user 2026-09-27 — "everything looks so
+[expletive] horrible... the only thing that is correct is the colours"):
+
+- [x] ~~06-01-PLAN.md~~ — superseded — Tailwind v4 `@theme` foundation tracer + locked token set (token *values* survive unchanged per D-03; superseded by 06-06-PLAN.md for the component layer)
+- [x] ~~06-02-PLAN.md~~ — superseded — Install Card/Badge/Input via shadcn CLI + port `icons.js` (superseded by 06-07/06-08/06-09-PLAN.md)
+- [x] ~~06-03-PLAN.md~~ — superseded — Restyle all 4 components to D-08 variant contracts (superseded by 06-06/06-07/06-08/06-09-PLAN.md)
+- [x] ~~06-04-PLAN.md~~ — superseded — Build the 3 D-10 sample validation pages (superseded by 06-19/06-20-PLAN.md)
+- [x] ~~06-05-PLAN.md~~ — superseded — Design-system docs page (superseded by 06-11/06-16/06-17/06-18-PLAN.md)
+
+Plans (rework, D-12..D-17 — expanded component set, first-class docs site, Home-proof page,
+mandatory per-component Figma-verification):
+
 **Wave 1**
 
-- [x] 06-01-PLAN.md — Tailwind v4 `@theme` foundation: tracer (one token → rendered Radix Button → green `next build`) + full locked token set + Inter font swap
+- [ ] 06-06-PLAN.md — TRACER: Figma-verify + reconcile Button's full variant set end-to-end (proves the D-15 mechanism before it repeats ~15 more times)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [x] 06-02-PLAN.md — Install Card/Badge/Input via shadcn CLI (`-b radix`) + port `icons.js` to a real React `Icon` component
+- [ ] 06-07-PLAN.md — Card restyle + Item primitive + resolve the 6-node Card Type Map
+- [ ] 06-08-PLAN.md — Badge + Progress/BatteryIndicator + ToggleGroup
+- [ ] 06-09-PLAN.md — Input restyle + Label + Field wrapper family
+- [ ] 06-10-PLAN.md — NavLink + NavBar (D-17 nav-color resolution) + `--radius-nav-bar` token
+- [ ] 06-11-PLAN.md — Docs site sidebar shell + Colors/Typography reference routes (replaces the rejected single-scroll docs page)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [x] 06-03-PLAN.md — Restyle all 4 components to their exact D-08 variant contracts + author a DESIGN.md per component
+- [ ] 06-12-PLAN.md — Select + Textarea (Field-wrapped)
+- [ ] 06-13-PLAN.md — Checkbox + RadioGroup + Switch (Field-wrapped)
+- [ ] 06-14-PLAN.md — Chart install (recharts, guarded against the known Card-overwrite pitfall; blocking checkpoint for the transitively-introduced `lucide-react`)
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [x] 06-04-PLAN.md — Build the 3 D-10 sample validation pages (states / empty-loading / nested) + final DSYS-03 regression + full test-suite phase gate
+- [ ] 06-15-PLAN.md — Sparkline + dual-axis analytics chart
 
-**Wave 5** *(blocked on Wave 4 completion — additive, user-requested)*
+**Wave 5** *(blocked on Waves 2-4 completion)*
 
-- [x] 06-05-PLAN.md — Design-system docs page (`/design-system/docs`): live-parsed token summary + all 4 component DESIGN.md docs, presented in-app (additive scope, no new REQ-ID)
+- [ ] 06-16-PLAN.md — Docs: Actions & Forms category (9 components)
+- [ ] 06-17-PLAN.md — Docs: Cards & Navigation category
+- [ ] 06-18-PLAN.md — Docs: Feedback/Status & Data Viz category
+
+**Wave 6** *(blocked on Wave 5's dependencies)*
+
+- [ ] 06-19-PLAN.md — Rebuild the 3 original sample pages (states/empty-loading/nested) with the expanded set
+- [ ] 06-20-PLAN.md — Home dashboard proof-of-concept page (D-14) + icon-set expansion
+
+**Wave 7** *(blocked on all prior waves — phase gate)*
+
+- [ ] 06-21-PLAN.md — Full-phase regression + D-15 provenance re-audit + human visual-quality sign-off
 
 **UI hint**: yes
 
@@ -165,7 +194,7 @@ Phases execute in numeric order: 5 → 6 → 7 → 8 → 9 → 10
 | 3. Offline-Buffered Batch Sync | v1.0 | 3/3 | Complete | 2026-09-19 |
 | 4. Historical Trends API | v1.0 | 1/1 | Complete | 2026-09-19 |
 | 5. Repo Cleanup & Canonicalization | v1.1 | 2/2 | Complete    | 2026-09-25 |
-| 6. Design System (Tailwind v4 Tokens) | v1.1 | 5/5 | In Progress|  |
+| 6. Design System (Tailwind v4 Tokens) | v1.1 | 0/16 | In Progress (rework) |  |
 | 7. HTML Prototype (Caregiver + Parent) | v1.1 | 0/TBD | Not started | - |
 | 8. Backend Gap-Fill | v1.1 | 0/TBD | Not started | - |
 | 9. Hardware Integration | v1.1 | 0/TBD | Not started | - |
