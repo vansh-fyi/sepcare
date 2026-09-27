@@ -10,8 +10,8 @@ rewrite.
 
 Per the D-15 Figma-extraction workaround (this executor has no direct Figma MCP access — see
 `.planning/phases/06-design-system-tailwind-v4-tokens/06-FIGMA-EXTRACTS.md`'s "Chart-family node"
-section), re-inspected node **`203-13216`** ("Perfusion Index" analytics chart card) for the
-dual-axis-specific layout values this plan calls out beyond 06-14's base primitive extraction:
+section), **Verified against Figma node** `203-13216` ("Perfusion Index" analytics chart card) for
+the dual-axis-specific layout values this plan calls out beyond 06-14's base primitive extraction:
 
 - **The real Figma frame is single-axis, not dual-axis.** It shows one pink/red line with dot
   markers, hourly X-axis labels (8:00–14:00), and one numeric Y-axis (100/99/96/94) —

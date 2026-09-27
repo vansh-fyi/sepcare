@@ -84,7 +84,7 @@ function NewSelectField() {
 
 ## Figma verification (06-09, 2026-09-27)
 
-No dedicated Figma node exists for the `Field` wrapper family — D-12's own note states the user
+**No dedicated Figma frame found** for the `Field` wrapper family — D-12's own note states the user
 "could not articulate exact form-field designs," leaving this component to the executor's
 discretion (per this plan's CONTEXT.md). `Field` is restyled against this project's existing
 token layer (established by Button/Card/Badge/Input/Label in prior waves) for visual consistency

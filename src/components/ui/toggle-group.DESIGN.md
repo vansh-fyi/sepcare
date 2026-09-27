@@ -10,13 +10,14 @@ behind the time-scale toggle (Figma node `203-11938`).
 
 ## Figma fidelity: token-consistent, not node-verified
 
-No dedicated per-value Figma extraction (exact padding, corner radius, active-segment fill,
-inactive-segment treatment) was performed for node `203-11938` or any dedicated `ToggleGroup`
-frame this plan — no such node/frame was included in the orchestrator's D-15 extraction handoff
-(`06-FIGMA-EXTRACTS.md`), unlike `Button`/`Card`/`Item`/`Progress`, each of which had a concrete
-per-node section to extract from. `06-RESEARCH.md`'s Pattern 3 confirms the node's existence and
-role (a segmented control for chart time ranges, `type="single"` mode) but does not carry per-pixel
-values.
+**No dedicated Figma frame found** for node `203-11938`'s per-value extraction (exact padding,
+corner radius, active-segment fill, inactive-segment treatment) was performed for node `203-11938`
+or any dedicated `ToggleGroup` frame this plan — no such node/frame was included in the
+orchestrator's D-15 extraction handoff (`06-FIGMA-EXTRACTS.md`), unlike `Button`/`Card`/`Item`/
+`Progress`, each of which had a concrete per-node section to extract from — so this disposition is
+honest-not-found rather than a guess dressed up as verified. `06-RESEARCH.md`'s Pattern 3 confirms
+the node's existence and role (a segmented control for chart time ranges, `type="single"` mode) but
+does not carry per-pixel values.
 
 Rather than guess bespoke values with no source of truth, this restyle reuses the exact
 radius/color/typography tokens already established by prior Figma-verified components:

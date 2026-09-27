@@ -12,8 +12,8 @@ that chrome, use `Chart`/`VitalsTrendChart` instead, not an expanded `Sparkline`
 ## Figma verification (D-15 mechanism)
 
 Per the D-15 Figma-extraction workaround (this executor has no direct Figma MCP access — see
-`.planning/phases/06-design-system-tailwind-v4-tokens/06-FIGMA-EXTRACTS.md`), verified against
-the relayed extraction notes for both Home-screen sparkline instances:
+`.planning/phases/06-design-system-tailwind-v4-tokens/06-FIGMA-EXTRACTS.md`), **Verified against Figma node** `266-9350`/`266-9363` via the relayed extraction notes for both Home-screen sparkline
+instances:
 
 - **`266-9350` (Pulse sparkline)** and **`266-9363` (Temp sparkline)** — both live inside the
   full-bleed gradient **Vital Stat Card** (node `266-9344`), at a fixed **76×26px slot**

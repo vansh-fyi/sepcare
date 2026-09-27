@@ -43,7 +43,7 @@ Preferred going forward — via `Field`/`FieldLabel` (see `field.DESIGN.md`):
 
 ## Figma verification (06-09, 2026-09-27)
 
-No dedicated Figma node exists for Label — D-12's own component table lists Label as new-but-
+**No dedicated Figma frame found** for Label — D-12's own component table lists Label as new-but-
 unspecified ("paired with every form field," no node ID). The visual reference actually used is
 the hand-rolled `<label className="text-label font-semibold text-text">` already present in
 `src/app/design-system/nested/page.tsx` (predates this plan), which itself derives from the
