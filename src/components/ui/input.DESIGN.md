@@ -46,3 +46,13 @@ separate future component, not an `Input` prop.
 Input's label/value is expected to wrap or truncate unexpectedly long text without breaking the
 token-driven height/radius. This is asserted by a held-out long-string render test (UI-SPEC "UI
 Considerations"), not independently re-verified by this plan's own automated checks.
+
+## Figma verification (06-09, 2026-09-27)
+
+No dedicated Figma frame was found for Input as of 2026-09-27 — D-12's own component table lists
+Input as "existing, carries forward" with no node ID, matching the same "no node exists" outcome
+already documented for Badge (06-08) and Item (06-07). Visual treatment is kept consistent with
+the extracted values already used by Button/Card (`rounded-input`, `border`, `focus:border-border-
+focus`/`focus:shadow-focus`) rather than inventing new values from scratch. The `error`/
+`errorMessage` prop contract and the locked default error copy ("Couldn't load this. Check your
+connection and try again.") are unchanged.
