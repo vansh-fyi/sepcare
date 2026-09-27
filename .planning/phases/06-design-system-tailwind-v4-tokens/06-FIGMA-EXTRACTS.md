@@ -184,4 +184,38 @@ icon-tile and text block, drop-shadow soft (`0px 2px 8px`, tint varies).
 
 ---
 
+## Chart-family node (06-14/06-15 — Chart install + Sparkline/DualAxisVitalsChart)
+
+### Node `203:13216` — "Perfusion Index" analytics chart card
+- Card shell: same Card treatment as other cards (white, `rounded-24`, `shadow: 0px 2px 8px
+  rgba(0,0,0,0.05)`, `padding: 16px`) — this chart lives INSIDE a normal `Card`, it is not a
+  custom card shape of its own.
+- Header row: icon tile 48px `rounded-16` bg pink-200 (`#fcc6c6`) with `ph:drop-bold` icon,
+  title "Perfusion Index" 14px Bold neutral-800, subtitle "Fatal downward trend" 12px Regular
+  neutral-500 (`#808699`), plus a status pill top-right: bg pink-200, `rounded-8`, `px-8`,
+  text "Warning" 8px Bold neutral-800 — this is a Badge-like pill but smaller (8px text) than
+  the existing Badge component; check whether Badge's smallest size token fits or whether
+  this needs a distinct micro-badge treatment.
+- Chart body: a single-series line chart, NOT dual-axis in this specific frame (the D-16
+  "dual-axis" idea was a general web-research finding about vitals dashboards broadly, not
+  something this specific Figma frame shows — build a single-axis line chart here; only add
+  a second Y-axis if a later Figma frame or explicit ask calls for it).
+  - Line color: pink/red (matches the critical/warning framing of this specific card)
+  - Dot markers at each data point
+  - Faint vertical gridlines with a top-to-bottom fade (`opacity-10`, gradient from
+    neutral-100 to pink-200) — a stylistic "ambient" gridline, not a hard axis grid line
+  - X-axis: hourly labels (8:00 through 14:00), **font: Roboto Regular 10px**, neutral-900 —
+    this is the ONE place in the whole design system that uses Roboto instead of Plus Jakarta
+    Sans/Inter; this is likely just Recharts' own default tick-label font leaking through in
+    the Figma mock rather than an intentional third font family — flag this for the
+    implementer's judgment (recommend matching the rest of the system's font stack for
+    consistency unless there's a reason to special-case chart ticks)
+  - Y-axis: numeric labels (100/99/96/94), same 10px style, right-aligned
+- Recommended implementation: this is exactly what shadcn's `chart` primitive (wrapping
+  Recharts `LineChart`) is for — a `ChartContainer` + `ChartTooltip` + a single `Line` series,
+  styled via `ChartConfig` color referencing this project's `--color-critical`/`--color-pink-*`
+  tokens (per 06-14's must-haves).
+
+---
+
 *(Additional node extractions will be appended here as later plans in this phase are dispatched.)*
