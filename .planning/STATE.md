@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 06
 current_phase_name: Design System (Tailwind v4 Tokens)
 status: executing
-stopped_at: Completed 06-18-PLAN.md
-last_updated: "2026-09-27T05:25:03.616Z"
+stopped_at: Completed 06-20-PLAN.md
+last_updated: "2026-09-27T05:43:02.750Z"
 last_activity: 2026-09-27
 last_activity_desc: Phase 06 execution started
-state_head: 5cae7af68867ded7100f0b6b5935b7922c0b61f9
+state_head: 957f47a07d6062bd89f8c988a3b7e0c7ad8570da
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 18
-  completed_plans: 16
+  completed_plans: 17
   percent: 0
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 06 (Design System (Tailwind v4 Tokens)) — EXECUTING
-Plan: 15 of 16
+Plan: 16 of 16
 Status: Ready to execute
 Last activity: 2026-09-27 — Phase 06 execution started
 
@@ -91,6 +91,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P16 | 30 min | 3 tasks | 16 files |
 | Phase 06 P19 | 10min | 2 tasks | 3 files |
 | Phase 06 P18 | 45min | 3 tasks | 10 files |
+| Phase 06 P20 | 20min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -147,6 +148,9 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 06]: Phase 06-18: ToggleGroup's docs page needed no client playground file — Radix already manages type="single" state uncontrolled client-side, so two independent live instances render from a pure Server Component.
 - [Phase 06]: Phase 06-18: Progress/BatteryIndicator share one docs route since they share one primitive; a native range slider (no dedicated Slider component in this project's scope) drives both live simultaneously.
 - [Phase 06]: Phase 06-18: Applied /emil-ui-polish's tabular-nums principle post-hoc to Progress playground's live percentage readouts after the D-13-mandated skill-compliance pass.
+- [Phase 06]: Phase 06-20: Reused existing icon.tsx entries (wearable/sort/check/baby/ankleBand) for 5 of 6 Home-screen icon needs; hand-authored only bottleBaby as the genuine gap. — Cross-checked the full Home screen icon inventory against the existing 40+ set before adding anything, per D-09's reuse-first precedent.
+- [Phase 06]: Phase 06-20: Followed the shipped 36px text-vital-metric convention (not card.DESIGN.md's older 21px screenshot note) for Vital Stat Card numbers, and used the real Figma-extracted 98.6°F Temp value over PLAN.md's illustrative 36.8°C example. — The 36px token is the actively-maintained, multiply-referenced convention (typography docs, sparkline.DESIGN.md); the Temp value is a locked extraction, not an illustrative example.
+- [Phase 06]: Phase 06-20: Resolved the Card-vs-Item Instructions-row composition tension (open since 06-17) for the Home-proof page: Card as outer row container, Item's sub-parts for inner content, not the outer Item root. — Matches this plan's own explicit task instruction and avoids double-counting padding against Card's own p-4.
 
 ### Pending Todos
 
@@ -168,8 +172,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-27T05:25:03.590Z
-Stopped at: Completed 06-18-PLAN.md
+Last session: 2026-09-27T05:43:02.646Z
+Stopped at: Completed 06-20-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
