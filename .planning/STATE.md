@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 06
 current_phase_name: Design System (Tailwind v4 Tokens)
 status: executing
-stopped_at: Completed 06-17-PLAN.md
-last_updated: "2026-09-27T04:35:59.965Z"
+stopped_at: Completed 06-15-PLAN.md
+last_updated: "2026-09-27T04:45:21.090Z"
 last_activity: 2026-09-27
 last_activity_desc: Phase 06 execution started
-state_head: 9e54a98ef114c615046872ede9da77f86267f4a0
+state_head: 32a19226606991053d38062c85e8b5f892e7ee76
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 18
-  completed_plans: 12
+  completed_plans: 13
   percent: 0
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 06 (Design System (Tailwind v4 Tokens)) — EXECUTING
-Plan: 11 of 16
+Plan: 12 of 16
 Status: Ready to execute
 Last activity: 2026-09-27 — Phase 06 execution started
 
@@ -87,6 +87,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P13 | 13min | 3 tasks | 6 files |
 | Phase 06 P14 | 15min | 3 tasks | 4 files |
 | Phase 06 P17 | 35min | 2 tasks | 6 files |
+| Phase 06 P15 | 25min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -133,6 +134,8 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 06]: Phase 06-17: Card Type Map row 2 rendered as the bare Card primitive (matching card.DESIGN.md's own disposition), not a Card+Item composition -- docs page cross-links to the still-open composition question instead.
 - [Phase 06]: Phase 06-17: Restructured docs/_lib/categories.ts's category list to carry per-category sidebar links (Cards, Navigation populated), closing the gap 06-11 explicitly deferred to Wave 5 -- the three new docs routes would otherwise be unreachable from the shell.
 - [Phase 06]: Phase 06-17: NavLink/NavBar live docs previews intercept clicks via onClick+preventDefault+local state rather than modifying either component, so real app-route hrefs never navigate away from the docs page.
+- [Phase 06]: Phase 06-15: VitalsTrendChart genuinely supports two Y-axes via Recharts' yAxisId pattern, but the right axis/legend only render when a series opts in - node 203-13216's real Figma frame is single-axis, D-16's dual-axis framing was a general research finding, not a literal frame in this file.
+- [Phase 06]: Phase 06-15: Sparkline's default color stays var(--color-safe) matching 06-RESEARCH.md's pattern, but sparkline.DESIGN.md documents that the real Vital Stat Card usage (266-9344) needs an explicit color="var(--color-text-inverse)" override since the card background is itself the status gradient.
 
 ### Pending Todos
 
@@ -154,8 +157,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-27T04:35:59.936Z
-Stopped at: Completed 06-17-PLAN.md
+Last session: 2026-09-27T04:45:21.064Z
+Stopped at: Completed 06-15-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
