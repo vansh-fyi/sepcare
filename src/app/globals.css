@@ -122,6 +122,12 @@
   --radius-hero: 24px;
   --radius-modal: 28px;
   --radius-full: 9999px;
+  /* NavBar top-corner radius (06-10 Task 2, Figma node 279-320/279-758) —
+     extracted per UI-SPEC.md's explicit "do not guess this value, do not
+     assume --radius-card fits" instruction. 20px is numerically close to
+     but distinct from --radius-card (24px); kept as its own token since a
+     bottom-fixed bar's top-corner treatment is its own decision. */
+  --radius-nav-bar: 20px;
 
   /* Button archetype A — gradient CTA pill (D-12 Figma nodes 203-11745, 203-14032).
      Extracted verbatim from Figma, additive only — no existing token value changed
@@ -161,6 +167,11 @@
   --shadow-critical: 0 10px 32px rgba(193, 3, 3, 0.14);
   --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.25);
   --shadow-cta: 0px 2px 2px var(--color-neutral-200);
+  /* NavBar's shadow (06-10 Task 2, Figma node 279-320) casts UPWARD (negative
+     Y offset) since the bar sits at the screen bottom — distinct direction
+     from every other shadow token above, so kept as its own token even
+     though it reuses the same neutral-200 tint as --shadow-cta. */
+  --shadow-nav-bar: 0px -2px 2px var(--color-neutral-200);
 
   /* Card typography (06-07 Task 1) — Figma nodes 266-9387/266-9344 both show a
      card title color one step lighter than --color-text (neutral-900) and a

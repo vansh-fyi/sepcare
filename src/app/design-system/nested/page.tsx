@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Icon } from "@/components/icon";
 import { Input } from "@/components/ui/input";
+import { NavBar } from "@/components/ui/nav-bar";
 import { NavLink } from "@/components/ui/nav-link";
 import { PageShell } from "@/components/page-shell";
 
@@ -24,6 +25,7 @@ import { PageShell } from "@/components/page-shell";
  */
 export default function NestedDesignSystemPage() {
   return (
+    <>
     <PageShell
       title="Nested composition"
       description="Button and Input rendered inside Card inside the page layout — proving the token set cascades correctly three layers deep."
@@ -87,5 +89,10 @@ export default function NestedDesignSystemPage() {
         </CardContent>
       </Card>
     </PageShell>
+    {/* Live NavBar instance (06-10 Task 2) for the orchestrator's deferred
+        D-15 screenshot-diff pass against Figma node 279-320/279-758. Fixed
+        to the real viewport bottom, outside PageShell's max-width wrapper. */}
+    <NavBar currentRoute="/design-system/nested" />
+    </>
   );
 }
