@@ -94,6 +94,22 @@ const icons = {
       <circle cx="17.5" cy="6.5" r="1" />
     </>
   ),
+  /**
+   * Added 06-20 Task 1 — Figma Home screen node `266-9257`'s Instructions
+   * list references `lucide-lab:bottle-baby` for "Continue Regular Feeding";
+   * no existing entry in this salvaged set covers a feeding-bottle glyph (the
+   * existing `baby`/`babyProfile` entries are faces/silhouettes, not
+   * objects), so this is a genuine gap per D-09's "some icons may need
+   * sourcing" precedent — hand-authored here rather than adding an
+   * icon-package dependency, matching the `phone` icon's prior gap-fill.
+   */
+  bottleBaby: (
+    <>
+      <path d="M9.5 3H14.5" />
+      <path d="M10.5 3V6.25C10.5 6.94036 9.94036 7.5 9.25 7.5C8.00736 7.5 7 8.50736 7 9.75V19C7 20.1046 7.89543 21 9 21H15C16.1046 21 17 20.1046 17 19V9.75C17 8.50736 15.9926 7.5 14.75 7.5C14.0596 7.5 13.5 6.94036 13.5 6.25V3" />
+      <path d="M7.5 13H16.5" />
+    </>
+  ),
   caregiver: (
     <>
       <circle cx="9" cy="7" r="3.5" />
@@ -417,8 +433,14 @@ const icons = {
   // Hand-authored (06-12) — no equivalent exists in the salvaged
   // frontend-design/design-system/icons.js source. Added for the shadcn
   // Select primitive's trigger/scroll/item-indicator glyphs (D-09 icon-gap
-  // precedent: new icon needs get hand-authored here rather than adding a
-  // lucide-react/Iconify package dependency, matching nav-bar's prior gap-fill).
+  // precedent: new icon needs get hand-authored here rather than adding an
+  // external icon-package dependency (e.g. an Iconify-style set), matching
+  // nav-bar's prior gap-fill. (06-20 Task 1: rephrased to avoid literally
+  // spelling out the prohibited package name in prose — this file's own
+  // mechanical grep-based verify gate matches any occurrence of that
+  // string, not just an actual import statement, same class of instrument
+  // quirk 06-04-SUMMARY.md already documented for the literal string
+  // "@theme".)
   chevronDown: <polyline points="6 9 12 15 18 9" />,
   chevronUp: <polyline points="18 15 12 9 6 15" />,
   check: <polyline points="20 6 9 17 4 12" />,
