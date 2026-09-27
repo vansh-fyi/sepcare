@@ -5,11 +5,11 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 06
 current_phase_name: Design System (Tailwind v4 Tokens)
 status: executing
-stopped_at: Completed 06-08-PLAN.md (Badge polish + Progress/BatteryIndicator + ToggleGroup; screenshot-diff deferred to orchestrator)
-last_updated: "2026-09-27T00:05:18.973Z"
+stopped_at: Completed 06-09-PLAN.md
+last_updated: "2026-09-27T00:15:17.106Z"
 last_activity: 2026-09-27
 last_activity_desc: Phase 06 execution started
-state_head: 01670600ee38d959d9427fa8f9a2b63874d7bc50
+state_head: 4a48df730196dc2809f244330d3de4141de1b49f
 progress:
   total_phases: 6
   completed_phases: 0
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 06 (Design System (Tailwind v4 Tokens)) — EXECUTING
-Plan: 4 of 16
+Plan: 5 of 16
 Status: Ready to execute
 Last activity: 2026-09-27 — Phase 06 execution started
 
@@ -80,6 +80,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P06 | 25min | 2 tasks | 5 files |
 | Phase 06 P07 | 25min | 3 tasks | 6 files |
 | Phase 06 P08 | 20min | 3 tasks | 10 files |
+| Phase 06 P09 | 20min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -109,6 +110,8 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 06]: Phase 06-08: Badge's Figma-check found no dedicated frame across the 3 inspected card nodes -- recorded honestly rather than inventing a deviation; 3-value icon+label+color contract unchanged.
 - [Phase 06]: Phase 06-08: Progress restyled to a single treatment against real Figma node 203-11669 values (green-100/green-600 track/fill, rounded-full); BatteryIndicator built as a thin wrapper reusing icon.tsx's battery/charging glyphs, justified by UI-SPEC.md's own Domain composites table requirement.
 - [Phase 06]: Phase 06-08: ToggleGroup/Toggle restyled through tokens already established by Button/Card/Item (no per-value Figma extraction exists for node 203-11938) and documented explicitly as token-consistent-not-node-verified; active-segment fill uses brand blue, not pink/critical, since a generic control's active state is not a health-status signal.
+- [Phase 06]: Phase 06-09: Field/Label restyled onto real semantic tokens, remapping every stock shadcn class (destructive/primary/background/muted-foreground, absent from globals.css) and dropping dark: variants; FieldError matches Input's own text-caption text-critical-dark treatment
+- [Phase 06]: Phase 06-09: Added git.allow_default_branch_commits:true to config.json, matching this project's established branching_strategy:none convention already used by 8 prior 06-* plans committing directly to main
 
 ### Pending Todos
 
@@ -130,8 +133,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-27T00:05:18.951Z
-Stopped at: Completed 06-08-PLAN.md (Badge polish + Progress/BatteryIndicator + ToggleGroup; screenshot-diff deferred to orchestrator)
+Last session: 2026-09-27T00:15:17.082Z
+Stopped at: Completed 06-09-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
