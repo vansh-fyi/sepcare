@@ -14,8 +14,9 @@ import { DOCS_COMPONENT_CATEGORIES, DOCS_TOP_LINKS } from "./_lib/categories";
  * The six component-doc categories come from `_lib/categories.ts`'s literal
  * array constant — never a filesystem `readdir` — so the sidebar's category
  * order stays stable across operating systems (DSYS-03 ordering resolution).
- * Per-component routes land in Wave 5 (06-16/06-17/06-18); until then each
- * category renders a "Coming soon" placeholder instead of a dangling link.
+ * Each category's own `links` array is populated by the Wave 5 plan
+ * (06-16/06-17/06-18) that builds its routes; a category with no links yet
+ * renders a "Coming soon" placeholder instead of a dangling link.
  *
  * Active-link state signals via color only (`text-brand` vs `text-text-
  * muted`), never a font-weight change (emil-ui-polish principle 2). No
@@ -60,11 +61,23 @@ export default function DesignSystemDocsLayout({
           className="flex flex-col gap-5 border-t border-border-subtle pt-5"
         >
           {DOCS_COMPONENT_CATEGORIES.map((category) => (
-            <div key={category} className="flex flex-col gap-1">
+            <div key={category.name} className="flex flex-col gap-1">
               <h3 className="px-3 text-caption font-semibold tracking-wide text-text-subtle uppercase">
-                {category}
+                {category.name}
               </h3>
-              <p className="px-3 text-caption text-text-muted">Coming soon</p>
+              {category.links.length > 0 ? (
+                category.links.map((link) => (
+                  <SidebarLink
+                    key={link.href}
+                    href={link.href}
+                    label={link.label}
+                  />
+                ))
+              ) : (
+                <p className="px-3 text-caption text-text-muted">
+                  Coming soon
+                </p>
+              )}
             </div>
           ))}
         </nav>

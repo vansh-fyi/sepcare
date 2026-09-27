@@ -47,18 +47,40 @@ export default function DesignSystemDocsLandingPage() {
       <section className="flex flex-col gap-4 border-t border-border pt-8">
         <h2 className="text-heading font-semibold text-text">Components</h2>
         <p className="max-w-2xl text-body text-text-secondary">
-          Per-component live previews and usage notes are on their way —
-          categories below are already fixed and stable.
+          Per-component live previews and usage notes land category by
+          category — categories below are already fixed and stable.
         </p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {DOCS_COMPONENT_CATEGORIES.map((category) => (
-            <div
-              key={category}
-              className="rounded-card-sm border border-dashed border-border-subtle p-4 text-label font-semibold text-text-muted"
-            >
-              {category}
-            </div>
-          ))}
+          {DOCS_COMPONENT_CATEGORIES.map((category) =>
+            category.links.length > 0 ? (
+              <div
+                key={category.name}
+                className="flex flex-col gap-2 rounded-card-sm border border-border-subtle p-4"
+              >
+                <span className="text-label font-semibold text-text-muted">
+                  {category.name}
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {category.links.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="rounded-cta border border-border-subtle px-2.5 py-1 text-caption font-semibold text-text transition-colors duration-[var(--duration-fast)] ease-out hover:border-border hover:text-brand"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div
+                key={category.name}
+                className="rounded-card-sm border border-dashed border-border-subtle p-4 text-label font-semibold text-text-muted"
+              >
+                {category.name}
+              </div>
+            ),
+          )}
         </div>
       </section>
     </div>

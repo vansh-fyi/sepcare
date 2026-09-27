@@ -7,17 +7,37 @@
  * since directory-listing order is not guaranteed stable across operating
  * systems — this is the DSYS-03 ordering resolution for the sidebar's
  * category list (06-UI-SPEC.md "Docs Site Interaction Contract").
+ *
+ * Each category carries its own `links` array of real per-component doc
+ * routes. 06-11 shipped every category with an empty `links` array (a
+ * "Coming soon" placeholder) with the explicit intent that each Wave 5 plan
+ * (06-16/06-17/06-18) populate its own category's `links` when that
+ * category's routes land — 06-17 populates Cards/Navigation here.
  */
-export const DOCS_COMPONENT_CATEGORIES = [
-  "Actions",
-  "Forms",
-  "Cards",
-  "Navigation",
-  "Feedback/Status",
-  "Data Viz",
-] as const;
+export interface DocsCategoryLink {
+  href: string;
+  label: string;
+}
 
-export type DocsComponentCategory = (typeof DOCS_COMPONENT_CATEGORIES)[number];
+export interface DocsComponentCategory {
+  name: string;
+  links: readonly DocsCategoryLink[];
+}
+
+export const DOCS_COMPONENT_CATEGORIES: readonly DocsComponentCategory[] = [
+  { name: "Actions", links: [] },
+  { name: "Forms", links: [] },
+  {
+    name: "Cards",
+    links: [
+      { href: "/design-system/docs/card", label: "Card" },
+      { href: "/design-system/docs/item", label: "Item" },
+    ],
+  },
+  { name: "Navigation", links: [] },
+  { name: "Feedback/Status", links: [] },
+  { name: "Data Viz", links: [] },
+] as const;
 
 /** Top-level links outside the six component-doc categories. */
 export const DOCS_TOP_LINKS = [
