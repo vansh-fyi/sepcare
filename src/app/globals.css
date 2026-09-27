@@ -132,6 +132,17 @@
   --gradient-cta: linear-gradient(127deg, var(--color-pink-500) 2.3%, var(--color-pink-400) 94.9%);
   --gradient-cta-critical: linear-gradient(135deg, var(--color-pink-600) 2.3%, var(--color-pink-500) 94.9%);
 
+  /* NavLink active state (06-10 Task 1, Figma node 279-220 "Open" state, D-17
+     locked resolution). 116deg is a DISTINCT angle from --gradient-cta's
+     127deg despite sharing the same two pink stops — kept as its own token
+     per the extraction's explicit instruction not to collapse the two.
+     --gradient-nav-indicator backs the 5px indicator bar below the active
+     pill (gradient-to-top pink-300 -> pink-500, a different stop pair from
+     the pill's own fill gradient). Exact percentage offsets weren't part of
+     this extraction (unlike --gradient-cta's), so both default to 0%/100%. */
+  --gradient-nav-active: linear-gradient(116deg, var(--color-pink-500) 0%, var(--color-pink-400) 100%);
+  --gradient-nav-indicator: linear-gradient(to top, var(--color-pink-300) 0%, var(--color-pink-500) 100%);
+
   /* Button archetype C — filled dark icon button (D-12 Figma node 266-9285).
      12px radius is distinct from both --radius-btn (14px) and --radius-cta (10px).
      --color-icon-fill-dark aliases neutral-700 rather than reusing

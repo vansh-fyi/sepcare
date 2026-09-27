@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Icon } from "@/components/icon";
 import { Input } from "@/components/ui/input";
+import { NavLink } from "@/components/ui/nav-link";
 import { PageShell } from "@/components/page-shell";
 
 /**
@@ -71,6 +72,18 @@ export default function NestedDesignSystemPage() {
           <Button variant="icon-filled" aria-label="Sort">
             <Icon name="sort" className="size-6" />
           </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="mx-auto mt-6 max-w-md">
+        <CardHeader>
+          <h2 className="text-heading font-semibold text-text">
+            NavLink states (06-10)
+          </h2>
+        </CardHeader>
+        <CardContent className="flex flex-wrap items-start gap-4 bg-bg p-4">
+          <NavLink href="#" icon="home" label="Home" state="active" />
+          <NavLink href="#" icon="monitoring" label="Vitals" state="inactive" />
         </CardContent>
       </Card>
     </PageShell>
