@@ -105,3 +105,162 @@ export function groupSemanticColorTokens(themeBlock: string): ColorTokenGroup[] 
     }))
     .filter((group) => group.tokens.length > 0);
 }
+
+/**
+ * Net-new for 06-11 Task 2 (not one of the four relocated helpers above) —
+ * live-parses the full 9-role Typography scale from 06-UI-SPEC.md's table.
+ *
+ * Two roles ("Heading — card", "Secondary text") are deliberate
+ * recombinations per the UI-SPEC: an existing size token at a different
+ * weight + line-height, not a new token. Their `lineHeight` is therefore a
+ * documented literal, not a parsed value — the same kind of hand-authored
+ * exception the old page already used for font-weight (--theme has no
+ * --text-*--font-weight namespace).
+ */
+export interface TypographyRoleSpec {
+  id: string;
+  label: string;
+  description: string;
+  sample: string;
+  sizeTokenName: string;
+  lineHeightTokenName: string | null;
+  fallbackLineHeight: string | null;
+  weightLabel: string;
+  weightValue: 400 | 600 | 700;
+  className: string;
+}
+
+export const TYPOGRAPHY_ROLE_SPECS: TypographyRoleSpec[] = [
+  {
+    id: "display",
+    label: "Display",
+    description: 'Hero headline, e.g. "Baby is Resting Safely."',
+    sample: "Baby is Resting Safely.",
+    sizeTokenName: "--text-display",
+    lineHeightTokenName: "--text-display--line-height",
+    fallbackLineHeight: null,
+    weightLabel: "700 (bold)",
+    weightValue: 700,
+    className: "text-display font-bold text-balance",
+  },
+  {
+    id: "heading-page",
+    label: "Heading — page title",
+    description: "Top-level page title.",
+    sample: "Design System",
+    sizeTokenName: "--text-heading-page",
+    lineHeightTokenName: "--text-heading-page--line-height",
+    fallbackLineHeight: null,
+    weightLabel: "700 (bold)",
+    weightValue: 700,
+    className: "text-heading-page font-bold text-balance",
+  },
+  {
+    id: "heading",
+    label: "Heading — section",
+    description: "Section heading (existing --text-heading token, unchanged).",
+    sample: "Section heading",
+    sizeTokenName: "--text-heading",
+    lineHeightTokenName: "--text-heading--line-height",
+    fallbackLineHeight: null,
+    weightLabel: "600 (semibold)",
+    weightValue: 600,
+    className: "text-heading font-semibold",
+  },
+  {
+    id: "heading-card",
+    label: "Heading — card",
+    description:
+      "Vital-card label, e.g. “Pulse” — recombination of Body's size at Heading's weight.",
+    sample: "Pulse",
+    sizeTokenName: "--text-body",
+    lineHeightTokenName: null,
+    fallbackLineHeight: "1.40",
+    weightLabel: "600 (semibold)",
+    weightValue: 600,
+    className: "text-body leading-[1.4] font-semibold",
+  },
+  {
+    id: "body",
+    label: "Body",
+    description: "Default text, Input/Field value.",
+    sample: "The quick brown fox jumps over the lazy dog.",
+    sizeTokenName: "--text-body",
+    lineHeightTokenName: "--text-body--line-height",
+    fallbackLineHeight: null,
+    weightLabel: "400 (regular)",
+    weightValue: 400,
+    className: "text-body font-normal",
+  },
+  {
+    id: "label",
+    label: "Label",
+    description: "Badge/Field label.",
+    sample: "STATUS LABEL",
+    sizeTokenName: "--text-label",
+    lineHeightTokenName: "--text-label--line-height",
+    fallbackLineHeight: null,
+    weightLabel: "600 (semibold)",
+    weightValue: 600,
+    className: "text-label font-semibold",
+  },
+  {
+    id: "secondary",
+    label: "Secondary text",
+    description:
+      "Timestamps, telemetry sub-labels — recombination of Label's size at Body's weight.",
+    sample: "Synced 2m ago",
+    sizeTokenName: "--text-label",
+    lineHeightTokenName: null,
+    fallbackLineHeight: "1.45",
+    weightLabel: "400 (regular)",
+    weightValue: 400,
+    className: "text-label leading-[1.45] font-normal",
+  },
+  {
+    id: "caption",
+    label: "Caption",
+    description: "Helper text, error text, units.",
+    sample: "Helper text goes here.",
+    sizeTokenName: "--text-caption",
+    lineHeightTokenName: "--text-caption--line-height",
+    fallbackLineHeight: null,
+    weightLabel: "400 (regular)",
+    weightValue: 400,
+    className: "text-caption font-normal",
+  },
+  {
+    id: "vital-metric",
+    label: "Vital metric",
+    description:
+      "Large Pulse/Temp/Activity readings — tabular-nums so digits don't jiggle as readings update.",
+    sample: "128 bpm",
+    sizeTokenName: "--text-vital-metric",
+    lineHeightTokenName: "--text-vital-metric--line-height",
+    fallbackLineHeight: null,
+    weightLabel: "700 (bold)",
+    weightValue: 700,
+    className: "text-vital-metric font-bold tabular-nums",
+  },
+];
+
+export interface ResolvedTypographyRole extends TypographyRoleSpec {
+  sizeValue: string;
+  lineHeightValue: string;
+}
+
+/** Resolves each TYPOGRAPHY_ROLE_SPECS entry's live size (and line-height, where a token exists). */
+export function resolveTypographyRoles(themeBlock: string): ResolvedTypographyRole[] {
+  const textTokens = parseThemeTokens(themeBlock, "--text-");
+  return TYPOGRAPHY_ROLE_SPECS.map((spec) => {
+    const sizeToken = textTokens.find((t) => t.name === spec.sizeTokenName);
+    const lineHeightToken = spec.lineHeightTokenName
+      ? textTokens.find((t) => t.name === spec.lineHeightTokenName)
+      : undefined;
+    return {
+      ...spec,
+      sizeValue: sizeToken?.value ?? "—",
+      lineHeightValue: lineHeightToken?.value ?? spec.fallbackLineHeight ?? "—",
+    };
+  });
+}

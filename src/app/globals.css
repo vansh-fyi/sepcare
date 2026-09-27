@@ -106,6 +106,19 @@
   --text-label--line-height: 1.4;
   --text-caption: 0.75rem;
   --text-caption--line-height: 1.4;
+  /* Added 06-11 Task 2 — UI-SPEC.md's Typography table expands the prior
+     4-role scale to 9 roles (D-12's hero headline, page title, and vital-
+     metric numbers need sizes/weights the original 4 can't express). These
+     three are the only genuinely new size tokens; "Heading — card" and
+     "Secondary text" are recombinations of the existing --text-body/
+     --text-label sizes at a different weight + line-height and intentionally
+     get no token of their own (see docs/typography/page.tsx). */
+  --text-display: 2.375rem;
+  --text-display--line-height: 1.15;
+  --text-heading-page: 1.5rem;
+  --text-heading-page--line-height: 1.3;
+  --text-vital-metric: 2.25rem;
+  --text-vital-metric--line-height: 1.1;
 
   --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
