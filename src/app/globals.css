@@ -234,17 +234,13 @@
     --radius-card vs --radius-hero: a page header's rounding and a modal's
     rounding are different concerns that may diverge later even though they
     currently share one pixel value. */
-  /* --gradient-metric-temp/-activity: card.DESIGN.md's Vital Stat Card
-     entry (node 266-9344) only had an exact gradient extraction for the
-     Pulse tone; Temp/Activity were explicitly deferred to whichever plan
-     built the real vitals row ("other vitals follow the same pattern with
-     their respective status hue" per 06-FIGMA-EXTRACTS.md) — this is that
-     plan. Approximated at the same 132.5deg angle/stop positions as the
-     exactly-extracted --gradient-metric-pulse, using each vital's own
-     already-established semantic hue family (pink for Temp, green for
-     Activity) rather than fabricating new colors. */
-  --gradient-metric-temp: linear-gradient(132.5deg, var(--color-pink-500) 0%, var(--color-pink-400) 100%);
-  --gradient-metric-activity: linear-gradient(132.5deg, var(--color-green-700) 0%, var(--color-green-500) 100%);
+  /* --gradient-metric-temp/-activity: corrected to the actual Figma node
+     266-9357 (Temp) / 266-9370 (Activity) extraction — one shade darker on
+     each stop than the earlier approximation (which reused Pulse's
+     500->400 pair by pattern-matching rather than exact per-vital values).
+     Temp: pink-600 -> pink-500. Activity: green-700 -> green-400. */
+  --gradient-metric-temp: linear-gradient(132.5deg, var(--color-pink-600) 0%, var(--color-pink-500) 100%);
+  --gradient-metric-activity: linear-gradient(132.5deg, var(--color-green-700) 0%, var(--color-green-400) 100%);
 
   --duration-fast: 150ms;
   --duration-normal: 250ms;
