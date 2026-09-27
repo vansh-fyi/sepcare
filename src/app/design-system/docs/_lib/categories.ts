@@ -54,8 +54,21 @@ export const DOCS_COMPONENT_CATEGORIES: readonly DocsComponentCategory[] = [
     name: "Navigation",
     links: [{ href: "/design-system/docs/nav", label: "Nav" }],
   },
-  { name: "Feedback/Status", links: [] },
-  { name: "Data Viz", links: [] },
+  {
+    name: "Feedback/Status",
+    links: [
+      { href: "/design-system/docs/badge", label: "Badge" },
+      { href: "/design-system/docs/progress", label: "Progress" },
+      { href: "/design-system/docs/toggle-group", label: "Toggle Group" },
+    ],
+  },
+  {
+    name: "Data Viz",
+    links: [
+      { href: "/design-system/docs/chart", label: "Chart" },
+      { href: "/design-system/docs/sparkline", label: "Sparkline" },
+    ],
+  },
 ] as const;
 
 /** Top-level links outside the six component-doc categories. */
