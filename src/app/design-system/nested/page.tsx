@@ -1,34 +1,43 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Icon } from "@/components/icon";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { NavBar } from "@/components/ui/nav-bar";
-import { NavLink } from "@/components/ui/nav-link";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PageShell } from "@/components/page-shell";
 
 /**
- * D-10 sample page 3 (DSYS-02/DSYS-03) — completed. Nests an Input and two
- * Buttons inside a Card inside the page layout, proving Card/Input/Button
- * token classes all cascade correctly three layers deep on a real route.
- * Originally seeded by Plan 06-01's tracer (a single Button proving one
- * compiled token rendered through a real Radix-based shadcn Button); the
- * tracer's manual `bg-brand-fill text-white` override is replaced here by
- * the `primary` variant now that Button carries its own restyled contract
- * (Plan 06-03).
+ * D-10 sample page 3 (DSYS-02/DSYS-03), rebuilt against the expanded D-12
+ * component set (06-19). Nests an Input and two Buttons inside a Card inside
+ * the page layout, proving Card/Input/Button token classes all cascade
+ * correctly three layers deep on a real route. Originally seeded by Plan
+ * 06-01's tracer (a single Button proving one compiled token rendered
+ * through a real Radix-based shadcn Button); the tracer's manual
+ * `bg-brand-fill text-white` override is replaced here by the `primary`
+ * variant now that Button carries its own restyled contract (Plan 06-03).
  *
- * The "Figma-verified Button archetypes" block below (06-06) is additive —
- * it does not touch the original Device Sync card — and exists so the
- * orchestrator has a real rendered instance of each new/reconciled Button
- * variant to screenshot-diff against Figma per the D-15 mechanism (see
- * button.DESIGN.md's "Figma extraction" section; this executor has no
- * browser/screenshot tool, so that comparison happens after this file lands).
+ * A second nested composition below proves the expanded form-field set
+ * cascades correctly too — Card > CardContent > Field > Select nests four
+ * layers deep, not just Card > CardContent > Input/Button.
+ *
+ * The temporary "Figma-verified Button archetypes" (06-06), "NavLink
+ * states" (06-10), and fixed `NavBar` (06-10) blocks that were mounted here
+ * for the orchestrator's deferred D-15 screenshot-diff pass have been
+ * removed (06-19 consolidation) — those component families now have their
+ * own dedicated docs-site routes (`/design-system/docs/button`,
+ * `/design-system/docs/nav`) as the canonical live-preview destination, so
+ * this page no longer needs to carry ad-hoc scaffolding for them.
  */
 export default function NestedDesignSystemPage() {
   return (
-    <>
     <PageShell
       title="Nested composition"
-      description="Button and Input rendered inside Card inside the page layout — proving the token set cascades correctly three layers deep."
+      description="Button, Input, and the expanded form-field set rendered inside Card inside the page layout — proving the token set cascades correctly three-plus layers deep."
     >
       <Card className="mx-auto max-w-md">
         <CardHeader>
@@ -56,43 +65,28 @@ export default function NestedDesignSystemPage() {
       <Card className="mx-auto mt-6 max-w-md">
         <CardHeader>
           <h2 className="text-heading font-semibold text-text">
-            Figma-verified Button archetypes (06-06)
+            Device region (Field + Select, 06-19)
           </h2>
         </CardHeader>
-        <CardContent className="flex flex-wrap items-center gap-3">
-          <Button variant="cta">
-            <Icon name="signal" className="size-5" />
-            Connect Device
-          </Button>
-          <Button variant="cta-critical">
-            <Icon name="phone" className="size-5" />
-            Call Ambulance
-          </Button>
-          <Button variant="icon-outline" aria-label="Back">
-            <Icon name="back" className="size-6" />
-          </Button>
-          <Button variant="icon-filled" aria-label="Sort">
-            <Icon name="sort" className="size-6" />
-          </Button>
-        </CardContent>
-      </Card>
-
-      <Card className="mx-auto mt-6 max-w-md">
-        <CardHeader>
-          <h2 className="text-heading font-semibold text-text">
-            NavLink states (06-10)
-          </h2>
-        </CardHeader>
-        <CardContent className="flex flex-wrap items-start gap-4 bg-bg p-4">
-          <NavLink href="#" icon="home" label="Home" state="active" />
-          <NavLink href="#" icon="monitoring" label="Vitals" state="inactive" />
+        <CardContent>
+          <Field>
+            <FieldLabel htmlFor="device-region">Device region</FieldLabel>
+            <Select>
+              <SelectTrigger id="device-region" className="w-full">
+                <SelectValue placeholder="Select a region" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="in-south">India — South</SelectItem>
+                <SelectItem value="in-north">India — North</SelectItem>
+                <SelectItem value="in-west">India — West</SelectItem>
+              </SelectContent>
+            </Select>
+            <FieldDescription>
+              Used to route device-support requests only.
+            </FieldDescription>
+          </Field>
         </CardContent>
       </Card>
     </PageShell>
-    {/* Live NavBar instance (06-10 Task 2) for the orchestrator's deferred
-        D-15 screenshot-diff pass against Figma node 279-320/279-758. Fixed
-        to the real viewport bottom, outside PageShell's max-width wrapper. */}
-    <NavBar currentRoute="/design-system/nested" />
-    </>
   );
 }
