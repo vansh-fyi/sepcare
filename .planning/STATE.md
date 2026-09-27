@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 06
 current_phase_name: Design System (Tailwind v4 Tokens)
 status: executing
-stopped_at: Completed 06-12-PLAN.md
-last_updated: "2026-09-27T00:53:28.100Z"
+stopped_at: Completed 06-13-PLAN.md
+last_updated: "2026-09-27T01:03:19.787Z"
 last_activity: 2026-09-27
 last_activity_desc: Phase 06 execution started
-state_head: 7366d4083a6caad1d114a997ca5c8002b54c1119
+state_head: cad7b85347407c1ffe6f223796bd28bca2140ed0
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 18
-  completed_plans: 9
+  completed_plans: 10
   percent: 0
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 06 (Design System (Tailwind v4 Tokens)) — EXECUTING
-Plan: 8 of 16
+Plan: 9 of 16
 Status: Ready to execute
 Last activity: 2026-09-27 — Phase 06 execution started
 
@@ -84,6 +84,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P10 | 22 min | 2 tasks | 6 files |
 | Phase 06 P11 | 20 min | 3 tasks | 7 files |
 | Phase 06 P12 | 9min | 2 tasks | 5 files |
+| Phase 06 P13 | 13min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -121,6 +122,9 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 06]: Phase 06-12: Dropped asChild on SelectPrimitive.Icon to avoid a ref-forwarding warning against the project's non-forwardRef Icon component; no visual change.
 - [Phase 06]: Phase 06-12: Select uses focus-visible: (button-like-control convention) while Textarea uses focus: (Input's real-text-field convention) rather than forcing one identical focus mechanism onto both new fields.
 - [Phase 06]: Phase 06-12: Hand-authored chevronDown/chevronUp/check into icon.tsx instead of adding lucide-react as a dependency for Select's stock icons, per D-09's dependency-free icon-system precedent.
+- [Phase 06]: Phase 06-13: Checkbox/RadioGroup/Switch restyled onto bg-brand-fill checked-state token and active:scale-[0.96] press feedback, matching the toggle-family convention established across all three controls.
+- [Phase 06]: Phase 06-13: RadioGroup's stock lucide-react CircleIcon replaced with a plain filled span rather than a stroked Icon glyph -- a solid dot is visually correct for a radio control, unlike this project's stroke-based Icon system.
+- [Phase 06]: Phase 06-13: Switch's press feedback applied to the thumb only via group-active/switch (not active: on the thumb itself), since SwitchPrimitive.Root is the actual focusable/pressable element.
 
 ### Pending Todos
 
@@ -142,8 +146,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-27T00:53:28.077Z
-Stopped at: Completed 06-12-PLAN.md
+Last session: 2026-09-27T01:03:19.764Z
+Stopped at: Completed 06-13-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
