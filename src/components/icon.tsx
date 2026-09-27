@@ -410,6 +410,18 @@ const icons = {
     </>
   ),
   insight: <path d="M12 2L14.4 7.6L20 10L14.4 12.4L12 18L9.6 12.4L4 10L9.6 7.6L12 2Z" />,
+
+  // =========================================================================
+  // FORM CONTROLS
+  // =========================================================================
+  // Hand-authored (06-12) — no equivalent exists in the salvaged
+  // frontend-design/design-system/icons.js source. Added for the shadcn
+  // Select primitive's trigger/scroll/item-indicator glyphs (D-09 icon-gap
+  // precedent: new icon needs get hand-authored here rather than adding a
+  // lucide-react/Iconify package dependency, matching nav-bar's prior gap-fill).
+  chevronDown: <polyline points="6 9 12 15 18 9" />,
+  chevronUp: <polyline points="18 15 12 9 6 15" />,
+  check: <polyline points="20 6 9 17 4 12" />,
 } as const
 
 export type IconName = keyof typeof icons
