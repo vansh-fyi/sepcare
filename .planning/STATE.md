@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 06
 current_phase_name: Design System (Tailwind v4 Tokens)
 status: executing
-stopped_at: Completed 06-07-PLAN.md (Card Figma-verified restyle + resolved 6-card Type Map + Item row primitive; screenshot-diff deferred to orchestrator)
-last_updated: "2026-09-26T23:51:30.958Z"
+stopped_at: Completed 06-08-PLAN.md (Badge polish + Progress/BatteryIndicator + ToggleGroup; screenshot-diff deferred to orchestrator)
+last_updated: "2026-09-27T00:05:18.973Z"
 last_activity: 2026-09-27
 last_activity_desc: Phase 06 execution started
-state_head: eb0a8668a38ba3e2047eb86a101f48c6f495208a
+state_head: 01670600ee38d959d9427fa8f9a2b63874d7bc50
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 18
-  completed_plans: 4
+  completed_plans: 5
   percent: 0
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 06 (Design System (Tailwind v4 Tokens)) — EXECUTING
-Plan: 3 of 16
+Plan: 4 of 16
 Status: Ready to execute
 Last activity: 2026-09-27 — Phase 06 execution started
 
@@ -79,6 +79,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P05 | 20min | 2 tasks | 1 files |
 | Phase 06 P06 | 25min | 2 tasks | 5 files |
 | Phase 06 P07 | 25min | 3 tasks | 6 files |
+| Phase 06 P08 | 20min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -105,6 +106,9 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 06]: Phase 06-07: Corrected --radius-card (20px->24px) and --shadow-card, and Card's own padding (p-6->p-4), to real Figma-extracted values shared by both confirmed card nodes.
 - [Phase 06]: Phase 06-07: Deferred the Vital Stat Card's promotion to a new CardMetric component -- only its Pulse gradient was exactly extracted, documented as a composition instead pending full 3-tone data.
 - [Phase 06]: Phase 06-07: Resolved D-16's progress-vs-battery-indicator question -- node 203-11669 is a generic percentage-driven horizontal bar named progress, not a battery glyph; the primitive itself is 06-08's job.
+- [Phase 06]: Phase 06-08: Badge's Figma-check found no dedicated frame across the 3 inspected card nodes -- recorded honestly rather than inventing a deviation; 3-value icon+label+color contract unchanged.
+- [Phase 06]: Phase 06-08: Progress restyled to a single treatment against real Figma node 203-11669 values (green-100/green-600 track/fill, rounded-full); BatteryIndicator built as a thin wrapper reusing icon.tsx's battery/charging glyphs, justified by UI-SPEC.md's own Domain composites table requirement.
+- [Phase 06]: Phase 06-08: ToggleGroup/Toggle restyled through tokens already established by Button/Card/Item (no per-value Figma extraction exists for node 203-11938) and documented explicitly as token-consistent-not-node-verified; active-segment fill uses brand blue, not pink/critical, since a generic control's active state is not a health-status signal.
 
 ### Pending Todos
 
@@ -126,8 +130,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-26T23:51:30.936Z
-Stopped at: Completed 06-07-PLAN.md (Card Figma-verified restyle + resolved 6-card Type Map + Item row primitive; screenshot-diff deferred to orchestrator)
+Last session: 2026-09-27T00:05:18.951Z
+Stopped at: Completed 06-08-PLAN.md (Badge polish + Progress/BatteryIndicator + ToggleGroup; screenshot-diff deferred to orchestrator)
 Resume file: None
 
 ## Operator Next Steps
