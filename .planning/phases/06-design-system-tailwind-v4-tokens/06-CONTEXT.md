@@ -77,6 +77,27 @@ User flagged the current set is missing obvious things ("doesn't even have diffe
 ### D-17: Nav active-state color — matches screenshot red exactly (resolves the D-04 tension flagged by research)
 Both the fresh RESEARCH.md and UI-SPEC.md independently flagged a tension: the Home-screen screenshot shows the bottom nav's active "Home" tab in red/pink, while D-04 reserves pink/red exclusively for Critical/danger status. User's explicit call: **match the screenshot exactly** — the nav's active-indicator uses the same red/pink as Critical status. This is a deliberate choice, not an oversight: navigation-selected-state and critical-health-status are treated as two different semantic dimensions (location vs. health), both allowed to use the same hue. Downstream agents should NOT "fix" this to blue — implement it exactly as shown in the screenshot and Figma nav bar node (`279-320`).
 
+### D-18: Icon strategy amended — adopt `@tabler/icons-react`, supersedes pure hand-authoring
+Original D-09 (hand-author every icon from the salvaged 40+ SVG set, no icon package) is
+**amended, not fully reversed.** Reason: multiple Figma nodes extracted during this phase
+literally name their icon layers with a `tabler:` prefix (e.g. node `203-11669`'s edit-pencil
+icon is `tabler:edit`) — Tabler is evidently the actual icon set the Figma file's authors used
+for several UI-chrome icons, not an arbitrary substitute. Continuing to hand-author every icon
+one-by-one (as 06-08/06-09/06-12/06-13 each did for a handful of icons) doesn't scale across
+the full expanded D-12 component set and duplicates work Tabler already solves correctly.
+- **Decision:** install `@tabler/icons-react` as a real dependency. Use it for any icon whose
+  Figma source is explicitly Tabler-named, and prefer it going forward for new icon needs
+  over continuing to hand-author one-off SVGs.
+- **Reconcile with the salvaged 40+ icon set:** keep using the existing hand-authored/salvaged
+  icons (`src/components/icon.tsx`) where they already exist and match — don't rip out
+  working icons to replace them with Tabler equivalents just for consistency's sake. This is
+  additive: Tabler fills gaps, it doesn't replace what's already correct.
+- **Directly relevant to 06-14 (chart install):** the `lucide-react` transitive dependency
+  flagged by that plan's checkpoint is UNUSED by the generated chart code either way — this
+  decision doesn't change the "strip lucide-react" resolution already given for that specific
+  checkpoint. It does mean any FUTURE plan needing a new icon should reach for
+  `@tabler/icons-react` rather than lucide-react or another one-off hand-authored SVG.
+
 ### Roadmap-restructuring flag (raised in original discussion — still not formally resolved)
 - **D-11 [informational]:** Not a Phase 6 implementation decision — cross-phase roadmap flag, intentionally uncovered by any Phase 6 plan. User wants to skip a separate static-HTML prototype phase and build the real Next.js frontend directly; Phase 10 becomes a "plug frontend into deployed backend" step. This is a **roadmap-level change** (ROADMAP.md Phases 7/8/10, REQUIREMENTS.md PARENT-05 wording) that a discuss-phase session cannot lock on its own.
   - **Status update:** D-14 (Home screen proof-of-concept) is already operating under this assumption. Recommend resolving D-11 formally (roadmap edit) before or immediately after this Phase 6 rework lands, so Phase 7's actual scope reflects reality.
