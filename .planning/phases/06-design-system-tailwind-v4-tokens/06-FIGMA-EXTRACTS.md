@@ -218,4 +218,27 @@ icon-tile and text block, drop-shadow soft (`0px 2px 8px`, tint varies).
 
 ---
 
+## Home-screen node (06-20 — Home-proof page, D-14)
+
+### Node `266:9257` — full Home dashboard screen
+Full-screen layout, phone frame `rounded-44`, drop-shadow `0px 32px 80px rgba(0,0,0,0.28), 0px 0px 0px 1px rgba(0,0,0,0.08)` (the OUTER phone-mockup shadow — do not apply this to the page itself, only relevant if you wrap the proof page in a device-frame decoration; the actual page content background is `#f0f1f6`, slightly different from `--color-bg` — check against existing token, may need a distinct "page canvas" shade one step lighter than card backgrounds).
+
+**Header (dark section, `bg-neutral-800 #222737`, `rounded-bl-28 rounded-br-28`):**
+- Status bar row: time "9:41" left, 3 status icons right (signal/wifi/battery — standard iOS status bar chrome, not a custom component)
+- Date row: calendar icon + "Sun, 16 Aug 2026" (Inter Medium 14px, 80% opacity white), plus 2 icon buttons right: a rotated "sort" icon (`rounded-12`, `bg-neutral-700 #42475e`, 40px — this is archetype C from the Button-family extraction) and a device/smartwatch icon button (same treatment)
+- Device row: 52px icon tile (`rounded-16`, bg green-800 `#006458`, smartwatch icon), "Device-SKU-1234" (20px Bold white), below it two status chips: "Monitor Active" and "Wearable Connected" — each a small 12px dark-neutral-700 dot/pill + checkmark icon + 12px Medium white label
+
+**Body (light section, `bg-#f0f1f6`, `px-20 pt-24 pb-32`):**
+1. "Infant Status" section header (16px Bold neutral-800) + a 3-dot overflow icon, then the Status Hero Card (node `266:9323`, already documented above) full-width
+2. "Vitals" section header + "See All" link (14px SemiBold, blue `#3b82f6`), then 3 Vital Stat Cards in a row, `gap-6`, each `flex-1`: Pulse (blue gradient, per Card-family notes), Temp (red/pink gradient, same shape, "98.6 °F"), Activity (green/teal gradient, same shape but shows a checkmark/subtract glyph instead of a sparkline, and "Healthy" text instead of a number+unit — Activity's card is NOT identical to Pulse/Temp's layout, it swaps the sparkline+number slot for a status-icon+word slot)
+3. "Instructions" section header, then 3 Instruction Row Cards (node `266:9387` pattern) stacked with `gap-12`: "Continue Regular Feeding" (`lucide-lab:bottle-baby` icon), "Keep Baby Warm & Covered" (`hugeicons:baby-02` icon), "Keep Ankle Band On" (`uil:watch` icon)
+
+**Bottom Nav:** the NavBar (node `279:758`/`279:320`, already documented above), fixed at the bottom, "Home" tab active (pink gradient, per D-17).
+
+**Icon inventory needed for this page** (cross-library names as Figma authored them — fluent/lucide-lab/hugeicons/uil, NOT a single consistent library): `fluent:smartwatch-dot-20-regular` (device icon, used twice), a generic checkmark (status chips + Status Hero Card), a "sort" icon (header), `lucide-lab:bottle-baby`, `hugeicons:baby-02`, `uil:watch`. **D-18 note:** none of these specific icons are Tabler-named, so D-18's Tabler adoption doesn't directly apply here — reuse the existing salvaged 40+ icon set / already-hand-authored icons where they cover these concepts (e.g. an existing bottle/feeding icon, a watch/band icon, a checkmark), and only hand-author a new one-off SVG for a genuine gap, consistent with the pattern 06-08/06-09/06-12/06-13 already established.
+
+**Screenshot:** see the inline render captured this session — a light-gray card list on a very-light-gray canvas below a dark rounded-bottom header, matches the description above closely; use it as the visual target.
+
+---
+
 *(Additional node extractions will be appended here as later plans in this phase are dispatched.)*
