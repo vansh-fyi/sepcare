@@ -71,7 +71,7 @@ Plans:
   3. At least 3 sample HTML pages exercise real component states (e.g. Green/Amber/Red status, empty/loading, nested component variants) using only the token set, and this validation checkpoint is reviewed before full prototype work starts
   4. The same token set is demonstrably reused across sample pages representing both the caregiver and parent visual language — one shared source, not two
 
-**Plans**: 5/16 plans executed (rework, D-12..D-17 — supersedes the original 5-plan execution below,
+**Plans**: 6/16 plans executed (rework, D-12..D-17 — supersedes the original 5-plan execution below,
 kept for history with `status: superseded` in their own frontmatter, not deleted)
 **UI hint**: yes
 
@@ -97,7 +97,7 @@ mandatory per-component Figma-verification):
 - [x] 06-08-PLAN.md — Badge + Progress/BatteryIndicator + ToggleGroup
 - [x] 06-09-PLAN.md — Input restyle + Label + Field wrapper family
 - [x] 06-10-PLAN.md — NavLink + NavBar (D-17 nav-color resolution) + `--radius-nav-bar` token
-- [ ] 06-11-PLAN.md — Docs site sidebar shell + Colors/Typography reference routes (replaces the rejected single-scroll docs page)
+- [x] 06-11-PLAN.md — Docs site sidebar shell + Colors/Typography reference routes (replaces the rejected single-scroll docs page)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -194,7 +194,7 @@ Phases execute in numeric order: 5 → 6 → 7 → 8 → 9 → 10
 | 3. Offline-Buffered Batch Sync | v1.0 | 3/3 | Complete | 2026-09-19 |
 | 4. Historical Trends API | v1.0 | 1/1 | Complete | 2026-09-19 |
 | 5. Repo Cleanup & Canonicalization | v1.1 | 2/2 | Complete    | 2026-09-25 |
-| 6. Design System (Tailwind v4 Tokens) | v1.1 | 5/16 | In Progress|  |
+| 6. Design System (Tailwind v4 Tokens) | v1.1 | 6/16 | In Progress|  |
 | 7. HTML Prototype (Caregiver + Parent) | v1.1 | 0/TBD | Not started | - |
 | 8. Backend Gap-Fill | v1.1 | 0/TBD | Not started | - |
 | 9. Hardware Integration | v1.1 | 0/TBD | Not started | - |
