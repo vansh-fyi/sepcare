@@ -217,6 +217,35 @@
      component's 6px-tall track, so no near-duplicate 5px token was added. */
   --color-safe-fill: var(--color-green-600);
 
+  /* Home-proof page (06-20) — Figma node `266-9257`. Small additive tokens
+     for values this specific page needs that no prior plan's component
+     extraction covered yet, following the same primitive/semantic
+     layering convention used throughout this phase. */
+  --color-page-canvas: #F0F1F6; /* Home screen's page-content bg — one step
+    off from --color-bg (#F5F5F8/neutral-100); a distinct extracted value,
+    not a typo/duplicate of --color-bg. */
+  --color-link: var(--color-blue-400); /* "See All" link (14px SemiBold
+    #3b82f6) — an exact match to the blue-400 primitive, but a distinct
+    semantic role from --color-brand (blue-600); kept separate rather than
+    reusing --color-brand since Figma's link color is one shade lighter. */
+  --radius-header: 28px; /* Home-screen header's rounded-bl-28/rounded-br-28
+    bottom corners. Numerically identical to --radius-modal (28px) but kept
+    as its own semantic token — same reasoning already established for
+    --radius-card vs --radius-hero: a page header's rounding and a modal's
+    rounding are different concerns that may diverge later even though they
+    currently share one pixel value. */
+  /* --gradient-metric-temp/-activity: card.DESIGN.md's Vital Stat Card
+     entry (node 266-9344) only had an exact gradient extraction for the
+     Pulse tone; Temp/Activity were explicitly deferred to whichever plan
+     built the real vitals row ("other vitals follow the same pattern with
+     their respective status hue" per 06-FIGMA-EXTRACTS.md) — this is that
+     plan. Approximated at the same 132.5deg angle/stop positions as the
+     exactly-extracted --gradient-metric-pulse, using each vital's own
+     already-established semantic hue family (pink for Temp, green for
+     Activity) rather than fabricating new colors. */
+  --gradient-metric-temp: linear-gradient(132.5deg, var(--color-pink-500) 0%, var(--color-pink-400) 100%);
+  --gradient-metric-activity: linear-gradient(132.5deg, var(--color-green-700) 0%, var(--color-green-500) 100%);
+
   --duration-fast: 150ms;
   --duration-normal: 250ms;
   --duration-slow: 350ms;
