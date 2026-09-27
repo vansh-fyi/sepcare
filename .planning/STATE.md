@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 06
 current_phase_name: Design System (Tailwind v4 Tokens)
 status: executing
-stopped_at: Completed 06-13-PLAN.md
-last_updated: "2026-09-27T01:03:19.787Z"
+stopped_at: Completed 06-14-PLAN.md
+last_updated: "2026-09-27T04:21:50.253Z"
 last_activity: 2026-09-27
 last_activity_desc: Phase 06 execution started
-state_head: cad7b85347407c1ffe6f223796bd28bca2140ed0
+state_head: 534bbc9d0be77fc70a4a9de5bd4d43600c8e89c2
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 18
-  completed_plans: 10
+  completed_plans: 11
   percent: 0
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 06 (Design System (Tailwind v4 Tokens)) — EXECUTING
-Plan: 9 of 16
+Plan: 10 of 16
 Status: Ready to execute
 Last activity: 2026-09-27 — Phase 06 execution started
 
@@ -85,6 +85,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P11 | 20 min | 3 tasks | 7 files |
 | Phase 06 P12 | 9min | 2 tasks | 5 files |
 | Phase 06 P13 | 13min | 3 tasks | 6 files |
+| Phase 06 P14 | 15min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -125,6 +126,9 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 06]: Phase 06-13: Checkbox/RadioGroup/Switch restyled onto bg-brand-fill checked-state token and active:scale-[0.96] press feedback, matching the toggle-family convention established across all three controls.
 - [Phase 06]: Phase 06-13: RadioGroup's stock lucide-react CircleIcon replaced with a plain filled span rather than a stroked Icon glyph -- a solid dot is visually correct for a radio control, unlike this project's stroke-based Icon system.
 - [Phase 06]: Phase 06-13: Switch's press feedback applied to the thumb only via group-active/switch (not active: on the thumb itself), since SwitchPrimitive.Root is the actual focusable/pressable element.
+- [Phase 06]: Phase 06-14: Resolved the Task 2 checkpoint's approved lucide-react install-then-strip via a stricter zero-risk-window method -- extracted chart.tsx from shadcn's --view dry-run output instead of ever running the real add command, so lucide-react never entered package.json/package-lock.json at all.
+- [Phase 06]: Phase 06-14: recharts pinned to the exact 3.8.0 version shadcn's own chart registry entry resolves to, installed via plain npm install independent of the shadcn CLI.
+- [Phase 06]: Phase 06-14: ChartTooltipContent's floating-surface treatment reuses select.tsx's existing dropdown-content convention (rounded-input border border-border bg-surface shadow-floating) verbatim rather than inventing a second floating-surface treatment.
 
 ### Pending Todos
 
@@ -146,8 +150,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-27T01:03:19.764Z
-Stopped at: Completed 06-13-PLAN.md
+Last session: 2026-09-27T04:21:50.228Z
+Stopped at: Completed 06-14-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
