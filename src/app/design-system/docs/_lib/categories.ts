@@ -34,7 +34,10 @@ export const DOCS_COMPONENT_CATEGORIES: readonly DocsComponentCategory[] = [
       { href: "/design-system/docs/item", label: "Item" },
     ],
   },
-  { name: "Navigation", links: [] },
+  {
+    name: "Navigation",
+    links: [{ href: "/design-system/docs/nav", label: "Nav" }],
+  },
   { name: "Feedback/Status", links: [] },
   { name: "Data Viz", links: [] },
 ] as const;
