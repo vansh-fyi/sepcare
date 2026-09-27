@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 06
 current_phase_name: Design System (Tailwind v4 Tokens)
 status: executing
-stopped_at: Completed 06-14-PLAN.md
-last_updated: "2026-09-27T04:21:50.253Z"
+stopped_at: Completed 06-17-PLAN.md
+last_updated: "2026-09-27T04:35:59.965Z"
 last_activity: 2026-09-27
 last_activity_desc: Phase 06 execution started
-state_head: 534bbc9d0be77fc70a4a9de5bd4d43600c8e89c2
+state_head: 9e54a98ef114c615046872ede9da77f86267f4a0
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 18
-  completed_plans: 11
+  completed_plans: 12
   percent: 0
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 06 (Design System (Tailwind v4 Tokens)) — EXECUTING
-Plan: 10 of 16
+Plan: 11 of 16
 Status: Ready to execute
 Last activity: 2026-09-27 — Phase 06 execution started
 
@@ -86,6 +86,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P12 | 9min | 2 tasks | 5 files |
 | Phase 06 P13 | 13min | 3 tasks | 6 files |
 | Phase 06 P14 | 15min | 3 tasks | 4 files |
+| Phase 06 P17 | 35min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -129,6 +130,9 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 06]: Phase 06-14: Resolved the Task 2 checkpoint's approved lucide-react install-then-strip via a stricter zero-risk-window method -- extracted chart.tsx from shadcn's --view dry-run output instead of ever running the real add command, so lucide-react never entered package.json/package-lock.json at all.
 - [Phase 06]: Phase 06-14: recharts pinned to the exact 3.8.0 version shadcn's own chart registry entry resolves to, installed via plain npm install independent of the shadcn CLI.
 - [Phase 06]: Phase 06-14: ChartTooltipContent's floating-surface treatment reuses select.tsx's existing dropdown-content convention (rounded-input border border-border bg-surface shadow-floating) verbatim rather than inventing a second floating-surface treatment.
+- [Phase 06]: Phase 06-17: Card Type Map row 2 rendered as the bare Card primitive (matching card.DESIGN.md's own disposition), not a Card+Item composition -- docs page cross-links to the still-open composition question instead.
+- [Phase 06]: Phase 06-17: Restructured docs/_lib/categories.ts's category list to carry per-category sidebar links (Cards, Navigation populated), closing the gap 06-11 explicitly deferred to Wave 5 -- the three new docs routes would otherwise be unreachable from the shell.
+- [Phase 06]: Phase 06-17: NavLink/NavBar live docs previews intercept clicks via onClick+preventDefault+local state rather than modifying either component, so real app-route hrefs never navigate away from the docs page.
 
 ### Pending Todos
 
@@ -150,8 +154,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-27T04:21:50.228Z
-Stopped at: Completed 06-14-PLAN.md
+Last session: 2026-09-27T04:35:59.936Z
+Stopped at: Completed 06-17-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
