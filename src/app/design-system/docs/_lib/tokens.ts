@@ -58,6 +58,20 @@ export function parseThemeTokens(themeBlock: string, prefix: string): ThemeToken
   return tokens;
 }
 
+/**
+ * Exact-name lookup for a single token (06-16) — `parseThemeTokens`'s prefix
+ * match alone is unsafe for a full token name (e.g. `"--color-brand-fill"` as
+ * a prefix also matches `"--color-brand-fill-hover"`), so this filters down
+ * to the exact name after parsing. Returns `"—"` (matching `parseThemeTokens`'
+ * own empty-input convention) when the token doesn't exist. Shared by every
+ * Actions & Forms docs route's "tokens this component consumes" section so
+ * none of them re-derive a hardcoded copy of a live value.
+ */
+export function getExactToken(themeBlock: string, name: string): string {
+  const tokens = parseThemeTokens(themeBlock, name);
+  return tokens.find((t) => t.name === name)?.value ?? "—";
+}
+
 export const PRIMITIVE_RAMPS = ["pink", "green", "blue", "neutral", "yellow"] as const;
 export const RAMP_STEPS = [100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 

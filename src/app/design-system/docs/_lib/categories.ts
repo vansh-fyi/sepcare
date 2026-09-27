@@ -12,7 +12,8 @@
  * routes. 06-11 shipped every category with an empty `links` array (a
  * "Coming soon" placeholder) with the explicit intent that each Wave 5 plan
  * (06-16/06-17/06-18) populate its own category's `links` when that
- * category's routes land — 06-17 populates Cards/Navigation here.
+ * category's routes land — 06-17 populated Cards/Navigation; 06-16 (this
+ * plan) populates Actions/Forms.
  */
 export interface DocsCategoryLink {
   href: string;
@@ -25,8 +26,23 @@ export interface DocsComponentCategory {
 }
 
 export const DOCS_COMPONENT_CATEGORIES: readonly DocsComponentCategory[] = [
-  { name: "Actions", links: [] },
-  { name: "Forms", links: [] },
+  {
+    name: "Actions",
+    links: [{ href: "/design-system/docs/button", label: "Button" }],
+  },
+  {
+    name: "Forms",
+    links: [
+      { href: "/design-system/docs/input", label: "Input" },
+      { href: "/design-system/docs/label", label: "Label" },
+      { href: "/design-system/docs/field", label: "Field" },
+      { href: "/design-system/docs/select", label: "Select" },
+      { href: "/design-system/docs/textarea", label: "Textarea" },
+      { href: "/design-system/docs/checkbox", label: "Checkbox" },
+      { href: "/design-system/docs/radio-group", label: "Radio Group" },
+      { href: "/design-system/docs/switch", label: "Switch" },
+    ],
+  },
   {
     name: "Cards",
     links: [
