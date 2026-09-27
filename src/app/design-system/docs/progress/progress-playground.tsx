@@ -24,7 +24,7 @@ export function ProgressPlayground() {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="progress-level-slider"
-          className="text-label font-semibold text-text"
+          className="text-label font-semibold text-text tabular-nums"
         >
           Level: {level}%
         </label>
@@ -59,7 +59,9 @@ export function ProgressPlayground() {
           </p>
           <div className="flex items-center gap-2">
             <Progress value={level} className="w-32" />
-            <span className="text-[10px] font-bold text-safe">{level}%</span>
+            <span className="text-[10px] font-bold text-safe tabular-nums">
+              {level}%
+            </span>
           </div>
         </div>
         <div className="flex flex-col gap-3">
