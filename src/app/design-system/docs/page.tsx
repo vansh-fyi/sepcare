@@ -1,88 +1,128 @@
 import Link from "next/link";
-import { DOCS_COMPONENT_CATEGORIES, DOCS_TOP_LINKS } from "./_lib/categories";
+import { DocPage, DocSection, Preview } from "@/components/docs/documentation";
+import { CodeBlock } from "@/components/docs/code-block";
+import {
+  DeviceCard,
+  StatusCard,
+  VitalCard,
+  InstructionCard,
+} from "@/components/patterns/clinical-cards";
+import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/icon";
+import { DOCS_COMPONENT_CATEGORIES } from "./_lib/categories";
 
-/**
- * Docs landing/overview (06-11 Task 3) — replaces the old 537-line
- * single-scroll page that dumped raw `.DESIGN.md` markdown into a `<pre>`
- * tag (D-13's rejected "single page bunch of crap"). This page now does no
- * file reads of its own — it is pure navigation into the sidebar shell's
- * categories, reusing the exact same `_lib/categories.ts` array `layout.tsx`
- * renders, so the two can never drift out of sync.
- *
- * Per-component content pages (live previews + DESIGN.md usage notes) land
- * in Wave 5 (06-16/06-17/06-18) — this page only links out to where those
- * will live once built.
- */
-const REFERENCE_LINKS = DOCS_TOP_LINKS.filter((link) => link.href !== "/design-system/docs");
+const PULSE = [118, 122, 119, 124, 121, 130, 123, 125, 120, 126, 124, 128].map(
+  (value) => ({ value }),
+);
+const TEMPERATURE = [98.2, 98.4, 98.3, 98.5, 98.6, 98.5, 98.7, 98.6].map(
+  (value) => ({ value }),
+);
 
-export default function DesignSystemDocsLandingPage() {
+export default function IntroductionPage() {
   return (
-    <div className="flex flex-col gap-10">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-heading-page font-bold text-text text-balance">
-          SepCare Design System
-        </h1>
-        <p className="max-w-2xl text-body text-text-secondary">
-          A live, token-driven reference for every component, color, and
-          type role this project ships — grouped by category in the sidebar,
-          never a single scrolling page.
-        </p>
-      </header>
-
-      <section className="flex flex-col gap-4">
-        <h2 className="text-heading font-semibold text-text">Reference</h2>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {REFERENCE_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-card-sm border border-border-subtle p-4 text-body font-semibold text-text transition-colors duration-[var(--duration-fast)] ease-out hover:border-border hover:text-brand"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="flex flex-col gap-4 border-t border-border pt-8">
-        <h2 className="text-heading font-semibold text-text">Components</h2>
-        <p className="max-w-2xl text-body text-text-secondary">
-          Per-component live previews and usage notes land category by
-          category — categories below are already fixed and stable.
-        </p>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {DOCS_COMPONENT_CATEGORIES.map((category) =>
-            category.links.length > 0 ? (
-              <div
-                key={category.name}
-                className="flex flex-col gap-2 rounded-card-sm border border-border-subtle p-4"
-              >
-                <span className="text-label font-semibold text-text-muted">
-                  {category.name}
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  {category.links.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="rounded-cta border border-border-subtle px-2.5 py-1 text-caption font-semibold text-text transition-colors duration-[var(--duration-fast)] ease-out hover:border-border hover:text-brand"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
+    <DocPage
+      title="SepCare design system"
+      category="Introduction"
+      description="The components behind SepCare's caregiver and clinical screens. Explore the visual language, try each control, and use the same patterns in the app."
+      sections={[
+        { id: "in-context", title: "In context" },
+        { id: "start-building", title: "Start building" },
+        { id: "components", title: "Components" },
+      ]}
+    >
+      <div id="in-context" className="scroll-mt-24">
+        <Preview
+          tone="canvas"
+          caption="Sample data. These are the shared components used in the home example."
+          code={
+            'import { DeviceCard, StatusCard, VitalCard } from "@/components/patterns/clinical-cards"\n\n<StatusCard\n  status="safe"\n  title="Baby is resting safely"\n  description="Based on the latest available readings, baby is healthy."\n/>\n<DeviceCard name="Device-SKU-1234" identifier="Device ID: SKU-1234" battery={90} />\n<VitalCard metric="pulse" value="128" unit="bpm" data={readings} />'
+          }
+        >
+          <div className="docs-overview-board">
+            <div className="docs-overview-column">
+              <StatusCard
+                status="safe"
+                title="Baby is resting safely"
+                description="Based on the latest available readings, baby is healthy."
+              />
+              <DeviceCard
+                name="Device-SKU-1234"
+                identifier="Device ID: SKU-1234"
+                battery={90}
+              />
+              <InstructionCard
+                icon="ankleBand"
+                title="Check the band"
+                description="Follow the fitting instructions supplied with the device."
+              />
+            </div>
+            <div className="docs-overview-column">
+              <div className="docs-overview-vitals">
+                <VitalCard metric="pulse" value="128" unit="bpm" data={PULSE} />
+                <VitalCard
+                  metric="temperature"
+                  value="98.6"
+                  unit="°F"
+                  data={TEMPERATURE}
+                />
               </div>
-            ) : (
-              <div
-                key={category.name}
-                className="rounded-card-sm border border-dashed border-border-subtle p-4 text-label font-semibold text-text-muted"
-              >
-                {category.name}
-              </div>
-            ),
-          )}
+              <Button asChild variant="primary" tone="neutral">
+                <Link href="/design-system/docs/button">
+                  <Icon name="signal" size={18} />
+                  Explore buttons
+                </Link>
+              </Button>
+              <p className="text-xs leading-relaxed text-text-secondary">
+                White surfaces, soft shadows, and color with a specific role.
+                The components carry those choices into every screen.
+              </p>
+            </div>
+          </div>
+        </Preview>
+      </div>
+      <DocSection
+        id="start-building"
+        title="Start with the shared components"
+        description="Import a component from the project and supply its content. Its spacing, type, colors, and interaction states are already defined."
+      >
+        <CodeBlock
+          code={
+            'import { Button } from "@/components/ui/button"\nimport { DeviceCard } from "@/components/patterns/clinical-cards"\n\n<DeviceCard name="Device-SKU-1234" identifier="Device ID: SKU-1234" battery={90} />\n<Button variant="primary" tone="neutral">Connect device</Button>'
+          }
+        />
+        <div className="docs-link-list">
+          <Link href="/design-system/docs/colors">
+            Color roles <span aria-hidden="true">↗</span>
+          </Link>
+          <Link href="/design-system/docs/typography">
+            Type and hierarchy <span aria-hidden="true">↗</span>
+          </Link>
+          <Link href="/design-system/docs/card">
+            Clinical card patterns <span aria-hidden="true">↗</span>
+          </Link>
+          <Link href="/design-system/docs/examples/clinical-dashboard">
+            Home example <span aria-hidden="true">↗</span>
+          </Link>
         </div>
-      </section>
-    </div>
+      </DocSection>
+      <DocSection
+        id="components"
+        title="Components"
+        description="Each page includes a working preview, usage examples, and the props you can change."
+      >
+        <div className="docs-link-list">
+          {DOCS_COMPONENT_CATEGORIES.filter(
+            (group) => group.name !== "Examples",
+          )
+            .flatMap((group) => group.links)
+            .map((link) => (
+              <Link href={link.href} key={link.href}>
+                {link.label}
+                <span aria-hidden="true">↗</span>
+              </Link>
+            ))}
+        </div>
+      </DocSection>
+    </DocPage>
   );
 }

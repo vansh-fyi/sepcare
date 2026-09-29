@@ -39,7 +39,7 @@ export const DOCS_COMPONENT_CATEGORIES: readonly DocsComponentCategory[] = [
       { href: "/design-system/docs/select", label: "Select" },
       { href: "/design-system/docs/textarea", label: "Textarea" },
       { href: "/design-system/docs/checkbox", label: "Checkbox" },
-      { href: "/design-system/docs/radio-group", label: "Radio Group" },
+      { href: "/design-system/docs/radio-group", label: "Radio group" },
       { href: "/design-system/docs/switch", label: "Switch" },
     ],
   },
@@ -47,6 +47,7 @@ export const DOCS_COMPONENT_CATEGORIES: readonly DocsComponentCategory[] = [
     name: "Cards",
     links: [
       { href: "/design-system/docs/card", label: "Card" },
+      { href: "/design-system/docs/status-summary", label: "Infant status" },
       { href: "/design-system/docs/item", label: "Item" },
     ],
   },
@@ -55,25 +56,47 @@ export const DOCS_COMPONENT_CATEGORIES: readonly DocsComponentCategory[] = [
     links: [{ href: "/design-system/docs/nav", label: "Nav" }],
   },
   {
-    name: "Feedback/Status",
+    name: "Feedback",
     links: [
       { href: "/design-system/docs/badge", label: "Badge" },
       { href: "/design-system/docs/progress", label: "Progress" },
-      { href: "/design-system/docs/toggle-group", label: "Toggle Group" },
+      { href: "/design-system/docs/toggle-group", label: "Toggle group" },
     ],
   },
   {
-    name: "Data Viz",
+    name: "Data visualization",
     links: [
       { href: "/design-system/docs/chart", label: "Chart" },
       { href: "/design-system/docs/sparkline", label: "Sparkline" },
+    ],
+  },
+  {
+    name: "Motion and animation",
+    links: [{ href: "/design-system/docs/motion", label: "Pulse wave" }],
+  },
+  {
+    name: "Examples",
+    links: [
+      {
+        href: "/design-system/docs/examples/clinical-dashboard",
+        label: "Clinical dashboard",
+      },
+      { href: "/design-system/docs/examples/forms", label: "Forms" },
+      {
+        href: "/design-system/docs/examples/sensor-states",
+        label: "Sensor states",
+      },
+      {
+        href: "/design-system/docs/examples/empty-loading",
+        label: "Empty and loading",
+      },
     ],
   },
 ] as const;
 
 /** Top-level links outside the six component-doc categories. */
 export const DOCS_TOP_LINKS = [
-  { href: "/design-system/docs", label: "Overview" },
+  { href: "/design-system/docs", label: "Introduction" },
   { href: "/design-system/docs/colors", label: "Colors" },
   { href: "/design-system/docs/typography", label: "Typography" },
 ] as const;

@@ -1,61 +1,63 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { NavLink } from "@/components/ui/nav-link"
-import type { IconName } from "@/components/icon"
-
-/**
- * NavBar — hand-authored fixed-bottom tab bar (no shadcn equivalent),
- * Figma-verified against node `279-320` (and its Home-screen instance
- * `279-758` inside `266-9257`, per nav-bar.DESIGN.md). Composes exactly 4
- * `NavLink` instances; exactly one is ever "active" at a time, driven by
- * `currentRoute` rather than hardcoded.
- *
- * Icon keys below cross-check the Figma tab set (Home/Vitals/Stats/
- * Settings) against the existing `icon.tsx` set — all 4 matched an
- * existing key, so no new icon.tsx entry or second icon-library import was
- * needed (see nav-bar.DESIGN.md's cross-check table).
- */
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { NavLink } from "@/components/ui/nav-link";
+import type { IconName } from "@/components/icon";
 export interface NavBarTab {
-  href: string
-  label: string
-  icon: IconName
+  href: string;
+  label: string;
+  icon: IconName;
 }
-
-const NAV_TABS: NavBarTab[] = [
+export const NAV_TABS: NavBarTab[] = [
   { href: "/", label: "Home", icon: "home" },
-  { href: "/vitals", label: "Vitals", icon: "monitoring" },
-  { href: "/stats", label: "Stats", icon: "history" },
+  { href: "/vitals", label: "Vitals", icon: "heart" },
+  { href: "/stats", label: "Stats", icon: "monitoring" },
   { href: "/settings", label: "Settings", icon: "settings" },
-]
-
-interface NavBarProps extends Omit<React.ComponentProps<"nav">, "className"> {
-  /** The app's current route (e.g. from `usePathname()`) — determines which single NavLink renders `state="active"`. */
-  currentRoute: string
-  className?: string
+];
+interface NavBarProps extends React.ComponentProps<"nav"> {
+  currentRoute: string;
+  tabs?: NavBarTab[];
+  position?: "fixed" | "static";
+  onTabChange?: (href: string) => void;
 }
-
-function NavBar({ currentRoute, className, ...props }: NavBarProps) {
+export function NavBar({
+  currentRoute,
+  tabs = NAV_TABS,
+  position = "fixed",
+  onTabChange,
+  className,
+  style,
+  ...props
+}: NavBarProps) {
   return (
     <nav
       data-slot="nav-bar"
+      aria-label="Main navigation"
       className={cn(
-        "fixed inset-x-0 bottom-0 flex items-center gap-1 rounded-t-[var(--radius-nav-bar)] bg-surface px-9 py-4 shadow-nav-bar",
-        className
+        "flex items-center gap-2 rounded-t-[var(--radius-nav-bar)] bg-surface px-6 py-4 shadow-nav-bar",
+        position === "fixed" && "fixed inset-x-0 bottom-0 z-30",
+        className,
       )}
-      style={{ paddingBottom: "max(env(safe-area-inset-bottom), 1rem)" }}
+      style={{
+        paddingBottom: "max(env(safe-area-inset-bottom), 1rem)",
+        ...style,
+      }}
       {...props}
     >
-      {NAV_TABS.map((tab) => (
+      {tabs.map((tab) => (
         <NavLink
           key={tab.href}
-          href={tab.href}
-          icon={tab.icon}
-          label={tab.label}
+          {...tab}
           state={currentRoute === tab.href ? "active" : "inactive"}
+          onClick={
+            onTabChange
+              ? (event) => {
+                  event.preventDefault();
+                  onTabChange(tab.href);
+                }
+              : undefined
+          }
         />
       ))}
     </nav>
-  )
+  );
 }
-
-export { NavBar, NAV_TABS }

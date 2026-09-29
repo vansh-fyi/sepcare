@@ -1,49 +1,55 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Progress as ProgressPrimitive } from "radix-ui"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { Progress as ProgressPrimitive } from "radix-ui";
+import { cn } from "@/lib/utils";
 
-/**
- * Restyled onto the project's semantic token layer. Figma node `203-11669`
- * (Device Status Card WITH progress bar — D-16's resolved disposition: a
- * generic percentage-driven horizontal bar, not a battery glyph) is the only
- * real per-node extraction available for this primitive: 6px-tall track,
- * `bg-safe-soft` (green-100), `bg-safe-fill` (green-600) indicator, 10px Bold
- * `text-safe` (green-700) percentage label (rendered by the consumer, not
- * built into this primitive — see `battery-indicator.tsx` for the composed
- * usage). No second visual treatment has been extracted anywhere in this
- * phase's Figma data, so this stays a single treatment (no CVA `variant`
- * axis) rather than guessing at variants that don't exist yet.
- *
- * Radius uses the existing `rounded-full` (`--radius-full`) token rather than
- * a new near-duplicate 5px token — Figma's exact 5px value is visually
- * indistinguishable from full-round on a 6px-tall track (a radius only needs
- * to exceed half the track height to render fully rounded), and
- * `06-UI-SPEC.md`'s Radius table already assigns `--radius-full` to
- * "BatteryIndicator track" for this exact usage.
- */
+/** Accessible progress primitive with semantic track and fill colors. */
+const TONES = {
+  safe: { track: "bg-safe-soft", fill: "bg-safe-fill" },
+  caution: { track: "bg-caution-soft", fill: "bg-caution" },
+  critical: { track: "bg-critical-soft", fill: "bg-critical" },
+  neutral: { track: "bg-bg", fill: "bg-text-muted" },
+} as const;
+
 function Progress({
   className,
   value,
+  max = 100,
+  tone = "safe",
   ...props
-}: React.ComponentProps<typeof ProgressPrimitive.Root>) {
+}: React.ComponentProps<typeof ProgressPrimitive.Root> & {
+  tone?: keyof typeof TONES;
+}) {
+  const limit = max > 0 && Number.isFinite(max) ? max : 100;
+  const resolvedValue = Math.max(
+    0,
+    Math.min(limit, Number.isFinite(value) ? value! : 0),
+  );
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
+      value={resolvedValue}
+      max={limit}
       className={cn(
-        "relative h-1.5 w-full overflow-hidden rounded-full bg-safe-soft",
-        className
+        "relative h-1.5 w-full overflow-hidden rounded-full",
+        TONES[tone].track,
+        className,
       )}
       {...props}
     >
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
-        className="h-full w-full flex-1 bg-safe-fill transition-[transform] duration-[var(--duration-normal)] ease-out"
-        style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+        className={cn(
+          "h-full w-full flex-1 transition-[transform] duration-[var(--duration-normal)] ease-out motion-reduce:transition-none",
+          TONES[tone].fill,
+        )}
+        style={{
+          transform: `translateX(-${100 - (resolvedValue / limit) * 100}%)`,
+        }}
       />
     </ProgressPrimitive.Root>
-  )
+  );
 }
 
-export { Progress }
+export { Progress };

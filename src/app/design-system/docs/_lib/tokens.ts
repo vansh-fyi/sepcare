@@ -46,13 +46,19 @@ export function readThemeBlock(): string {
   return css.slice(openBrace + 1, closeBrace);
 }
 
-/** Line-based parse of every custom property whose name starts with `prefix` (e.g. "--color-"). */
-export function parseThemeTokens(themeBlock: string, prefix: string): ThemeToken[] {
+/** Parse custom properties, including formatted multiline values and inline comments. */
+export function parseThemeTokens(
+  themeBlock: string,
+  prefix: string,
+): ThemeToken[] {
   const tokens: ThemeToken[] = [];
-  for (const line of themeBlock.split("\n")) {
-    const match = line.match(/^\s*(--[\w-]+):\s*(.+?);\s*$/);
-    if (match && match[1].startsWith(prefix)) {
-      tokens.push({ name: match[1], value: match[2] });
+  const declarations = themeBlock.replace(/\/\*[\s\S]*?\*\//g, "");
+  for (const match of declarations.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+    if (match[1].startsWith(prefix)) {
+      tokens.push({
+        name: match[1],
+        value: match[2].trim().replace(/\s+/g, " "),
+      });
     }
   }
   return tokens;
@@ -72,8 +78,16 @@ export function getExactToken(themeBlock: string, name: string): string {
   return tokens.find((t) => t.name === name)?.value ?? "—";
 }
 
-export const PRIMITIVE_RAMPS = ["pink", "green", "blue", "neutral", "yellow"] as const;
-export const RAMP_STEPS = [100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
+export const PRIMITIVE_RAMPS = [
+  "pink",
+  "green",
+  "blue",
+  "neutral",
+  "yellow",
+] as const;
+export const RAMP_STEPS = [
+  100, 200, 300, 400, 500, 600, 700, 800, 900,
+] as const;
 
 /** Live-parsed primitive ramps (--color-{ramp}-{step}), sourced from Figma Segue 3.0. */
 export function parsePrimitiveRamps(themeBlock: string) {
@@ -81,7 +95,9 @@ export function parsePrimitiveRamps(themeBlock: string) {
   return PRIMITIVE_RAMPS.map((ramp) => ({
     ramp,
     steps: RAMP_STEPS.map((step) => {
-      const token = colorTokens.find((t) => t.name === `--color-${ramp}-${step}`);
+      const token = colorTokens.find(
+        (t) => t.name === `--color-${ramp}-${step}`,
+      );
       return { step, value: token?.value ?? "—" };
     }),
   }));
@@ -97,17 +113,34 @@ export interface ColorTokenGroup {
  * text, brand, safe, caution, critical) — excludes the raw primitive ramps,
  * which get their own swatch section above.
  */
-export function groupSemanticColorTokens(themeBlock: string): ColorTokenGroup[] {
+export function groupSemanticColorTokens(
+  themeBlock: string,
+): ColorTokenGroup[] {
   const colorTokens = parseThemeTokens(themeBlock, "--color-").filter(
-    (t) => !PRIMITIVE_RAMPS.some((ramp) => t.name.startsWith(`--color-${ramp}-`)),
+    (t) =>
+      !PRIMITIVE_RAMPS.some((ramp) => t.name.startsWith(`--color-${ramp}-`)),
   );
   const groupDefs: { title: string; test: (name: string) => boolean }[] = [
     {
       title: "Surface / Border",
-      test: (n) => /^--color-(bg|surface|border)/.test(n),
+      test: (n) => /^--color-(bg|surface|border|page-canvas)/.test(n),
     },
+    {
+      title: "Motion and status",
+      test: (n) => /^--color-(motion|status|device-header)-/.test(n),
+    },
+    {
+      title: "Navigation and selection",
+      test: (n) => /^--color-(nav|toggle)-/.test(n),
+    },
+    {
+      title: "Device tiles",
+      test: (n) => /^--color-device-(healthy|medium|low|disconnected)-/.test(n),
+    },
+    { title: "Buttons", test: (n) => /^--color-button-/.test(n) },
     { title: "Text", test: (n) => /^--color-text/.test(n) },
-    { title: "Brand", test: (n) => /^--color-brand/.test(n) },
+    { title: "Brand", test: (n) => /^--color-(brand|link)/.test(n) },
+    { title: "Icon tiles", test: (n) => /^--color-icon/.test(n) },
     { title: "Safe", test: (n) => /^--color-safe/.test(n) },
     { title: "Caution", test: (n) => /^--color-caution/.test(n) },
     { title: "Critical", test: (n) => /^--color-critical/.test(n) },
@@ -124,7 +157,7 @@ export function groupSemanticColorTokens(themeBlock: string): ColorTokenGroup[] 
  * Net-new for 06-11 Task 2 (not one of the four relocated helpers above) —
  * live-parses the full 9-role Typography scale from 06-UI-SPEC.md's table.
  *
- * Two roles ("Heading — card", "Secondary text") are deliberate
+ * Two roles ("Card heading", "Secondary text") are deliberate
  * recombinations per the UI-SPEC: an existing size token at a different
  * weight + line-height, not a new token. Their `lineHeight` is therefore a
  * documented literal, not a parsed value — the same kind of hand-authored
@@ -159,7 +192,7 @@ export const TYPOGRAPHY_ROLE_SPECS: TypographyRoleSpec[] = [
   },
   {
     id: "heading-page",
-    label: "Heading — page title",
+    label: "Page title",
     description: "Top-level page title.",
     sample: "Design System",
     sizeTokenName: "--text-heading-page",
@@ -171,7 +204,7 @@ export const TYPOGRAPHY_ROLE_SPECS: TypographyRoleSpec[] = [
   },
   {
     id: "heading",
-    label: "Heading — section",
+    label: "Section heading",
     description: "Section heading (existing --text-heading token, unchanged).",
     sample: "Section heading",
     sizeTokenName: "--text-heading",
@@ -183,7 +216,7 @@ export const TYPOGRAPHY_ROLE_SPECS: TypographyRoleSpec[] = [
   },
   {
     id: "heading-card",
-    label: "Heading — card",
+    label: "Card heading",
     description:
       "Vital-card label, e.g. “Pulse” — recombination of Body's size at Heading's weight.",
     sample: "Pulse",
@@ -264,7 +297,9 @@ export interface ResolvedTypographyRole extends TypographyRoleSpec {
 }
 
 /** Resolves each TYPOGRAPHY_ROLE_SPECS entry's live size (and line-height, where a token exists). */
-export function resolveTypographyRoles(themeBlock: string): ResolvedTypographyRole[] {
+export function resolveTypographyRoles(
+  themeBlock: string,
+): ResolvedTypographyRole[] {
   const textTokens = parseThemeTokens(themeBlock, "--text-");
   return TYPOGRAPHY_ROLE_SPECS.map((spec) => {
     const sizeToken = textTokens.find((t) => t.name === spec.sizeTokenName);

@@ -1,77 +1,61 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { PageShell } from "@/components/page-shell";
-
-/**
- * D-10 sample page 2 (DSYS-02/DSYS-03), rebuilt against the expanded D-12
- * component set (06-19). Renders one Card in empty-state and one in
- * loading-state, proving Card's structurally-invariant layout holds across
- * content states (DESIGN-SYSTEM.md §9 "layout never changes" rule).
- *
- * The loading-state example was originally a bespoke `animate-` + `pulse`
- * skeleton div with no relationship to any real component (06-01). Now that
- * a restyled `Progress` primitive exists (06-08), the loading state is a genuinely
- * progressing `Progress` bar instead — a real component demonstrating a
- * real in-flight sync, not a placeholder skeleton shape. The interval is
- * skipped entirely under `prefers-reduced-motion`, matching the original
- * page's own reduced-motion discipline; the value simply holds still.
- */
-const LOADING_INTERVAL_MS = 900;
-const LOADING_STEP = 17;
-
-export default function EmptyLoadingDesignSystemPage() {
-  const [syncProgress, setSyncProgress] = useState(12);
-
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
-
-    const id = window.setInterval(() => {
-      setSyncProgress((current) =>
-        current >= 100 ? LOADING_STEP : current + LOADING_STEP
-      );
-    }, LOADING_INTERVAL_MS);
-
-    return () => window.clearInterval(id);
-  }, []);
-
+export default function EmptyLoadingPage() {
+  const [progress, setProgress] = useState(35);
   return (
     <PageShell
-      title="Empty & loading states"
-      description="Card's DOM structure never changes between content states — only what's inside CardContent differs."
+      title="Empty and loading states"
+      description="Keep the card's space available while content changes. An empty state explains what happens next; a known loading value shows progress."
     >
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Card>
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card className="min-h-52">
           <CardHeader>
-            <h2 className="text-heading font-semibold text-text">
-              No readings yet
-            </h2>
+            <CardTitle className="text-base">No readings yet</CardTitle>
+            <CardDescription>
+              The device has not sent any readings.
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-body text-text-secondary">
-              Vitals will appear here once the device starts sending data.
+            <p className="text-sm leading-relaxed text-text-secondary">
+              Keep the band connected. Readings will appear here when they
+              arrive.
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="min-h-52">
           <CardHeader>
-            <h2 className="text-heading font-semibold text-text">
-              Syncing device
-            </h2>
+            <CardTitle className="text-base">
+              {progress === 100 ? "Sync complete" : "Syncing device"}
+            </CardTitle>
+            <CardDescription>Uploading stored readings.</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <Progress value={syncProgress} aria-label="Syncing device data" />
-            <p className="text-caption text-text-secondary">
-              Buffered readings will finish uploading once connectivity
-              returns.
+          <CardContent>
+            <Progress value={progress} aria-label="Sync progress" />
+            <p className="text-xs tabular-nums text-text-secondary">
+              {progress}% complete
             </p>
+            <Button
+              variant="secondary"
+              size="sm"
+              className="self-start"
+              onClick={() =>
+                setProgress((value) =>
+                  value === 100 ? 0 : Math.min(100, value + 25),
+                )
+              }
+            >
+              {progress === 100 ? "Restart example" : "Advance example"}
+            </Button>
           </CardContent>
         </Card>
       </div>

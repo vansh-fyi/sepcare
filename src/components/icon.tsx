@@ -6,14 +6,23 @@
  * so no raw-HTML-injection API is ever needed to render an icon.
  * Source: frontend-design/design-system/icons.js (D-09).
  *
- * Preserves the exact outer-<svg> attributes `renderSepCareIcon` set:
- * viewBox="0 0 24 24", fill="none", stroke="currentColor", strokeWidth={1.75},
+ * Uses the shared outline stroke token for consistent weight:
+ * viewBox="0 0 24 24", fill="none", stroke="currentColor", strokeWidth="var(--icon-stroke-width, 2.25)",
  * strokeLinecap="round", strokeLinejoin="round", aria-hidden="true" — plus the
  * fallback-to-`information` behavior for an unrecognized name.
  */
-import * as React from "react"
+import * as React from "react";
+import { IconMoodSmileBeam, IconMoodEmpty, IconMoodSadSquint } from "@tabler/icons-react";
 
 const icons = {
+  // Sleeping face: shared glyph for the neutral motion state.
+  moodSleep: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M7 10q1.5 2 3 0M14 10q1.5 2 3 0" />
+      <ellipse cx="12" cy="15.5" rx="1.25" ry="1.5" />
+    </>
+  ),
   // =========================================================================
   // NAVIGATION
   // =========================================================================
@@ -163,6 +172,20 @@ const icons = {
     <>
       <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z" />
       <path d="M3.5 12H7L9 8L12 15L14 10L16 12H20.5" />
+    </>
+  ),
+  perfusion: (
+    <path d="M12 3C9 7 5 11 5 15a7 7 0 0 0 14 0c0-4-4-8-7-12Zm4 12a4 4 0 0 1-3 4" />
+  ),
+  ratio: (
+    <>
+      <path d="M11 3a9 9 0 1 0 10 10H11Z" />
+      <path d="M15 3v6h6a8 8 0 0 0-6-6Z" />
+    </>
+  ),
+  lungs: (
+    <>
+      <path d="M12 3v8m0-3-4 4m4-4 4 4M9 5C5 5 3 12 3 17c0 4 6 4 6 0V5Zm6 0c4 0 6 7 6 12 0 4-6 4-6 0V5Z" />
     </>
   ),
   temperature: (
@@ -425,7 +448,9 @@ const icons = {
       <line x1="1" y1="1" x2="23" y2="23" />
     </>
   ),
-  insight: <path d="M12 2L14.4 7.6L20 10L14.4 12.4L12 18L9.6 12.4L4 10L9.6 7.6L12 2Z" />,
+  insight: (
+    <path d="M12 2L14.4 7.6L20 10L14.4 12.4L12 18L9.6 12.4L4 10L9.6 7.6L12 2Z" />
+  ),
 
   // =========================================================================
   // FORM CONTROLS
@@ -444,30 +469,53 @@ const icons = {
   chevronDown: <polyline points="6 9 12 15 18 9" />,
   chevronUp: <polyline points="18 15 12 9 6 15" />,
   check: <polyline points="20 6 9 17 4 12" />,
-} as const
+  copy: (
+    <>
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </>
+  ),
+} as const;
 
-export type IconName = keyof typeof icons
+const moodIcons = {
+  moodSmileBeam: IconMoodSmileBeam,
+  moodEmpty: IconMoodEmpty,
+  moodSadSquint: IconMoodSadSquint,
+};
+export type IconName = keyof typeof icons | keyof typeof moodIcons;
 
 export interface IconProps {
   /** Icon key from the ported SepCareIcons map. Falls back to "information" if unrecognized. */
-  name: IconName
+  name: IconName;
   /** Rendered width/height in pixels. Defaults to 24 (the icon set's native viewBox size). */
-  size?: number
+  size?: number;
   /** Additional class names, merged onto the outer <svg>. */
-  className?: string
+  className?: string;
 }
 
 export function Icon({ name, size = 24, className = "" }: IconProps) {
-  const content = icons[name] ?? icons.information
+  if (name in moodIcons) {
+    const MoodIcon = moodIcons[name as keyof typeof moodIcons];
+    return (
+      <MoodIcon
+        size={size}
+        stroke="var(--icon-stroke-width, 2.25)"
+        aria-hidden="true"
+        className={className}
+      />
+    );
+  }
+  const content = icons[name as keyof typeof icons] ?? icons.information;
 
   return (
     <svg
+      data-icon={name}
       width={size}
       height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.75}
+      strokeWidth="var(--icon-stroke-width, 2.25)"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -475,5 +523,5 @@ export function Icon({ name, size = 24, className = "" }: IconProps) {
     >
       {content}
     </svg>
-  )
+  );
 }

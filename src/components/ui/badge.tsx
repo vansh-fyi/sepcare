@@ -13,14 +13,19 @@ import { Icon } from "@/components/icon"
  * otherwise bypass the Icon+label pairing.
  */
 const badgeVariants = cva(
-  "inline-flex items-center gap-1 rounded-full p-1 text-label font-semibold",
+  "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold tracking-tight border transition-colors select-none",
   {
     variants: {
       status: {
-        "safe": "bg-safe-soft text-safe-dark",
-        "caution": "bg-caution-soft text-caution-dark",
-        "critical": "bg-critical-soft text-critical-dark",
+        "safe": "bg-safe-soft text-safe-dark border-border-subtle",
+        "caution": "bg-caution-soft text-caution-dark border-border-subtle",
+        "critical": "bg-critical-soft text-critical-dark border-border-subtle",
+        "neutral": "bg-bg text-text border-border-subtle",
+        "brand": "bg-brand-soft text-brand border-border-subtle",
       },
+    },
+    defaultVariants: {
+      status: "safe",
     },
   }
 )
@@ -28,19 +33,24 @@ const badgeVariants = cva(
 export type BadgeStatus = NonNullable<VariantProps<typeof badgeVariants>["status"]>
 
 interface BadgeProps extends Omit<React.ComponentProps<"span">, "className"> {
-  status: BadgeStatus
+  status?: BadgeStatus
+  variant?: BadgeStatus
   className?: string
+  showIcon?: boolean
 }
 
-function Badge({ className, status, children, ...props }: BadgeProps) {
+function Badge({ className, status, variant, showIcon = true, children, ...props }: BadgeProps) {
+  const resolvedStatus = status ?? variant ?? "safe";
+  const hasStatusIcon = resolvedStatus === "safe" || resolvedStatus === "caution" || resolvedStatus === "critical";
+
   return (
     <span
       data-slot="badge"
-      data-status={status}
-      className={cn(badgeVariants({ status }), className)}
+      data-status={resolvedStatus}
+      className={cn(badgeVariants({ status: resolvedStatus }), className)}
       {...props}
     >
-      <Icon name={status} size={16} />
+      {showIcon && hasStatusIcon && <Icon name={resolvedStatus} size={14} className="shrink-0" />}
       {children}
     </span>
   )

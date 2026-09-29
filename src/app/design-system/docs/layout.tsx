@@ -1,44 +1,41 @@
 "use client";
 
+import { Wordmark } from "@/components/wordmark";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Icon } from "@/components/icon";
 import { DOCS_COMPONENT_CATEGORIES, DOCS_TOP_LINKS } from "./_lib/categories";
+import "@/components/docs/docs.css";
 
-/**
- * Persistent sidebar shell for every `/design-system/docs/*` route (06-11
- * Task 1) — replaces the rejected single-scroll `docs/page.tsx` ("a single
- * page bunch of crap", D-13) with a real navigation shell + content pane.
- *
- * The six component-doc categories come from `_lib/categories.ts`'s literal
- * array constant — never a filesystem `readdir` — so the sidebar's category
- * order stays stable across operating systems (DSYS-03 ordering resolution).
- * Each category's own `links` array is populated by the Wave 5 plan
- * (06-16/06-17/06-18) that builds its routes; a category with no links yet
- * renders a "Coming soon" placeholder instead of a dangling link.
- *
- * Active-link state signals via color only (`text-brand` vs `text-text-
- * muted`), never a font-weight change (emil-ui-polish principle 2). No
- * entrance animation plays on this shell's own load (emil-animations
- * principle 8) — only the hover/press color transition below is
- * intentional, and it only ever transitions `color`, never `transition-all`.
- */
-function SidebarLink({ href, label }: { href: string; label: string }) {
+const GROUPS = [
+  { name: "Getting started", links: DOCS_TOP_LINKS },
+  ...DOCS_COMPONENT_CATEGORIES,
+];
+const LINKS = GROUPS.flatMap((group) =>
+  group.links.map((link) => ({ ...link, group: group.name })),
+);
+
+function DocumentationNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
-  const isActive = pathname === href;
-
   return (
-    <Link
-      href={href}
-      aria-current={isActive ? "page" : undefined}
-      className={cn(
-        "block rounded-card-sm px-3 py-2 text-label transition-colors duration-[var(--duration-fast)] ease-out",
-        isActive ? "text-brand" : "text-text-muted hover:text-text",
-      )}
-    >
-      {label}
-    </Link>
+    <nav aria-label="Documentation">
+      {GROUPS.map((group) => (
+        <div className="docs-nav-group" key={group.name}>
+          <h2>{group.name}</h2>
+          {group.links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={pathname === link.href ? "page" : undefined}
+              onClick={onNavigate}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      ))}
+    </nav>
   );
 }
 
@@ -47,43 +44,198 @@ export default function DesignSystemDocsLayout({
 }: {
   children: ReactNode;
 }) {
+  const pathname = usePathname();
+  const searchDialog = useRef<HTMLDialogElement>(null);
+  const mobileDialog = useRef<HTMLDialogElement>(null);
+  const [query, setQuery] = useState("");
+  const results = LINKS.filter((link) =>
+    `${link.label} ${link.group}`
+      .toLowerCase()
+      .includes(query.trim().toLowerCase()),
+  );
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        if (searchDialog.current?.open) searchDialog.current.close();
+        else searchDialog.current?.showModal();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
   return (
-    <div className="mx-auto flex max-w-6xl gap-10 px-6 py-12 sm:px-8">
-      <aside className="sticky top-12 hidden h-fit w-56 shrink-0 flex-col gap-6 md:flex">
-        <nav aria-label="Docs" className="flex flex-col gap-1">
-          {DOCS_TOP_LINKS.map((link) => (
-            <SidebarLink key={link.href} href={link.href} label={link.label} />
-          ))}
-        </nav>
-
-        <nav
-          aria-label="Components"
-          className="flex flex-col gap-5 border-t border-border-subtle pt-5"
+    <div className="docs-root">
+      <a className="docs-skip" href="#documentation-content">
+        Skip to content
+      </a>
+      <header className="docs-header">
+        <div className="docs-header-inner">
+          <button
+            className="docs-mobile-trigger"
+            aria-label="Open navigation"
+            onClick={() => mobileDialog.current?.showModal()}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="var(--icon-stroke-width, 2.25)"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <Link className="docs-logo" href="/design-system/docs">
+            <span className="docs-logo-mark">
+              <Icon name="pulse" size={19} />
+            </span>
+            <Wordmark />
+          </Link>
+          <nav className="docs-header-nav" aria-label="Main navigation">
+            <Link
+              href="/design-system/docs"
+              aria-current={
+                pathname === "/design-system/docs" ? "page" : undefined
+              }
+            >
+              Introduction
+            </Link>
+            <Link
+              href="/design-system/docs/button"
+              aria-current={
+                ![
+                  "/design-system/docs",
+                  "/design-system/docs/examples",
+                  "/design-system/docs/colors",
+                  "/design-system/docs/typography",
+                ].includes(pathname) &&
+                !pathname.startsWith("/design-system/docs/examples")
+                  ? "page"
+                  : undefined
+              }
+            >
+              Components
+            </Link>
+            <Link
+              href="/design-system/docs/colors"
+              aria-current={
+                [
+                  "/design-system/docs/colors",
+                  "/design-system/docs/typography",
+                ].includes(pathname)
+                  ? "page"
+                  : undefined
+              }
+            >
+              Foundations
+            </Link>
+            <Link
+              href="/design-system/docs/examples/clinical-dashboard"
+              aria-current={
+                pathname.startsWith("/design-system/docs/examples")
+                  ? "page"
+                  : undefined
+              }
+            >
+              Examples
+            </Link>
+          </nav>
+          <button
+            className="docs-search-trigger"
+            onClick={() => searchDialog.current?.showModal()}
+            aria-label="Search documentation"
+          >
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="var(--icon-stroke-width, 2.25)"
+              aria-hidden="true"
+            >
+              <circle cx="10.5" cy="10.5" r="6.5" />
+              <path d="m16 16 5 5" />
+            </svg>
+            <span>Search documentation…</span>
+            <kbd>⌘ K</kbd>
+          </button>
+        </div>
+      </header>
+      <div className="docs-workspace">
+        <aside className="docs-sidebar">
+          <DocumentationNav />
+        </aside>
+        <main
+          id="documentation-content"
+          key={pathname}
+          className="docs-content"
+          tabIndex={-1}
         >
-          {DOCS_COMPONENT_CATEGORIES.map((category) => (
-            <div key={category.name} className="flex flex-col gap-1">
-              <h3 className="px-3 text-caption font-semibold tracking-wide text-text-subtle uppercase">
-                {category.name}
-              </h3>
-              {category.links.length > 0 ? (
-                category.links.map((link) => (
-                  <SidebarLink
-                    key={link.href}
-                    href={link.href}
-                    label={link.label}
-                  />
-                ))
-              ) : (
-                <p className="px-3 text-caption text-text-muted">
-                  Coming soon
-                </p>
-              )}
-            </div>
-          ))}
-        </nav>
-      </aside>
-
-      <main className="min-w-0 flex-1">{children}</main>
+          {children}
+        </main>
+      </div>
+      <dialog
+        ref={searchDialog}
+        className="docs-dialog"
+        aria-label="Search documentation"
+        onClick={(event) => {
+          if (event.target === event.currentTarget)
+            searchDialog.current?.close();
+        }}
+      >
+        <div className="docs-search-field">
+          <input
+            autoFocus
+            aria-label="Search pages"
+            placeholder="Search components and foundations…"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+          <button
+            className="docs-dialog-close"
+            onClick={() => searchDialog.current?.close()}
+            aria-label="Close search"
+          >
+            Esc
+          </button>
+        </div>
+        <div className="docs-search-results">
+          {results.length ? (
+            results.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => {
+                  searchDialog.current?.close();
+                  setQuery("");
+                }}
+              >
+                <span>{link.label}</span>
+                <small>{link.group}</small>
+              </Link>
+            ))
+          ) : (
+            <p>No pages found for “{query}”. Try a component name.</p>
+          )}
+        </div>
+      </dialog>
+      <dialog
+        ref={mobileDialog}
+        className="docs-dialog docs-mobile-dialog"
+        aria-label="Documentation navigation"
+      >
+        <button
+          className="docs-dialog-close"
+          onClick={() => mobileDialog.current?.close()}
+        >
+          Close
+        </button>
+        <DocumentationNav onNavigate={() => mobileDialog.current?.close()} />
+      </dialog>
     </div>
   );
 }

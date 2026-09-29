@@ -1,0 +1,30 @@
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+  width: 100%;
+}
+.tile {
+  width: var(--tile-size, 48px);
+  height: var(--tile-size, 48px);
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-card-sm);
+  box-shadow: none;
+}
+.tile > svg {
+  width: 45%;
+  height: 45%;
+}
+.tile > [data-slot="pulse-wave"] {
+  width: 74%;
+  height: 74%;
+}
+.content {
+  flex: 1;
+  min-width: 0;
+  display: flow-root;
+  overflow-wrap: anywhere;
+}

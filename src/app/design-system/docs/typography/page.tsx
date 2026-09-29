@@ -1,56 +1,76 @@
+import { DocPage, DocSection } from "@/components/docs/documentation";
+import { CodeBlock } from "@/components/docs/code-block";
 import { readThemeBlock, resolveTypographyRoles } from "../_lib/tokens";
 
-/**
- * Live typography reference (06-11 Task 2) — renders all 9 roles from
- * 06-UI-SPEC.md's Typography table as real rendered samples at their actual
- * compiled size/weight/line-height, sourced from `docs/_lib/tokens.ts`'s
- * `resolveTypographyRoles`, not a table of numbers.
- *
- * Each sample's className references the token-generated Tailwind utility
- * (`text-display`, `text-body`, …) directly, so the rendering itself reads
- * the same `--text-*` custom properties the caption row below displays —
- * two views of one source, never a hand-duplicated literal. The two
- * recombination roles ("Heading — card", "Secondary text") use an existing
- * size token with an explicit `leading-[…]` override, per the UI-SPEC's own
- * note that they intentionally get no new token.
- *
- * The Vital-metric sample carries `tabular-nums` (font-variant-numeric)
- * so digits don't jiggle as readings update, and Display/page-title use
- * `text-balance` (text-wrap: balance) for better line breaks — both per
- * emil-ui-polish principle 5.
- */
-export default function DesignSystemDocsTypographyPage() {
-  const themeBlock = readThemeBlock();
-  const roles = resolveTypographyRoles(themeBlock);
-
+export default function TypographyPage() {
+  const roles = resolveTypographyRoles(readThemeBlock());
   return (
-    <div className="flex flex-col gap-8">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-heading-page font-bold text-text text-balance">
-          Typography
-        </h1>
-        <p className="max-w-2xl text-body text-text-secondary">
-          Every role rendered at its real compiled size/weight/line-height —
-          9 roles across 3 weights (400 regular, 600 semibold, 700 bold,
-          reserved for Display/page-title/Vital-metric only).
-        </p>
-      </header>
-
-      <div className="flex flex-col gap-6">
+    <DocPage
+      category="Foundations"
+      title="Typography"
+      description="Plus Jakarta Sans gives headings and key readings their shape. Inter keeps labels, controls, and longer text clear at small sizes."
+      sections={[
+        { id: "families", title: "Font families" },
+        { id: "scale", title: "Type scale" },
+        { id: "usage", title: "Using type" },
+      ]}
+    >
+      <div id="families" className="scroll-mt-24">
+        <div className="docs-font-specimen">
+          <span className="docs-font-name">
+            Plus Jakarta Sans · Headings and key readings
+          </span>
+          <p className="docs-font-sample font-heading font-semibold">
+            Device details
+          </p>
+          <p className="font-heading text-text-muted">
+            Aa Bb Cc Dd Ee Ff Gg &nbsp; 0123456789
+          </p>
+        </div>
+        <div className="docs-font-specimen">
+          <span className="docs-font-name">
+            Inter · Body, labels, and controls
+          </span>
+          <p className="docs-font-sample font-sans">
+            Last synced two minutes ago.
+          </p>
+          <p className="font-sans text-text-muted">
+            Aa Bb Cc Dd Ee Ff Gg &nbsp; 0123456789
+          </p>
+        </div>
+      </div>
+      <DocSection
+        id="scale"
+        title="Clinical type scale"
+        description="These samples use the same size tokens as the clinical components. Choose a role based on the content's place in the screen."
+      >
         {roles.map((role) => (
-          <div
-            key={role.id}
-            className="flex flex-col gap-1 border-b border-border-subtle pb-6 last:border-0 last:pb-0"
-          >
-            <p className={`${role.className} text-text`}>{role.sample}</p>
-            <p className="text-caption text-text-muted">{role.description}</p>
-            <p className="text-caption text-text-subtle">
-              {role.label} · {role.sizeValue} · {role.weightLabel} ·
-              line-height {role.lineHeightValue}
+          <div className="docs-type-row" key={role.id}>
+            <p
+              className={`${role.className} ${["display", "heading-page", "heading", "heading-card", "vital-metric"].includes(role.id) ? "font-heading" : "font-sans"} text-text`}
+            >
+              {role.sample}
             </p>
+            <div className="docs-type-meta">
+              <span>{role.label}</span>
+              <span>{role.sizeValue}</span>
+              <span>{role.weightLabel}</span>
+              <span>Line height {role.lineHeightValue}</span>
+            </div>
           </div>
         ))}
-      </div>
-    </div>
+      </DocSection>
+      <DocSection
+        id="usage"
+        title="Using type"
+        description="Keep numeric readings aligned with tabular figures. Let supporting text wrap, and use weight to separate a label from its value."
+      >
+        <CodeBlock
+          code={
+            '<h1 className="font-heading text-heading-page font-bold">Device details</h1>\n<p className="text-body text-text-secondary">Review the latest readings.</p>\n<p className="font-heading text-vital-metric font-bold tabular-nums">128</p>'
+          }
+        />
+      </DocSection>
+    </DocPage>
   );
 }

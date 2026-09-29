@@ -1,8 +1,8 @@
 "use client"
 
-import * as React from "react"
 import { Line, LineChart, ResponsiveContainer } from "recharts"
 import { cn } from "@/lib/utils"
+import { useReducedMotion } from "@/lib/use-reduced-motion"
 
 export type SparklinePoint = { value: number }
 
@@ -31,19 +31,6 @@ const EMPTY_COPY = "No data for this range yet."
  * `motion-reduce:` variant can intercept, so it must be disabled via the
  * `isAnimationActive` prop instead.
  */
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = React.useState(false)
-
-  React.useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)")
-    setReduced(query.matches)
-    const listener = (event: MediaQueryListEvent) => setReduced(event.matches)
-    query.addEventListener("change", listener)
-    return () => query.removeEventListener("change", listener)
-  }, [])
-
-  return reduced
-}
 
 /**
  * Chromeless inline trend glyph for vital-stat cards — a single `Line` and
@@ -62,7 +49,7 @@ export function Sparkline({
   height = 26,
   className,
 }: SparklineProps) {
-  const prefersReducedMotion = usePrefersReducedMotion()
+  const prefersReducedMotion = useReducedMotion()
 
   if (data.length === 0) {
     return (
@@ -87,7 +74,7 @@ export function Sparkline({
       style={{ height }}
       className={cn("w-full", className)}
     >
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 160, height }}>
         <LineChart
           data={data}
           margin={{ top: 2, right: 2, bottom: 2, left: 2 }}

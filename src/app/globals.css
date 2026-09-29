@@ -1,59 +1,78 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@theme {
+@theme static {
+  /* Calm, decorative status motion. These are not measured heartbeats. */
+  --spacing-pulse-sm: 16px;
+  --spacing-pulse-md: 32px;
+  --spacing-pulse-lg: 52px;
+  --spacing-pulse-xl: 80px;
+  --duration-pulse-safe: 6s;
+  --duration-pulse-caution: 2.5s;
+  --duration-pulse-critical: 1.2s;
+  --ease-pulse-alert: cubic-bezier(0.2, 0, 0.4, 1);
+  --ease-pulse: cubic-bezier(0.45, 0, 0.55, 1);
+  --color-motion-safe: var(--color-green-600);
+  --color-status-tile: var(--color-safe-soft);
+  --color-device-header-battery-healthy: var(--color-green-300);
+  --color-device-header-battery-medium: var(--color-yellow-300);
+  --color-device-header-battery-low: var(--color-pink-300);
+  --color-device-header-battery-disconnected: var(--color-neutral-300);
+  --color-device-header-surface: var(--color-text-strong);
+  --color-device-header-action: var(--color-icon-fill-dark);
+
   /* ==========================================================================
      PRIMITIVES — verbatim from Figma Segue 3.0 (203-9098..9138), do not hand-edit.
      Components never reference these directly — only the semantic layer below does.
      ========================================================================== */
-  --color-pink-100: #FEE3E3;
-  --color-pink-200: #FCC6C6;
-  --color-pink-300: #FBAAAA;
-  --color-pink-400: #F98D8D;
-  --color-pink-500: #F87171;
-  --color-pink-600: #EF4444;
-  --color-pink-700: #EF0C0C;
-  --color-pink-800: #C10303;
+  --color-pink-100: #fee3e3;
+  --color-pink-200: #fcc6c6;
+  --color-pink-300: #fbaaaa;
+  --color-pink-400: #f98d8d;
+  --color-pink-500: #f87171;
+  --color-pink-600: #ef4444;
+  --color-pink-700: #ef0c0c;
+  --color-pink-800: #c10303;
   --color-pink-900: #590101;
 
-  --color-green-100: #D0F1ED;
-  --color-green-200: #A1E3DB;
-  --color-green-300: #72D4CA;
-  --color-green-400: #70D4C9;
-  --color-green-500: #27E4D0;
-  --color-green-600: #08D7BF;
-  --color-green-700: #01A18E;
+  --color-green-100: #d0f1ed;
+  --color-green-200: #a1e3db;
+  --color-green-300: #72d4ca;
+  --color-green-400: #70d4c9;
+  --color-green-500: #27e4d0;
+  --color-green-600: #08d7bf;
+  --color-green-700: #01a18e;
   --color-green-800: #006458;
   --color-green-900: #042521;
 
-  --color-blue-100: #D3E0FB;
-  --color-blue-200: #A8C1F7;
-  --color-blue-300: #5195EF;
-  --color-blue-400: #3B82F6;
-  --color-blue-500: #2563EB;
-  --color-blue-600: #1A4DC0;
+  --color-blue-100: #d3e0fb;
+  --color-blue-200: #a8c1f7;
+  --color-blue-300: #5195ef;
+  --color-blue-400: #3b82f6;
+  --color-blue-500: #2563eb;
+  --color-blue-600: #1a4dc0;
   --color-blue-700: #103891;
-  --color-blue-800: #0A2662;
+  --color-blue-800: #0a2662;
   --color-blue-900: #041437;
 
-  --color-neutral-100: #F5F5F8;
-  --color-neutral-200: #DADCE0;
-  --color-neutral-300: #C1C4D0;
-  --color-neutral-400: #9AA0AF;
+  --color-neutral-100: #f5f5f8;
+  --color-neutral-200: #dadce0;
+  --color-neutral-300: #c1c4d0;
+  --color-neutral-400: #9aa0af;
   --color-neutral-500: #808699;
-  --color-neutral-600: #626B81;
-  --color-neutral-700: #42475E;
+  --color-neutral-600: #626b81;
+  --color-neutral-700: #42475e;
   --color-neutral-800: #222737;
-  --color-neutral-900: #0A0A11;
+  --color-neutral-900: #0a0a11;
 
-  --color-yellow-100: #FAF5DF;
-  --color-yellow-200: #F7EDC1;
-  --color-yellow-300: #F2E08E;
-  --color-yellow-400: #F3DB74;
-  --color-yellow-500: #F3CB3B;
-  --color-yellow-600: #F5C724;
-  --color-yellow-700: #CBA003;
-  --color-yellow-800: #6D5000;
+  --color-yellow-100: #faf5df;
+  --color-yellow-200: #f7edc1;
+  --color-yellow-300: #f2e08e;
+  --color-yellow-400: #f3db74;
+  --color-yellow-500: #f3cb3b;
+  --color-yellow-600: #f5c724;
+  --color-yellow-700: #cba003;
+  --color-yellow-800: #6d5000;
   --color-yellow-900: #473700;
 
   /* ==========================================================================
@@ -61,7 +80,7 @@
      so a future re-tone of the primitives never requires touching component code.
      ========================================================================== */
   --color-bg: var(--color-neutral-100);
-  --color-surface: #FFFFFF;
+  --color-surface: #ffffff;
   --color-surface-soft-blue: var(--color-blue-100);
   --color-border: var(--color-neutral-300);
   --color-border-subtle: var(--color-neutral-200);
@@ -71,7 +90,7 @@
   --color-text-secondary: var(--color-neutral-700);
   --color-text-muted: var(--color-neutral-500);
   --color-text-disabled: var(--color-neutral-300);
-  --color-text-inverse: #FFFFFF;
+  --color-text-inverse: #ffffff;
 
   /* Brand/interaction — Blue family only. Never used to denote health status (D-04). */
   --color-brand: var(--color-blue-600);
@@ -120,7 +139,12 @@
   --text-vital-metric: 2.25rem;
   --text-vital-metric--line-height: 1.1;
 
-  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-heading:
+    var(--font-plus-jakarta-sans), -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans:
+    var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
 
   --radius-input: 12px;
   --radius-btn: 14px;
@@ -148,19 +172,29 @@
      background-image gradient, not a flat color), so it stays outside Tailwind's
      color-utility auto-generation and is referenced via bg-[image:var(--gradient-cta)]. */
   --radius-cta: 10px;
-  --gradient-cta: linear-gradient(127deg, var(--color-pink-500) 2.3%, var(--color-pink-400) 94.9%);
-  --gradient-cta-critical: linear-gradient(135deg, var(--color-pink-600) 2.3%, var(--color-pink-500) 94.9%);
+  --gradient-cta: linear-gradient(
+    127deg,
+    var(--color-pink-500) 2.3%,
+    var(--color-pink-400) 94.9%
+  );
+  --gradient-cta-critical: linear-gradient(
+    135deg,
+    var(--color-pink-600) 2.3%,
+    var(--color-pink-500) 94.9%
+  );
 
-  /* NavLink active state (06-10 Task 1, Figma node 279-220 "Open" state, D-17
-     locked resolution). 116deg is a DISTINCT angle from --gradient-cta's
-     127deg despite sharing the same two pink stops — kept as its own token
-     per the extraction's explicit instruction not to collapse the two.
-     --gradient-nav-indicator backs the 5px indicator bar below the active
-     pill (gradient-to-top pink-300 -> pink-500, a different stop pair from
-     the pill's own fill gradient). Exact percentage offsets weren't part of
-     this extraction (unlike --gradient-cta's), so both default to 0%/100%. */
-  --gradient-nav-active: linear-gradient(116deg, var(--color-pink-500) 0%, var(--color-pink-400) 100%);
-  --gradient-nav-indicator: linear-gradient(to top, var(--color-pink-300) 0%, var(--color-pink-500) 100%);
+  /* Neutral selection keeps clinical status colors focused on readings. */
+  --color-nav-active: var(--color-neutral-800);
+  --color-nav-indicator: var(--color-neutral-800);
+  --color-toggle-active: var(--color-neutral-800);
+  --color-device-healthy-surface: var(--color-green-100);
+  --color-device-healthy-icon: var(--color-green-800);
+  --color-device-medium-surface: var(--color-yellow-100);
+  --color-device-medium-icon: var(--color-yellow-800);
+  --color-device-low-surface: var(--color-pink-100);
+  --color-device-low-icon: var(--color-pink-800);
+  --color-device-disconnected-surface: var(--color-neutral-200);
+  --color-device-disconnected-icon: var(--color-neutral-800);
 
   /* Button archetype C — filled dark icon button (D-12 Figma node 266-9285).
      12px radius is distinct from both --radius-btn (14px) and --radius-cta (10px).
@@ -176,9 +210,17 @@
      rgba(0,0,0,0.05)), not the deeper/darker value originally guessed —
      another D-15 bug fix, not a stylistic preference. */
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.05);
-  --shadow-floating: 0 8px 30px rgba(10, 10, 17, 0.10);
+  --shadow-floating: 0 8px 30px rgba(10, 10, 17, 0.1);
   --shadow-critical: 0 10px 32px rgba(193, 3, 3, 0.14);
   --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  --color-toggle-surface: var(--color-surface);
+  --color-toggle-hover: var(--color-neutral-100);
+  --color-toggle-text: var(--color-text-secondary);
+  --color-toggle-active-text: var(--color-text-inverse);
+  --shadow-control:
+    0 1px 3px color-mix(in srgb, var(--color-neutral-900) 12%, transparent),
+    0 2px 5px color-mix(in srgb, var(--color-neutral-900) 5%, transparent);
+  --icon-stroke-width: 2.25;
   --shadow-cta: 0px 2px 2px var(--color-neutral-200);
   /* NavBar's shadow (06-10 Task 2, Figma node 279-320) casts UPWARD (negative
      Y offset) since the bar sits at the screen bottom — distinct direction
@@ -198,13 +240,22 @@
      genuinely new Figma-extracted value, following the primitive/semantic
      layering convention (06-06 precedent). See card.DESIGN.md's Card Type Map
      for per-node provenance. */
-  --color-text-hero-muted: #7B82A0; /* 266-9323 hero subtitle — distinct from neutral-500 (#808699) */
-  --color-icon-tile-neutral: var(--color-neutral-100); /* 266-9387 icon tile bg */
+  --color-text-hero-muted: #7b82a0; /* 266-9323 hero subtitle — distinct from neutral-500 (#808699) */
+  --color-icon-tile-neutral: var(
+    --color-neutral-100
+  ); /* 266-9387 icon tile bg */
   --color-icon-tile-green: var(--color-green-100); /* 203-13605 icon tile bg */
-  --gradient-card-hero-icon: linear-gradient(135deg, var(--color-green-700) 0%, var(--color-green-500) 100%); /* 266-9323 icon tile */
-  --gradient-card-device-icon: linear-gradient(180deg, var(--color-pink-500) 0%, var(--color-pink-300) 100%); /* 203-13559 / 203-11669 icon tile */
+  --gradient-card-hero-icon: linear-gradient(
+    135deg,
+    var(--color-green-700) 0%,
+    var(--color-green-500) 100%
+  ); /* 266-9323 icon tile */
   --shadow-card-device: 0 2px 8px var(--color-neutral-200); /* 203-13559 / 203-11669 — Figma authored this one directly against the token, not an rgba literal */
-  --gradient-metric-pulse: linear-gradient(132.5deg, var(--color-blue-500) 0%, var(--color-blue-400) 100%); /* 266-9344 Pulse tone only — Temp/Activity gradients not extracted this plan, see card.DESIGN.md */
+  --gradient-metric-pulse: linear-gradient(
+    132.5deg,
+    var(--color-blue-500) 0%,
+    var(--color-blue-400) 100%
+  ); /* 266-9344 Pulse tone only — Temp/Activity gradients not extracted this plan, see card.DESIGN.md */
 
   /* Progress/BatteryIndicator (06-08) — Figma node 203-11669 (Device Status Card
      WITH progress bar; D-16's resolved disposition, a generic percentage-driven
@@ -221,10 +272,12 @@
      for values this specific page needs that no prior plan's component
      extraction covered yet, following the same primitive/semantic
      layering convention used throughout this phase. */
-  --color-page-canvas: #F0F1F6; /* Home screen's page-content bg — one step
+  --color-page-canvas: #f0f1f6; /* Home screen's page-content bg — one step
     off from --color-bg (#F5F5F8/neutral-100); a distinct extracted value,
     not a typo/duplicate of --color-bg. */
-  --color-link: var(--color-blue-400); /* "See All" link (14px SemiBold
+  --color-link: var(
+    --color-blue-400
+  ); /* "See All" link (14px SemiBold
     #3b82f6) — an exact match to the blue-400 primitive, but a distinct
     semantic role from --color-brand (blue-600); kept separate rather than
     reusing --color-brand since Figma's link color is one shade lighter. */
@@ -239,39 +292,100 @@
      each stop than the earlier approximation (which reused Pulse's
      500->400 pair by pattern-matching rather than exact per-vital values).
      Temp: pink-600 -> pink-500. Activity: green-700 -> green-400. */
-  --gradient-metric-temp: linear-gradient(132.5deg, var(--color-pink-600) 0%, var(--color-pink-500) 100%);
-  --gradient-metric-activity: linear-gradient(132.5deg, var(--color-green-700) 0%, var(--color-green-400) 100%);
+  --gradient-metric-temp: linear-gradient(
+    132.5deg,
+    var(--color-pink-600) 0%,
+    var(--color-pink-500) 100%
+  );
+  --gradient-metric-activity: linear-gradient(
+    132.5deg,
+    var(--color-green-700) 0%,
+    var(--color-green-400) 100%
+  );
+
+  /* Button-owned semantic roles. Retone controls without changing the palette. */
+  --color-button-brand-fill: var(--color-brand-fill);
+  --color-button-brand-fill-hover: var(--color-brand-fill-hover);
+  --color-button-brand-fill-active: var(--color-brand-fill-active);
+  --color-button-brand-on-fill: var(--color-text-inverse);
+  --color-button-brand-surface: var(--color-surface);
+  --color-button-brand-surface-hover: var(--color-brand-soft);
+  --color-button-brand-text: var(--color-brand);
+  --color-button-brand-border: var(--color-border);
+  --color-button-coral-fill: var(--color-pink-500);
+  --color-button-coral-fill-hover: var(--color-pink-600);
+  --color-button-coral-fill-active: var(--color-pink-700);
+  --color-button-coral-on-fill: var(--color-text-inverse);
+  --color-button-coral-surface: var(--color-surface);
+  --color-button-coral-surface-hover: var(--color-pink-100);
+  --color-button-coral-text: var(--color-pink-800);
+  --color-button-coral-border: var(--color-pink-300);
+  --color-button-critical-fill: var(--color-critical-fill);
+  --color-button-critical-fill-hover: var(--color-critical-fill-hover);
+  --color-button-critical-fill-active: var(--color-critical-fill-active);
+  --color-button-critical-on-fill: var(--color-text-inverse);
+  --color-button-critical-surface: var(--color-surface);
+  --color-button-critical-surface-hover: var(--color-critical-soft);
+  --color-button-critical-text: var(--color-critical-dark);
+  --color-button-critical-border: var(--color-pink-300);
+  --color-button-neutral-fill: var(--color-neutral-800);
+  --color-button-neutral-fill-hover: var(--color-neutral-900);
+  --color-button-neutral-fill-active: var(--color-neutral-900);
+  --color-button-neutral-on-fill: var(--color-text-inverse);
+  --color-button-neutral-surface: var(--color-surface);
+  --color-button-neutral-surface-hover: var(--color-bg);
+  --color-button-neutral-text: var(--color-text);
+  --color-button-neutral-border: var(--color-neutral-400);
 
   --duration-fast: 150ms;
   --duration-normal: 250ms;
   --duration-slow: 350ms;
 }
 
-html {
-  height: 100%;
-}
+@layer base {
+  html {
+    height: 100%;
+  }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
 
-body {
-  min-height: 100%;
-  color: var(--color-text);
-  background: var(--color-bg);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  body {
+    min-height: 100%;
+    color: var(--color-text);
+    background: var(--color-bg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
+  /* Tailwind's Preflight owns the reset. Unlayered resets override utilities. */
+  :focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }

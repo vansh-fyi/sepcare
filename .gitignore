@@ -28,3 +28,7 @@ dist/
 *.tsbuildinfo
 next-env.d.ts
 /coverage
+
+# Obsolete early design iterations
+/archive/
+/References/

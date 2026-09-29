@@ -1,5 +1,13 @@
+"use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,81 +18,71 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PageShell } from "@/components/page-shell";
-
-/**
- * D-10 sample page 3 (DSYS-02/DSYS-03), rebuilt against the expanded D-12
- * component set (06-19). Nests an Input and two Buttons inside a Card inside
- * the page layout, proving Card/Input/Button token classes all cascade
- * correctly three layers deep on a real route. Originally seeded by Plan
- * 06-01's tracer (a single Button proving one compiled token rendered
- * through a real Radix-based shadcn Button); the tracer's manual
- * `bg-brand-fill text-white` override is replaced here by the `primary`
- * variant now that Button carries its own restyled contract (Plan 06-03).
- *
- * A second nested composition below proves the expanded form-field set
- * cascades correctly too — Card > CardContent > Field > Select nests four
- * layers deep, not just Card > CardContent > Input/Button.
- *
- * The temporary "Figma-verified Button archetypes" (06-06), "NavLink
- * states" (06-10), and fixed `NavBar` (06-10) blocks that were mounted here
- * for the orchestrator's deferred D-15 screenshot-diff pass have been
- * removed (06-19 consolidation) — those component families now have their
- * own dedicated docs-site routes (`/design-system/docs/button`,
- * `/design-system/docs/nav`) as the canonical live-preview destination, so
- * this page no longer needs to carry ad-hoc scaffolding for them.
- */
-export default function NestedDesignSystemPage() {
+export default function FormExamplePage() {
+  const [saved, setSaved] = useState(false);
   return (
     <PageShell
-      title="Nested composition"
-      description="Button, Input, and the expanded form-field set rendered inside Card inside the page layout — proving the token set cascades correctly three-plus layers deep."
+      title="Device setup form"
+      description="A complete form built from Card, Field, Input, Select, and Button. This example keeps its values in the browser."
     >
       <Card className="mx-auto max-w-md">
         <CardHeader>
-          <h2 className="text-heading font-semibold text-text">
-            Device Sync
-          </h2>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="device-id"
-              className="text-label font-semibold text-text"
-            >
-              Device ID
-            </label>
-            <Input id="device-id" placeholder="nb-001" />
-          </div>
-          <div className="flex gap-3">
-            <Button variant="primary">Sync Now</Button>
-            <Button variant="secondary">Cancel</Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="mx-auto mt-6 max-w-md">
-        <CardHeader>
-          <h2 className="text-heading font-semibold text-text">
-            Device region (Field + Select, 06-19)
-          </h2>
+          <CardTitle className="text-base">Set up a device</CardTitle>
+          <CardDescription>
+            Add the identifier printed on the band.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Field>
-            <FieldLabel htmlFor="device-region">Device region</FieldLabel>
-            <Select>
-              <SelectTrigger id="device-region" className="w-full">
-                <SelectValue placeholder="Select a region" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="in-south">India — South</SelectItem>
-                <SelectItem value="in-north">India — North</SelectItem>
-                <SelectItem value="in-west">India — West</SelectItem>
-              </SelectContent>
-            </Select>
-            <FieldDescription>
-              Used to route device-support requests only.
-            </FieldDescription>
-          </Field>
+          <form
+            className="grid gap-6"
+            onSubmit={(event) => {
+              event.preventDefault();
+              setSaved(true);
+            }}
+            onChange={() => setSaved(false)}
+          >
+            <Field>
+              <FieldLabel htmlFor="device-id">Device ID</FieldLabel>
+              <Input
+                id="device-id"
+                name="device"
+                placeholder="e.g. SKU-1234"
+                required
+                aria-describedby="device-help"
+              />
+              <FieldDescription id="device-help">
+                Find this on the back of the band.
+              </FieldDescription>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="device-region">Support region</FieldLabel>
+              <Select name="region" defaultValue="south">
+                <SelectTrigger id="device-region" className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="south">South India</SelectItem>
+                  <SelectItem value="north">North India</SelectItem>
+                  <SelectItem value="west">West India</SelectItem>
+                </SelectContent>
+              </Select>
+            </Field>
+            <div className="flex gap-3">
+              <Button type="submit" variant="primary" tone="neutral">
+                Save device
+              </Button>
+              <Button
+                type="reset"
+                variant="secondary"
+                onClick={() => setSaved(false)}
+              >
+                Reset
+              </Button>
+            </div>
+            <p role="status" className="min-h-5 text-xs text-safe-dark">
+              {saved ? "Saved for this example. No data was sent." : ""}
+            </p>
+          </form>
         </CardContent>
       </Card>
     </PageShell>
