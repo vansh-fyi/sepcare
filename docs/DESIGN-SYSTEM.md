@@ -75,6 +75,8 @@ The home example uses InfantStatusCard from `src/components/patterns/status-summ
 
 Live documentation: /design-system/docs/status-summary.
 
+Prototype caregiver and parent screens use `InfantStatusSection`, which composes InfantStatusCard with a Badge below the card so every status has a literal word, icon, and color. Its emergency action displays demo feedback only. It accepts the same required `infant` data; real call behavior remains the lower-level card's handler contract. Containing prototype shells label static sample data explicitly.
+
 Web app headers start with the wordmark and app actions. Do not render a simulated operating-system status bar (time, cellular signal, or phone battery). The wearable battery percentage remains part of DeviceHeader.
 
 ## Consistent example scenarios

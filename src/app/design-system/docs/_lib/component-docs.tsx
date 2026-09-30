@@ -50,7 +50,7 @@ export function ComponentDocs({ name }: { name: ComponentName }) {
         title="API reference"
         description={
           name === "status-summary"
-            ? "InfantStatusCard is a composition. Its supported props are listed below."
+            ? "InfantStatusCard renders the card. InfantStatusSection adds the status Badge and prototype feedback; it accepts the same infant prop only."
             : name === "motion"
             ? "PulseWave is the motion primitive; DeviceHeader is a shared composition. Their supported props are listed below."
             : "Standard element props and className pass through to the underlying control."

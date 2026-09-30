@@ -12,10 +12,10 @@ export const COMPONENT_CONTENT = {
     title: "Infant status",
     description: "A full-width infant-status card with an extra-large face above its heading and description.",
     usage: 'import { InfantStatusCard } from "@/components/patterns/status-summary-cards";\n\n<InfantStatusCard infant={{ status: "safe", title: "Baby is resting safely", description: "Based on the latest available readings." }} />',
-    guidance: "Uses Card and an 80px XL PulseWave. The face sits above the text, with the title matching DeviceHeader: Plus Jakarta Sans, text-xl, bold. The card fills its container at every viewport size. Supply clinical status and copy from application data.",
+    guidance: "Uses Card and an 80px XL PulseWave. The face sits above the text, with the title matching DeviceHeader: Plus Jakarta Sans, text-xl, bold. The card fills its container at every viewport size. Supply clinical status and copy from application data. For prototype caregiver and parent screens, InfantStatusSection adds a Badge with the literal status word below the card and handles demo-only emergency feedback. The section accepts only infant; the card accepts infant and an optional onCallAmbulance handler.",
     props: [
       { name: "infant", type: "{ status: safe | caution | critical; title: string; description: string }", description: "Required infant state and visible clinical copy. Critical replaces the description with Call ambulance when onCallAmbulance is supplied." },
-      { name: "onCallAmbulance", type: "() => void", description: "Optional critical action handler. Renders the shared critical button beneath the heading instead of the description. Examples only show demo feedback." },
+      { name: "onCallAmbulance", type: "() => void", description: "InfantStatusCard only: optional critical action handler. Renders the shared critical button beneath the heading instead of the description. InfantStatusSection provides demo feedback internally and does not accept this prop." },
     ],
     tokens: ["--color-surface", "--radius-card", "--shadow-card", "--color-text-strong", "--color-text-subtle", "--spacing-pulse-xl", "--color-motion-safe", "--color-caution", "--color-critical", "--color-text-muted"],
   },

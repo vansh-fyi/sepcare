@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Preview } from "@/components/docs/documentation";
 import { InfantStatusCard } from "@/components/patterns/status-summary-cards";
+import { InfantStatusSection } from "@/components/patterns/infant-status-section";
 import type { ClinicalStatus } from "@/components/patterns/clinical-cards";
 
 const INFANT = {
@@ -40,11 +41,11 @@ export function StatusSummaryExample() {
 
 export function StatusSummaryVariations() {
   return (
-    <Preview tone="canvas" caption="The same full-width composition presents caution and critical states."
-      code={'<InfantStatusCard infant={{ status: "caution", title: "Needs attention", description: "Review the readings and contact the care team." }} />'}
+    <Preview tone="canvas" caption="Sample prototype section: the Badge adds an explicit status word below the card. Call ambulance only demonstrates feedback."
+      code={'import { InfantStatusSection } from "@/components/patterns/infant-status-section";\n\n<InfantStatusSection infant={{ status: "critical", title: "Take baby to hospital", description: "Contact emergency care now." }} />'}
     >
       <div className="w-full max-w-lg">
-        <InfantStatusCard infant={{ status: "caution", ...INFANT.caution }} />
+        <InfantStatusSection infant={{ status: "critical", ...INFANT.critical }} />
       </div>
     </Preview>
   );
