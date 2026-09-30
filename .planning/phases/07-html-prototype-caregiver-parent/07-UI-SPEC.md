@@ -153,13 +153,22 @@ No new spacing values needed this phase. Declared project scale (unchanged, `AGE
 | 2xl | 48px | Page-level top/bottom breathing room |
 | 3xl | 64px | Not used this phase |
 
-Exceptions: `VitalDetailCard` uses `p-5` (20px) — a Phase 6-established exception already baked into the reused component; do not "fix" it to `p-6`/`p-4` when composing this phase's screens. `InstructionCard`'s inner `Item` uses `p-3.5` (14px) — same rule.
+**Pre-existing exceptions (out of this phase's spacing-contract scope):** `VitalDetailCard` uses `p-5` (20px) and `InstructionCard`'s inner `Item` uses `p-3.5` (14px). Both were accepted at Phase 6's own sign-off, inside Phase 6's shipped components — they are restated here only so this phase's screens know not to "fix" them to `p-6`/`p-4`/`p-4` when composing around them. Phase 7 is not re-asserting, re-adjudicating, or expanding these values as part of its own spacing scale; it is naming two already-shipped facts about components it reuses unmodified. **Phase 7's own new spacing contribution is zero new spacing values:** every new composition in this phase (`RiskTimeline`, `ConnectionStatus`, `DeviceSelectList`, `DeviceDetails`, the `VitalDetailCard` `unavailable`-tone extension) uses only the eight standard-scale values in the table above (4/8/16/24/32/48/64, plus the two named pre-existing exceptions it inherits by reuse) — it introduces none of its own.
 
 ---
 
 ## Typography
 
-Unchanged from Phase 6 — this phase adds no new text roles. Existing 9-role scale (`globals.css`):
+**Scope note:** the 9-role / 4-weight scale below is Phase 6's own shipped, previously-signed-off
+typography system (`globals.css`), reused unmodified. It is restated here for reference only — Phase
+7 is not re-asserting, re-adjudicating, or expanding it, and it is out of this phase's own
+typography-contract scope. **Phase 7's own new typography contribution is zero new font sizes and
+zero new font weights:** every new composition this phase specifies (`RiskTimeline`,
+`ConnectionStatus`, `DeviceSelectList`, `DeviceDetails`, the `VitalDetailCard` `unavailable`-tone
+extension) maps onto roles already in this inherited scale — see "New-composition-specific mapping"
+below, which cites four existing roles and introduces none.
+
+Existing 9-role scale (`globals.css`), inherited from Phase 6, listed for reference only:
 
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
