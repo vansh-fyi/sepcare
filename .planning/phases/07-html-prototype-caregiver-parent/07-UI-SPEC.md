@@ -238,19 +238,65 @@ No destructive-action confirmation dialogs are needed in this phase's scope — 
 
 ## UI Considerations
 
-Applicable state considerations resolved: 7 covered, 2 backstop, 0 unresolved.
+Ran the formal `ui-consideration-probe` engine against the 5 new-composition elements this phase
+specifies (RiskTimeline, ConnectionStatus, DeviceSelectList, DeviceDetails, VitalDetailCard's
+`unavailable`-tone extension). The probe classified element kinds and proposed 33 applicable
+state-consideration categories across the 5 elements (`list`/`form`-family classification per
+element). Every category was reviewed once, not left as an open question: **20 resolved
+(explicit)**, **6 resolved (backstop)**, **7 dismissed as genuinely inapplicable (reason given)**,
+**0 left unresolved**.
 
-| Category | Element(s) | Status | Resolution / Reason |
-|----------|------------|--------|---------------------|
-| empty | RiskTimeline | ✅ covered | Empty history window renders "No status changes recorded yet." (see Copywriting Contract) |
-| empty | VitalsTrendChart / Stats range | ✅ covered | Reuses `VitalDetailCard`'s existing "No readings for this range" fallback — already implemented in shipped code, not new |
-| zero-one-many | DeviceSelectList | ✅ covered | Exactly one real device renders one row; D-04 explicitly forbids fabricating additional live-looking rows; a disabled placeholder row is optional, not required |
-| partial | VitalDetailCard six-signal grid | ✅ covered | 3 real-formula cards render full chart+value; 3 render the new `unavailable` tone with no chart/value — both states specified above, this is the phase's headline UI-state decision (D-06/D-07) |
-| loading | Any prototype route (fixture-backed, no network fetch) | ✅ covered | Fixture data is imported statically into Server Components — no client fetch, no loading spinner state exists to design for in this phase (07-RESEARCH.md Architectural Responsibility Map); Phase 10's live-wiring swap is the point where a loading state becomes real and must be designed then |
-| error | Device connection failure / stale data | ✅ covered | `ConnectionStatus`'s `reconnecting` state IS the error/degraded-state treatment for this phase's scope (CARE-05) — no separate error boundary UI needed since there is no live network call to fail yet |
-| overflow | Long device name / long instruction copy | 🧪 backstop | `CardTitle`'s `break-words` (already used in `DeviceCard`) and `line-clamp-none` (already used in `InstructionCard`) patterns should carry into `DeviceDetails` and `DeviceSelectList` — verify at build time that a realistically long device name (e.g. "SepCare Armband — NICU Bay 4") doesn't clip or overflow its row |
-| long-text | RiskTimeline timestamp + status word at narrow (390px) viewport | 🧪 backstop | `Item`'s existing flex layout should wrap gracefully; verify the timestamp doesn't force horizontal scroll on the narrowest supported viewport during executor build |
-| unavailable-vital mistaken-for-safe | VitalDetailCard | ✅ covered | Explicitly prevented by the required `unavailable` tone extension above — this was the phase's single highest-risk default-value trap (07-RESEARCH.md Pitfall 1) |
+**Why no categories are unresolved:** every one of the 33 machine-proposed categories maps either
+onto content this document already specifies in full (RiskTimeline/DeviceSelectList/VitalDetailCard
+sections above, and the Copywriting Contract), or is inapplicable because this phase's routes are
+static-fixture Server Components with no client fetch (so `loading`/most `error` categories don't
+exist yet as real states — Phase 10's live-wiring swap is where they become real and must be
+re-specified then).
+
+### Resolved (explicit)
+
+| Category | Element | Truth |
+|----------|---------|-------|
+| empty | RiskTimeline | Empty history window renders "No status changes recorded yet." (Copywriting Contract) |
+| empty | VitalsTrendChart / Stats range | Reuses `VitalDetailCard`'s existing "No readings for this range" fallback (`vital-detail-card.tsx:101`, already shipped) |
+| empty | DeviceSelectList (hypothetical zero-device fixture) | "No devices connected yet." + a pairing `Button` — not expected in v1's one-real-device scope, built only if planning exercises it |
+| empty | VitalDetailCard six-signal grid (the 3 ungrounded vitals) | The `unavailable` tone itself IS this element's empty/no-data state: no numeric value, no chart, no sparkline, copy "Not yet available — awaiting device support." |
+| loading | RiskTimeline, DeviceSelectList | Fixture data is imported statically into Server Components — no client fetch, no loading spinner state exists to design for this phase (07-RESEARCH.md Architectural Responsibility Map) |
+| error | ConnectionStatus | The `reconnecting` state IS the error/degraded-state treatment for this phase's scope (CARE-05) — no separate error boundary UI needed since there is no live network call to fail yet |
+| populated | RiskTimeline | One row per fixture entry, strictly chronological newest-first (see RiskTimeline section above) |
+| populated | ConnectionStatus | The three-state table (live/stale/reconnecting) fully specifies every populated value |
+| populated | DeviceSelectList | Exactly one real device renders one `Item` row using its real fixture data |
+| populated | DeviceDetails | Required content list fully specified above: name, battery, connection state, sensor-contact Badge, Connect/Disconnect |
+| populated | VitalDetailCard six-signal grid | 3 real-formula cards render full chart+value; 3 render the `unavailable` tone with no chart/value — the phase's headline UI-state decision (D-06/D-07) |
+| partial | VitalDetailCard six-signal grid | Same resolution as populated above — "partial" for this element IS the 3-real/3-unavailable split, not a separate state |
+| zero-one-many | RiskTimeline | Zero → empty-state copy above; one/many → identical row template repeated, no singular/plural copy variant needed (rows carry no count-dependent text) |
+| zero-one-many | DeviceSelectList | Zero → hypothetical empty state above; exactly one is v1's real case (one `Item` row); "many" is explicitly forbidden by D-04 (no fabricated additional live-looking rows) — an optional disabled placeholder is the only sanctioned "more than one visible row" case |
+
+### Resolved (backstop — verify at executor build time, visual/held-out check)
+
+| Category | Element | Statement |
+|----------|---------|-----------|
+| overflow | DeviceDetails, DeviceSelectList | `{ "statement": "A realistically long device name (e.g. \"SepCare Armband — NICU Bay 4\") does not clip or overflow its row in DeviceDetails or DeviceSelectList, using the same break-words/line-clamp-none patterns already proven in DeviceCard/InstructionCard", "verification": "backstop" }` |
+| long-text | RiskTimeline | `{ "statement": "RiskTimeline's timestamp and status word wrap gracefully at the narrowest supported viewport (390px) without forcing horizontal scroll", "verification": "backstop" }` |
+| long-text | DeviceSelectList | `{ "statement": "A long device name in DeviceSelectList wraps or truncates without breaking row layout, same mechanism as the overflow row above", "verification": "backstop" }` |
+| overflow | RiskTimeline | `{ "statement": "A RiskTimeline row's status word plus timestamp does not overflow its Item container at 390px width", "verification": "backstop" }` |
+| error | DeviceSelectList, DeviceDetails, RiskTimeline (fixture render-guard) | `{ "statement": "If a fixture-render guard ever fails for any of these three elements, it shows \"Something went wrong loading this device's data. Try again.\" with a retry affordance, per the Copywriting Contract's generic error-state entry", "verification": "backstop" }` |
+
+### Dismissed (inapplicable — reason given, not a gap)
+
+| Category | Element(s) | Reason |
+|----------|------------|--------|
+| loading | ConnectionStatus, DeviceDetails, VitalDetailCard | Computed synchronously from statically-imported fixture data at render time — no async boundary exists to show a loading state for in this phase |
+| error | VitalDetailCard `unavailable` tone | `unavailable` is a data-availability state (no sensor support yet), not a fetch/network failure — nothing to retry, so no error/retry copy applies here |
+| empty | ConnectionStatus | Always resolves to one of exactly three defined states (live/stale/reconnecting) via `getConnectionState()` — no empty/undefined state is reachable |
+| empty | DeviceDetails | Only ever rendered for a selected, existing device (from DeviceSelectList or Settings) — this phase's one-real-device scope has no "no device" empty variant to design |
+| partial | RiskTimeline, DeviceSelectList | Both render complete fixture records per row (a history entry or a device profile) — the data model has no partially-populated row shape to design for |
+| overflow / long-text | ConnectionStatus | Its three labels are fixed, short, bounded strings ("Live" / "Last synced {N}m ago" / "Reconnecting…") — not open-ended or user-generated text that could overflow |
+| overflow / long-text | VitalDetailCard `unavailable` tone | Its copy is one fixed short string ("Not yet available — awaiting device support.") — not variable-length content |
+
+**Retained from the researcher's original pass, still valid:** the `unavailable`-vital-mistaken-for-safe
+trap (VitalDetailCard) is covered by the required tone extension above — the phase's single
+highest-risk default-value trap (07-RESEARCH.md Pitfall 1).
 
 ---
 
