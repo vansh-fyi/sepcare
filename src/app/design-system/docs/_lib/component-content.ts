@@ -807,8 +807,8 @@ export const COMPONENT_CONTENT = {
       },
       {
         name: "status",
-        type: "safe | caution | critical",
-        description: "VitalDetailCard: colors the icon, latest value, and chart lines consistently. Explicit status takes precedence over critical.",
+        type: "safe | caution | critical | unavailable",
+        description: "Unavailable suppresses values and charts and shows neutral device-support copy. VitalDetailCard: colors the icon, latest value, and chart lines consistently. Explicit status takes precedence over critical.",
       },
       {
         name: "critical",
@@ -826,7 +826,7 @@ export const COMPONENT_CONTENT = {
         name: "chart",
         type: "VitalsTrendChartProps",
         description:
-          "Optional chart configuration on VitalDetailCard. Omit for a summary row; empty data retains the chart space.",
+          "Optional chart configuration on VitalDetailCard. Omit for a summary row; empty data retains the chart space. Unavailable status suppresses the chart entirely, even when supplied.",
       },
       {
         name: "timeAxis",

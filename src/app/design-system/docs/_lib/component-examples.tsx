@@ -450,13 +450,14 @@ function NavExample() {
 
 function ChartExample({ small = false }: { small?: boolean }) {
   const [empty, setEmpty] = useState(false);
-  const [status, setStatus] = useState<"safe" | "caution" | "critical">("safe");
+  const [status, setStatus] = useState<"safe" | "caution" | "critical" | "unavailable">("safe");
   return (
     <Preview
       tone="canvas"
       code={
         small
           ? `<VitalCard metric="pulse" value="128" unit="bpm" data={${empty ? "[]" : "readings"}} />`
+          : status === "unavailable" ? `<VitalDetailCard title="Cardiac Autonomic" icon="pulse" description="Not yet available — awaiting device support." status="unavailable" />`
           : `<VitalDetailCard
   title="Thermoregulation"
   icon="temperature"
@@ -483,6 +484,7 @@ function ChartExample({ small = false }: { small?: boolean }) {
                 <option value="safe">Safe</option>
                 <option value="caution">Caution</option>
                 <option value="critical">Critical</option>
+                <option value="unavailable">Unavailable</option>
               </select>
             </label>
           )}
@@ -502,10 +504,10 @@ function ChartExample({ small = false }: { small?: boolean }) {
         <div className="w-full min-w-0">
           <VitalDetailCard
             status={status}
-            title="Thermoregulation"
-            icon="temperature"
+            title={status === "unavailable" ? "Cardiac Autonomic" : "Thermoregulation"}
+            icon={status === "unavailable" ? "pulse" : "temperature"}
             description={status === "safe" ? "Readings are stable." : "Review the highlighted changes."}
-            chart={{
+            chart={status === "unavailable" ? undefined : {
               data: empty ? [] : sampleVitalReadings(4),
               xKey: "time",
               timeAxis: true,

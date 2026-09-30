@@ -9,6 +9,8 @@ import {
 import type { ClinicalStatus } from "./clinical-cards";
 import { cn } from "@/lib/utils";
 
+export const UNAVAILABLE_VITAL_DESCRIPTION = "Not yet available — awaiting device support.";
+
 export const VITAL_DETAILS: {
   title: string;
   icon: IconName;
@@ -22,12 +24,12 @@ export const VITAL_DETAILS: {
   {
     title: "Cardiac Autonomic",
     icon: "pulse",
-    description: "Abrupt HRV pattern changes detected",
+    description: UNAVAILABLE_VITAL_DESCRIPTION,
   },
   {
     title: "Perfusion Index",
     icon: "perfusion",
-    description: "Severe downward trend",
+    description: UNAVAILABLE_VITAL_DESCRIPTION,
   },
   {
     title: "HR / Temp Ratio",
@@ -37,7 +39,7 @@ export const VITAL_DETAILS: {
   {
     title: "Respiratory Pattern",
     icon: "lungs",
-    description: "All systems stable",
+    description: UNAVAILABLE_VITAL_DESCRIPTION,
   },
   {
     title: "Activity Level",
@@ -61,14 +63,16 @@ export function VitalDetailCard({
   icon: IconName;
   description: string;
   critical?: boolean;
-  status?: ClinicalStatus;
+  status?: ClinicalStatus | "unavailable";
   value?: string | number;
   unit?: string;
   rangeLabel?: string;
   chart?: Omit<VitalsTrendChartProps, "className">;
 }) {
   const tone = status ?? (critical ? "critical" : "safe");
+  const showChart = Boolean(chart) && tone !== "unavailable";
   const treatment = {
+    unavailable: { tile: "bg-neutral-100 text-text-muted", text: "text-text-muted", label: "Unavailable" },
     safe: { tile: "bg-safe-soft text-safe", text: "text-safe", label: "Stable" },
     caution: { tile: "bg-caution-soft text-caution-dark", text: "text-caution-dark", label: "Needs attention" },
     critical: { tile: "bg-critical-soft text-critical", text: "text-critical", label: "Critical" },
@@ -117,11 +121,11 @@ export function VitalDetailCard({
         <div className="min-w-0 flex-1">
           <CardTitle>{title}</CardTitle>
           <CardDescription className="mt-1 flex items-center gap-1.5">
-            {chart && <Icon name="calendar" size={13} />}
-            {chart ? range : description}
+            {showChart && chart && <Icon name="calendar" size={13} />}
+            {tone === "unavailable" ? UNAVAILABLE_VITAL_DESCRIPTION : chart ? range : description}
           </CardDescription>
         </div>
-        {chart && (
+        {showChart && chart && (
           <div
             className={cn(
               "shrink-0 text-right tabular-nums",
@@ -138,7 +142,7 @@ export function VitalDetailCard({
           </div>
         )}
       </div>
-      {chart && (
+      {showChart && chart && (
         <div className="mt-5">
           <VitalsTrendChart
             {...chart}
