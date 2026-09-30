@@ -128,7 +128,7 @@ mandatory per-component Figma-verification):
 
 ### Phase 7: HTML Prototype (Caregiver + Parent)
 
-**Goal**: A validated static HTML prototype demonstrates the full caregiver view and the abstracted parent view sharing one design system, with real backend field names, ready to drive backend gap-fill and the Next.js port
+**Goal**: A validated Next.js prototype — real App Router routes/components reusing Phase 6's design system directly, wired to backend-shaped static fixture data (not a separate static-HTML tree) — demonstrates the full caregiver view and the abstracted parent view sharing one design system, with real backend field names, ready to drive backend gap-fill and later live-data wiring (Phase 10 swaps fixtures for live wiring, not a markup port; supersedes this phase's original "static HTML prototype" framing per 07-CONTEXT.md D-01/D-02)
 **Depends on**: Phase 6
 **Requirements**: CARE-01, CARE-02, CARE-03, CARE-04, CARE-05, CARE-06, PARENT-01, PARENT-02, PARENT-03, PARENT-04, PARENT-05
 **Success Criteria** (what must be TRUE):
@@ -139,7 +139,32 @@ mandatory per-component Figma-verification):
   4. Selecting "See All" on the parent home screen reveals a two-tab (Vitals/Stats) view giving the parent the same underlying data as the caregiver in abstracted presentation, with device/settings reached via a device icon rather than a nav tab — this exact flow finalized collaboratively during the phase's discuss-step
   5. A data-contract diff document lists every field/endpoint gap the prototype build surfaced against the current API
 
-**Plans**: TBD
+**Plans**: 8 plans
+
+Plans:
+**Wave 1**
+
+- [ ] 07-01-PLAN.md — TRACER: fixtures (readings/risk-status/device) + caregiver persistent-nav chrome + Home (live vitals card, traffic-light status)
+- [ ] 07-02-PLAN.md — VitalDetailCard "unavailable" tone extension + ConnectionStatus (live/stale/reconnecting)
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [ ] 07-03-PLAN.md — RiskTimeline + DeviceSelectList + shared DeviceDetails
+- [ ] 07-04-PLAN.md — Parent layout (no persistent nav) + abstracted Home
+
+**Wave 3** *(blocked on Wave 2)*
+
+- [ ] 07-05-PLAN.md — Shared VitalsView/StatsView (6-signal grid, risk history, 1h/6h/24h trend charts) + trend-window utility
+
+**Wave 4** *(blocked on Wave 3)*
+
+- [ ] 07-06-PLAN.md — Caregiver Vitals/Stats/Settings routes
+- [ ] 07-07-PLAN.md — Parent device flow (Select Device list -> Device Details) + "See All" two-tab Vitals/Stats
+
+**Wave 5** *(phase gate)*
+
+- [ ] 07-08-PLAN.md — Data-contract diff document + full-phase regression
+
 **UI hint**: yes
 
 ### Phase 8: Backend Gap-Fill
@@ -195,7 +220,7 @@ Phases execute in numeric order: 5 → 6 → 7 → 8 → 9 → 10
 | 4. Historical Trends API | v1.0 | 1/1 | Complete | 2026-09-19 |
 | 5. Repo Cleanup & Canonicalization | v1.1 | 2/2 | Complete    | 2026-09-25 |
 | 6. Design System (Tailwind v4 Tokens) | v1.1 | 21/16 | Complete    | 2026-09-30 |
-| 7. HTML Prototype (Caregiver + Parent) | v1.1 | 0/TBD | Not started | - |
+| 7. HTML Prototype (Caregiver + Parent) | v1.1 | 0/8 | Not started | - |
 | 8. Backend Gap-Fill | v1.1 | 0/TBD | Not started | - |
 | 9. Hardware Integration | v1.1 | 0/TBD | Not started | - |
 | 10. Next.js Port + Deploy | v1.1 | 0/TBD | Not started | - |
