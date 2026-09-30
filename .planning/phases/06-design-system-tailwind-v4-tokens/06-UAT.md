@@ -29,14 +29,6 @@ note: "Terminology check: caution color is correctly 'yellow' per design system 
 expected: Labels truncate/ellipsis rather than resizing the component; components wrap or truncate long text without breaking token-driven height/radius.
 result: pass
 
-### 3. Visit /design-system/docs in a running `npm run dev` session
-expected: The Color Tokens table's rendered values visually match what's shown on /design-system/states (Safe green / Caution amber / Critical pink); all four component DESIGN.md docs render in full and are legible; the three Sample Pages links navigate correctly.
-result: [pending]
-
-### 4. Render Button/Badge/Card/Input with adversarially long label/heading/value strings (no sample page currently does this)
-expected: Labels truncate/ellipsis rather than resizing the component; components wrap or truncate long text without breaking token-driven height/radius.
-result: [pending]
-
 ## Summary
 
 total: 4

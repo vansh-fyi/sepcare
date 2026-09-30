@@ -15,9 +15,9 @@ Requirements for this milestone (judge-ready demo, ~2 dedicated days). Each maps
 
 ### Design System
 
-- [ ] **DSYS-01**: A Tailwind v4 token-based design system exists (`@theme` directive, no `tailwind.config.js`-style config), with a color palette distinct from the students' original (no baby pink), informed by the Figma reference (Segue 3.0) and salvaged pieces of the students' `frontend-design/design-system/`
-- [ ] **DSYS-02**: The design system is validated with at least 3 sample HTML pages exercising real component states (e.g. Green/Amber/Red status, empty/loading, nested component variants) before the full prototype is built
-- [ ] **DSYS-03**: The design system supports both the caregiver (full detail) and parent (abstracted) visual language from one shared token set
+- [x] **DSYS-01**: A Tailwind v4 token-based design system exists (`@theme` directive, no `tailwind.config.js`-style config), with a color palette distinct from the students' original (no baby pink), informed by the Figma reference (Segue 3.0) and salvaged pieces of the students' `frontend-design/design-system/`
+- [x] **DSYS-02**: The design system is validated with at least 3 sample HTML pages exercising real component states (e.g. Green/Amber/Red status, empty/loading, nested component variants) before the full prototype is built
+- [x] **DSYS-03**: The design system supports both the caregiver (full detail) and parent (abstracted) visual language from one shared token set
 
 ### Caregiver Dashboard
 
@@ -83,9 +83,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLEAN-01 | Phase 5 | Complete |
 | CLEAN-02 | Phase 5 | Complete |
 | CLEAN-03 | Phase 5 | Complete |
-| DSYS-01 | Phase 6 | Needs Rework |
-| DSYS-02 | Phase 6 | Needs Rework |
-| DSYS-03 | Phase 6 | Needs Rework |
+| DSYS-01 | Phase 6 | Complete |
+| DSYS-02 | Phase 6 | Complete |
+| DSYS-03 | Phase 6 | Complete |
 | CARE-01 | Phase 7 | Pending |
 | CARE-02 | Phase 7 | Pending |
 | CARE-03 | Phase 7 | Pending |

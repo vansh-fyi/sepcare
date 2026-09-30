@@ -36,7 +36,7 @@ key-files:
 key-decisions:
   - "Did not run `roadmap.update-plan-progress` or `requirements.mark-complete` for this plan yet — writing this SUMMARY would flip the `06-21-PLAN.md` ROADMAP checkbox to checked (roadmap.cjs marks any plan with a matching *-SUMMARY.md file, regardless of the SUMMARY's own `status:` field), which would misrepresent the phase gate as fully passed before Task 2's human visual sign-off — the exact failure mode (automated-but-insufficient verification) this plan exists to prevent. Deferred to the continuation agent that resolves Task 2."
 
-requirements-completed: []  # Deliberately empty — DSYS-01/02/03 stay "Needs Rework" until Task 2's human sign-off closes the phase gate.
+requirements-completed: [DSYS-01, DSYS-02, DSYS-03]  # Task 2's human sign-off closed the phase gate 2026-09-30 (see D4 rationale).
 
 coverage:
   - id: D1
@@ -72,24 +72,27 @@ coverage:
   - id: D4
     description: "Full manual walkthrough of all 4 sample/proof pages and the docs site confirms the actual visual-quality bar the user wanted"
     requirement: "DSYS-02"
-    verification: []
+    verification:
+      - kind: other
+        ref: "06-UAT.md (4/4 conversational UAT tests passed, 2026-09-30: states/empty-loading tri-state palette, nested composition, docs color-token parity, adversarial long-string handling)"
+        status: pass
     human_judgment: true
-    rationale: "06-RESEARCH.md's own Validation Architecture section states no automated visual-regression tooling exists in this repo; this is the phase's core risk (visual/UX quality, not logic correctness) and is Task 2's blocking-human checkpoint, still open at the time of this SUMMARY."
+    rationale: "06-RESEARCH.md's own Validation Architecture section states no automated visual-regression tooling exists in this repo; this is the phase's core risk (visual/UX quality, not logic correctness). Task 2's blocking-human checkpoint is now resolved: the project owner (a professional designer) explicitly signed off on the full rebuilt design system during the 2026-09-30 /gsd-verify-work session — \"The UI is completely and perfectly 100% fine... The design system is spot on.\" — covering the itemized checkpoint items (sample pages, docs site, home-proof composition, bottom-nav active-tab color) as a whole rather than a line-by-line walkthrough transcript."
 
 duration: 15min
-completed: 2026-09-27
-status: halted
+completed: 2026-09-30
+status: complete
 ---
 
 # Phase 6 Plan 21: Full-Phase Regression + D-15 Provenance Re-Audit Summary
 
-**Cold full-phase `npm run build` passes across all ~20 components/17 docs routes/4 sample pages, D-15 provenance audit is 20/20 clean, and all three Prohibition Recall checks re-confirm clean — Task 2's human visual sign-off remains open.**
+**Cold full-phase `npm run build` passes across all ~20 components/17 docs routes/4 sample pages, D-15 provenance audit is 20/20 clean, all three Prohibition Recall checks re-confirm clean, and Task 2's human visual sign-off is now resolved — the project owner approved the full rebuilt design system during the 2026-09-30 UAT session.**
 
 ## Performance
 
-- **Duration:** 15 min (this session's continuation of Task 1's remaining verification steps)
-- **Completed:** 2026-09-27
-- **Tasks:** 1 of 2 (Task 1 complete; Task 2 is a blocking-human checkpoint, not yet resolved)
+- **Duration:** 15 min (Task 1) + resolved via 2026-09-30 `/gsd-verify-work` session (Task 2)
+- **Completed:** 2026-09-30
+- **Tasks:** 2 of 2 (Task 1 complete 2026-09-27; Task 2 resolved 2026-09-30)
 - **Files modified:** 0 this session (the 5 DESIGN.md provenance fixes were committed in a prior session as `87067bf`, confirmed still in place)
 
 ## Accomplishments
@@ -119,8 +122,8 @@ Task 1's actual fix (the 5 DESIGN.md provenance corrections) was committed in a 
 
 ## Decisions Made
 
-- Skipped `roadmap.update-plan-progress` and `requirements.mark-complete` for this plan in this session. Writing this SUMMARY.md makes `roadmap.cjs`'s plan-checkbox-matching logic see a `06-21-SUMMARY.md` file and check off `06-21-PLAN.md` in ROADMAP.md regardless of this SUMMARY's `status: halted` — that would misrepresent the phase gate as closed before Task 2's human visual sign-off actually happens, which is precisely the "automated-but-insufficient verification" failure mode this plan exists to catch. The continuation agent that resolves Task 2 should run those commands once the checkpoint is genuinely approved (or update this SUMMARY's `status` to `complete` first).
-- Confirmed (not re-derived) that Phase 6's `06-VERIFICATION.md` still carries `status: human_needed` from before this rework — `roadmap.update-plan-progress` would not have flipped the phase-level checkbox to Complete even if run, but the per-plan checkbox risk above still applied.
+- Prior session skipped `roadmap.update-plan-progress` and `requirements.mark-complete` for this plan, deliberately, to avoid misrepresenting the phase gate as closed before Task 2's human visual sign-off actually happened.
+- 2026-09-30: Task 2 resolved. During `/gsd-verify-work 6`, all 4 UAT checkpoints passed, and the project owner (a professional designer) gave explicit, unambiguous sign-off on the complete rebuilt design system ("The UI is completely and perfectly 100% fine... The design system is spot on... close it"), superseding the itemized walkthrough transcript the plan's Task 2 originally called for. This SUMMARY's `status` is updated to `complete`, `requirements-completed` now lists DSYS-01/02/03, and the ROADMAP checkbox / requirements tracker should be updated accordingly.
 
 ## Deviations from Plan
 
@@ -136,8 +139,8 @@ None - no external service configuration required.
 
 ## Next Phase Readiness
 
-Task 1 (the automated full-phase regression + provenance audit) is fully green. Task 2 — the blocking-human visual-quality walkthrough of all 4 sample/proof pages and the docs site — is the sole remaining item before this phase gate closes and `/gsd-verify-work` can be meaningfully run against Phase 6. This SUMMARY is intentionally marked `status: halted` (not `complete`) to reflect that.
+Both tasks are green: Task 1's automated full-phase regression + provenance audit, and Task 2's human visual-quality sign-off (resolved 2026-09-30). Phase 6's gate is closed; Phase 7 (HTML Prototype) can proceed.
 
 ---
 *Phase: 06-design-system-tailwind-v4-tokens*
-*Completed: 2026-09-27 (Task 1 only — Task 2 pending)*
+*Completed: 2026-09-30 (Task 1: 2026-09-27, Task 2: 2026-09-30)*
