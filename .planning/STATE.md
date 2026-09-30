@@ -5,11 +5,11 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 7
 current_phase_name: HTML Prototype (Caregiver + Parent)
 status: planning
-stopped_at: Phase 6 complete, ready to plan Phase 7
-last_updated: "2026-09-30T13:04:44.472Z"
+stopped_at: Phase 7 context gathered
+last_updated: "2026-09-30T00:00:00.000Z"
 last_activity: 2026-09-30
-last_activity_desc: Phase 6 complete, transitioned to Phase 7
-state_head: d4d05764750af8c79baef280ce5853ffef0e8328
+last_activity_desc: Phase 7 context gathered
+state_head: 2ddfb6c
 progress:
   total_phases: 6
   completed_phases: 1
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 
 Phase: 7 — HTML Prototype (Caregiver + Parent)
 Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-30 — Phase 6 complete, transitioned to Phase 7
+Status: Context gathered, ready to plan
+Last activity: 2026-09-30 — Phase 7 context gathered (07-CONTEXT.md)
 
 Progress: [██░░░░░░░░] 17%
 
@@ -94,6 +94,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 06 P18 | 45min | 3 tasks | 10 files |
 | Phase 06 P20 | 20min | 3 tasks | 3 files |
 | Phase 06 P21 | 15min | 1 tasks | 0 files |
+| Phase 07 discuss | - | - | 2 files |
 
 ## Accumulated Context
 
@@ -157,6 +158,9 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 06]: 2026-09-30: Task 2 (human visual sign-off) resolved — project owner (professional designer) gave explicit, unambiguous approval of the full rebuilt design system during `/gsd-verify-work 6`; DSYS-01/02/03 marked Complete.
 - [Phase 06]: 2026-09-30: Re-verification (post-UAT) found and fixed two real regressions introduced after the 09-27 sign-off: a broken `next build` (missing `color` field in a Nyquist test fixture) and 9/20 `DESIGN.md` files that silently lost their Figma-provenance line during the homepage-rewrite commit (`fb25dbe`). Both fixed and committed (`c433e53`); clean build re-confirmed.
 - [Phase 06]: 2026-09-30: Security review accepted one deviation as documented risk rather than a code change — `@tabler/icons-react` was added for 3 mood glyphs despite the phase's own "hand-authored SVG only" rule (T-06-20, `06-SECURITY.md`); reputable package, no dangerous code paths, user declined to replace it.
+- [Phase 07]: 2026-09-30: Resolved Phase 6's D-11 flag — Phase 7 builds real Next.js routes reusing the design system directly, not detached static HTML; ROADMAP.md's "static HTML prototype"/"port to Next.js" wording is superseded (rename recommended, not yet done).
+- [Phase 07]: 2026-09-30: Of the six vital summaries Phase 6 built, only 3 (Thermoregulation, HR/Temp Ratio, Activity Level) can be computed from real backend fields using the actual §7.1.1 research formulas; the other 3 (HRV, Perfusion Index, Respiratory Pattern) need firmware/backend work not yet done (`RISK-V2-01`). User directive: keep the full six-signal UI, flag the ungrounded 3 explicitly as pending rather than dropping or faking them — project is no longer being built as a competition/hackathon entry.
+- [Phase 07]: 2026-09-30: Parent "See All" → Vitals/Stats tabs (reusing caregiver's own screens); parent device icon and caregiver Settings tab both open the same shared Select-Device-list → Device-Details flow.
 
 ### Pending Todos
 
@@ -178,11 +182,12 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-30T13:04:44.472Z
-Stopped at: Phase 6 complete, ready to plan Phase 7
-Resume file: None
+Last session: 2026-09-30T00:00:00.000Z
+Stopped at: Phase 7 context gathered
+Resume file: .planning/phases/07-html-prototype-caregiver-parent/07-CONTEXT.md
 
 ## Operator Next Steps
 
 - Phase 6 (Design System) shipped — UAT (4/4 pass), Nyquist validation (33/33 tests, nyquist_compliant: true), security review (threats_open: 0), and human design sign-off are all complete; VERIFICATION.md status: passed
-- Start Phase 7 (HTML Prototype) with `/gsd-discuss-phase 7` (or `/gsd-plan-phase 7` to skip discussion)
+- Phase 7 context gathered (`07-CONTEXT.md`) — key decisions: real Next.js routes (not static HTML), parent nav flow resolved, six-vital-signal data gap handled honestly (3 real, 3 flagged pending), shared device/settings screen, dedicated data-contract diff doc
+- Plan Phase 7 with `/gsd-plan-phase 7`
