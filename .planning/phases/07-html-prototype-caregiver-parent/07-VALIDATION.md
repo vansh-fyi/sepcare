@@ -40,27 +40,31 @@ No `jsdom` or `@testing-library/*` is installed. Component tests use `renderToSt
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 07-TBD | TBD | TBD | CARE-01 | TBD | N/A | unit (renderToStaticMarkup) | `npx vitest run tests/prototype.caregiver-home.test.ts` | ❌ W0 | ⬜ pending |
-| 07-TBD | TBD | TBD | CARE-02 | TBD | N/A | unit (markup assertion) | `npx vitest run tests/prototype.status.test.ts` | ❌ W0 | ⬜ pending |
-| 07-TBD | TBD | TBD | CARE-03 | TBD | N/A | unit (pure function) | `npx vitest run tests/prototype.timeline.test.ts` | ❌ W0 | ⬜ pending |
-| 07-TBD | TBD | TBD | CARE-04 | TBD | N/A | unit (pure function) | `npx vitest run tests/prototype.trend-window.test.ts` | ❌ W0 | ⬜ pending |
-| 07-TBD | TBD | TBD | CARE-05 | TBD | N/A | unit (pure function) | `npx vitest run tests/prototype.connection-status.test.ts` | ❌ W0 | ⬜ pending |
-| 07-TBD | TBD | TBD | CARE-06 | TBD | N/A | unit (markup assertion) | `npx vitest run tests/prototype.caregiver-nav.test.ts` | ❌ W0 | ⬜ pending |
-| 07-TBD | TBD | TBD | PARENT-01 | TBD | N/A | unit (markup assertion) | `npx vitest run tests/prototype.parent-home.test.ts` | ❌ W0 | ⬜ pending |
-| 07-TBD | TBD | TBD | PARENT-02/03 | TBD | N/A | unit (markup assertion) | `npx vitest run tests/prototype.parent-detail.test.ts` | ❌ W0 | ⬜ pending |
-| 07-TBD | TBD | TBD | PARENT-04 | TBD | N/A | unit (markup assertion, same file as PARENT-01) | `npx vitest run tests/prototype.parent-home.test.ts` | ❌ W0 | ⬜ pending |
-| 07-TBD | TBD | TBD | PARENT-05 | TBD | N/A | manual-only (UAT) | `/gsd-verify-work 7` conversational UAT | n/a | ⬜ pending |
+| 07-01-02 | 01 | 1 | CARE-01 | — | N/A | unit (renderToStaticMarkup) | `npx vitest run tests/prototype.caregiver-home.test.ts` | ❌ pre-exec | ⬜ pending |
+| 07-01-02 | 01 | 1 | CARE-02 | — | N/A | unit (markup assertion) | `npx vitest run tests/prototype.status.test.ts` | ❌ pre-exec | ⬜ pending |
+| 07-03-01 | 03 | 2 | CARE-03 | — | N/A | unit (pure function) | `npx vitest run tests/prototype.timeline.test.ts` | ❌ pre-exec | ⬜ pending |
+| 07-05-01 | 05 | 3 | CARE-04 | — | N/A | unit (pure function) | `npx vitest run tests/prototype.trend-window.test.ts` | ❌ pre-exec | ⬜ pending |
+| 07-02-02 | 02 | 1 | CARE-05 | — | N/A | unit (pure function) | `npx vitest run tests/prototype.connection-status.test.ts` | ❌ pre-exec | ⬜ pending |
+| 07-01-01 | 01 | 1 | CARE-06 | — | N/A | unit (markup assertion) | `npx vitest run tests/prototype.caregiver-nav.test.ts` | ❌ pre-exec | ⬜ pending |
+| 07-04-02 | 04 | 2 | PARENT-01 | — | N/A | unit (markup assertion) | `npx vitest run tests/prototype.parent-home.test.ts` | ❌ pre-exec | ⬜ pending |
+| 07-07-03 | 07 | 4 | PARENT-02/03 | — | N/A | unit (markup assertion, byte-identical parity test) | `npx vitest run tests/prototype.parent-detail.test.ts` | ❌ pre-exec | ⬜ pending |
+| 07-03-02 | 03 | 2 | PARENT-04 | — | N/A | unit (markup assertion) | `npx vitest run tests/prototype.device-select-list.test.ts` | ❌ pre-exec | ⬜ pending |
+| 07-07-01 | 07 | 4 | PARENT-05 | — | N/A | manual-only (UAT) | `/gsd-verify-work 7` conversational UAT | n/a | ⬜ pending |
+| 07-08-02 | 08 | 5 | (cross-cutting) | T-07-03 | Prevent accidental live-Supabase import in prototype routes | unit + grep guard | `grep -rl "@/lib/supabase" src/app/(prototype)/ \| wc -l \| tr -d ' '` | ❌ pre-exec | ⬜ pending |
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky. `Task ID`/`Plan`/`Wave`/`Threat Ref` columns are finalized by the planner once PLAN.md files exist — this row set is RESEARCH.md's requirement→test map carried forward.*
+*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky. Task ID/Plan/Wave/Threat Ref columns finalized 2026-09-30 against the 8 committed PLAN.md files (07-01..07-08); `File Exists: ❌ pre-exec` reflects that Wave 1 hasn't executed yet, not a planning gap — re-check after `/gsd-execute-phase 7`.*
 
 ---
 
 ## Wave 0 Requirements
 
-- [ ] `src/lib/fixtures/readings.ts` — the fixture module every render/unit test depends on must exist before any test can import it
-- [ ] `src/lib/fixtures/risk-status.ts` — `mapRiskStatus()` helper (bridges backend `green|amber|red` to design-system `safe|caution|critical`)
-- [ ] `src/lib/fixtures/connection-status.ts` — `getConnectionState()` helper (Live/Last synced Xm ago/Reconnecting)
-- [ ] `tests/prototype.*.test.ts` files listed above — none exist yet
+No separate Wave 0 — the planner folded fixture/test scaffolding directly into Wave 1 (07-01, 07-02), each with its own automated `<verify>`. Scaffolding is planned, not yet executed:
+
+- [ ] `src/lib/fixtures/readings.ts` — 07-01 Task 1
+- [ ] `src/lib/fixtures/risk-status.ts` — `mapRiskStatus()` helper — 07-01 Task 1
+- [ ] `src/lib/fixtures/device.ts` — 07-01 Task 1
+- [ ] `src/lib/fixtures/connection-status.ts` — `getConnectionState()` helper — 07-02 Task 2
+- [ ] `tests/prototype.*.test.ts` files listed above — created alongside their respective plan/task, not pre-created separately
 - [ ] Framework install: none — Vitest is already configured project-wide
 
 ---
