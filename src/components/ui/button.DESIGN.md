@@ -29,3 +29,7 @@ Primary uses fill and on-fill roles. Primary and icon buttons have no default sh
 Loading hides content while preserving its space and shows a centered spinner. The button retains its width and becomes disabled. Use `asChild` for enabled links styled as buttons, with the link's content inside the child; the `icon` prop and loading spinner apply to native button rendering.
 
 The system rules are in `docs/DESIGN-SYSTEM.md`. Padding belongs to Button, not individual documentation pages. Global resets belong in `@layer base` so utility classes retain their intended effect.
+
+## Figma provenance
+
+Verified against Figma node(s) `203-11745`, `203-14032`, `203-11521`, `266-9285`.

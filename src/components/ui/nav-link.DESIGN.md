@@ -9,3 +9,7 @@ Use `icon`, `label`, `href`, and `state`. NavBar supplies these for a complete n
 The selected surface uses `--color-nav-active`; its indicator uses `--color-nav-indicator`. Both alias neutral-800. The selected button is shadowless; inactive items retain the shared control shadow. Keep the full-width indicator below the active tab.
 
 Live examples are at `/design-system/docs/nav`.
+
+## Figma provenance
+
+Verified against Figma node `279-220`.

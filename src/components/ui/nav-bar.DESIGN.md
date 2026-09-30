@@ -9,3 +9,7 @@ Use `position="fixed"` for a bar at the viewport bottom. Use `position="static"`
 `onTabChange` supports controlled examples. When supplied, a click updates the selected view instead of navigating. The home example uses it to show Home, Vitals, Stats, and Settings within the phone.
 
 The bar uses `--radius-nav-bar`, `--shadow-nav-bar`, and `--color-surface`. References are in `References/figma/8.png` and `9.png`; earlier extraction recorded nodes `279-320` and `279-758`.
+
+## Figma provenance
+
+Verified against Figma node `279-320` (and its Home-screen instance `279-758`).

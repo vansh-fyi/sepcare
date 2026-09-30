@@ -7,3 +7,7 @@ Supply arbitrary labels and values. Keep the current controlled value when a req
 `fit="content"` uses intrinsic item widths. `fit="equal"` fills its parent with equal-width items; pair it with `size="sm"` for the seven time ranges on a phone. `spacing` is measured in quarter-rem increments. Group variant and size apply to all items.
 
 Do not restyle selected states inside example pages. Change the shared variants and update the live documentation together.
+
+## Figma provenance
+
+No dedicated Figma frame found for node `203-11938`'s per-value extraction; token-consistent with prior Figma-verified components.

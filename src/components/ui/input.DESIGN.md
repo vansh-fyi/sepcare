@@ -7,3 +7,7 @@ For new forms, compose Input with Field, FieldLabel, FieldDescription, and Field
 The existing `error` and `errorMessage` props remain available for inline errors. Input generates an error ID, connects it to the input, and preserves any existing `aria-describedby` value. The icon comes from the shared Icon component.
 
 Do not fix form spacing with per-page control overrides. Update Field or Input so the correction reaches every form. Examples are at `/design-system/docs/input` and `/design-system/docs/field`.
+
+## Figma provenance
+
+No dedicated Figma frame was found for Input.

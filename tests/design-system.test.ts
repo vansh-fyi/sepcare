@@ -472,7 +472,7 @@ describe("VitalDetailCard contract", () => {
         chart: {
           data: [],
           xKey: "t",
-          series: [{ key: "value", label: "HRV" }],
+          series: [{ key: "value", label: "HRV", color: "var(--color-critical)" }],
           height: 180,
         },
       }),
