@@ -1,33 +1,28 @@
 ---
 phase: 06-design-system-tailwind-v4-tokens
-verified: 2026-09-26T13:35:24Z
-status: human_needed
-score: 22/24 must-haves verified
-covered_files: [".planning/REQUIREMENTS.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-01-PLAN.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-01-SUMMARY.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-02-PLAN.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-02-SUMMARY.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-03-PLAN.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-03-SUMMARY.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-03-deferred-items.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-04-PLAN.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-04-SUMMARY.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-05-PLAN.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-05-SUMMARY.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-REVIEW-FIX.md", ".planning/phases/06-design-system-tailwind-v4-tokens/06-REVIEW.md", "AGENTS.md", "components.json", "postcss.config.mjs", "src/app/design-system/docs/error.tsx", "src/app/design-system/docs/page.tsx", "src/app/design-system/empty-loading/page.tsx", "src/app/design-system/nested/page.tsx", "src/app/design-system/states/page.tsx", "src/app/globals.css", "src/app/layout.tsx", "src/components/icon.tsx", "src/components/ui/badge.DESIGN.md", "src/components/ui/badge.tsx", "src/components/ui/button.DESIGN.md", "src/components/ui/button.tsx", "src/components/ui/card.DESIGN.md", "src/components/ui/card.tsx", "src/components/ui/input.DESIGN.md", "src/components/ui/input.tsx", "src/lib/utils.ts"]
-covered_digest: "v1:sha256:ff9604ee660509ec643d1bbe580ba6ed6b2a325eab507ba433dc02aaffbbe751"
+verified: 2026-09-30T19:15:00Z
+status: passed
+score: 6/6 must-haves verified
+covered_files: [".planning/REQUIREMENTS.md",".planning/ROADMAP.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-01-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-01-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-02-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-02-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-03-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-03-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-03-deferred-items.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-04-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-04-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-05-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-05-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-06-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-06-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-07-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-07-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-08-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-08-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-09-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-09-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-10-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-10-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-11-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-11-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-12-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-12-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-13-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-13-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-14-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-14-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-15-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-15-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-16-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-16-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-17-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-17-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-18-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-18-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-19-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-19-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-20-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-20-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-21-PLAN.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-21-SUMMARY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-CONTEXT.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-DISCUSSION-LOG.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-FIGMA-EXTRACTS.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-PATTERNS.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-RESEARCH.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-REVIEW-FIX.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-REVIEW.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-SECURITY.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-UAT.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-UI-SPEC.md",".planning/phases/06-design-system-tailwind-v4-tokens/06-VALIDATION.md","AGENTS.md","components.json","postcss.config.mjs","src/app/design-system/docs/error.tsx","src/app/design-system/docs/page.tsx","src/app/design-system/empty-loading/page.tsx","src/app/design-system/home-proof/page.tsx","src/app/design-system/nested/page.tsx","src/app/design-system/page.tsx","src/app/design-system/states/page.tsx","src/app/globals.css","src/app/layout.tsx","src/components/icon.tsx","src/components/ui/badge.DESIGN.md","src/components/ui/badge.tsx","src/components/ui/battery-indicator.DESIGN.md","src/components/ui/battery-indicator.tsx","src/components/ui/button.DESIGN.md","src/components/ui/button.tsx","src/components/ui/card.DESIGN.md","src/components/ui/card.tsx","src/components/ui/chart.DESIGN.md","src/components/ui/chart.tsx","src/components/ui/checkbox.DESIGN.md","src/components/ui/checkbox.tsx","src/components/ui/field.DESIGN.md","src/components/ui/field.tsx","src/components/ui/input.DESIGN.md","src/components/ui/input.tsx","src/components/ui/item.DESIGN.md","src/components/ui/item.tsx","src/components/ui/label.DESIGN.md","src/components/ui/label.tsx","src/components/ui/nav-bar.DESIGN.md","src/components/ui/nav-bar.tsx","src/components/ui/nav-link.DESIGN.md","src/components/ui/nav-link.tsx","src/components/ui/progress.DESIGN.md","src/components/ui/progress.tsx","src/components/ui/radio-group.DESIGN.md","src/components/ui/radio-group.tsx","src/components/ui/select.DESIGN.md","src/components/ui/select.tsx","src/components/ui/separator.tsx","src/components/ui/sparkline.DESIGN.md","src/components/ui/sparkline.tsx","src/components/ui/switch.DESIGN.md","src/components/ui/switch.tsx","src/components/ui/textarea.DESIGN.md","src/components/ui/textarea.tsx","src/components/ui/toggle-group.DESIGN.md","src/components/ui/toggle-group.tsx","src/components/ui/toggle.tsx","src/components/ui/vitals-trend-chart.DESIGN.md","src/components/ui/vitals-trend-chart.tsx","src/lib/utils.ts","tests/design-system.test.ts"]
+covered_digest: "v1:sha256:839874727bc9a56848e02219e6ba7652f38cb417b7733ab24646bcac1fbd352b"
 behavior_unverified: 0
 overrides_applied: 0
-human_verification:
-  - test: "Visit /design-system/states and /design-system/empty-loading in a running `npm run dev` session"
-    expected: "The three Badge/Card pairs show visibly distinct Safe (green) / Caution (amber) / Critical (pink) colors, each with icon + label + color together; the empty-state Card shows the exact locked copy; the loading-state Card's skeleton pulses smoothly (or holds still under OS reduced-motion)."
-    why_human: "Visual/subjective judgment — 'visibly distinct from the pre-existing baby-pink palette, informed by the Figma reference' (roadmap SC2) has no deterministic shape-based check; the plan's own flagged_assumptions block explicitly defers this to a human-reviewed checkpoint."
-  - test: "Visit /design-system/nested in a running `npm run dev` session"
-    expected: "The Card containing the Input and two Buttons renders with correct spacing/radius/color at every nesting level — no layout breakage, no unstyled flash."
-    why_human: "Layout-correctness-under-real-rendering judgment; harvested verbatim from 06-04-PLAN.md's Task 2 `<human-check>` block per workflow.human_verify_mode: end-of-phase."
-  - test: "Visit /design-system/docs in a running `npm run dev` session"
-    expected: "The Color Tokens table's rendered values visually match what's shown on /design-system/states (Safe green / Caution amber / Critical pink); all four component DESIGN.md docs render in full and are legible; the three Sample Pages links navigate correctly."
-    why_human: "Visual-correctness and navigation judgment; harvested verbatim from 06-05-PLAN.md's Task 2 `<human-check>` block per workflow.human_verify_mode: end-of-phase."
-  - test: "Render Button/Badge/Card/Input with adversarially long label/heading/value strings (no sample page currently does this)"
-    expected: "Labels truncate/ellipsis rather than resizing the component; components wrap or truncate long text without breaking token-driven height/radius."
-    why_human: "Both truths are explicitly tagged `verification: backstop` in 06-03-PLAN.md's own must_haves block — no automated render test exercises long-string content against these components anywhere in this phase (06-03-SUMMARY.md's own D3 coverage entry records this as unverified and defers it, likely to Phase 7)."
+re_verification:
+  previous_status: gaps_found
+  previous_score: 4/6
+  gaps_closed:
+    - "npm run build (full, cold, .next cleared) now exits 0 — tests/design-system.test.ts:475 was fixed by adding `color: \"var(--color-critical)\"` to the VitalsTrendSeries test fixture (commit c433e53). Reproduced independently in this session: `rm -rf .next && npm run build` completed the TypeScript-checking stage and static generation for all 40 routes with exit 0."
+    - "D-15 Figma-provenance audit now passes 20/20 — the 9 previously-regressed DESIGN.md files (battery-indicator, button, card, input, nav-bar, nav-link, progress, toggle-group, vitals-trend-chart) each had a one-line 'Verified against Figma node(s) ...' or 'No dedicated Figma frame was found' citation appended (commit c433e53). Reproduced independently: `grep -rL \"Verified against Figma node\\|No dedicated Figma frame\" src/components/ui/*.DESIGN.md` now returns empty (exit 1, zero filenames), and `grep -rl` confirms all 20 files match."
+  gaps_remaining: []
+  regressions: []
 ---
 
 # Phase 6: Design System (Tailwind v4 Tokens) Verification Report
 
 **Phase Goal:** A validated Tailwind v4 token-based design system exists that can support both the caregiver and parent visual language, proven against real component states before any full screen gets built
-**Verified:** 2026-09-26T13:35:24Z
-**Status:** human_needed
-**Re-verification:** No — initial verification
+**Verified:** 2026-09-30T19:15:00Z
+**Status:** passed
+**Re-verification:** Yes — final re-check after commit c433e53 closed both blocker gaps from the prior verification (2026-09-30T19:00:00Z)
 
 ## Goal Achievement
 
@@ -35,150 +30,108 @@ human_verification:
 
 | # | Truth | Status | Evidence |
 |---|-------|--------|----------|
-| SC1 | An `@theme`-directive token set exists (no `tailwind.config.js`-style config) and compiles cleanly in a real `next build` | ✓ VERIFIED | `find . -maxdepth 1 -iname "tailwind.config*"` → no match. `next build` (Turbopack) ran clean: "Compiled successfully", all 12 routes generated, 0 errors. |
-| SC2 | Color palette is visibly distinct from the students' original (no baby pink), informed by the Figma reference (Segue 3.0) and salvaged pieces of `frontend-design/design-system/` | ⚠️ Needs human (mechanical half verified) | Mechanical check passed: pink hue (`352`) appears only in the six `--color-critical*` tokens; every `--color-brand*`/`--color-border-focus` token stays in the blue hue family (`252.1`) — `grep -n "352\|252.1" src/app/globals.css`. The "visibly distinct / matches Figma intent" subjective half is explicitly deferred by the plan's own `<flagged_assumptions>` block to a human-reviewed checkpoint (harvested below). |
-| SC3 | At least 3 sample pages exercise real component states (Green/Amber/Red, empty/loading, nested variants) using only the token set, reviewed before full prototype work starts | ✓ VERIFIED (technical existence); review checkpoint → human | `src/app/design-system/{states,empty-loading,nested}/page.tsx` all exist, compile, and render Safe/Caution/Critical, empty/loading, and 3-level nested composition respectively — confirmed by direct file read and a clean `next build`. The "reviewed" sign-off is a human checkpoint (harvested below), not a code fact. |
-| SC4 | The same token set is demonstrably reused across sample pages (one shared source, not two) | ✓ VERIFIED | Exactly one actual `@theme {` block-opening declaration exists repo-wide (`src/app/globals.css:4`) — confirmed via `grep -rn "@theme {" src/`. All four `/design-system/*` pages import only from `@/components/ui/*` / `@/components/icon`, no page declares its own tokens or inline hex/oklch literals. |
+| SC1 | An `@theme`-directive token set exists (no `tailwind.config.js`-style config) and compiles cleanly in a real `next build`, not just dev mode | ✓ VERIFIED | `find . -maxdepth 1 -iname "tailwind.config*"` → no match. Independently re-ran `rm -rf .next && npm run build` in this session: `✓ Compiled successfully in 2.8s`, `Finished TypeScript in 2.3s`, all 40 routes statically generated, process exit 0. |
+| SC2 | Color palette is visibly distinct from the students' original (no baby pink), informed by the Figma reference (Segue 3.0) and salvaged pieces of `frontend-design/design-system/` | ✓ VERIFIED | Unchanged since prior verification (no source touched by c433e53 affects this). Mechanical: `--color-critical*` tokens reference pink-700/800/900; `--color-brand*` stays on blue-600/700/800 (`src/app/globals.css`). Human: 06-UAT.md test 1 passed; 06-21-SUMMARY.md D4 records explicit owner sign-off. Out of scope for this re-check per instructions (not re-opened). |
+| SC3 | At least 3 sample pages exercise real component states (Green/Amber/Red, empty/loading, nested variants), reviewed before full prototype work starts | ✓ VERIFIED | Unchanged. 4 sample pages exist (`states`, `empty-loading`, `nested`, `home-proof`) and all appear as static routes in the fresh build output. Human review (06-UAT.md 4/4) out of scope for this re-check per instructions. |
+| SC4 | The same token set is demonstrably reused across sample pages representing both caregiver and parent visual language — one shared source, not two | ✓ VERIFIED | Re-confirmed: exactly one `@theme static {` block (`grep -n "@theme" src/app/globals.css` → 1 hit, line 4). `grep -c "^\s*--color-.*\(caregiver\|parent\)" src/app/globals.css` → 0. |
 
-### Plan-Level Observable Truths
+**Score:** 4/4 roadmap Success Criteria verified.
+
+### Phase-Gate Must-Haves (06-21-PLAN.md, the closing verification plan)
 
 | # | Truth | Status | Evidence |
 |---|-------|--------|----------|
-| 1 | `npm run build` compiles with the `@theme` pipeline active, no config file | ✓ VERIFIED | Same build run as SC1. |
-| 2 | Exactly one `@theme` block exists, sole token source | ✓ VERIFIED | See SC4. (Note: a literal `grep -rl "@theme" src/ \| wc -l` now returns 3, not 1 — `docs/page.tsx` and `docs/error.tsx` mention the string "@theme" in prose comments, added by Plan 06-05 and the review-fix pass after Plan 06-04's own regression check ran. The actual block-declaration count is still 1; see Anti-Patterns.) |
-| 3 | No custom-property name inside `@theme` is declared twice | ✓ VERIFIED | `grep -oE -- '--[a-zA-Z-]+:' src/app/globals.css \| sort \| uniq -d` → empty output. |
-| 4 | Pink reserved for `--color-critical*`, brand/interactive stays blue (~252°) | ✓ VERIFIED | Direct read of `globals.css` lines 21-40 confirms hue split exactly as specified. |
-| 5 | `button.tsx` uses a Radix primitive, never Base UI | ✓ VERIFIED | `import { Slot } from "radix-ui"` in `button.tsx`; `grep -c "@base-ui" package-lock.json` → 0. |
-| 6 | `AGENTS.md` has a shadcn/cn section appended strictly after the auto-generated block, original 9 lines unmodified | ✓ VERIFIED | Direct read: `BEGIN:nextjs-agent-rules`/`END:nextjs-agent-rules` block (9 lines) present verbatim, new `# shadcn/ui and cn are also newer than your training data` section follows after a blank line. |
-| 7 | `card.tsx`/`badge.tsx`/`input.tsx` are Radix-based or Radix-adjacent, never Base UI | ✓ VERIFIED | `card.tsx`/`input.tsx` import no primitive library (plain div/input wrappers, shadcn's actual generated output for these two); `badge.tsx` in its restyled (06-03) form intentionally dropped its `Slot`/`asChild` import per an explicit, documented design decision (multi-modal-rule enforcement) — zero `@base-ui-*` anywhere in `package-lock.json` or `src/`. |
-| 8 | `icon.tsx` renders every ported icon as real JSX, zero raw-HTML-injection API | ✓ VERIFIED | `grep -c "dangerouslySetInnerHTML" src/components/icon.tsx` → 0. 60 named icon keys present (`grep -oE "^  [a-zA-Z0-9]+:" src/components/icon.tsx \| wc -l` → 61 incl. one non-icon line), including `safe`/`caution`/`critical`/`information`. |
-| 9 | Icon preserves exact outer-`<svg>` attributes and unrecognized-name fallback | ✓ VERIFIED | `viewBox="0 0 24 24"`, `stroke="currentColor"`, `strokeWidth={1.75}`, `strokeLinecap="round"`, `strokeLinejoin="round"`, `aria-hidden="true"` all present; `const content = icons[name] ?? icons.information`. |
-| 10 | Button exposes exactly 4 variants (primary/secondary/tertiary/critical), no size axis | ✓ VERIFIED | `buttonVariants` CVA union is exactly `"primary" \| "secondary" \| "tertiary" \| "critical"`; no `size` variant key or prop present. |
-| 11 | Badge exposes exactly 3 status variants, Icon+label+color always together | ✓ VERIFIED | `badgeVariants` union is exactly `"safe" \| "caution" \| "critical"`; `Badge` unconditionally renders `<Icon name={status} size={16} />` before `children`. |
-| 12 | Card's DOM nesting (CardHeader/CardContent) doesn't branch on content state | ✓ VERIFIED | `card.tsx`'s `Card`/`CardHeader`/`CardContent` take no content-state prop; only children passed by callers (states/empty-loading/nested pages) differ. |
-| 13 | Input renders critical border + inline error message in error state, disabled/locked treatment | ✓ VERIFIED | `aria-invalid:border-critical`, conditional `<p className="text-caption text-critical-dark">{errorMessage ?? DEFAULT_ERROR_MESSAGE}</p>`, `disabled:opacity-50 disabled:cursor-not-allowed`. |
-| 14 | Button/Badge/Card/Input truncate/wrap long text without breaking shape (backstop) | ? UNCERTAIN — insufficient_spec | Tagged `verification: backstop` in 06-03-PLAN.md's own must_haves; no held-out long-string render test exists anywhere in this phase (06-03-SUMMARY.md's own D3 entry records this as unverified). Routed to human verification — presence/wiring alone cannot certify this. |
-| 15 | `states/page.tsx` renders Safe/Caution/Critical Badge+Card pairs | ✓ VERIFIED | Direct file read: 3 `Card`s, each with a `Badge status={"safe"\|"caution"\|"critical"}`. |
-| 16 | `empty-loading/page.tsx` renders locked empty-state copy + reduced-motion-aware loading skeleton | ✓ VERIFIED | Exact copy "No readings yet" / "Vitals will appear here once the device starts sending data." present; skeleton uses `[animation-duration:var(--duration-slow)] motion-reduce:animate-none`. |
-| 17 | `nested/page.tsx` nests Input + 2 Buttons inside a Card | ✓ VERIFIED | Direct file read confirms `Card > CardContent > (label+Input, 2 Buttons)`. |
-| 18 | Full regression (`npm run build && npm test`) green after all component work | ✓ VERIFIED | `npm run build`: 0 errors, all 4 design-system routes + existing API routes compiled. `npm test`: 59 passed / 1 skipped / 0 failed (matches SUMMARY claims). |
-| 19 | Docs page (`06-05`, additive, `requirements: []`) live-parses tokens, zero hardcoded `oklch(...)`, renders all 4 DESIGN.md files, links to samples | ✓ VERIFIED | `grep -c "oklch(" src/app/design-system/docs/page.tsx` → 0; `readFileSync`/`readThemeBlock`/`parseThemeTokens` parse `globals.css` live; all 4 `*.DESIGN.md` read via literal-path `readFileSync` calls and rendered in `<pre>` blocks; 3 sample-page links present. |
-| 20 | CR-01 fix landed: `Button asChild` no longer throws | ✓ VERIFIED | `button.tsx` now branches: `asChild` renders `<Slot.Root>{children}</Slot.Root>` (single child, satisfies `React.Children.count(children) === 1`); the loading wrapper/spinner only renders in the plain `<button>` branch. |
-| 21 | CR-02 fix landed: no unlayered `body` font-family override defeating Inter | ✓ VERIFIED | `globals.css`'s `body` rule now only sets `color`/`background` (via tokens) — no `font-family: Arial, Helvetica, sans-serif` line remains anywhere in the file. |
-| 22 | WR-01 fix landed: `CardDescription` no longer references an undefined token | ✓ VERIFIED | `card.tsx`'s `CardDescription` now uses `"text-body text-text-secondary"` — both are real declared tokens; no `text-muted-foreground` remains. |
-| 23 | WR-02 fix landed: docs page has an error boundary | ✓ VERIFIED | `src/app/design-system/docs/error.tsx` exists — client component with `"use client"`, standard Next.js `error.tsx` signature (`error`, `reset`), renders a graceful fallback. |
-| 24 | WR-03 fix landed: metadata is SepCare-branded, not scaffold defaults | ✓ VERIFIED | `layout.tsx`: `title: "SepCare"`, `description: "Neonatal sepsis risk monitoring for ASHA workers and caregivers."` |
+| 1 | `npm run build` (full, cold) exits 0 across the entire rebuilt phase | ✓ VERIFIED | Independently reproduced twice in this session (`rm -rf .next && npm run build`, exit 0 both times). Root cause fix confirmed by direct read of `tests/design-system.test.ts:475`: the `VitalDetailCard` chart `series` array now includes `color: "var(--color-critical)"` on the `{ key: "value", label: "HRV" }` object, satisfying `VitalsTrendSeries`. `npx vitest run tests/design-system.test.ts` still passes all 33 tests (no regression from the fix). |
+| 2 | `grep -c "^\s*--color-.*\(caregiver\|parent\)" src/app/globals.css` returns 0 | ✓ VERIFIED | Re-confirmed 0. Unaffected by c433e53. |
+| 3 | A full manual walkthrough of all 4 sample pages + docs site confirms the actual visual-quality bar | ✓ VERIFIED (carried forward, out of scope for this re-check) | 06-UAT.md: 4/4 conversational UAT tests passed 2026-09-30. 06-21-SUMMARY.md D4: explicit owner sign-off. Not re-opened per task instructions. |
+| 4 | Every component's DESIGN.md cites a Figma node ID or an honest "no dedicated frame found" note (D-15), re-audited at the full ~20-component set | ✓ VERIFIED | Independently re-ran `grep -rL "Verified against Figma node\|No dedicated Figma frame" src/components/ui/*.DESIGN.md` — empty output, exit 1 (no files without the citation). Cross-checked with `grep -rl` (same pattern): 20/20 files match. Spot-read all 9 previously-broken files directly — each now carries a concise, specific citation line (e.g. `battery-indicator.DESIGN.md:11` → "Verified against Figma nodes `203-11669` and `266-9257`."; `input.DESIGN.md:13` and `toggle-group.DESIGN.md:13` use the honest "no dedicated frame" form). |
+| 5 | Prohibition Recall re-confirmation: zero direct `lucide-react` imports; `card.tsx` shows no stock-token reversion; zero caregiver/parent tokens | ✓ VERIFIED | Re-confirmed all three: `grep -rn 'from "lucide-react"' src/ --include="*.tsx" --include="*.ts"` → 0 matches. `grep -n "bg-card\|text-card-foreground" src/components/ui/card.tsx` → 0 matches. Caregiver/parent grep → 0 (same as #2). |
 
-**Score:** 22/24 truths verified (2 routed to human verification: SC2's visual-distinctness judgment and the backstop long-text truth — see `human_verification` above; both were explicitly and honestly flagged as such in the phase's own planning artifacts, not silently claimed).
+**Score:** 5/5 phase-gate must-haves verified.
+
+### Combined Score
+
+**6/6 distinct must-haves verified** (SC1 and must-have #1 are the same underlying truth, counted once; SC2/SC3/must-have #3 are the same human-judgment truth, counted once). Both gaps from the prior `gaps_found` verification are closed by direct, independently-reproduced evidence — not by trusting SUMMARY.md's claims.
 
 ### Required Artifacts
 
 | Artifact | Expected | Status | Details |
 |----------|----------|--------|---------|
-| `postcss.config.mjs` | `@tailwindcss/postcss` plugin wiring | ✓ VERIFIED | Exists, referenced by build. |
-| `components.json` | shadcn config, no `tailwind.config` | ✓ VERIFIED | style `new-york`, baseColor `slate`. |
-| `src/app/globals.css` | Single `@theme` block, full token set | ✓ VERIFIED | 69 lines, one `@theme {` declaration, no duplicate keys, no dark-mode scaffold. |
-| `src/components/ui/button.tsx` | 4-variant CVA Button, Radix `asChild` support | ✓ VERIFIED | Confirmed, and CR-01-fixed. |
-| `src/components/ui/card.tsx` | Structurally invariant Card | ✓ VERIFIED | Confirmed, and WR-01-fixed (`CardDescription`). |
-| `src/components/ui/badge.tsx` | 3-status Badge, Icon+label+color | ✓ VERIFIED | Confirmed. |
-| `src/components/ui/input.tsx` | Token-driven Input, error/disabled states | ✓ VERIFIED | Confirmed. |
-| `src/components/icon.tsx` | 60-icon typed `Icon` component | ✓ VERIFIED | Confirmed, zero raw-HTML injection. |
-| `src/components/ui/{button,card,badge,input}.DESIGN.md` | Per-component usage docs | ✓ VERIFIED | All 4 exist with variant tables + correct/incorrect examples. |
-| `src/app/design-system/{states,empty-loading,nested}/page.tsx` | 3 D-10 sample pages | ✓ VERIFIED | All exist, compile, render real components. |
-| `src/app/design-system/docs/page.tsx` + `error.tsx` | Docs reference page + WR-02 error boundary | ✓ VERIFIED | Both exist, compile. |
-| `AGENTS.md` | shadcn/cn live-docs convention section | ✓ VERIFIED | Confirmed, original block untouched. |
+| `src/app/globals.css` | Single `@theme` block, full token set, no `tailwind.config.js` | ✓ VERIFIED | Unchanged; re-confirmed. |
+| `src/components/ui/*.tsx` (~20 components) | Radix/Base-UI-free where applicable, token-driven | ✓ VERIFIED | Unchanged; not touched by c433e53. |
+| `src/components/ui/*.DESIGN.md` (20 files) | Figma-provenance line per D-15 | ✓ VERIFIED (20/20) | Gap closed — see must-have #4 above. |
+| `src/app/design-system/{states,empty-loading,nested,home-proof}/page.tsx` | 4 sample/proof pages | ✓ VERIFIED | All 4 present in fresh build's static route list. |
+| `src/app/design-system/docs/**` (17 routes) | Component docs site | ✓ VERIFIED | All 17 docs routes present in fresh build's static route list (`badge`, `button`, `card`, `chart`, `checkbox`, `colors`, `examples` + 4 sub-routes, `field`, `input`, `item`, `label`, `motion`, `nav`, `progress`, `radio-group`, `select`, `sparkline`, `status-summary`, `switch`, `textarea`, `toggle-group`, `typography`). |
+| `tests/design-system.test.ts` | Nyquist behavioral coverage (33 tests) | ✓ VERIFIED | Fixed and re-confirmed: `npx vitest run` → 33/33 pass; `npm run build`'s TypeScript gate now also passes against this file. |
+| `06-SECURITY.md` | Threat register, `threats_open: 0` | ✓ VERIFIED | Re-read: frontmatter `threats_open: 0`, `status: verified`; 36 threats registered, all closed/accepted; audit trail confirms `Open: 0`. |
+| `.planning/REQUIREMENTS.md` | DSYS-01/02/03 marked complete | ✓ VERIFIED | Re-read: all three show `[x]` in the checklist and "Complete" in the Traceability table. Unlike the prior verification, this mark is now earned — the build gate it depends on (DSYS-01) passes. |
 
 ### Key Link Verification
 
 | From | To | Via | Status | Details |
 |------|-----|-----|--------|---------|
-| `src/app/globals.css` | `src/components/ui/button.tsx` | `bg-brand-fill`/`bg-critical-fill` compiled utility classes | ✓ WIRED | Confirmed via direct read of `buttonVariants`. |
-| `components.json` | `src/components/ui/*.tsx` | shadcn CLI alias resolution | ✓ WIRED | All 4 primitives generated under `src/components/ui/`, `cn` imports repointed to `@/lib/utils` consistently. |
-| `src/app/layout.tsx` | `src/app/globals.css` | `--font-inter` → `--font-sans` chain | ✓ WIRED | `layout.tsx` sets `inter.variable` on `<html>`; `globals.css`'s `--font-sans` references `var(--font-inter)`; CR-02 fix removed the rule that was defeating this chain. |
-| `src/components/icon.tsx` | `src/components/ui/badge.tsx` | `<Icon name={status} />` inside `Badge` | ✓ WIRED | Confirmed in `badge.tsx`. |
-| `src/app/globals.css` | `src/app/design-system/docs/page.tsx` | `readFileSync` live-parse of the `@theme` block | ✓ WIRED — data flows | Confirmed: `readThemeBlock()`/`parseThemeTokens()` produce the values rendered in the Color Tokens / Typography Scale tables; zero hardcoded `oklch(...)`. |
-| `src/components/ui/*.DESIGN.md` | `src/app/design-system/docs/page.tsx` | literal-path `readFileSync` per component | ✓ WIRED | Confirmed 4 explicit literal-path reads, not a dynamic/interpolated helper (this was itself a review-caught fix during 06-05's own execution). |
+| `src/app/globals.css` | `src/components/ui/*.tsx` | Compiled `bg-*`/`text-*`/`rounded-*` utility classes referencing `@theme` tokens | ✓ WIRED | Unchanged. |
+| `src/app/design-system/docs/page.tsx` | `src/app/globals.css` + `*.DESIGN.md` | `readFileSync` live-parse | ✓ WIRED | Unchanged. |
+| `tests/design-system.test.ts` | `next build`'s TypeScript project | Shared `tsconfig.json` `include` scope | ✓ WIRED SAFELY | The type error that previously broke this link is fixed; the test file now type-checks cleanly within the same project the production build uses. |
 
 ### Data-Flow Trace (Level 4)
 
-| Artifact | Data Variable | Source | Produces Real Data | Status |
-|----------|---------------|--------|---------------------|--------|
-| `docs/page.tsx` | `colorGroups`/`typographyRoles` | `readFileSync(globals.css)` → regex line-parse | Yes | ✓ FLOWING |
-| `docs/page.tsx` | `componentDocs[].content` | `readFileSync(*.DESIGN.md)` (4 literal calls) | Yes | ✓ FLOWING |
-| `states/page.tsx` | `STATUS_ROWS` | Hardcoded local constant (3 fixed demo rows) | N/A — intentional static sample content | ✓ acceptable (sample/demo page, not live-data page; Phase 7 wires real Realtime data) |
+No change from the prior verification's findings. Sample/docs pages remain intentionally static/demo content, appropriately deferred to Phase 7 for live data. No new stub/hollow-prop patterns found.
 
 ### Behavioral Spot-Checks
 
 | Behavior | Command | Result | Status |
 |----------|---------|--------|--------|
-| Full build compiles all 4 design-system routes | `npm run build` | "Compiled successfully", 12/12 routes generated | ✓ PASS |
-| Full existing test suite unaffected | `npm test` | 59 passed / 1 skipped / 0 failed | ✓ PASS |
-| No `tailwind.config.js`-style file present | `find . -maxdepth 1 -iname "tailwind.config*"` | no match | ✓ PASS |
-| Exactly one `@theme {` block declaration | `grep -rn "@theme {" src/` | 1 hit (`globals.css:4`) | ✓ PASS |
-| Zero duplicate `@theme` token names | `grep -oE ... \| sort \| uniq -d` | empty | ✓ PASS |
-| Zero `dangerouslySetInnerHTML` in `icon.tsx` | `grep -c ...` | 0 | ✓ PASS |
-| Zero `@base-ui-*` anywhere in the lockfile/src | `grep -c "@base-ui" package-lock.json` | 0 | ✓ PASS |
-| CR-01 `Button asChild` renders a single child (no Slot throw) | direct code read of the `asChild` branch | conditional branch isolates `children` from the loading wrapper | ✓ PASS |
+| Cold production build compiles (TypeScript gate included) | `rm -rf .next && npm run build` | Exit 0. `✓ Compiled successfully in 2.8s`, `Finished TypeScript in 2.3s`, 40/40 routes generated. Reproduced twice. | ✓ PASS |
+| Nyquist behavioral test suite (33 tests) | `npx vitest run tests/design-system.test.ts` | `Test Files 1 passed (1)`, `Tests 33 passed (33)` | ✓ PASS |
+| No `tailwind.config.js`-style file present | `find . -maxdepth 1 -iname "tailwind.config*"` | No match | ✓ PASS |
+| Exactly one `@theme` block | `grep -n "@theme" src/app/globals.css` | 1 hit, line 4 | ✓ PASS |
+| Zero duplicate token names inside `@theme` | scoped `awk`+`sort`+`uniq -d` | Empty | ✓ PASS |
+| Zero direct `lucide-react` component imports | `grep -rn 'from "lucide-react"' src/` | 0 matches | ✓ PASS |
+| D-15 Figma-provenance audit (re-check) | `grep -rL "Verified against Figma node\|No dedicated Figma frame" src/components/ui/*.DESIGN.md` | Empty output, exit 1 (no unmatched files) | ✓ PASS |
+| D-15 positive confirmation | `grep -rl "Verified against Figma node\|No dedicated Figma frame" src/components/ui/*.DESIGN.md \| wc -l` | 20 | ✓ PASS |
+| Caregiver/parent token isolation | `grep -c "^\s*--color-.*\(caregiver\|parent\)" src/app/globals.css` | 0 | ✓ PASS |
+| `card.tsx` no stock-token reversion | `grep -n "bg-card\|text-card-foreground" src/components/ui/card.tsx` | 0 matches | ✓ PASS |
 
 ### Probe Execution
 
-Step 7c: SKIPPED — no `scripts/*/tests/probe-*.sh` convention or PLAN/SUMMARY-declared probes found in this phase; this is a frontend design-system phase, not a migration/CLI/tooling phase.
+Step 7c: SKIPPED — no `scripts/*/tests/probe-*.sh` convention or PLAN/SUMMARY-declared probes found; this is a frontend design-system phase, not a migration/CLI/tooling phase.
 
 ### Requirements Coverage
 
-| Requirement | Source Plan | Description | Status | Evidence |
+| Requirement | Source Plans | Description | Status | Evidence |
 |--------------|-------------|--------------|--------|----------|
-| DSYS-01 | 06-01, 06-02, 06-03 | Tailwind v4 token-based design system, `@theme` directive, no `tailwind.config.js`, distinct palette | ✓ SATISFIED (mechanical) / visual half → human | Token pipeline, no-config, hue-split all confirmed in code; "visibly distinct" subjective claim explicitly deferred to human checkpoint per the plan's own flagged assumption. |
-| DSYS-02 | 06-04 | ≥3 sample pages exercising real component states, reviewed before full prototype | ✓ SATISFIED (technical existence) / review → human | 3 real, build-verified sample routes exist and render real component states; the "reviewed" sign-off is the harvested human-check item. |
-| DSYS-03 | 06-01, 06-03, 06-04 | One shared token set supports both caregiver/parent visual languages | ✓ SATISFIED | Single `@theme` declaration site confirmed; all sample pages + the docs page consume only `@/components/ui/*`/`@/components/icon` — no per-page/per-audience token override exists anywhere. |
+| DSYS-01 | 06-01..06-21 (all 21 plans declare it) | `@theme`-based token system, no config file, distinct palette | ✓ SATISFIED | Token pipeline and palette correct in source; the cold `npm run build` gate now passes and the D-15 Figma-provenance obligation now passes 20/20. `.planning/REQUIREMENTS.md`'s `[x]` Complete mark is now earned against current HEAD. |
+| DSYS-02 | 06-01..06-21 | ≥3 sample pages exercising real states, reviewed before full prototype | ✓ SATISFIED | 4 real sample pages exist and render in the fresh build; human review (06-UAT.md, 4/4 pass) and owner sign-off both completed prior to this re-check and not re-opened. |
+| DSYS-03 | 06-01, 06-03, 06-04, 06-21 | One shared token set supports both caregiver/parent visual languages | ✓ SATISFIED | Single `@theme` declaration confirmed; zero audience-specific tokens. |
 
-No orphaned requirements found: `.planning/REQUIREMENTS.md`'s Traceability table maps DSYS-01/02/03 to Phase 6 only, and all three appear in at least one plan's `requirements:` frontmatter (06-01/06-02/06-03/06-04).
+No orphaned requirements: all 21 plans declare `requirements: [DSYS-01, DSYS-02, DSYS-03]`, matching `.planning/REQUIREMENTS.md`'s Traceability table mapping (all three marked Phase 6 / Complete, now consistent with the current build state).
 
 ### Anti-Patterns Found
 
 | File | Line | Pattern | Severity | Impact |
 |------|------|---------|----------|--------|
-| `src/app/design-system/docs/page.tsx`, `error.tsx` | various | Literal string "@theme" appears in prose comments | ℹ️ Info | Plan 06-04's own regression check (`grep -rl "@theme" src/ \| wc -l` == 1) and this plan's DSYS-03 must-have truth #2 would now literally fail if re-run verbatim (count is 3, not 1) — a false positive, since no second `@theme { ... }` block actually exists (confirmed via `@theme {` pattern match). Not a functional gap; worth rewording the two comments (as 06-04 already had to do once for the same reason) so the phase's own regression command stays accurate for future re-runs. |
-| `src/components/ui/card.tsx` | 24-55 | `CardTitle`/`CardAction`/`CardFooter` are shipped, unused-in-`src/` shadcn scaffold sub-components outside this phase's locked Card/CardHeader/CardContent contract | ℹ️ Info | Explicitly acknowledged and deferred in `06-03-deferred-items.md` — currently inert (zero call sites), not visibly broken, tracked for whichever future phase first renders a Card heading/footer. Not a regression from what the phase claims to deliver. |
-| `src/components/ui/button.tsx` | 54 | `cn(buttonVariants({ variant, className }))` — inconsistent className-merge convention vs. Card/Badge/Input's `cn(base, className)` pattern | ℹ️ Info | Review's IN-01, explicitly out of the fix pass's scope (`fix_scope: critical_warning`, IN-* excluded). Both forms resolve correctly at runtime; a maintainability nit only. |
-| `src/components/ui/button.tsx` | 76-79 | Spinner `<span>` carries dead `inline-flex items-center justify-center` classes with no children | ℹ️ Info | Review's IN-02, explicitly out of scope. Cosmetic dead code, no functional effect. |
-| `src/components/ui/button.DESIGN.md` | whole file | `asChild` prop still undocumented | ℹ️ Info | Review's IN-03, explicitly out of scope. CR-01 is fixed in code; the doc gap that let it go unnoticed remains. |
+| Root ESLint run (`npm run lint`) | thousands of lines | ~3,950 errors, overwhelmingly inside `.agents/gsd-core/**` internal tooling files and one legacy `archive/` file | ℹ️ Info, out of phase scope | Not attributable to phase 6's own source changes (`src/`); pre-existing finding from prior verification, unaffected by the gap-closure commit. Not a phase-6 gap. |
+| `src/components/ui/card.tsx` | 24-55 | `CardTitle`/`CardAction`/`CardFooter` still unused-in-`src/` scaffold sub-components | ℹ️ Info | Same finding as prior verification; explicitly tracked in `06-03-deferred-items.md`, not a regression. |
 
-No `TBD`/`FIXME`/`XXX`/`TODO`/`HACK`/`PLACEHOLDER` markers found in any file touched by this phase.
+No `TBD`/`FIXME`/`XXX` debt markers found in `tests/design-system.test.ts` or the 9 previously-regressed `DESIGN.md` files (checked directly in this re-check), nor in any other phase-6 source file per the prior pass.
+
+The gap-closure commit (c433e53) is minimal and targeted: 10 files changed, 37 insertions, 1 deletion — exactly the two fixes claimed (one `color` field added to a test fixture; a 4-line Figma-provenance addition to each of the 9 regressed `DESIGN.md` files). No unrelated changes, no new stubs introduced.
 
 ### Human Verification Required
 
-See `human_verification` in frontmatter — reproduced here for readability:
-
-### 1. Sample pages 1 & 2 visual review (states, empty-loading)
-
-**Test:** Run `npm run dev`, visit `/design-system/states` and `/design-system/empty-loading`.
-**Expected:** Three Badge/Card pairs show visibly distinct Safe(green)/Caution(amber)/Critical(pink) colors with icon+label+color together; empty-state Card shows the exact locked copy; loading-state skeleton pulses smoothly (or holds still under reduced-motion).
-**Why human:** Subjective visual-distinctness judgment (roadmap SC2) — explicitly flagged in 06-01-PLAN.md's own `<flagged_assumptions>` block as requiring human review, no deterministic shape-based check exists for it.
-
-### 2. Sample page 3 visual review (nested)
-
-**Test:** Run `npm run dev`, visit `/design-system/nested`.
-**Expected:** Card containing Input + 2 Buttons renders with correct spacing/radius/color at every nesting level, no layout breakage, no unstyled flash.
-**Why human:** Layout-correctness-under-real-rendering judgment; harvested verbatim from 06-04-PLAN.md's Task 2 `<human-check>` per `workflow.human_verify_mode: end-of-phase`.
-
-### 3. Docs page visual review
-
-**Test:** Run `npm run dev`, visit `/design-system/docs`.
-**Expected:** Color Tokens table values visually match `/design-system/states`; all four DESIGN.md docs render legibly; all three Sample Pages links navigate correctly.
-**Why human:** Visual-correctness and navigation judgment; harvested verbatim from 06-05-PLAN.md's Task 2 `<human-check>`.
-
-### 4. Long-text overflow/truncation backstop
-
-**Test:** Render Button/Badge/Card/Input with adversarially long label/heading/value strings.
-**Expected:** Truncate/ellipsis rather than resizing; wrap without breaking token-driven height/radius.
-**Why human:** Explicitly tagged `verification: backstop` in 06-03-PLAN.md; no automated render test exercises this anywhere in the phase — 06-03-SUMMARY.md's own coverage entry records it as unverified rather than silently claiming it's proven.
+None. All previously-open human-judgment items (SC2 visual distinctness, nested/docs layout, long-text truncation backstop, overall visual-quality bar) were resolved by 06-UAT.md's 4/4 passing conversational UAT session and the project owner's explicit design sign-off recorded in 06-21-SUMMARY.md, and are correctly out of scope for this re-check per task instructions — nothing in the gap-closure commit touched those areas.
 
 ### Gaps Summary
 
-No blocking gaps found. All 2 code-review Critical issues (CR-01 `Button asChild` throw, CR-02 hardcoded `body` font-family defeating Inter) and all 3 Warning issues (WR-01 `CardDescription` dead token, WR-02 missing docs-page error boundary, WR-03 scaffold metadata) were independently re-verified in the current codebase — not just trusted from `06-REVIEW-FIX.md`'s claims — and all five fixes are present and correct. `npm run build` and `npm test` are both green. The only open items are (a) genuinely subjective visual-review checkpoints the phase's own plans explicitly and honestly deferred to a human, and (b) two `backstop`-tier truths with no automated test anywhere in the phase, also explicitly and honestly flagged as unverified in 06-03-SUMMARY.md rather than silently claimed as done. Nothing here should block proceeding to Phase 7, but a human should complete the four checks above before treating DSYS-02's "reviewed" checkpoint as closed.
+None remaining. Both blocker gaps from the prior verification (2026-09-30T19:00:00Z, `gaps_found`, 4/6) were independently re-verified as closed in this session:
+
+1. **Build gate** — `rm -rf .next && npm run build` now exits 0. The root cause (a `VitalsTrendSeries` test fixture at `tests/design-system.test.ts:475` missing the required `color` field) was fixed by adding `color: "var(--color-critical)"`. Confirmed by direct read of the file and by two independent clean build runs.
+2. **D-15 Figma-provenance audit** — now passes 20/20. The 9 files that had been silently stripped of their provenance line by an out-of-phase commit (`fb25dbe`) each received a one-line citation restoring the audit. Confirmed by direct read of all 9 files and by re-running the exact grep command from the prior verification, which now returns empty.
+
+All roadmap Success Criteria (SC1-SC4) and all phase-gate must-haves (06-21-PLAN.md) are verified. Phase 6 goal is achieved: a validated Tailwind v4 token-based design system exists, compiles cleanly in production, supports both caregiver and parent visual language from one shared token set, and has been proven against real component states with full Figma-provenance traceability. Phase 6 is ready to close; Phase 7 may proceed.
 
 ---
 
-*Verified: 2026-09-26T13:35:24Z*
+*Verified: 2026-09-30T19:15:00Z*
 *Verifier: Claude (gsd-verifier)*
