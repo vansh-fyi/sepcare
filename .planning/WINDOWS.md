@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 9
+open_count: 10
 waived_count: 0
 fixed_count: 0
-total_count: 9
-last_updated: 2026-10-01T16:34:01.535Z
+total_count: 10
+last_updated: 2026-10-01T16:42:22.610Z
 ---
 
 # Broken Windows Ledger
@@ -24,6 +24,7 @@ last_updated: 2026-10-01T16:34:01.535Z
 | 7 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-04-PLAN.md |  | Full npm test deferred to phase close by orchestrator; parent/caregiver tests and build passed. | open |  | 2026-10-01T04:26:23.850Z |  |
 | 8 | 07 | unrun-verify | tests/realtime.subscribe.test.ts |  | Full suite Realtime reading/risk INSERT delivery timed out; shared Vitals and Stats scoped tests pass. | open |  | 2026-10-01T11:10:51.574Z |  |
 | 9 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-06-PLAN.md |  | Full npm test deferred to phase close by orchestrator; caregiver route scoped tests and production build passed. | open |  | 2026-10-01T16:34:01.535Z |  |
+| 10 | 07 | deviation | .planning/phases/07-html-prototype-caregiver-parent/07-07-SUMMARY.md |  | Task 1 RED evidence parser passed only after implementation edits; replay against committed RED snapshot confirmed intended failure before GREEN commit. | open |  | 2026-10-01T16:42:22.610Z |  |
 
 ````json
 [
@@ -133,6 +134,18 @@ last_updated: 2026-10-01T16:34:01.535Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-10-01T16:34:01.535Z",
+    "resolved_at": null
+  },
+  {
+    "id": 10,
+    "kind": "deviation",
+    "phase": "07",
+    "file": ".planning/phases/07-html-prototype-caregiver-parent/07-07-SUMMARY.md",
+    "line": null,
+    "description": "Task 1 RED evidence parser passed only after implementation edits; replay against committed RED snapshot confirmed intended failure before GREEN commit.",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-10-01T16:42:22.610Z",
     "resolved_at": null
   }
 ]

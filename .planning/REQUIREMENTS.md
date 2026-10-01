@@ -32,9 +32,9 @@ Requirements for this milestone (judge-ready demo, ~2 dedicated days). Each maps
 
 - [x] **PARENT-01**: Parent home screen shows an abstracted infant-status summary, compact vitals, and simple care instructions — no persistent bottom nav on the home screen itself
 - [x] **PARENT-02**: Parent has full data parity with the caregiver view (same underlying vitals/risk/history data) reached via progressive disclosure ("See All"), not restricted data
-- [ ] **PARENT-03**: Selecting "See All" reveals a two-tab navigation (Vitals / Stats) for the parent to browse the same detail the caregiver sees, in an abstracted presentation
+- [x] **PARENT-03**: Selecting "See All" reveals a two-tab navigation (Vitals / Stats) for the parent to browse the same detail the caregiver sees, in an abstracted presentation
 - [x] **PARENT-04**: Parent's device/settings equivalent is reached via a device icon on the home screen, not a nav tab
-- [ ] **PARENT-05**: Exact parent navigation flow is finalized collaboratively during the HTML prototype discuss-phase, not fully locked here
+- [x] **PARENT-05**: Exact parent navigation flow is finalized collaboratively during the HTML prototype discuss-phase, not fully locked here
 
 ### Backend Gap-Fill
 
@@ -94,9 +94,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CARE-06 | Phase 7 | Complete |
 | PARENT-01 | Phase 7 | Complete |
 | PARENT-02 | Phase 7 | Complete |
-| PARENT-03 | Phase 7 | Pending |
+| PARENT-03 | Phase 7 | Complete |
 | PARENT-04 | Phase 7 | Complete |
-| PARENT-05 | Phase 7 | Pending |
+| PARENT-05 | Phase 7 | Complete |
 | API-01 | Phase 8 | Pending |
 | API-02 | Phase 8 | Pending |
 | HW-01 | Phase 9 | Pending |
