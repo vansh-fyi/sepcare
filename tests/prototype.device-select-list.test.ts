@@ -12,7 +12,7 @@ describe("device selection", () => {
     const { DeviceSelectList } = await import("@/components/patterns/device-select-list");
     const html = renderToStaticMarkup(createElement(DeviceSelectList, { devices: [DEVICE], hrefFor: d => `/parent/device/${d.id}` }));
     expect(html.match(/data-slot="item"/g)).toHaveLength(1);
-    expect(html.split(DEVICE.name)).toHaveLength(2);
+    expect(html.replace(/<[^>]*>/g, "").split(DEVICE.name)).toHaveLength(2);
     expect(html).toContain(`href="/parent/device/${DEVICE.id}"`);
     expect(html).toContain(`${DEVICE.battery}%`);
     const disconnected = renderToStaticMarkup(createElement(DeviceSelectList, { devices: [{ ...DEVICE, connected: false }], hrefFor: () => "/device" }));
