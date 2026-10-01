@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 3
+open_count: 5
 waived_count: 0
 fixed_count: 0
-total_count: 3
-last_updated: 2026-10-01T04:13:16.261Z
+total_count: 5
+last_updated: 2026-10-01T04:20:28.565Z
 ---
 
 # Broken Windows Ledger
@@ -18,6 +18,8 @@ last_updated: 2026-10-01T04:13:16.261Z
 | 1 | 06 | deviation | src/components/ui/card.tsx |  | CardTitle/CardDescription/CardAction/CardFooter still reference undefined shadcn stock tokens (--muted-foreground etc.); unused anywhere in src/, deferred to the phase that first renders them | open |  | 2026-09-26T12:55:19.880Z |  |
 | 2 | 07 | deviation | tests/realtime.subscribe.test.ts |  | Concurrent full-suite Realtime subscription tests timed out; both files passed serially, matching the pre-existing recorded flake. | open |  | 2026-09-30T18:24:17.391Z |  |
 | 3 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-02-PLAN.md |  | Full npm test not repeated for Plan 07-02 per orchestrator; phase-level integration regression remains pending after known Realtime concurrency flake. | open |  | 2026-10-01T04:13:16.261Z |  |
+| 4 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-03-PLAN.md |  | Full npm test deferred to phase close by orchestrator; focused 07-03 tests and production build passed. | open |  | 2026-10-01T04:20:28.454Z |  |
+| 5 | 07 | stub | src/components/patterns/device-select-list.tsx |  | Pairing is intentionally unavailable in the unused zero-device state; Pair a device is disabled pending future pairing integration. | open |  | 2026-10-01T04:20:28.565Z |  |
 
 ````json
 [
@@ -55,6 +57,30 @@ last_updated: 2026-10-01T04:13:16.261Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-10-01T04:13:16.261Z",
+    "resolved_at": null
+  },
+  {
+    "id": 4,
+    "kind": "unrun-verify",
+    "phase": "07",
+    "file": ".planning/phases/07-html-prototype-caregiver-parent/07-03-PLAN.md",
+    "line": null,
+    "description": "Full npm test deferred to phase close by orchestrator; focused 07-03 tests and production build passed.",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-10-01T04:20:28.454Z",
+    "resolved_at": null
+  },
+  {
+    "id": 5,
+    "kind": "stub",
+    "phase": "07",
+    "file": "src/components/patterns/device-select-list.tsx",
+    "line": null,
+    "description": "Pairing is intentionally unavailable in the unused zero-device state; Pair a device is disabled pending future pairing integration.",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-10-01T04:20:28.565Z",
     "resolved_at": null
   }
 ]
