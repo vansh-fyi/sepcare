@@ -452,6 +452,7 @@ function NavExample() {
 
 function ChartExample({ small = false }: { small?: boolean }) {
   const [empty, setEmpty] = useState(false);
+  const [summary, setSummary] = useState(false);
   const [status, setStatus] = useState<"safe" | "caution" | "critical" | "unavailable">("safe");
   return (
     <Preview
@@ -460,6 +461,7 @@ function ChartExample({ small = false }: { small?: boolean }) {
         small
           ? `<VitalCard metric="pulse" value="128" unit="bpm" data={${empty ? "[]" : "readings"}} />`
           : status === "unavailable" ? `<VitalDetailCard title="Cardiac Autonomic" icon="pulse" description="Not yet available — awaiting device support." status="unavailable" />`
+          : summary ? `<VitalDetailCard title="Thermoregulation" icon="temperature" description="Latest temperature reading." status="${status}" value="${empty ? "—" : "36.8"}" unit="°C" />`
           : `<VitalDetailCard
   title="Thermoregulation"
   icon="temperature"
@@ -479,6 +481,12 @@ function ChartExample({ small = false }: { small?: boolean }) {
             />
             Empty data
           </label>
+          {!small && (
+            <label>
+              <input type="checkbox" checked={summary} onChange={event => setSummary(event.target.checked)} />
+              Summary only
+            </label>
+          )}
           {!small && (
             <label>
               Status{" "}
@@ -508,8 +516,10 @@ function ChartExample({ small = false }: { small?: boolean }) {
             status={status}
             title={status === "unavailable" ? "Cardiac Autonomic" : "Thermoregulation"}
             icon={status === "unavailable" ? "pulse" : "temperature"}
-            description={status === "safe" ? "Readings are stable." : "Review the highlighted changes."}
-            chart={status === "unavailable" ? undefined : {
+            description={summary ? "Latest temperature reading." : status === "safe" ? "Readings are stable." : "Review the highlighted changes."}
+            value={summary ? empty ? "—" : "36.8" : undefined}
+            unit={summary ? "°C" : undefined}
+            chart={status === "unavailable" || summary ? undefined : {
               data: empty ? [] : sampleVitalReadings(4),
               xKey: "time",
               timeAxis: true,

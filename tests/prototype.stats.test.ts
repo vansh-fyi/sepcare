@@ -7,13 +7,19 @@ import { READINGS } from "@/lib/fixtures/readings";
 import { getTrendWindow } from "@/lib/fixtures/trend-window";
 import { VitalDetailCard } from "@/components/patterns/vital-detail-card";
 
-afterEach(() => vi.restoreAllMocks());
+const state = vi.hoisted(() => ({ active: false, range: 1 }));
+vi.mock("react", async importOriginal => {
+  const actual = await importOriginal<typeof React>();
+  return { ...actual, useState: (...args: Parameters<typeof actual.useState>) => state.active
+    ? [state.range, (value: number) => { state.range = value; }]
+    : actual.useState(...args) };
+});
+afterEach(() => { state.active = false; state.range = 1; });
 
 it("selects original timestamped chart readings for every range and retains required selection", async () => {
   expect(existsSync("src/components/patterns/stats-view.tsx"), "shared Stats view exists").toBe(true);
   const { StatsView } = await import("@/components/patterns/stats-view");
-  let range = 1;
-  vi.spyOn(React, "useState").mockImplementation((() => [range, (value: number) => { range = value; }]) as typeof React.useState);
+  state.active = true;
   const entries = READINGS.entries;
   const now = entries.at(-1)!.timestamp;
   for (const hours of [1, 6, 24] as const) {
@@ -37,7 +43,7 @@ it("selects original timestamped chart readings for every range and retains requ
       expect(cards[index].props.value).toBeUndefined();
     }
     control.props.onValueChange("");
-    expect(range).toBe(hours);
+    expect(state.range).toBe(hours);
   }
 });
 
@@ -46,6 +52,6 @@ it("renders empty Stats charts without inventing readings", async () => {
   const { StatsView } = await import("@/components/patterns/stats-view");
   const html = renderToStaticMarkup(createElement(StatsView, { entries: [] }));
   expect(html.match(/No readings for this range/g)).toHaveLength(3);
-  expect(html.match(/No data for this range yet\./g)).toHaveLength(3);
+  expect(html.match(/data-slot="vitals-trend-chart-empty"/g)).toHaveLength(3);
   expect(html.match(/Not yet available — awaiting device support\./g)).toHaveLength(3);
 });
