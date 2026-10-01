@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 5
+open_count: 7
 waived_count: 0
 fixed_count: 0
-total_count: 5
-last_updated: 2026-10-01T04:20:28.565Z
+total_count: 7
+last_updated: 2026-10-01T04:26:23.850Z
 ---
 
 # Broken Windows Ledger
@@ -20,6 +20,8 @@ last_updated: 2026-10-01T04:20:28.565Z
 | 3 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-02-PLAN.md |  | Full npm test not repeated for Plan 07-02 per orchestrator; phase-level integration regression remains pending after known Realtime concurrency flake. | open |  | 2026-10-01T04:13:16.261Z |  |
 | 4 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-03-PLAN.md |  | Full npm test deferred to phase close by orchestrator; focused 07-03 tests and production build passed. | open |  | 2026-10-01T04:20:28.454Z |  |
 | 5 | 07 | stub | src/components/patterns/device-select-list.tsx |  | Pairing is intentionally unavailable in the unused zero-device state; Pair a device is disabled pending future pairing integration. | open |  | 2026-10-01T04:20:28.565Z |  |
+| 6 | 07 | deviation | tests/prototype.parent-home.test.ts |  | TDD evidence format normalization passed after implementation was written, before GREEN commit; raw intentional RED preserved. | open |  | 2026-10-01T04:26:09.029Z |  |
+| 7 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-04-PLAN.md |  | Full npm test deferred to phase close by orchestrator; parent/caregiver tests and build passed. | open |  | 2026-10-01T04:26:23.850Z |  |
 
 ````json
 [
@@ -81,6 +83,30 @@ last_updated: 2026-10-01T04:20:28.565Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-10-01T04:20:28.565Z",
+    "resolved_at": null
+  },
+  {
+    "id": 6,
+    "kind": "deviation",
+    "phase": "07",
+    "file": "tests/prototype.parent-home.test.ts",
+    "line": null,
+    "description": "TDD evidence format normalization passed after implementation was written, before GREEN commit; raw intentional RED preserved.",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-10-01T04:26:09.029Z",
+    "resolved_at": null
+  },
+  {
+    "id": 7,
+    "kind": "unrun-verify",
+    "phase": "07",
+    "file": ".planning/phases/07-html-prototype-caregiver-parent/07-04-PLAN.md",
+    "line": null,
+    "description": "Full npm test deferred to phase close by orchestrator; parent/caregiver tests and build passed.",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-10-01T04:26:23.850Z",
     "resolved_at": null
   }
 ]
