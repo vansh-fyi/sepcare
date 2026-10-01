@@ -1,5 +1,4 @@
 import { existsSync } from "node:fs";
-import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { READINGS } from "@/lib/fixtures/readings";
@@ -20,10 +19,12 @@ describe("parent health details", () => {
   it.each(["vitals", "stats"])("uses two real links with %s selected", async (tab) => {
     navigation.pathname = `/parent/detail/${tab}`;
     const { default: Layout } = await import("@/app/(prototype)/parent/detail/layout");
-    const html = renderToStaticMarkup(createElement(Layout, { children: "detail content", params: Promise.resolve({}) }));
+    const html = renderToStaticMarkup(Layout({ children: "detail content", params: Promise.resolve({}) }));
     expect(html.match(/data-slot="toggle-group-item"/g)).toHaveLength(2);
     expect(html.indexOf('href="/parent/detail/vitals"')).toBeLessThan(html.indexOf('href="/parent/detail/stats"'));
-    expect(html).toContain(`href="/parent/detail/${tab}" aria-current="page"`);
+    const activeLink = html.match(/<a\b[^>]*>/g)?.find(link => link.includes(`href="/parent/detail/${tab}"`));
+    expect(activeLink).toContain('aria-current="page"');
+    expect(activeLink).toContain('data-state="on"');
     expect(html).not.toContain('data-slot="nav-bar"');
     expect(html).toContain("detail content");
   });
