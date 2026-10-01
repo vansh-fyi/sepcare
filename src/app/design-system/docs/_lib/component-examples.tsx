@@ -1,6 +1,7 @@
 "use client";
 
 import { VitalDetailCard } from "@/components/patterns/vital-detail-card";
+import { ConnectionStatusExample } from "./connection-status-example";
 import { sampleVitalReadings } from "@/lib/examples/vital-readings";
 import { StatusSummaryExample, StatusSummaryVariations } from "./status-summary-examples";
 import { MotionExample, MotionVariations } from "./motion-examples";
@@ -553,6 +554,7 @@ function ItemExample() {
 }
 
 export function ComponentExample({ name }: { name: ComponentName }) {
+  if (name === "connection-status") return <ConnectionStatusExample />;
   switch (name) {
     case "status-summary":
       return <StatusSummaryExample />;
@@ -603,6 +605,7 @@ export function ComponentExample({ name }: { name: ComponentName }) {
 }
 
 export function ComponentVariations({ name }: { name: ComponentName }) {
+  if (name === "connection-status") return <p>Choose Live, Stale, or Reconnecting in the preview. Without an override, freshness follows the supplied timestamp.</p>;
   if (name === "status-summary") return <StatusSummaryVariations />;
   if (name === "motion") return <MotionVariations />;
   if (name === "button") return <ButtonVariations />;

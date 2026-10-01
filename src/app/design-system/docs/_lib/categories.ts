@@ -58,6 +58,7 @@ export const DOCS_COMPONENT_CATEGORIES: readonly DocsComponentCategory[] = [
   {
     name: "Feedback",
     links: [
+      { href: "/design-system/docs/connection-status", label: "Connection status" },
       { href: "/design-system/docs/badge", label: "Badge" },
       { href: "/design-system/docs/progress", label: "Progress" },
       { href: "/design-system/docs/toggle-group", label: "Toggle group" },

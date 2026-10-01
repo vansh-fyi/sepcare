@@ -3,6 +3,12 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { existsSync } from "node:fs";
 
+const effects = vi.hoisted(() => [] as Array<() => void | (() => void)>);
+vi.mock("react", async (importOriginal) => ({
+  ...await importOriginal<typeof import("react")>(),
+  useEffect: (effect: () => void | (() => void)) => effects.push(effect),
+}));
+
 afterEach(() => vi.useRealTimers());
 
 describe("connection status", () => {
@@ -34,5 +40,18 @@ describe("connection status", () => {
       expect(html).toContain(color);
       expect(html).toContain(`data-icon="${icon}"`);
     }
+  });
+
+  it("clears its 15-second clock when the effect is unmounted", async () => {
+    vi.useFakeTimers();
+    effects.length = 0;
+    const { ConnectionStatus } = await import("@/components/patterns/connection-status");
+    renderToStaticMarkup(createElement(ConnectionStatus, { lastSyncedAt: Date.now() }));
+    const cleanup = effects[0]();
+    expect(vi.getTimerCount()).toBe(1);
+    vi.advanceTimersByTime(15_000);
+    expect(typeof cleanup).toBe("function");
+    if (cleanup) cleanup();
+    expect(vi.getTimerCount()).toBe(0);
   });
 });

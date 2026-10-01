@@ -1,5 +1,7 @@
 # SepCare design system
 
+ConnectionStatus is the shared reading-freshness indicator: Live (green connected icon), Last synced Nm ago (muted sync icon), or Reconnecting… (caution syncing icon). It updates its clock every 15 seconds, uses a strict 60-second freshness threshold by default, and clears the timer on unmount. Retry state comes from the caller, never elapsed time. Its API and controlled preview live at /design-system/docs/connection-status.
+
 The source of truth is `src/app/globals.css`, the components in `src/components/ui`, and the compositions in `src/components/patterns`. Documentation uses the same components as the app.
 
 ## Direction

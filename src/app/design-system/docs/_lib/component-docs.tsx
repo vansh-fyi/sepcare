@@ -51,6 +51,8 @@ export function ComponentDocs({ name }: { name: ComponentName }) {
         description={
           name === "status-summary"
             ? "InfantStatusCard renders the card. InfantStatusSection adds the status Badge and prototype feedback; it accepts the same infant prop only."
+            : name === "connection-status"
+            ? "ConnectionStatus accepts the props below; it does not forward arbitrary span attributes."
             : name === "motion"
             ? "PulseWave is the motion primitive; DeviceHeader is a shared composition. Their supported props are listed below."
             : "Standard element props and className pass through to the underlying control."

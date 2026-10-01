@@ -8,6 +8,19 @@ export interface ComponentContent {
   tokens: string[];
 }
 export const COMPONENT_CONTENT = {
+  "connection-status": {
+    title: "Connection status",
+    description: "Reading freshness expressed with an icon, state word, and color.",
+    usage: 'import { ConnectionStatus } from "@/components/patterns/connection-status";\n\n<ConnectionStatus lastSyncedAt={lastReadingTimestamp} />\n<ConnectionStatus lastSyncedAt={lastReadingTimestamp} forceState="reconnecting" />',
+    guidance: "A reading is Live for less than 60 seconds by default; the exact threshold is stale. The clock refreshes every 15 seconds and stops on unmount. Stale labels round elapsed minutes and show Last synced just now below half a minute. Reconnecting is an explicit caller state, never inferred from age. Device connection, battery, and infant risk remain independent.",
+    props: [
+      { name: "lastSyncedAt", type: "number", description: "Required Unix epoch-millisecond timestamp of the last reading." },
+      { name: "staleAfterMs", type: "number", default: "60000", description: "Age threshold in milliseconds; equality is stale." },
+      { name: "forceState", type: "live | stale | reconnecting", description: "Optional explicit state override, including actual retry state or a controlled preview." },
+      { name: "className", type: "string", description: "Optional placement classes." },
+    ],
+    tokens: ["--color-safe", "--color-text-muted", "--color-caution-dark", "--text-caption"],
+  },
   "status-summary": {
     title: "Infant status",
     description: "A full-width infant-status card with an extra-large face above its heading and description.",
