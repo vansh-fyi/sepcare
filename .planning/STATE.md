@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 07
 current_phase_name: HTML Prototype (Caregiver + Parent)
 status: executing
-stopped_at: Completed 07-01-PLAN.md
-last_updated: "2026-09-30T18:25:42.949Z"
+stopped_at: Completed 07-02-PLAN.md
+last_updated: "2026-10-01T04:13:29.685Z"
 last_activity: 2026-09-30
 last_activity_desc: Phase 07 execution started
-state_head: a581dd6366066b07cd8141c284130e25be49099f
+state_head: 3f5b92214056307d64eb1407561ecac0307be464
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 26
-  completed_plans: 19
+  completed_plans: 20
   percent: 0
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 07 (HTML Prototype (Caregiver + Parent)) — EXECUTING
-Plan: 2 of 8
+Plan: 3 of 8
 Status: Ready to execute
 Last activity: 2026-09-30 — Phase 07 execution started
 
@@ -96,6 +96,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 06 P21 | 15min | 1 tasks | 0 files |
 | Phase 07 discuss | - | - | 2 files |
 | Phase 07 P01 | 9min | 2 tasks | 16 files |
+| Phase 07 P02 | 12min | 2 tasks | 16 files |
 
 ## Accumulated Context
 
@@ -163,6 +164,7 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 07]: 2026-09-30: Of the six vital summaries Phase 6 built, only 3 (Thermoregulation, HR/Temp Ratio, Activity Level) can be computed from real backend fields using the actual §7.1.1 research formulas; the other 3 (HRV, Perfusion Index, Respiratory Pattern) need firmware/backend work not yet done (`RISK-V2-01`). User directive: keep the full six-signal UI, flag the ungrounded 3 explicitly as pending rather than dropping or faking them — project is no longer being built as a competition/hackathon entry.
 - [Phase 07]: 2026-09-30: Parent "See All" → Vitals/Stats tabs (reusing caregiver's own screens); parent device icon and caregiver Settings tab both open the same shared Select-Device-list → Device-Details flow.
 - [Phase 07]: Phase 07-01: Missing or unscored readings show explicit absence instead of default Safe; prototype shell labels static data and reserves fixed-nav clearance.
+- [Phase 07]: Phase 07-02: Unavailable vitals suppress supplied charts, values, and misleading descriptions; connection retry is caller-controlled and freshness alone derives live/stale.
 
 ### Pending Todos
 
@@ -184,8 +186,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-30T18:25:42.919Z
-Stopped at: Completed 07-01-PLAN.md
+Last session: 2026-10-01T04:13:29.656Z
+Stopped at: Completed 07-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps

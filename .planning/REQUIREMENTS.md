@@ -25,7 +25,7 @@ Requirements for this milestone (judge-ready demo, ~2 dedicated days). Each maps
 - [x] **CARE-02**: Traffic-light (Green/Amber/Red) status is shown prominently, redundant-coded with color + icon + word (not color alone)
 - [ ] **CARE-03**: A risk-status timeline shows chronological Green/Amber/Red history
 - [ ] **CARE-04**: A vitals trend graph with a time-range selector (e.g. 1h/6h/24h) is sourced from the existing bounded `GET /api/readings` query
-- [ ] **CARE-05**: A device connection/last-synced indicator distinguishes "Live" / "Last synced Xm ago" / "Reconnecting" states, so stale data is never shown as current
+- [x] **CARE-05**: A device connection/last-synced indicator distinguishes "Live" / "Last synced Xm ago" / "Reconnecting" states, so stale data is never shown as current
 - [x] **CARE-06**: Persistent bottom navigation exposes the caregiver's full view set, including a Settings tab
 
 ### Parent View
@@ -90,7 +90,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CARE-02 | Phase 7 | Complete |
 | CARE-03 | Phase 7 | Pending |
 | CARE-04 | Phase 7 | Pending |
-| CARE-05 | Phase 7 | Pending |
+| CARE-05 | Phase 7 | Complete |
 | CARE-06 | Phase 7 | Complete |
 | PARENT-01 | Phase 7 | Pending |
 | PARENT-02 | Phase 7 | Pending |
