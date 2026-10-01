@@ -5,6 +5,16 @@ import { describe, expect, it } from "vitest";
 import { READINGS } from "@/lib/fixtures/readings";
 
 describe("risk timeline", () => {
+  it("renders VitalsView history using the supplied original hourly readings", async () => {
+    expect(existsSync("src/components/patterns/vitals-view.tsx")).toBe(true);
+    const { VitalsView } = await import("@/components/patterns/vitals-view");
+    const { getRiskHistory } = await import("@/lib/fixtures/risk-history");
+    const html = renderToStaticMarkup(createElement(VitalsView, { entries: READINGS.entries }));
+    expect(html).toContain("Risk history");
+    for (const entry of getRiskHistory(READINGS.entries)) {
+      expect(html).toContain(new Date(entry.timestamp).toISOString());
+    }
+  });
   it("provides hourly history and the timeline composition", () => {
     expect(existsSync("src/lib/fixtures/risk-history.ts")).toBe(true);
     expect(existsSync("src/components/patterns/risk-timeline.tsx")).toBe(true);
