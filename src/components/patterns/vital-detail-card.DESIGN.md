@@ -1,5 +1,7 @@
 # Vital detail card
 
+An explicit `value` and optional `unit` also render in summary mode, without a chart. Omit `value` for a text-only summary. Unavailable always suppresses the value. The same header and typography serve summaries and trends; this stateless composition is usable from server and client components.
+
 ## Consistent example scenarios
 
 The Safe / Caution / Critical preview control applies across Home, Vitals, Stats, and Settings without resetting navigation. Fixtures in src/lib/examples/clinical-scenarios.ts supply per-vital states: safe detail rows and Stats graphs are all green, while Home VitalCards retain their three distinct metric gradients; caution uses yellow thermoregulation and cardiac autonomic, red activity, and three green vitals; critical is all red. Stats graphs, icons, and values use the same per-vital states as Vitals. Infant headings and descriptions follow the overall scenario. These are illustrative combinations, not rules for computing infant risk.

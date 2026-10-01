@@ -834,7 +834,7 @@ export const COMPONENT_CONTENT = {
         name: "value / unit",
         type: "string | number / string",
         description:
-          "Optional latest-value override and unit. Defaults to the last reading of the first series.",
+          "Optional value and unit, also shown in summary mode without a chart. With a chart, defaults to the last reading of the first series. Unavailable suppresses the value.",
       },
       {
         name: "rangeLabel",

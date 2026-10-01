@@ -1,5 +1,3 @@
-"use client";
-
 import { Icon, type IconName } from "@/components/icon";
 import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 import {
@@ -125,8 +123,9 @@ export function VitalDetailCard({
             {tone === "unavailable" ? UNAVAILABLE_VITAL_DESCRIPTION : chart ? range : description}
           </CardDescription>
         </div>
-        {showChart && chart && (
+        {tone !== "unavailable" && (showChart || value !== undefined) && (
           <div
+            data-slot="vital-value"
             className={cn(
               "shrink-0 text-right tabular-nums",
               treatment.text,
