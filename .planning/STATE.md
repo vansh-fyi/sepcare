@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 07
 current_phase_name: HTML Prototype (Caregiver + Parent)
 status: executing
-stopped_at: Completed 07-04-PLAN.md
-last_updated: "2026-10-01T04:26:08.911Z"
+stopped_at: Completed 07-05-PLAN.md
+last_updated: "2026-10-01T11:12:28.701Z"
 last_activity: 2026-09-30
 last_activity_desc: Phase 07 execution started
-state_head: 5dd1d3be7c6f9cd0f7d5a1c498809f30dd4a44af
+state_head: e75825ca9f4a7b61e5917fd39178444512efae88
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 26
-  completed_plans: 22
+  completed_plans: 23
   percent: 0
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 07 (HTML Prototype (Caregiver + Parent)) — EXECUTING
-Plan: 5 of 8
+Plan: 6 of 8
 Status: Ready to execute
 Last activity: 2026-09-30 — Phase 07 execution started
 
@@ -99,6 +99,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 07 P02 | 12min | 2 tasks | 16 files |
 | Phase 07 P03 | 9min | 3 tasks | 22 files |
 | Phase 07 P04 | 7min | 2 tasks | 3 files |
+| Phase 07 P05 | 404min wall including interruption/approvals | 3 tasks | 18 files |
 
 ## Accumulated Context
 
@@ -169,6 +170,7 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 07]: Phase 07-02: Unavailable vitals suppress supplied charts, values, and misleading descriptions; connection retry is caller-controlled and freshness alone derives live/stale.
 - [Phase 07]: DeviceDetails accepts optional onConnectionChange; missing handlers disable the neutral action and disconnected freshness cannot show Live.
 - [Phase 07]: Phase 07-04: Parent device link contains its Icon and uses the shared Button data-icon-only geometry; no persistent nav.
+- [Phase 07]: Stats snapshot windows end at the last supplied original timestamp; null ratios preserve timestamps without invented values.
 
 ### Pending Todos
 
@@ -190,8 +192,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-01T04:25:53.831Z
-Stopped at: Completed 07-04-PLAN.md
+Last session: 2026-10-01T11:12:28.671Z
+Stopped at: Completed 07-05-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
