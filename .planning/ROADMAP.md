@@ -139,7 +139,7 @@ mandatory per-component Figma-verification):
   4. Selecting "See All" on the parent home screen reveals a two-tab (Vitals/Stats) view giving the parent the same underlying data as the caregiver in abstracted presentation, with device/settings reached via a device icon rather than a nav tab — this exact flow finalized collaboratively during the phase's discuss-step
   5. A data-contract diff document lists every field/endpoint gap the prototype build surfaced against the current API
 
-**Plans**: 3/8 plans executed
+**Plans**: 4/8 plans executed
 
 Plans:
 **Wave 1**
@@ -150,7 +150,7 @@ Plans:
 **Wave 2** *(blocked on Wave 1)*
 
 - [x] 07-03-PLAN.md — RiskTimeline + DeviceSelectList + shared DeviceDetails
-- [ ] 07-04-PLAN.md — Parent layout (no persistent nav) + abstracted Home
+- [x] 07-04-PLAN.md — Parent layout (no persistent nav) + abstracted Home
 
 **Wave 3** *(blocked on Wave 2)*
 
@@ -220,7 +220,7 @@ Phases execute in numeric order: 5 → 6 → 7 → 8 → 9 → 10
 | 4. Historical Trends API | v1.0 | 1/1 | Complete | 2026-09-19 |
 | 5. Repo Cleanup & Canonicalization | v1.1 | 2/2 | Complete    | 2026-09-25 |
 | 6. Design System (Tailwind v4 Tokens) | v1.1 | 21/16 | Complete    | 2026-09-30 |
-| 7. HTML Prototype (Caregiver + Parent) | v1.1 | 3/8 | In Progress|  |
+| 7. HTML Prototype (Caregiver + Parent) | v1.1 | 4/8 | In Progress|  |
 | 8. Backend Gap-Fill | v1.1 | 0/TBD | Not started | - |
 | 9. Hardware Integration | v1.1 | 0/TBD | Not started | - |
 | 10. Next.js Port + Deploy | v1.1 | 0/TBD | Not started | - |

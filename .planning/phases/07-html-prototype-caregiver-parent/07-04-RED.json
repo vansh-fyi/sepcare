@@ -1,0 +1,11 @@
+{
+  "command": "npx vitest run tests/prototype.parent-home.test.ts --reporter=tap",
+  "exitCode": 1,
+  "output": "TAP version 13\nnot ok 1 - offers one device link and See All without persistent navigation\nnot ok 2 - renders the caregiver's same latest readings, status, and care instructions\n1..2\n# tests 2\n# pass 0\n# fail 2\n",
+  "targetTest": "offers one device link and See All without persistent navigation",
+  "targetFile": "tests/prototype.parent-home.test.ts",
+  "expected": "Parent home route exists and exposes shared data and navigation",
+  "actual": "Assertion failed: parent Home must render the shared readings and progressive disclosure",
+  "rawOutput": "TAP version 13\n1..1\nnot ok 1 - tests/prototype.parent-home.test.ts # time=4.05ms {\n    1..2\n    not ok 1 - offers one device link and See All without persistent navigation # time=3.19ms\n        ---\n        error:\n            name: \"AssertionError\"\n            message: \"parent Home must render the shared readings and progressive disclosure: expected false to be true // Object.is equality\"\n        at: \"/Users/hp/Desktop/Work/Repositories/sepcare/tests/prototype.parent-home.test.ts:10:135\"\n        actual: \"false\"\n        expected: \"true\"\n        ...\n    not ok 2 - renders the caregiver's same latest readings, status, and care instructions # time=0.32ms\n        ---\n        error:\n            name: \"AssertionError\"\n            message: \"parent Home must render the shared readings and progressive disclosure: expected false to be true // Object.is equality\"\n        at: \"/Users/hp/Desktop/Work/Repositories/sepcare/tests/prototype.parent-home.test.ts:10:135\"\n        actual: \"false\"\n        expected: \"true\"\n        ...\n}\n(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:\n  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `\"type\": \"module\"` in the closest package.json\nSet `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.\n",
+  "normalization": "Flatten Vitest nested TAP failures and derive Node TAP summary; rawOutput retained."
+}
