@@ -5,16 +5,16 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 07
 current_phase_name: HTML Prototype (Caregiver + Parent)
 status: executing
-stopped_at: Completed 07-02-PLAN.md
-last_updated: "2026-10-01T04:13:29.685Z"
+stopped_at: Completed 07-03-PLAN.md
+last_updated: "2026-10-01T04:21:25.142Z"
 last_activity: 2026-09-30
 last_activity_desc: Phase 07 execution started
-state_head: 3f5b92214056307d64eb1407561ecac0307be464
+state_head: 1fa0f87be77d9716dca959d9db037782babd1259
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 26
-  completed_plans: 20
+  completed_plans: 21
   percent: 0
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 07 (HTML Prototype (Caregiver + Parent)) — EXECUTING
-Plan: 3 of 8
+Plan: 4 of 8
 Status: Ready to execute
 Last activity: 2026-09-30 — Phase 07 execution started
 
@@ -97,6 +97,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 07 discuss | - | - | 2 files |
 | Phase 07 P01 | 9min | 2 tasks | 16 files |
 | Phase 07 P02 | 12min | 2 tasks | 16 files |
+| Phase 07 P03 | 9min | 3 tasks | 22 files |
 
 ## Accumulated Context
 
@@ -165,6 +166,7 @@ Full decision log lives in PROJECT.md's Key Decisions table. v1.1-relevant frami
 - [Phase 07]: 2026-09-30: Parent "See All" → Vitals/Stats tabs (reusing caregiver's own screens); parent device icon and caregiver Settings tab both open the same shared Select-Device-list → Device-Details flow.
 - [Phase 07]: Phase 07-01: Missing or unscored readings show explicit absence instead of default Safe; prototype shell labels static data and reserves fixed-nav clearance.
 - [Phase 07]: Phase 07-02: Unavailable vitals suppress supplied charts, values, and misleading descriptions; connection retry is caller-controlled and freshness alone derives live/stale.
+- [Phase 07]: DeviceDetails accepts optional onConnectionChange; missing handlers disable the neutral action and disconnected freshness cannot show Live.
 
 ### Pending Todos
 
@@ -186,8 +188,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-01T04:13:29.656Z
-Stopped at: Completed 07-02-PLAN.md
+Last session: 2026-10-01T04:21:25.113Z
+Stopped at: Completed 07-03-PLAN.md
 Resume file: None
 
 ## Operator Next Steps

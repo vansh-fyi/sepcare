@@ -23,7 +23,7 @@ Requirements for this milestone (judge-ready demo, ~2 dedicated days). Each maps
 
 - [x] **CARE-01**: Live vitals card (pulse, temperature, activity/perfusion) is visible on load, sourced from the existing Realtime feed
 - [x] **CARE-02**: Traffic-light (Green/Amber/Red) status is shown prominently, redundant-coded with color + icon + word (not color alone)
-- [ ] **CARE-03**: A risk-status timeline shows chronological Green/Amber/Red history
+- [x] **CARE-03**: A risk-status timeline shows chronological Green/Amber/Red history
 - [ ] **CARE-04**: A vitals trend graph with a time-range selector (e.g. 1h/6h/24h) is sourced from the existing bounded `GET /api/readings` query
 - [x] **CARE-05**: A device connection/last-synced indicator distinguishes "Live" / "Last synced Xm ago" / "Reconnecting" states, so stale data is never shown as current
 - [x] **CARE-06**: Persistent bottom navigation exposes the caregiver's full view set, including a Settings tab
@@ -33,7 +33,7 @@ Requirements for this milestone (judge-ready demo, ~2 dedicated days). Each maps
 - [ ] **PARENT-01**: Parent home screen shows an abstracted infant-status summary, compact vitals, and simple care instructions — no persistent bottom nav on the home screen itself
 - [ ] **PARENT-02**: Parent has full data parity with the caregiver view (same underlying vitals/risk/history data) reached via progressive disclosure ("See All"), not restricted data
 - [ ] **PARENT-03**: Selecting "See All" reveals a two-tab navigation (Vitals / Stats) for the parent to browse the same detail the caregiver sees, in an abstracted presentation
-- [ ] **PARENT-04**: Parent's device/settings equivalent is reached via a device icon on the home screen, not a nav tab
+- [x] **PARENT-04**: Parent's device/settings equivalent is reached via a device icon on the home screen, not a nav tab
 - [ ] **PARENT-05**: Exact parent navigation flow is finalized collaboratively during the HTML prototype discuss-phase, not fully locked here
 
 ### Backend Gap-Fill
@@ -88,14 +88,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DSYS-03 | Phase 6 | Complete |
 | CARE-01 | Phase 7 | Complete |
 | CARE-02 | Phase 7 | Complete |
-| CARE-03 | Phase 7 | Pending |
+| CARE-03 | Phase 7 | Complete |
 | CARE-04 | Phase 7 | Pending |
 | CARE-05 | Phase 7 | Complete |
 | CARE-06 | Phase 7 | Complete |
 | PARENT-01 | Phase 7 | Pending |
 | PARENT-02 | Phase 7 | Pending |
 | PARENT-03 | Phase 7 | Pending |
-| PARENT-04 | Phase 7 | Pending |
+| PARENT-04 | Phase 7 | Complete |
 | PARENT-05 | Phase 7 | Pending |
 | API-01 | Phase 8 | Pending |
 | API-02 | Phase 8 | Pending |
