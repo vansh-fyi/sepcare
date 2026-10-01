@@ -55,6 +55,8 @@ Vitals uses the heart icon and six summary rows. Stats uses the monitoring icon 
 
 ## Shared chart and selection contracts
 
+RiskTimeline composes Item rows with a clinical icon, word, color, and local timestamp. It preserves input order; getRiskHistory owns newest-first hourly selection without changing the original chart readings. DeviceSelectList renders supplied DeviceCards as links and never fabricates device peers. DeviceDetails is the single identity, battery, connection freshness, sensor-contact, and neutral connection-action composition used by device screens. Unwired actions are disabled; DeviceDetails accepts an optional onConnectionChange handler. Their live docs are `/design-system/docs/risk-timeline`, `/design-system/docs/device-select-list`, and `/design-system/docs/device-details`.
+
 ToggleGroup has a white surface, neutral-100 hover for inactive options, and a solid dark neutral selected treatment everywhere, including preview controls. VitalDetailCard composes Card, Icon, and VitalsTrendChart; both the chart documentation and Stats render that same composition. Sample readings live in `src/lib/examples/vital-readings.ts`, outside reusable components.
 
 Timestamped charts use epoch milliseconds and preserve every supplied reading with linear segments. Time labels start strictly after the range start and use uniform 30-minute steps, or larger uniform steps on narrow charts. Gridlines align with visible ticks on both axes. Axis-label spacing is independent of reading cadence; every reading is retained. Example readings vary between one and three minutes. Planning specifies periodic summaries and original timestamps, but does not fix the firmware interval.

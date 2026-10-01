@@ -8,6 +8,30 @@ export interface ComponentContent {
   tokens: string[];
 }
 export const COMPONENT_CONTENT = {
+  "risk-timeline": {
+    title: "Risk timeline",
+    description: "Hourly status history with a status word, icon, color, and timestamp for every reading.",
+    usage: 'import { RiskTimeline } from "@/components/patterns/risk-timeline";\n\n<RiskTimeline entries={[{ timestamp: 1790812800000, status: "safe" }]} />',
+    guidance: "Supply already mapped clinical statuses. The component preserves input order; getRiskHistory keeps each local calendar hour’s last original reading and sorts newest-first. Chart data retains every reading. Empty history says No status changes recorded yet. Today shows time only; older entries also show month and day.",
+    props: [{ name: "entries", type: "RiskTimelineEntry[]", description: "Required array of { timestamp: number; status: safe | caution | critical }. Timestamps use Unix epoch milliseconds." }],
+    tokens: ["--color-safe", "--color-caution", "--color-critical", "--color-text-strong", "--color-text-subtle"],
+  },
+  "device-select-list": {
+    title: "Device selection",
+    description: "Navigable device cards using each supplied device’s identity, battery, and connection state.",
+    usage: 'import { DeviceSelectList } from "@/components/patterns/device-select-list";\n\n<DeviceSelectList devices={devices} hrefFor={device => `/parent/device/${device.id}`} />',
+    guidance: "Each Item links to the supplied destination and contains the shared DeviceCard. The current app supplies one real device; never fabricate peers. Empty data shows No devices connected yet. and a disabled Pair a device affordance because pairing is not implemented.",
+    props: [{ name: "devices", type: "DeviceProfile[]", description: "Required device data. No rows are invented." }, { name: "hrefFor", type: "(device: DeviceProfile) => string", description: "Required destination builder for each supplied device." }],
+    tokens: ["--color-surface", "--radius-card", "--shadow-card-device", "--color-text-strong"],
+  },
+  "device-details": {
+    title: "Device details",
+    description: "Shared device identity, battery, reading freshness, sensor contact, and connection action.",
+    usage: 'import { DeviceDetails } from "@/components/patterns/device-details";\n\n<DeviceDetails device={device} />\n// Supply a handler to enable the connection action.\n<DeviceDetails device={device} onConnectionChange={handleConnectionChange} />',
+    guidance: "Use the same composition for every device-details entry point. Contact labels are Good contact, Check placement, and No contact. Disconnected battery is last known, and its freshness cannot say Live. Connect/Disconnect uses neutral tone and is disabled without a handler. DeviceDetails never changes device state itself.",
+    props: [{ name: "device", type: "DeviceProfile", description: "Required id, name, battery percentage, connected boolean, lastSyncedAt timestamp, and sensorContact clinical status." }, { name: "onConnectionChange", type: "() => void", description: "Optional action handler. Omit to keep the Connect/Disconnect button disabled." }],
+    tokens: ["--color-surface", "--radius-card", "--shadow-card", "--color-button-neutral-fill", "--color-text-strong"],
+  },
   "connection-status": {
     title: "Connection status",
     description: "Reading freshness expressed with an icon, state word, and color.",

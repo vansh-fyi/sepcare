@@ -2,6 +2,7 @@
 
 import { VitalDetailCard } from "@/components/patterns/vital-detail-card";
 import { ConnectionStatusExample } from "./connection-status-example";
+import { DeviceHistoryExample } from "./device-history-examples";
 import { sampleVitalReadings } from "@/lib/examples/vital-readings";
 import { StatusSummaryExample, StatusSummaryVariations } from "./status-summary-examples";
 import { MotionExample, MotionVariations } from "./motion-examples";
@@ -555,6 +556,7 @@ function ItemExample() {
 
 export function ComponentExample({ name }: { name: ComponentName }) {
   if (name === "connection-status") return <ConnectionStatusExample />;
+  if (name === "risk-timeline" || name === "device-select-list" || name === "device-details") return <DeviceHistoryExample name={name} />;
   switch (name) {
     case "status-summary":
       return <StatusSummaryExample />;
@@ -605,6 +607,9 @@ export function ComponentExample({ name }: { name: ComponentName }) {
 }
 
 export function ComponentVariations({ name }: { name: ComponentName }) {
+  if (name === "risk-timeline") return <p>Use Empty history in the preview to inspect the no-records state. Status rows retain the supplied order.</p>;
+  if (name === "device-select-list") return <p>Use No devices to inspect the empty state. A populated list shows only the devices supplied by its caller.</p>;
+  if (name === "device-details") return <p>Toggle Connected to compare the neutral connection action and last-known battery presentation. Sensor contact remains independent.</p>;
   if (name === "connection-status") return <p>Choose Live, Stale, or Reconnecting in the preview. Without an override, freshness follows the supplied timestamp.</p>;
   if (name === "status-summary") return <StatusSummaryVariations />;
   if (name === "motion") return <MotionVariations />;

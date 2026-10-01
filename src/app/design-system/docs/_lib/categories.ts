@@ -49,6 +49,9 @@ export const DOCS_COMPONENT_CATEGORIES: readonly DocsComponentCategory[] = [
       { href: "/design-system/docs/card", label: "Card" },
       { href: "/design-system/docs/status-summary", label: "Infant status" },
       { href: "/design-system/docs/item", label: "Item" },
+      { href: "/design-system/docs/risk-timeline", label: "Risk timeline" },
+      { href: "/design-system/docs/device-select-list", label: "Device selection" },
+      { href: "/design-system/docs/device-details", label: "Device details" },
     ],
   },
   {
