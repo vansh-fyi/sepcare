@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 7
+open_count: 8
 waived_count: 0
 fixed_count: 0
-total_count: 7
-last_updated: 2026-10-01T04:26:23.850Z
+total_count: 8
+last_updated: 2026-10-01T11:10:51.574Z
 ---
 
 # Broken Windows Ledger
@@ -22,6 +22,7 @@ last_updated: 2026-10-01T04:26:23.850Z
 | 5 | 07 | stub | src/components/patterns/device-select-list.tsx |  | Pairing is intentionally unavailable in the unused zero-device state; Pair a device is disabled pending future pairing integration. | open |  | 2026-10-01T04:20:28.565Z |  |
 | 6 | 07 | deviation | tests/prototype.parent-home.test.ts |  | TDD evidence format normalization passed after implementation was written, before GREEN commit; raw intentional RED preserved. | open |  | 2026-10-01T04:26:09.029Z |  |
 | 7 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-04-PLAN.md |  | Full npm test deferred to phase close by orchestrator; parent/caregiver tests and build passed. | open |  | 2026-10-01T04:26:23.850Z |  |
+| 8 | 07 | unrun-verify | tests/realtime.subscribe.test.ts |  | Full suite Realtime reading/risk INSERT delivery timed out; shared Vitals and Stats scoped tests pass. | open |  | 2026-10-01T11:10:51.574Z |  |
 
 ````json
 [
@@ -107,6 +108,18 @@ last_updated: 2026-10-01T04:26:23.850Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-10-01T04:26:23.850Z",
+    "resolved_at": null
+  },
+  {
+    "id": 8,
+    "kind": "unrun-verify",
+    "phase": "07",
+    "file": "tests/realtime.subscribe.test.ts",
+    "line": null,
+    "description": "Full suite Realtime reading/risk INSERT delivery timed out; shared Vitals and Stats scoped tests pass.",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-10-01T11:10:51.574Z",
     "resolved_at": null
   }
 ]
