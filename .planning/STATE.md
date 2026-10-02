@@ -5,11 +5,11 @@ milestone_name: Frontend Rebuild + Design System + Hardware Integration
 current_phase: 07
 current_phase_name: HTML Prototype (Caregiver + Parent)
 status: executing
-stopped_at: Completed 07-07-PLAN.md
-last_updated: "2026-10-01T16:42:21.858Z"
+stopped_at: 07-08 Task 1 complete; Task 2 blocked on Turbopack worker port EPERM
+last_updated: "2026-10-02T07:56:19.085Z"
 last_activity: 2026-09-30
 last_activity_desc: Phase 07 execution started
-state_head: 32f75e965d524e549f601f0f3926a3b118b7360a
+state_head: 73f16b952ec81c1f48674d084fc4463829425694
 progress:
   total_phases: 6
   completed_phases: 0
@@ -182,9 +182,11 @@ None yet.
 
 ### Blockers/Concerns
 
-None currently for v1.1 planning. Carried forward from v1.0 (non-blocking): `GET /api/readings` has no API-key/auth gate — protected only by the hardcoded `nb-001` allow-list; fine for the single-device demo, flagged for post-v1.1 revisit. Known flake (non-blocking): `tests/realtime.subscribe.test.ts` / `tests/realtime.risk-scores.test.ts` intermittently time out under full-suite runs but pass in isolation.
+currently for v1.1 planning. Carried forward from v1.0 (non-blocking): `GET /api/readings` has no API-key/auth gate — protected only by the hardcoded `nb-001` allow-list; fine for the single-device demo, flagged for post-v1.1 revisit. Known flake (non-blocking): `tests/realtime.subscribe.test.ts` / `tests/realtime.risk-scores.test.ts` intermittently time out under full-suite runs but pass in isolation.
 
 Time-budget risk flagged by research (research/SUMMARY.md): static HTML prototype (Phase 7) must stay timeboxed and not become a second app; Tailwind v4 tokens (Phase 6) must be validated against a real `next build`, not just dev mode; hardware checklist (Phase 9) must be re-run verbatim after the Phase 10 port/redeploy.
+
+- 07-08 default production build blocked: Turbopack worker port EPERM persists after approved unsandboxed retry. Webpack build and 135 tests pass; exact Task 2 gate remains unresolved.
 
 ## Deferred Items
 
@@ -196,9 +198,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-01T16:42:21.829Z
-Stopped at: Completed 07-07-PLAN.md
-Resume file: None
+Last session: 2026-10-02T07:56:19.039Z
+Stopped at: 07-08 Task 1 complete; Task 2 blocked on Turbopack worker port EPERM
+Resume file: .planning/phases/07-html-prototype-caregiver-parent/07-08-SUMMARY.md
 
 ## Operator Next Steps
 

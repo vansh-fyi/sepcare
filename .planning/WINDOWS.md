@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 10
+open_count: 12
 waived_count: 0
 fixed_count: 0
-total_count: 10
-last_updated: 2026-10-01T16:42:22.610Z
+total_count: 12
+last_updated: 2026-10-02T07:55:12.829Z
 ---
 
 # Broken Windows Ledger
@@ -25,6 +25,8 @@ last_updated: 2026-10-01T16:42:22.610Z
 | 8 | 07 | unrun-verify | tests/realtime.subscribe.test.ts |  | Full suite Realtime reading/risk INSERT delivery timed out; shared Vitals and Stats scoped tests pass. | open |  | 2026-10-01T11:10:51.574Z |  |
 | 9 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-06-PLAN.md |  | Full npm test deferred to phase close by orchestrator; caregiver route scoped tests and production build passed. | open |  | 2026-10-01T16:34:01.535Z |  |
 | 10 | 07 | deviation | .planning/phases/07-html-prototype-caregiver-parent/07-07-SUMMARY.md |  | Task 1 RED evidence parser passed only after implementation edits; replay against committed RED snapshot confirmed intended failure before GREEN commit. | open |  | 2026-10-01T16:42:22.610Z |  |
+| 11 | 07 | unrun-verify | package.json |  | 07-08 exact npm run build fails in Turbopack PostCSS worker port binding (EPERM), including approved unsandboxed retry; Webpack production build passes. | open |  | 2026-10-02T07:55:12.720Z |  |
+| 12 | 07 | skipped-test | tests/e2e-deployed.test.ts | 66 | Existing deployed smoke suite skipped without DEPLOYED_URL; 07-08 full npm test otherwise passes 135 tests. | open |  | 2026-10-02T07:55:12.829Z |  |
 
 ````json
 [
@@ -146,6 +148,30 @@ last_updated: 2026-10-01T16:42:22.610Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-10-01T16:42:22.610Z",
+    "resolved_at": null
+  },
+  {
+    "id": 11,
+    "kind": "unrun-verify",
+    "phase": "07",
+    "file": "package.json",
+    "line": null,
+    "description": "07-08 exact npm run build fails in Turbopack PostCSS worker port binding (EPERM), including approved unsandboxed retry; Webpack production build passes.",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-10-02T07:55:12.720Z",
+    "resolved_at": null
+  },
+  {
+    "id": 12,
+    "kind": "skipped-test",
+    "phase": "07",
+    "file": "tests/e2e-deployed.test.ts",
+    "line": 66,
+    "description": "Existing deployed smoke suite skipped without DEPLOYED_URL; 07-08 full npm test otherwise passes 135 tests.",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-10-02T07:55:12.829Z",
     "resolved_at": null
   }
 ]
