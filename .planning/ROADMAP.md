@@ -30,7 +30,7 @@ Full detail archived at [`.planning/milestones/v1.0-ROADMAP.md`](milestones/v1.0
 
 - [x] **Phase 5: Repo Cleanup & Canonicalization** - Archive duplicate/off-topic material so only sepsis-relevant, non-duplicate content remains (completed 2026-09-25)
 - [x] **Phase 6: Design System (Tailwind v4 Tokens)** - Build and validate a shared caregiver/parent token set before any full-screen build starts (completed 2026-09-30)
-- [ ] **Phase 7: HTML Prototype (Caregiver + Parent)** - Validate the full caregiver view and abstracted parent view against the shared design system
+- [x] **Phase 7: HTML Prototype (Caregiver + Parent)** - Validate the full caregiver view and abstracted parent view against the shared design system (completed 2026-10-02)
 - [ ] **Phase 8: Backend Gap-Fill** - Close every data gap the prototype surfaced before the Next.js port begins
 - [ ] **Phase 9: Hardware Integration** - Get the real ESP32-S3-Tiny armband live against the deployed pipeline, with a rehearsed demo fallback
 - [ ] **Phase 10: Next.js Port + Deploy** - Port the validated prototype into Next.js, merge with the backend, deploy live, and re-validate hardware post-deploy
@@ -220,7 +220,7 @@ Phases execute in numeric order: 5 → 6 → 7 → 8 → 9 → 10
 | 4. Historical Trends API | v1.0 | 1/1 | Complete | 2026-09-19 |
 | 5. Repo Cleanup & Canonicalization | v1.1 | 2/2 | Complete    | 2026-09-25 |
 | 6. Design System (Tailwind v4 Tokens) | v1.1 | 21/16 | Complete    | 2026-09-30 |
-| 7. HTML Prototype (Caregiver + Parent) | v1.1 | 8/8 | In Progress|  |
+| 7. HTML Prototype (Caregiver + Parent) | v1.1 | 8/8 | Complete    | 2026-10-02 |
 | 8. Backend Gap-Fill | v1.1 | 0/TBD | Not started | - |
 | 9. Hardware Integration | v1.1 | 0/TBD | Not started | - |
 | 10. Next.js Port + Deploy | v1.1 | 0/TBD | Not started | - |
