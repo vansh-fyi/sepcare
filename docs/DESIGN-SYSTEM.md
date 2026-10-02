@@ -63,7 +63,7 @@ Timestamped charts use epoch milliseconds and preserve every supplied reading wi
 
 Chart cards show the time range beneath the metric title, with a calendar icon, and the latest numeric value at the right instead of a status badge. The value and metric icon are green by default; critical mode colors the value, icon, and chart lines red. Optional `value`, `unit`, and `rangeLabel` props customize the header. The plot fills the available card content width, reserving only the space needed for axis labels.
 
-VitalDetailCard also renders an explicit value/unit in summary mode without a chart. VitalsView and StatsView share the original-reading metric mapping: temperature, computed HR/Temp Ratio, and activity are supported; the other three signals use unavailable. A null computed ratio stays missing. Feature abnormal/trending booleans map to safe or critical independently of the aggregate three-tier status.
+VitalDetailCard also renders an explicit value/unit in summary mode without a chart. VitalsView and StatsView share the original-reading metric mapping: temperature, computed HR/Temp Ratio, and activity are supported; the other three signals use unavailable. A null computed ratio stays missing. Feature abnormal/trending booleans map to safe or critical only when an assessment exists, independently of the aggregate three-tier status.
 
 ## Motion and animation
 
@@ -96,3 +96,5 @@ VitalDetailCard accepts optional status (safe/caution/critical), which controls 
 InfantStatusCard accepts onCallAmbulance. In critical state, supplying this handler replaces the description with a shared critical Call ambulance button beneath the title. The Home example uses demo feedback and does not duplicate this button under Instructions.
 
 VitalDetailCard also accepts status="unavailable" for signals without device/backend support. It keeps the metric glyph on a neutral-100 tile with muted text, always displays ‘Not yet available — awaiting device support.’, and suppresses numeric values, calendar range, and charts even when supplied. This is not a loading or network-error state. ClinicalStatus remains the three clinical tones. The chart documentation preview includes this explicit option.
+
+Missing risk assessments and null computed ratios use `unscored`, never Safe. VitalDetailCard preserves raw values and charts with neutral text/lines and visible “Not yet assessed.” copy; `unavailable` remains reserved for unsupported signals and suppresses measurements. RiskTimeline accepts `unscored` to retain unassessed history with a neutral icon and label.

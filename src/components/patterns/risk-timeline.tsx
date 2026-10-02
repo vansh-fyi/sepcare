@@ -3,8 +3,8 @@ import { Item, ItemContent, ItemDescription, ItemGroup, ItemMedia, ItemTitle } f
 import { STATUS_LABEL } from "@/lib/fixtures/risk-status";
 import type { ClinicalStatus } from "./clinical-cards";
 
-export interface RiskTimelineEntry { timestamp: number; status: ClinicalStatus }
-const COLORS = { safe: "text-safe", caution: "text-caution", critical: "text-critical" };
+export interface RiskTimelineEntry { timestamp: number; status: ClinicalStatus | "unscored" }
+const COLORS = { unscored: "text-text-muted", safe: "text-safe", caution: "text-caution", critical: "text-critical" };
 
 export function RiskTimeline({ entries }: { entries: RiskTimelineEntry[] }) {
   const today = new Date().toDateString();
@@ -16,9 +16,9 @@ export function RiskTimeline({ entries }: { entries: RiskTimelineEntry[] }) {
       hour: "numeric", minute: "2-digit", hour12: true,
     });
     return <Item key={entry.timestamp} role="listitem" className="flex-nowrap">
-      <ItemMedia><Icon name={entry.status} size={16} className={COLORS[entry.status]} /></ItemMedia>
+      <ItemMedia><Icon name={entry.status === "unscored" ? "sync" : entry.status} size={16} className={COLORS[entry.status]} /></ItemMedia>
       <ItemContent className="min-w-0 break-words">
-        <ItemTitle>{STATUS_LABEL[entry.status]}</ItemTitle>
+        <ItemTitle>{entry.status === "unscored" ? "Not yet assessed" : STATUS_LABEL[entry.status]}</ItemTitle>
         <ItemDescription className="line-clamp-none"><time dateTime={date.toISOString()}>{label}</time></ItemDescription>
       </ItemContent>
     </Item>;

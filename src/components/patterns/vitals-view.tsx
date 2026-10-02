@@ -32,7 +32,7 @@ export function VitalsView({ entries }: { entries: ReadingEntry[] }) {
       <h2 className="font-heading text-xl font-bold">Risk history</h2>
       <RiskTimeline entries={getRiskHistory(entries).map(entry => ({
         timestamp: entry.timestamp,
-        status: mapRiskStatus(entry.risk?.status ?? "green"),
+        status: entry.risk ? mapRiskStatus(entry.risk.status) : "unscored",
       }))} />
     </section>
   </div>;

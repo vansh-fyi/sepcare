@@ -33,7 +33,7 @@ export function StatsView({ entries }: { entries: ReadingEntry[] }) {
         return <VitalDetailCard key={detail.title} {...detail} {...metric}
           value={metric.value === undefined ? "—" : index === 3 ? metric.value.toFixed(1) : metric.value}
           chart={{ data, xKey: "timestamp", timeAxis: true, series: [{
-            key: "value", label: detail.title, color: `var(--color-${metric.status})`, showDots: false,
+            key: "value", label: detail.title, color: metric.status === "unscored" ? "var(--color-text-muted)" : `var(--color-${metric.status})`, showDots: false,
           }] }} />;
       })}
     </div>

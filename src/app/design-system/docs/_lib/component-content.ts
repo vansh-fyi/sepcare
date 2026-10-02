@@ -13,7 +13,7 @@ export const COMPONENT_CONTENT = {
     description: "Hourly status history with a status word, icon, color, and timestamp for every reading.",
     usage: 'import { RiskTimeline } from "@/components/patterns/risk-timeline";\n\n<RiskTimeline entries={[{ timestamp: 1790812800000, status: "safe" }]} />',
     guidance: "Supply already mapped clinical statuses. The component preserves input order; getRiskHistory keeps each local calendar hour’s last original reading and sorts newest-first. Chart data retains every reading. Empty history says No status changes recorded yet. Today shows time only; older entries also show month and day.",
-    props: [{ name: "entries", type: "RiskTimelineEntry[]", description: "Required array of { timestamp: number; status: safe | caution | critical }. Timestamps use Unix epoch milliseconds." }],
+    props: [{ name: "entries", type: "RiskTimelineEntry[]", description: "Required array of { timestamp: number; status: safe | caution | critical | unscored }. Timestamps use Unix epoch milliseconds." }],
     tokens: ["--color-safe", "--color-caution", "--color-critical", "--color-text-strong", "--color-text-subtle"],
   },
   "device-select-list": {
@@ -844,8 +844,8 @@ export const COMPONENT_CONTENT = {
       },
       {
         name: "status",
-        type: "safe | caution | critical | unavailable",
-        description: "Unavailable suppresses values and charts and shows neutral device-support copy. VitalDetailCard: colors the icon, latest value, and chart lines consistently. Explicit status takes precedence over critical.",
+        type: "safe | caution | critical | unscored | unavailable",
+        description: "Unscored preserves values and charts in neutral colors with Not yet assessed copy. Unavailable suppresses values and charts and shows neutral device-support copy. VitalDetailCard: colors the icon, latest value, and chart lines consistently. Explicit status takes precedence over critical.",
       },
       {
         name: "critical",

@@ -9,6 +9,7 @@
 # (same placeholder-only content, allowed filename). See 01-01-SUMMARY.md
 # deviations.
 .env.local.example
+.env.example
 
 node_modules/
 dist/

@@ -453,7 +453,7 @@ function NavExample() {
 function ChartExample({ small = false }: { small?: boolean }) {
   const [empty, setEmpty] = useState(false);
   const [summary, setSummary] = useState(false);
-  const [status, setStatus] = useState<"safe" | "caution" | "critical" | "unavailable">("safe");
+  const [status, setStatus] = useState<"safe" | "caution" | "critical" | "unscored" | "unavailable">("safe");
   return (
     <Preview
       tone="canvas"
@@ -494,6 +494,7 @@ function ChartExample({ small = false }: { small?: boolean }) {
                 <option value="safe">Safe</option>
                 <option value="caution">Caution</option>
                 <option value="critical">Critical</option>
+                <option value="unscored">Unscored</option>
                 <option value="unavailable">Unavailable</option>
               </select>
             </label>

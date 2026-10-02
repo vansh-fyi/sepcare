@@ -61,7 +61,7 @@ export function VitalDetailCard({
   icon: IconName;
   description: string;
   critical?: boolean;
-  status?: ClinicalStatus | "unavailable";
+  status?: ClinicalStatus | "unscored" | "unavailable";
   value?: string | number;
   unit?: string;
   rangeLabel?: string;
@@ -70,6 +70,7 @@ export function VitalDetailCard({
   const tone = status ?? (critical ? "critical" : "safe");
   const showChart = Boolean(chart) && tone !== "unavailable";
   const treatment = {
+    unscored: { tile: "bg-neutral-100 text-text-muted", text: "text-text-muted", label: "Not yet assessed" },
     unavailable: { tile: "bg-neutral-100 text-text-muted", text: "text-text-muted", label: "Unavailable" },
     safe: { tile: "bg-safe-soft text-safe", text: "text-safe", label: "Stable" },
     caution: { tile: "bg-caution-soft text-caution-dark", text: "text-caution-dark", label: "Needs attention" },
@@ -103,7 +104,7 @@ export function VitalDetailCard({
       : "No readings for this range");
   const series = chart?.series.map((item) => ({
     ...item,
-    color: status || critical ? `var(--color-${tone})` : item.color,
+    color: tone === "unscored" ? "var(--color-text-muted)" : status || critical ? `var(--color-${tone})` : item.color,
   }));
   return (
     <Card className="min-w-0 p-5">
@@ -141,6 +142,7 @@ export function VitalDetailCard({
           </div>
         )}
       </div>
+      {tone === "unscored" && <p className="mt-2 text-sm text-text-muted">Not yet assessed.</p>}
       {showChart && chart && (
         <div className="mt-5">
           <VitalsTrendChart
