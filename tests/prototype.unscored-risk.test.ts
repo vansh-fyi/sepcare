@@ -24,3 +24,9 @@ it.each([["Vitals", VitalsView], ["Stats", StatsView]] as const)("keeps measured
   expect(html).not.toContain("var(--color-safe)");
   expect(html).not.toContain("var(--color-critical)");
 });
+
+it.each([["Vitals", VitalsView], ["Stats", StatsView]] as const)("does not imply a safe classification when %s has no readings", (_name, View) => {
+  const html = renderToStaticMarkup(createElement(View, { entries: [] }));
+  expect(/(?:text|bg)-(?:safe|critical)(?:[\s"-])/.test(html), "No readings means no risk classification").toBe(false);
+  expect(html).not.toContain("var(--color-safe)");
+});
