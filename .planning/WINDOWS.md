@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 12
+open_count: 6
 waived_count: 0
-fixed_count: 0
+fixed_count: 6
 total_count: 12
-last_updated: 2026-10-02T07:55:12.829Z
+last_updated: 2026-10-02T08:26:30.392Z
 ---
 
 # Broken Windows Ledger
@@ -17,15 +17,15 @@ last_updated: 2026-10-02T07:55:12.829Z
 |----|-------|------|------|------|-------------|--------|--------|-------------|-------------|
 | 1 | 06 | deviation | src/components/ui/card.tsx |  | CardTitle/CardDescription/CardAction/CardFooter still reference undefined shadcn stock tokens (--muted-foreground etc.); unused anywhere in src/, deferred to the phase that first renders them | open |  | 2026-09-26T12:55:19.880Z |  |
 | 2 | 07 | deviation | tests/realtime.subscribe.test.ts |  | Concurrent full-suite Realtime subscription tests timed out; both files passed serially, matching the pre-existing recorded flake. | open |  | 2026-09-30T18:24:17.391Z |  |
-| 3 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-02-PLAN.md |  | Full npm test not repeated for Plan 07-02 per orchestrator; phase-level integration regression remains pending after known Realtime concurrency flake. | open |  | 2026-10-01T04:13:16.261Z |  |
-| 4 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-03-PLAN.md |  | Full npm test deferred to phase close by orchestrator; focused 07-03 tests and production build passed. | open |  | 2026-10-01T04:20:28.454Z |  |
+| 3 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-02-PLAN.md |  | Full npm test not repeated for Plan 07-02 per orchestrator; phase-level integration regression remains pending after known Realtime concurrency flake. | fixed |  | 2026-10-01T04:13:16.261Z | 2026-10-02T08:26:29.948Z |
+| 4 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-03-PLAN.md |  | Full npm test deferred to phase close by orchestrator; focused 07-03 tests and production build passed. | fixed |  | 2026-10-01T04:20:28.454Z | 2026-10-02T08:26:30.060Z |
 | 5 | 07 | stub | src/components/patterns/device-select-list.tsx |  | Pairing is intentionally unavailable in the unused zero-device state; Pair a device is disabled pending future pairing integration. | open |  | 2026-10-01T04:20:28.565Z |  |
 | 6 | 07 | deviation | tests/prototype.parent-home.test.ts |  | TDD evidence format normalization passed after implementation was written, before GREEN commit; raw intentional RED preserved. | open |  | 2026-10-01T04:26:09.029Z |  |
-| 7 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-04-PLAN.md |  | Full npm test deferred to phase close by orchestrator; parent/caregiver tests and build passed. | open |  | 2026-10-01T04:26:23.850Z |  |
-| 8 | 07 | unrun-verify | tests/realtime.subscribe.test.ts |  | Full suite Realtime reading/risk INSERT delivery timed out; shared Vitals and Stats scoped tests pass. | open |  | 2026-10-01T11:10:51.574Z |  |
-| 9 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-06-PLAN.md |  | Full npm test deferred to phase close by orchestrator; caregiver route scoped tests and production build passed. | open |  | 2026-10-01T16:34:01.535Z |  |
+| 7 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-04-PLAN.md |  | Full npm test deferred to phase close by orchestrator; parent/caregiver tests and build passed. | fixed |  | 2026-10-01T04:26:23.850Z | 2026-10-02T08:26:30.169Z |
+| 8 | 07 | unrun-verify | tests/realtime.subscribe.test.ts |  | Full suite Realtime reading/risk INSERT delivery timed out; shared Vitals and Stats scoped tests pass. | fixed |  | 2026-10-01T11:10:51.574Z | 2026-10-02T08:26:30.281Z |
+| 9 | 07 | unrun-verify | .planning/phases/07-html-prototype-caregiver-parent/07-06-PLAN.md |  | Full npm test deferred to phase close by orchestrator; caregiver route scoped tests and production build passed. | fixed |  | 2026-10-01T16:34:01.535Z | 2026-10-02T08:26:30.392Z |
 | 10 | 07 | deviation | .planning/phases/07-html-prototype-caregiver-parent/07-07-SUMMARY.md |  | Task 1 RED evidence parser passed only after implementation edits; replay against committed RED snapshot confirmed intended failure before GREEN commit. | open |  | 2026-10-01T16:42:22.610Z |  |
-| 11 | 07 | unrun-verify | package.json |  | 07-08 exact npm run build fails in Turbopack PostCSS worker port binding (EPERM), including approved unsandboxed retry; Webpack production build passes. | open |  | 2026-10-02T07:55:12.720Z |  |
+| 11 | 07 | unrun-verify | package.json |  | 07-08 exact npm run build fails in Turbopack PostCSS worker port binding (EPERM), including approved unsandboxed retry; Webpack production build passes. | fixed |  | 2026-10-02T07:55:12.720Z | 2026-10-02T08:26:29.839Z |
 | 12 | 07 | skipped-test | tests/e2e-deployed.test.ts | 66 | Existing deployed smoke suite skipped without DEPLOYED_URL; 07-08 full npm test otherwise passes 135 tests. | open |  | 2026-10-02T07:55:12.829Z |  |
 
 ````json
@@ -61,10 +61,10 @@ last_updated: 2026-10-02T07:55:12.829Z
     "file": ".planning/phases/07-html-prototype-caregiver-parent/07-02-PLAN.md",
     "line": null,
     "description": "Full npm test not repeated for Plan 07-02 per orchestrator; phase-level integration regression remains pending after known Realtime concurrency flake.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-01T04:13:16.261Z",
-    "resolved_at": null
+    "resolved_at": "2026-10-02T08:26:29.948Z"
   },
   {
     "id": 4,
@@ -73,10 +73,10 @@ last_updated: 2026-10-02T07:55:12.829Z
     "file": ".planning/phases/07-html-prototype-caregiver-parent/07-03-PLAN.md",
     "line": null,
     "description": "Full npm test deferred to phase close by orchestrator; focused 07-03 tests and production build passed.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-01T04:20:28.454Z",
-    "resolved_at": null
+    "resolved_at": "2026-10-02T08:26:30.060Z"
   },
   {
     "id": 5,
@@ -109,10 +109,10 @@ last_updated: 2026-10-02T07:55:12.829Z
     "file": ".planning/phases/07-html-prototype-caregiver-parent/07-04-PLAN.md",
     "line": null,
     "description": "Full npm test deferred to phase close by orchestrator; parent/caregiver tests and build passed.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-01T04:26:23.850Z",
-    "resolved_at": null
+    "resolved_at": "2026-10-02T08:26:30.169Z"
   },
   {
     "id": 8,
@@ -121,10 +121,10 @@ last_updated: 2026-10-02T07:55:12.829Z
     "file": "tests/realtime.subscribe.test.ts",
     "line": null,
     "description": "Full suite Realtime reading/risk INSERT delivery timed out; shared Vitals and Stats scoped tests pass.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-01T11:10:51.574Z",
-    "resolved_at": null
+    "resolved_at": "2026-10-02T08:26:30.281Z"
   },
   {
     "id": 9,
@@ -133,10 +133,10 @@ last_updated: 2026-10-02T07:55:12.829Z
     "file": ".planning/phases/07-html-prototype-caregiver-parent/07-06-PLAN.md",
     "line": null,
     "description": "Full npm test deferred to phase close by orchestrator; caregiver route scoped tests and production build passed.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-01T16:34:01.535Z",
-    "resolved_at": null
+    "resolved_at": "2026-10-02T08:26:30.392Z"
   },
   {
     "id": 10,
@@ -157,10 +157,10 @@ last_updated: 2026-10-02T07:55:12.829Z
     "file": "package.json",
     "line": null,
     "description": "07-08 exact npm run build fails in Turbopack PostCSS worker port binding (EPERM), including approved unsandboxed retry; Webpack production build passes.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-02T07:55:12.720Z",
-    "resolved_at": null
+    "resolved_at": "2026-10-02T08:26:29.839Z"
   },
   {
     "id": 12,
