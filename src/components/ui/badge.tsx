@@ -3,25 +3,17 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { Icon } from "@/components/icon"
 
-/**
- * Locked D-08 Badge/StatusPill contract: exactly 3 status keys, each always
- * rendering Icon + label + color together (DESIGN-SYSTEM.md §9 multi-modal
- * rule — a Badge must never communicate status via color alone). Because
- * that invariant lives inside the component body (not just the class
- * string), the `as-child`/`Slot` composition pattern is intentionally not
- * supported here — a caller substituting the rendered element could
- * otherwise bypass the Icon+label pairing.
- */
+/** Clinical badges pair a status glyph with supplied text; metadata uses neutral or brand. */
 const badgeVariants = cva(
-  "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold tracking-tight border transition-colors select-none",
+  "inline-flex items-center gap-1.5 rounded-badge bg-[image:var(--gradient-status-sheen)] px-3 py-1 text-xs font-semibold tracking-tight transition-colors select-none",
   {
     variants: {
       status: {
-        "safe": "bg-safe-soft text-safe-dark border-border-subtle",
-        "caution": "bg-caution-soft text-caution-dark border-border-subtle",
-        "critical": "bg-critical-soft text-critical-dark border-border-subtle",
-        "neutral": "bg-bg text-text border-border-subtle",
-        "brand": "bg-brand-soft text-brand border-border-subtle",
+        "safe": "bg-safe-soft bg-[image:var(--gradient-badge-safe)] text-safe-dark",
+        "caution": "bg-caution-soft bg-[image:var(--gradient-badge-caution)] text-caution-dark",
+        "critical": "bg-critical-soft bg-[image:var(--gradient-badge-critical)] text-critical-dark",
+        "neutral": "bg-bg text-text",
+        "brand": "bg-brand-soft text-brand",
       },
     },
     defaultVariants: {
@@ -36,6 +28,7 @@ interface BadgeProps extends Omit<React.ComponentProps<"span">, "className"> {
   status?: BadgeStatus
   variant?: BadgeStatus
   className?: string
+  /** Independent appearance option: true shows the clinical glyph; false is text-only. */
   showIcon?: boolean
 }
 

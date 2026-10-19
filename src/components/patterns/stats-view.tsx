@@ -1,25 +1,23 @@
 "use client";
 
 import * as React from "react";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { TrendTimeScale, TREND_HOURS } from "./trend-time-scale";
+import { ClinicalMetricGrid } from "./clinical-screen";
 import { VITAL_DETAILS, VitalDetailCard } from "./vital-detail-card";
 import type { ReadingEntry } from "@/lib/fixtures/readings";
 import { getTrendWindow, type TrendRangeHours } from "@/lib/fixtures/trend-window";
 import { getVitalMetric } from "@/lib/fixtures/vital-metrics";
 
 export function StatsView({ entries }: { entries: ReadingEntry[] }) {
-  const [range, setRange] = React.useState<TrendRangeHours>(1);
+  const [range, setRange] = React.useState<TrendRangeHours>(4);
   const latest = entries.at(-1);
   // A fixture is a snapshot: anchor its window to its last original timestamp.
   const windowed = getTrendWindow(entries, range, latest?.timestamp ?? 0);
   return <div className="space-y-6">
-    <ToggleGroup type="single" size="sm" fit="equal" aria-label="Trend time range"
-      value={String(range)} onValueChange={value => {
-        if (value === "1" || value === "6" || value === "24") setRange(Number(value) as TrendRangeHours);
-      }}>
-      {([1, 6, 24] as const).map(hours => <ToggleGroupItem key={hours} value={String(hours)}>{hours}H</ToggleGroupItem>)}
-    </ToggleGroup>
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <TrendTimeScale value={String(range)} onValueChange={value => {
+      if (TREND_HOURS.some(hours => String(hours) === value)) setRange(Number(value) as TrendRangeHours);
+    }} />
+    <ClinicalMetricGrid>
       {VITAL_DETAILS.map((detail, index) => {
         const metric = getVitalMetric(index, latest);
         if (metric.status === "unavailable") return <VitalDetailCard key={detail.title} {...detail} {...metric} />;
@@ -36,6 +34,6 @@ export function StatsView({ entries }: { entries: ReadingEntry[] }) {
             key: "value", label: detail.title, color: metric.status === "unscored" ? "var(--color-text-muted)" : `var(--color-${metric.status})`, showDots: false,
           }] }} />;
       })}
-    </div>
+    </ClinicalMetricGrid>
   </div>;
 }

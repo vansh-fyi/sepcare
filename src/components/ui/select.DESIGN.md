@@ -114,3 +114,8 @@ pattern for the new form fields.
 `SelectValue`'s slot classes carry `line-clamp-1` from the stock scaffold (kept) so a long selected
 option label truncates rather than growing the trigger's fixed height. Not independently
 re-verified by this plan's own automated checks.
+
+
+## Shared surface depth
+
+Field surfaces use --gradient-input-surface over a white base. The subtle gradient is shared with cards and remains separate from border, focus, disabled, and validation states.

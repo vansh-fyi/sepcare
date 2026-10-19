@@ -10,6 +10,7 @@ import {
   ItemDescription,
 } from "@/components/ui/item";
 import { BatteryIndicator } from "@/components/ui/battery-indicator";
+import { DeviceConnectionLabel } from "./device-connection-label";
 import { DeviceTileRow } from "./device-tile-row";
 import { DEVICE_STATE, getDeviceState } from "@/lib/device-state";
 import { Sparkline, type SparklinePoint } from "@/components/ui/sparkline";
@@ -38,6 +39,7 @@ export function StatusCard({
   return (
     <Card className={className}>
       <ContentTileRow
+        tileSize={64}
         tileClassName={STATUS_TILES[status]}
         tile={
           <PulseWave emoji size="lg" tone={status} />
@@ -79,7 +81,8 @@ export function DeviceCard({
           {action}
         </div>
         <CardDescription className="mt-1">{identifier}</CardDescription>
-        {state !== "healthy" && (
+        <DeviceConnectionLabel connected={connected} className="mt-1" />
+        {state !== "healthy" && state !== "disconnected" && (
           <CardDescription className="mt-1">
             {DEVICE_STATE[state].label}
           </CardDescription>
@@ -123,20 +126,18 @@ export function VitalCard({
   data,
   status,
   className,
-}: {
-  metric: keyof typeof METRICS;
-  value: string;
-  unit?: string;
-  data?: SparklinePoint[];
-  status?: ClinicalStatus;
-  className?: string;
-}) {
+  trendHeight = 26,
+}: VitalCardProps) {
   const spec = METRICS[metric];
   return (
     <div
       className={cn(
-        "flex min-w-0 flex-col justify-between gap-4 rounded-card p-4 text-text-inverse",
-        status === "critical" ? "bg-critical" : status === "caution" ? "bg-caution" : spec.fill,
+        "flex min-w-0 flex-col justify-between gap-3 rounded-card border border-vital-card-border p-4 shadow-card",
+        status === "critical"
+          ? "bg-vital-critical-fill bg-[image:var(--gradient-vital-critical)] text-vital-alert-text"
+          : status === "caution"
+            ? "bg-vital-caution-fill bg-[image:var(--gradient-vital-caution)] text-vital-alert-text"
+            : `${spec.fill} text-text-inverse`,
         className,
       )}
     >
@@ -144,22 +145,32 @@ export function VitalCard({
         <span className="text-caption font-semibold">{spec.label}</span>
         <Icon name={spec.icon} size={14} />
       </div>
-      {data ? (
+      {metric === "activity" && !data ? (
+        <div className="flex flex-1 flex-col items-start justify-end gap-2">
+          <Icon name={status === "critical" ? "critical" : status === "caution" ? "warning" : "safe"} size={18} className="self-end" />
+          <span className="break-words font-heading text-2xl font-bold">{value}</span>
+        </div>
+      ) : (
         <>
-          <Sparkline data={data} color="var(--color-text-inverse)" />
           <p className="flex flex-wrap items-baseline gap-1 tabular-nums">
             <span className="font-heading text-2xl font-bold">{value}</span>
-            <span className="text-[10px]">{unit}</span>
+            <span className="text-xs">{unit}</span>
           </p>
+          {data && <Sparkline data={data} height={trendHeight} color="currentColor" />}
         </>
-      ) : (
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 py-1">
-          <Icon name={status === "critical" ? "critical" : status === "caution" ? "warning" : "safe"} size={30} />
-          <span className="font-heading text-2xl font-bold">{value}</span>
-        </div>
       )}
     </div>
   );
+}
+
+export interface VitalCardProps {
+  metric: keyof typeof METRICS;
+  value: string;
+  unit?: string;
+  data?: SparklinePoint[];
+  status?: ClinicalStatus;
+  trendHeight?: number;
+  className?: string;
 }
 
 export function InstructionCard({

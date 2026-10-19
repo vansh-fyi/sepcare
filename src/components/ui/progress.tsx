@@ -32,7 +32,7 @@ function Progress({
       value={resolvedValue}
       max={limit}
       className={cn(
-        "relative h-1.5 w-full overflow-hidden rounded-full",
+        "bg-[image:var(--gradient-control-sheen)] relative h-1.5 w-full overflow-hidden rounded-full",
         TONES[tone].track,
         className,
       )}
@@ -41,7 +41,7 @@ function Progress({
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
         className={cn(
-          "h-full w-full flex-1 transition-[transform] duration-[var(--duration-normal)] ease-out motion-reduce:transition-none",
+          "bg-[image:var(--gradient-control-sheen)] h-full w-full flex-1 transition-[transform] duration-[var(--duration-normal)] ease-out motion-reduce:transition-none",
           TONES[tone].fill,
         )}
         style={{

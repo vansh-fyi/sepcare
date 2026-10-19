@@ -1,6 +1,6 @@
 # NavLink
 
-NavLink renders a destination in the clinical bottom navigation. The active destination has an icon, a label, a solid dark neutral pill, and a matching indicator. Inactive destinations show the same icon and label arrangement on a surface defined by the shared control shadow.
+NavLink renders a destination in the clinical bottom navigation. The active destination has an icon, a label, a solid dark neutral pill, and a matching indicator. Inactive destinations show the same icon and label arrangement on a white surface with a 1px semantic card stroke and the crisp shared control shadow.
 
 The link always has an accessible name through `aria-label`. The active link also has `aria-current="page"`. Every destination has equal width and a 56px button height, with its icon above a persistent label. An 8px gap separates destinations. The indicator follows the full width of its own button.
 
@@ -13,3 +13,8 @@ Live examples are at `/design-system/docs/nav`.
 ## Figma provenance
 
 Verified against Figma node `279-220`.
+
+
+## Shared surface depth
+
+Inactive items use --gradient-surface with their existing stroke and shadow. Active items use --gradient-control-sheen over the dark-neutral fill and retain a shadowless selected surface and solid indicator.

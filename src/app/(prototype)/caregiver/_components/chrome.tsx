@@ -12,10 +12,10 @@ const TABS: NavBarTab[] = [
 ];
 
 export function CaregiverNav() {
-  return <NavBar tabs={TABS} currentRoute={usePathname()} />;
+  return <NavBar tabs={TABS} currentRoute={usePathname()} position="static" className="shrink-0" />;
 }
 
-export function CaregiverHeader(props: { deviceName: string; battery: number; connected: boolean }) {
+export function CaregiverHeader() {
   const router = useRouter();
-  return <DeviceHeader {...props} onReadings={() => router.push("/caregiver/stats")} onSettings={() => router.push("/caregiver/settings")} />;
+  return <DeviceHeader onReadings={() => router.push("/caregiver/stats")} onSettings={() => router.push("/caregiver/settings")} />;
 }

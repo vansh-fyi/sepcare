@@ -1,6 +1,6 @@
 import type { ReadingEntry } from "./readings";
 
-export type TrendRangeHours = 1 | 6 | 24;
+export type TrendRangeHours = 1 | 2 | 4 | 6 | 8 | 10 | 12 | 24;
 
 /** Inclusive lower bound, preserving every original reading and its input order. */
 export function getTrendWindow(

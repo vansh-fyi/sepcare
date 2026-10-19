@@ -39,7 +39,7 @@ function ToggleGroup({
       data-fit={fit}
       data-spacing={spacing}
       className={cn(
-        "group/toggle-group inline-flex items-center rounded-input bg-toggle-surface p-1",
+        "group/toggle-group inline-flex items-center rounded-input border border-toggle-border bg-toggle-surface bg-[image:var(--gradient-control-sheen)] p-1",
         fit === "equal" &&
           "w-full [&>[data-slot=toggle-group-item]]:min-w-0 [&>[data-slot=toggle-group-item]]:flex-1 [&>[data-slot=toggle-group-item]]:px-1",
         className,

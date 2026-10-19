@@ -30,7 +30,7 @@ it("renders three real summary values and three unsupported signals in VitalsVie
   expect(html).toContain(String(latest.vitals.temperature));
   expect(html).toContain(String(latest.vitals.activityScore));
   expect(html).toContain(latest.risk!.breakdown.hrTempProportionality.ratio!.toFixed(1));
-  expect(html).toContain('data-slot="badge"');
+  expect(html).not.toContain("No combined risk alert in the latest reading.");
   for (const [flag, expected] of [[true, "text-critical"], [false, "text-safe"]] as const) {
     const entry = { ...latest, risk: { ...latest.risk!, breakdown: {
       temperature: { value: latest.vitals.temperature, abnormal: flag },

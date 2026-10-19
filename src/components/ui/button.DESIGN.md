@@ -33,3 +33,8 @@ The system rules are in `docs/DESIGN-SYSTEM.md`. Padding belongs to Button, not 
 ## Figma provenance
 
 Verified against Figma node(s) `203-11745`, `203-14032`, `203-11521`, `266-9285`.
+
+
+## Shared surface depth
+
+Primary and secondary treatments use --gradient-control-sheen, a low-opacity highlight that fades into the base fill layered over the existing semantic fill. Hover, active, and custom colors remain the underlying color roles. Tertiary stays transparent; buttons retain their shadowless contract.

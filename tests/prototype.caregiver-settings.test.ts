@@ -13,5 +13,5 @@ it("serves caregiver Settings with the shared device identity, battery and conne
   expect(html).toContain(DEVICE.name);
   expect(html).toContain('data-slot="battery-indicator"');
   expect(html).toContain(`${DEVICE.battery}%`);
-  expect(html).toMatch(/Live|Last synced|Reconnecting/);
+  expect(html).toMatch(/Checking freshness|Live|Last synced|Reconnecting/);
 });

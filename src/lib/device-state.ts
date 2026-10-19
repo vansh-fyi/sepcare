@@ -19,7 +19,7 @@ export const DEVICE_STATE = {
   healthy: {
     tone: "safe",
     label: "Connected",
-    tile: "bg-device-healthy-surface text-device-healthy-icon",
+    tile: "bg-device-healthy-surface text-device-healthy-icon [--tile-gradient:var(--gradient-signifier-safe)]",
   },
   medium: {
     tone: "caution",

@@ -126,6 +126,10 @@ export function groupSemanticColorTokens(
       test: (n) => /^--color-(bg|surface|border|page-canvas)/.test(n),
     },
     {
+      title: "Screen previews",
+      test: (n) => /^--color-preview-/.test(n),
+    },
+    {
       title: "Motion and status",
       test: (n) => /^--color-(motion|status|device-header)-/.test(n),
     },
@@ -137,6 +141,7 @@ export function groupSemanticColorTokens(
       title: "Device tiles",
       test: (n) => /^--color-device-(healthy|medium|low|disconnected)-/.test(n),
     },
+    { title: "Vital cards", test: (n) => /^--color-vital-/.test(n) },
     { title: "Buttons", test: (n) => /^--color-button-/.test(n) },
     { title: "Text", test: (n) => /^--color-text/.test(n) },
     { title: "Brand", test: (n) => /^--color-(brand|link)/.test(n) },

@@ -1,63 +1,18 @@
-# Badge (StatusPill) — DESIGN.md
+# Badge
 
-`Badge` renders a single traffic-light status — safe, caution, or critical — and always pairs the
-status color with an icon and a text label. It is the component-level enforcement of
-DESIGN-SYSTEM.md §9's multi-modal rule: **a status is never communicated by color alone**. This is
-not just a styling convention — it is built into the component body, not just its class strings —
-so `asChild`/`Slot` composition is intentionally not supported here (a caller substituting the
-rendered element could bypass the Icon+label pairing the whole component exists to guarantee).
+Badge renders a compact rounded rectangle with an 8px radius from --radius-badge. It uses soft semantic fills and contrasting text, with no border, ring, or shadow. Shape and geometry belong to this shared component; consumers supply status and label.
 
-## Status values
+Clinical statuses safe, caution, and critical show the corresponding shared Icon before the label by default. Neutral and brand are nonclinical alternatives without an automatic icon. The status prop defaults to safe; variant is a compatibility alias. showIcon is an independent appearance choice: true (default) renders icon plus text for clinical tones; false renders text only. Neither choice changes status, fill, text color, or radius. The documentation playground controls both the rendered badges and copyable code. Standard span attributes and className are supported; asChild is not supported.
 
-| Status | Canonical meaning | Visual treatment |
-|--------|---------------------|--------------------|
-| `safe` | Green — vitals within normal range | `bg-safe-soft text-safe-dark` + `<Icon name="safe" />` |
-| `caution` | Amber — one or more vitals trending abnormal, not yet urgent | `bg-caution-soft text-caution-dark` + `<Icon name="caution" />` |
-| `critical` | Pink/rose — urgent, composite risk score has escalated | `bg-critical-soft text-critical-dark` + `<Icon name="critical" />` |
+Use short labels and retain text so color never carries meaning alone. Vitals summaries use Stable, Caution, Critical, Unscored, or Unavailable; the last two use neutral so absent assessments and unsupported signals cannot imply health. VitalDetailCard owns placement at the far right of its summary header and always passes showIcon={false}. Other consumers choose icon visibility explicitly or retain the icon default. Trend cards retain their latest numeric value rather than a badge.
 
-`status` is a **required** prop — there is no default/unscored rendering in this phase's atomic
-scope (an unscored/pending state, if ever needed, is a future composite-screen concern).
+Live preview, copyable code, supported props, and token references: /design-system/docs/badge. Changing this component updates documentation, clinical cards, infant-status sections, and sensor-state examples together.
 
-## Correct usage
 
-```tsx
-<Badge status="safe">Safe</Badge>
-<Badge status="caution">Caution</Badge>
-<Badge status="critical">Critical</Badge>
-```
+## Shared surface depth
 
-Every render always shows the icon (from `src/components/icon.tsx`, ported from `icons.js`'s
-`safe`/`caution`/`critical` keys) immediately before the label — this happens automatically inside
-`Badge`, callers never pass the icon themselves.
+Clinical badges use light tonal gradients: --gradient-badge-safe (green-100–200), --gradient-badge-caution (yellow-100–200), and --gradient-badge-critical (pink-100–200). Neutral and brand retain --gradient-status-sheen. This adds a soft highlight without changing icon options, 8px radius, or the borderless/shadowless contract.
 
-## Incorrect usage
+## Connection and safe signifiers
 
-```tsx
-// ✗ Violates the multi-modal rule — a bare colored <span> communicates status via color alone,
-// with no icon and no text label a screen reader or colorblind user can rely on.
-<span className="bg-critical-soft" />
-
-// ✗ Rejected by TypeScript — "danger" is not a member of the locked status union.
-<Badge status="danger">Danger</Badge>
-```
-
-`status` only accepts `"safe" | "caution" | "critical"` (the `BadgeStatus` type exported from
-`badge.tsx`). Any other string literal is a compile-time error.
-
-## Figma verification (06-08, 2026-09-27)
-
-No dedicated Figma frame was found for Badge as of 2026-09-27 — the three card nodes already
-inspected for this phase's status-adjacent context (`266-9323` Status Hero Card, `266-9387`
-Instruction Row Card, `266-9344` Vital Stat Card) show icon tiles, headline/subtitle text, and
-gradient/sparkline treatments, but no distinct badge/status-pill sub-element inside any of them.
-D-12's own component table lists Badge/StatusPill as "existing, carries forward" with no node ID,
-confirming this isn't an oversight. Visual treatment is carried forward unchanged from the prior
-extraction — no deviation identified, and the locked 3-value `icon+label+color` contract is
-unaffected either way.
-
-## Overflow / long-text (backstop)
-
-The label is expected to truncate/ellipsis rather than resize the Badge, and to wrap or truncate
-long text without breaking the token-driven pill shape. This is asserted by a held-out long-string
-render test (UI-SPEC "UI Considerations"), not independently re-verified by this plan's own
-automated checks.
+DeviceCard and DeviceDetails share DeviceConnectionLabel: an sm non-emoji PulseWave beside Connected, or a static neutral pulse beside Disconnected. Connectivity is independent of battery and infant risk. Healthy device tiles and safe VitalDetailCard icon tiles (Vitals and Stats) use --gradient-signifier-safe with --color-signifier-safe-fill and white --color-signifier-safe-on-fill. The gradient runs from a green-700/800 blend through green-800 to green-900. Chart lines and values keep their existing semantic colors. Clinical badges use lighter 100–200 tonal gradients with dark text, retaining their borderless 8px radius and independent showIcon option; Vitals badges remain text-only. Other tile states retain their established caution, critical, and neutral treatments.

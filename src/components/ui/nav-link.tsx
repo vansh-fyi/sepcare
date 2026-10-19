@@ -42,10 +42,10 @@ export function NavLink({
     >
       <span
         className={cn(
-          "inline-flex h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-cta px-1 transition-[background-color,box-shadow] duration-[var(--duration-fast)]",
+          "inline-flex h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-cta border border-transparent px-1 transition-[background-color,box-shadow] duration-[var(--duration-fast)]",
           active
-            ? "bg-nav-active text-text-inverse"
-            : "bg-surface text-text-muted shadow-control group-hover:bg-bg group-hover:text-text-secondary",
+            ? "bg-nav-active bg-[image:var(--gradient-control-sheen)] text-text-inverse"
+            : "border-card-border bg-surface bg-[image:var(--gradient-surface)] text-text-muted shadow-control group-hover:bg-bg group-hover:text-text-secondary",
         )}
       >
         <Icon name={icon} size={20} />

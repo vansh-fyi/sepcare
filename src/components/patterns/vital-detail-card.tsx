@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/vitals-trend-chart";
 import type { ClinicalStatus } from "./clinical-cards";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 export const UNAVAILABLE_VITAL_DESCRIPTION = "Not yet available — awaiting device support.";
 
@@ -72,10 +73,13 @@ export function VitalDetailCard({
   const treatment = {
     unscored: { tile: "bg-neutral-100 text-text-muted", text: "text-text-muted", label: "Not yet assessed" },
     unavailable: { tile: "bg-neutral-100 text-text-muted", text: "text-text-muted", label: "Unavailable" },
-    safe: { tile: "bg-safe-soft text-safe", text: "text-safe", label: "Stable" },
+    safe: { tile: "bg-signifier-safe-fill text-signifier-safe-on-fill bg-[image:var(--gradient-signifier-safe)]", text: "text-safe", label: "Stable" },
     caution: { tile: "bg-caution-soft text-caution-dark", text: "text-caution-dark", label: "Needs attention" },
     critical: { tile: "bg-critical-soft text-critical", text: "text-critical", label: "Critical" },
   }[tone];
+  const badgeStatus = tone === "unscored" || tone === "unavailable" ? "neutral" : tone;
+  const badgeLabel = tone === "caution" ? "Caution" : tone === "unscored" ? "Unscored" : treatment.label;
+  const showValue = tone !== "unavailable" && (showChart || value !== undefined);
   const latest = chart?.data.at(-1);
   const latestValue =
     value ?? (chart?.series[0] ? latest?.[chart.series[0].key] : undefined);
@@ -108,37 +112,43 @@ export function VitalDetailCard({
   }));
   return (
     <Card className="min-w-0 p-5">
-      <div className="flex items-center gap-4">
+      <div className={cn("flex", chart ? "items-center gap-4" : "items-start gap-3")}>
         <div
           className={cn(
-            "grid size-12 shrink-0 place-items-center rounded-icon-btn",
+            "grid size-12 shrink-0 place-items-center rounded-icon-btn bg-[image:var(--gradient-status-sheen)]",
             treatment.tile,
           )}
         >
           <Icon name={icon} size={24} />
         </div>
         <div className="min-w-0 flex-1">
-          <CardTitle>{title}</CardTitle>
+          <CardTitle className="break-words">{title}</CardTitle>
           <CardDescription className="mt-1 flex items-center gap-1.5">
             {showChart && chart && <Icon name="calendar" size={13} />}
             {tone === "unavailable" ? UNAVAILABLE_VITAL_DESCRIPTION : chart ? range : description}
           </CardDescription>
         </div>
-        {tone !== "unavailable" && (showChart || value !== undefined) && (
-          <div
-            data-slot="vital-value"
-            className={cn(
-              "shrink-0 text-right tabular-nums",
-              treatment.text,
+        {(!chart || showValue) && (
+          <div className="flex shrink-0 flex-col items-end gap-2">
+            {!chart && (
+              <Badge status={badgeStatus} showIcon={false} className="whitespace-nowrap">
+                {badgeLabel}
+              </Badge>
             )}
-          >
-            <p className="font-heading text-2xl font-bold">
-              {latestValue ?? "—"}
-              {unit && <span className="ml-1 text-xs font-medium">{unit}</span>}
-            </p>
-            <span className="sr-only">
-              {treatment.label} · Latest reading
-            </span>
+            {showValue && (
+              <div
+                data-slot="vital-value"
+                className={cn("text-right tabular-nums", treatment.text)}
+              >
+                <p className="font-heading text-2xl font-bold">
+                  {latestValue ?? "—"}
+                  {unit && <span className="ml-1 text-xs font-medium">{unit}</span>}
+                </p>
+                <span className="sr-only">
+                  {treatment.label} · Latest reading
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>

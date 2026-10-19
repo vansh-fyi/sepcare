@@ -7,14 +7,14 @@ import { READINGS } from "@/lib/fixtures/readings";
 import { getTrendWindow } from "@/lib/fixtures/trend-window";
 import { VitalDetailCard } from "@/components/patterns/vital-detail-card";
 
-const state = vi.hoisted(() => ({ active: false, range: 1 }));
+const state = vi.hoisted(() => ({ active: false, range: 4 }));
 vi.mock("react", async importOriginal => {
   const actual = await importOriginal<typeof React>();
   return { ...actual, useState: (...args: Parameters<typeof actual.useState>) => state.active
     ? [state.range, (value: number) => { state.range = value; }]
     : actual.useState(...args) };
 });
-afterEach(() => { state.active = false; state.range = 1; });
+afterEach(() => { state.active = false; state.range = 4; });
 
 it("selects original timestamped chart readings for every range and retains required selection", async () => {
   expect(existsSync("src/components/patterns/stats-view.tsx"), "shared Stats view exists").toBe(true);
@@ -22,7 +22,7 @@ it("selects original timestamped chart readings for every range and retains requ
   state.active = true;
   const entries = READINGS.entries;
   const now = entries.at(-1)!.timestamp;
-  for (const hours of [1, 6, 24] as const) {
+  for (const hours of [2, 4, 6, 8, 10, 12, 24] as const) {
     const tree = StatsView({ entries });
     const [selector] = React.Children.toArray(tree.props.children) as ReactElement<{ onValueChange: (value: string) => void }>[];
     selector.props.onValueChange(String(hours));

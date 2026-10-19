@@ -30,10 +30,10 @@ describe("connection status", () => {
     vi.setSystemTime(180_000);
     const { ConnectionStatus } = await import("@/components/patterns/connection-status");
     for (const [props, label, color, icon] of [
-      [{ lastSyncedAt: 170_000 }, "Live", "text-safe", "connected"],
-      [{ lastSyncedAt: 90_000 }, "Last synced 2m ago", "text-text-muted", "sync"],
+      [{ lastSyncedAt: 170_000 }, "Checking freshness…", "text-text-muted", "sync"],
+      [{ lastSyncedAt: 90_000, forceState: "live" as const }, "Live", "text-safe", "connected"],
       [{ lastSyncedAt: 180_000, forceState: "reconnecting" as const }, "Reconnecting…", "text-caution-dark", "syncing"],
-      [{ lastSyncedAt: 180_000, forceState: "stale" as const }, "Last synced just now", "text-text-muted", "sync"],
+      [{ lastSyncedAt: 180_000, forceState: "stale" as const }, "Last synced — checking time…", "text-text-muted", "sync"],
     ] as const) {
       const html = renderToStaticMarkup(createElement(ConnectionStatus, props));
       expect(html).toContain(label);

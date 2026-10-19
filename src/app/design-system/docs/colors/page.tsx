@@ -4,6 +4,7 @@ import { ColorChip } from "@/components/docs/color-chip";
 import { Badge } from "@/components/ui/badge";
 import { TokenSwatchGrid } from "../_lib/token-swatch";
 import {
+  getExactToken,
   groupSemanticColorTokens,
   parsePrimitiveRamps,
   readThemeBlock,
@@ -21,6 +22,7 @@ export default function ColorsPage() {
       sections={[
         { id: "palette", title: "Palette" },
         { id: "roles", title: "Semantic roles" },
+        { id: "gradients", title: "Surface gradients" },
         { id: "status", title: "Clinical status" },
         { id: "usage", title: "Using color" },
       ]}
@@ -51,6 +53,29 @@ export default function ColorsPage() {
         ))}
       </DocSection>
       <DocSection
+        id="gradients"
+        title="Surface gradients"
+        description="Static gradients add restrained depth to shared components. Page canvases stay white, and clinical status still controls color."
+      >
+        <TokenSwatchGrid tokens={[
+          "--gradient-surface",
+          "--gradient-input-surface",
+          "--gradient-control-sheen",
+          "--gradient-status-sheen",
+          "--gradient-signifier-safe",
+          "--gradient-badge-safe",
+          "--gradient-badge-caution",
+          "--gradient-badge-critical",
+          "--gradient-vital-caution",
+          "--gradient-vital-critical",
+        ].map((name) => ({ name, value: getExactToken(theme, name) }))} />
+        <DocNote>
+          Cards and fields use a white-to-neutral surface. Controls, badges, and icon tiles
+          use semantic gradients. Healthy device and safe metric icon tiles use dark green with white glyphs; badges use lighter tonal gradients with dark text. Caution vital cards use
+          yellow-400 through yellow-600; critical uses pink-200 through pink-300.
+        </DocNote>
+      </DocSection>
+      <DocSection
         id="status"
         title="Clinical status"
         description="Pair color with an icon and a clear label. A reader should be able to understand the status without distinguishing the hue."
@@ -61,10 +86,9 @@ export default function ColorsPage() {
           <Badge status="critical">Critical</Badge>
         </div>
         <DocNote>
-          Blue identifies general actions and links. Pink also appears in the
-          connection and navigation treatments from the Figma designs. Those
-          controls are distinct from a clinical status message; their labels
-          explain the action.
+          Blue identifies general actions and links. Dark neutral identifies selected
+          navigation. Yellow indicates caution, and pink indicates critical status.
+          Every clinical status retains a clear text label.
         </DocNote>
       </DocSection>
       <DocSection

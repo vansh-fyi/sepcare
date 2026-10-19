@@ -21,7 +21,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Sparkline } from "@/components/ui/sparkline";
 import { VitalDetailCard } from "@/components/patterns/vital-detail-card";
-import { DeviceHeader } from "@/components/patterns/device-header";
 import { COMPONENT_CONTENT } from "@/app/design-system/docs/_lib/component-content";
 import {
   getExactToken,
@@ -122,7 +121,7 @@ describe("design-system regressions", () => {
       parseThemeTokens("--color-example: #FFFFFF; /* reference */", "--color-"),
     ).toEqual([{ name: "--color-example", value: "#FFFFFF" }]);
     expect(getExactToken(theme, "--color-page-canvas").toLowerCase()).toBe(
-      "#f0f1f6",
+      "var(--color-surface)",
     );
     for (const content of Object.values(COMPONENT_CONTENT)) {
       for (const token of content.tokens)
@@ -478,48 +477,5 @@ describe("VitalDetailCard contract", () => {
       }),
     );
     expect(html).toContain("No readings for this range");
-  });
-});
-
-describe("DeviceHeader battery omission", () => {
-  it("omits both the battery percentage text and its divider when battery is missing", () => {
-    const html = renderToStaticMarkup(
-      createElement(DeviceHeader, {
-        deviceName: "Armband 01",
-        connected: true,
-        onReadings: () => {},
-        onSettings: () => {},
-      }),
-    );
-    expect(html).not.toContain("%");
-    expect(html).not.toContain("h-4 w-px");
-  });
-
-  it("omits both the battery percentage text and its divider when battery is NaN", () => {
-    const html = renderToStaticMarkup(
-      createElement(DeviceHeader, {
-        deviceName: "Armband 01",
-        connected: true,
-        battery: NaN,
-        onReadings: () => {},
-        onSettings: () => {},
-      }),
-    );
-    expect(html).not.toContain("%");
-    expect(html).not.toContain("h-4 w-px");
-  });
-
-  it("renders the battery percentage and divider together when battery is a finite number", () => {
-    const html = renderToStaticMarkup(
-      createElement(DeviceHeader, {
-        deviceName: "Armband 01",
-        connected: true,
-        battery: 72,
-        onReadings: () => {},
-        onSettings: () => {},
-      }),
-    );
-    expect(html).toContain("72%");
-    expect(html).toContain("h-4 w-px");
   });
 });

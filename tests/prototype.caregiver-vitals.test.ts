@@ -17,7 +17,7 @@ it("renders the caregiver six-signal grid and complete chronological risk histor
     .toEqual(getRiskHistory(READINGS.entries).map(entry => new Date(entry.timestamp).toISOString()));
 });
 
-it("serves caregiver Stats with real readings and all three range choices", async () => {
+it("serves caregiver Stats with real readings and the seven shared range choices", async () => {
   expect(existsSync("src/app/(prototype)/caregiver/stats/page.tsx"), "caregiver Stats route is reachable").toBe(true);
   const { default: Page } = await import("@/app/(prototype)/caregiver/stats/page");
   const html = renderToStaticMarkup(createElement(Page as ComponentType));
@@ -25,5 +25,5 @@ it("serves caregiver Stats with real readings and all three range choices", asyn
   expect(html).toContain(shared);
   expect(html.match(/Not yet available — awaiting device support\./g)).toHaveLength(3);
   expect(html.match(/data-slot="vital-value"/g)).toHaveLength(3);
-  for (const label of ["1H", "6H", "24H"]) expect(html).toContain(label);
+  for (const label of ["2H", "4H", "6H", "8H", "10H", "12H", "24H"]) expect(html).toContain(label);
 });

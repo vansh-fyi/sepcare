@@ -92,14 +92,12 @@ export function MotionVariations() {
       </Preview>
       <Preview
         code={
-          'import { useState } from "react";\nimport { DeviceHeader } from "@/components/patterns/device-header";\n\nconst [destination, setDestination] = useState("");\n\n<DeviceHeader deviceName="Device-SKU-1234" battery={90} connected onReadings={() => setDestination("Stats")} onSettings={() => setDestination("Settings")} />'
+          'import { useState } from "react";\nimport { DeviceHeader } from "@/components/patterns/device-header";\n\nconst [destination, setDestination] = useState("");\n\n<DeviceHeader onReadings={() => setDestination("Stats")} onSettings={() => setDestination("Settings")} />'
         }
-        caption="Sample device. Header actions update this demonstration only."
+        caption="Wordmark and app actions. Header actions update this demonstration only."
       >
         <div className="w-full max-w-md">
           <DeviceHeader
-            deviceName="Device-SKU-1234"
-            battery={90}
             onReadings={() => setDestination("Stats")}
             onSettings={() => setDestination("Settings")}
           />

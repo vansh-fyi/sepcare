@@ -9,9 +9,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-[color:var(--button-fill)] text-[color:var(--button-on-fill)] hover:bg-[color:var(--button-fill-hover)] active:bg-[color:var(--button-fill-active)]",
+          "bg-[image:var(--gradient-control-sheen)] bg-[color:var(--button-fill)] text-[color:var(--button-on-fill)] hover:bg-[color:var(--button-fill-hover)] active:bg-[color:var(--button-fill-active)]",
         secondary:
-          "border border-[color:var(--button-border)] bg-[color:var(--button-surface)] text-[color:var(--button-text)] hover:bg-[color:var(--button-surface-hover)]",
+          "bg-[image:var(--gradient-control-sheen)] border border-[color:var(--button-border)] bg-[color:var(--button-surface)] text-[color:var(--button-text)] hover:bg-[color:var(--button-surface-hover)]",
         tertiary:
           "bg-transparent text-[color:var(--button-text)] hover:bg-[color:var(--button-surface-hover)]",
       },

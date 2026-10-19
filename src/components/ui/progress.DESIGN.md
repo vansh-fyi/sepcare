@@ -9,3 +9,8 @@ The label is outside this primitive. Use BatteryIndicator to keep the percentage
 ## Figma provenance
 
 Verified against Figma node `203-11669`.
+
+
+## Shared surface depth
+
+Track and fill use --gradient-control-sheen over existing tone-specific colors. The depth treatment does not change progress values, accessibility, or reduced-motion behavior.

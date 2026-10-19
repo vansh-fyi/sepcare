@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { DeviceProfile } from "@/lib/fixtures/device";
 import { ConnectionStatus } from "./connection-status";
+import { DeviceConnectionLabel } from "./device-connection-label";
 import { DeviceTileRow } from "./device-tile-row";
 
 const CONTACT_LABEL = { safe: "Good contact", caution: "Check placement", critical: "No contact" };
@@ -13,6 +14,7 @@ export function DeviceDetails({ device, onConnectionChange }: { device: DevicePr
     <DeviceTileRow connected={device.connected} battery={device.battery}>
       <h2 className="break-words font-heading text-xl font-bold text-text-strong">{device.name}</h2>
       <p className="mt-1 text-caption text-text-muted">{device.id}</p>
+      <DeviceConnectionLabel connected={device.connected} className="mt-1" />
     </DeviceTileRow>
     <div className="space-y-2">
       <p className="text-sm font-semibold">{device.connected ? "Battery" : "Last known battery"}</p>

@@ -75,7 +75,7 @@ Do not require a separate approval step for routine shared-component fixes alrea
 - Preserve `@theme static` so tokens needed by runtime charts and swatches are emitted. Keep global resets in `@layer base` and documentation styles in `@layer components`. An unlayered padding reset previously defeated button utility classes; do not reintroduce it.
 - Use the shared `cn` helper from `src/lib/utils.ts` (`clsx` plus configured `tailwind-merge`). Register new custom text-size or shadow utility names where necessary. A text-color override must not remove the text-size class.
 - Primary and icon buttons have no default shadow. Secondary buttons use a 1px stroke through their tone-specific border role. Inactive navigation retains `--shadow-control`. Do not stack a border, ring, and shadow indiscriminately.
-- Clinical surfaces use white cards on a soft canvas, the established card radii, restrained shadows, and purposeful clinical gradients. Use Card and the shared patterns rather than recreating their surfaces inside a page.
+- All app pages and screen examples use a pure white background through --color-page-canvas (aliasing --color-surface), including the inherited global body inside iframes. Do not use --color-bg, neutral tints, or risk-state fills for page canvases. Component fills such as toggle groups, icon tiles, and vital gradients retain their semantic colors. Clinical cards use shared strokes and crisp shadows for definition on white. Use Card and the shared patterns rather than recreating their surfaces inside a page.
 
 ## Button contract
 
@@ -91,14 +91,14 @@ Do not require a separate approval step for routine shared-component fixes alrea
 ## Navigation and icons
 
 - Current decision: every clinical navigation item has equal width and a 56px button height, with an icon above an always-visible label. Selection changes appearance, not dimensions. The earlier expanding-active-item / hugging-inactive-items experiment was rejected.
-- Selected navigation uses a solid dark neutral fill and matching indicator. Keep the indicator below the active tab. Inactive items use the shared control shadow. Keep an 8px gap and accessible destination names/current-page state.
+- Selected navigation uses a dark neutral fill with the shared subtle highlight and matching indicator. Keep the indicator below the active tab. Inactive items use the shared control shadow. Keep an 8px gap and accessible destination names/current-page state.
 - Vitals uses `heart`; Stats uses `monitoring`. Home and Settings retain their corresponding icons.
 - Use the shared Icon component. Outline stroke weight comes from `--icon-stroke-width` (currently 2.25 at a 24px viewBox). Do not adjust the entire icon family with isolated per-screen overrides. Add missing glyphs to the shared icon system.
 - Preview navigation updates the contained example through its controlled handler; it must not send readers to missing product routes or out of the docs shell.
 
 ## Toggle groups
 
-- Use the shared ToggleGroup and ToggleGroupItem in both documentation controls and screens. The group background is white, inactive options hover at neutral-100, and the default selected treatment is dark neutral with inverse text. The coral selection variant has been removed.
+- Use the shared ToggleGroup and ToggleGroupItem in both documentation controls and screens. The group background is neutral-100, with a neutral-200 stroke and inactive hover, and the default selected treatment is dark neutral with inverse text. The coral selection variant has been removed.
 - Use the same neutral default in documentation and screen consumers. Usage snippets must reproduce the actual preview.
 - `outline` and `brand` are explicit alternatives, not silent substitutions for the default. Labels and values are supplied by consumers.
 - `fit="content"` uses content widths; `fit="equal"` gives equal widths within the available space. Use equal fit and small size for the seven-option time-scale row on a phone. Do not wrap its final option onto a second row accidentally.
@@ -144,7 +144,7 @@ Chart cards show the time range beneath the metric title, with a calendar icon, 
 
 ## Content-sized icon tiles and wordmark
 
-StatusCard, DeviceCard, InstructionCard, and DeviceHeader use ContentTileRow. The leading tile is always square and both dimensions match the adjacent content height; no fixed minimum tile height forces a short card taller. Glyphs and resting motion scale inside the tile. DeviceCard and DeviceHeader share device-state tiles: healthy uses green-100 and a darker green glyph, medium uses yellow, low battery uses red, and disconnected uses neutral. The shared Wordmark renders SepCare with the same Plus Jakarta Sans typography in docs and clinical headers.
+StatusCard, DeviceCard, InstructionCard, and DeviceHeader use ContentTileRow. The leading tile is always square and both dimensions match the adjacent content height; no fixed minimum tile height forces a short card taller. Glyphs and resting motion scale inside the tile. DeviceCard and DeviceHeader share device-state tiles: healthy uses --gradient-signifier-safe and a white glyph, medium uses yellow, low battery uses red, and disconnected uses neutral. The shared Wordmark renders SepCare with the same Plus Jakarta Sans typography in docs and clinical headers.
 
 ## Pulse wave
 
@@ -162,10 +162,30 @@ Web app headers start with the wordmark and app actions. Do not render a simulat
 
 ## Consistent example scenarios
 
-The Safe / Caution / Critical preview control applies across Home, Vitals, Stats, and Settings without resetting navigation. Fixtures in src/lib/examples/clinical-scenarios.ts supply per-vital states: safe detail rows and Stats graphs are all green, while Home VitalCards retain their three distinct metric gradients; caution uses yellow thermoregulation and cardiac autonomic, red activity, and three green vitals; critical is all red. Stats graphs, icons, and values use the same per-vital states as Vitals. Infant headings and descriptions follow the overall scenario. These are illustrative combinations, not rules for computing infant risk.
+The Safe / Caution / Critical preview control applies across Home, Vitals, Stats, and Settings without resetting navigation. Fixtures in src/lib/examples/clinical-scenarios.ts supply per-vital states: safe detail rows and Stats graphs are all green, while Home VitalCards retain their three distinct metric gradients; caution uses yellow thermoregulation and cardiac autonomic, critical activity, and three safe vitals; critical marks every vital critical, using pink fills on Home. Stats graphs, icons, and values use the same per-vital states as Vitals. Infant headings and descriptions follow the overall scenario. These are illustrative combinations, not rules for computing infant risk.
 
 Device fixtures use 90%, 40%, and 15% respectively; caution displays Slow internet. DeviceHeader.slowInternet is an independent boolean, defaults false, and disconnected takes precedence. Device battery stays consistent across header and device cards. Clinical state never computes battery or connectivity in shared components.
 
-VitalDetailCard accepts optional status (safe/caution/critical), which controls the icon, value, and graph lines together. Explicit status overrides legacy critical. If neither is supplied, the header defaults green and series retain supplied colors. VitalCard retains each metric gradient for safe or omitted status. Caution uses yellow and critical uses red. Filled VitalCards always use white labels, icons, sparklines, and values. Activity text uses the same font-heading text-2xl font-bold as numeric readings.
+VitalDetailCard accepts optional status (safe/caution/critical), which controls the icon, value, and graph lines together. Explicit status overrides legacy critical. If neither is supplied, the header defaults green and series retain supplied colors. VitalCard retains each metric gradient for safe or omitted status. Caution uses yellow and critical filled VitalCards use pink. Safe VitalCards use white foregrounds on their metric gradients. Caution uses a yellow-400–600 gradient over its yellow-600 base and critical uses a pink-200–300 gradient over its pink-300 base; both use --color-vital-alert-text for dark-neutral labels, icons, sparklines, and values. Activity text uses the same font-heading text-2xl font-bold as numeric readings.
 
 InfantStatusCard accepts onCallAmbulance. In critical state, supplying this handler replaces the description with a shared critical Call ambulance button beneath the title. The Home example uses demo feedback and does not duplicate this button under Instructions.
+
+## Badge appearances
+
+Badge uses an 8px rounded rectangle from --radius-badge, without a border, ring, or shadow. Icon presence is independent of status: showIcon={true} (default) is icon plus text, showIcon={false} is text only. VitalDetailCard summary badges use showIcon={false}; clinical labels and semantic colors remain visible. Update the shared component, live documentation controls, copyable code, API guidance, and design notes together.
+
+## Screen-preview stage and device frame
+
+The outer ExampleBrowser stage uses --color-preview-stage (neutral-900, the darkest neutral), while the iframe UI stays pure white through --color-page-canvas. A shared black 8px device bezel surrounds all screen examples; this is presentation owned by ExampleBrowser, not product-screen markup. Include the bezel in fit calculations and scale the complete device uniformly while preserving real iframe viewports and internal state. Update shared preview CSS, tokens, and design notes together.
+
+## Shared subtle gradients
+
+Use the shared gradient roles in component implementations: --gradient-surface for cards/navigation, --gradient-input-surface for fields, --gradient-control-sheen for filled controls, and --gradient-status-sheen for soft semantic tiles and metadata badges. Healthy device and safe metric tiles use --gradient-signifier-safe with white glyphs; clinical badges use light --gradient-badge-safe/caution/critical ramps with dark text. Caution VitalCards use --gradient-vital-caution (yellow-400 through yellow-600); critical uses --gradient-vital-critical (pink-200 through pink-300). Safe retains metric gradients. All states receive equal surface-depth treatment. Keep page canvases and the shared header white. Chart plotting areas, infant summaries, and tertiary buttons remain transparent; charts reveal their parent card gradient. Preserve semantic hover/focus states, stroke/shadow contracts, and accessible text. Update component notes and live token documentation together.
+
+## Connection and safe signifiers
+
+DeviceCard and DeviceDetails share DeviceConnectionLabel: an sm non-emoji PulseWave beside Connected, or a static neutral pulse beside Disconnected. Connectivity is independent of battery and infant risk. Healthy device tiles and safe VitalDetailCard icon tiles (Vitals and Stats) use --gradient-signifier-safe with --color-signifier-safe-fill and white --color-signifier-safe-on-fill. The gradient runs from a green-700/800 blend through green-800 to green-900. Chart lines and values keep their existing semantic colors. Clinical badges use lighter 100–200 tonal gradients with dark text, retaining their borderless 8px radius and independent showIcon option; Vitals badges remain text-only. Other tile states retain their established caution, critical, and neutral treatments.
+
+## Shared frontend and example layouts
+
+Use ClinicalScreen, ClinicalMetricGrid, HomeOverview, and TrendTimeScale for the matching frontend and clinical-example compositions. Caregiver navigation is a static flex child outside the scrolling main, not a fixed overlay with compensating padding. Parent uses DeviceHeader.settingsHref for its one device entry point. Settings/device details share DeviceDetails across both products and the clinical example. Keep backend availability, real units, null risk, original chart timestamps, and parent progressive disclosure intact; illustrative scenario fixtures do not establish data support. See docs/DESIGN-SYSTEM.md and .planning/phases/07-html-prototype-caregiver-parent/07-DESIGN-PARITY.md.

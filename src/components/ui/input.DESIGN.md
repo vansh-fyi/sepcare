@@ -11,3 +11,8 @@ Do not fix form spacing with per-page control overrides. Update Field or Input s
 ## Figma provenance
 
 No dedicated Figma frame was found for Input.
+
+
+## Shared surface depth
+
+Field surfaces use --gradient-input-surface over a white base. The subtle gradient is shared with cards and remains separate from border, focus, disabled, and validation states.

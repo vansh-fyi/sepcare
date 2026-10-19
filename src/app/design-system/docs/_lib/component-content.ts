@@ -28,15 +28,24 @@ export const COMPONENT_CONTENT = {
     title: "Device details",
     description: "Shared device identity, battery, reading freshness, sensor contact, and connection action.",
     usage: 'import { DeviceDetails } from "@/components/patterns/device-details";\n\n<DeviceDetails device={device} />\n// Supply a handler to enable the connection action.\n<DeviceDetails device={device} onConnectionChange={handleConnectionChange} />',
-    guidance: "Use the same composition for every device-details entry point. Contact labels are Good contact, Check placement, and No contact. Disconnected battery is last known, and its freshness cannot say Live. Connect/Disconnect uses neutral tone and is disabled without a handler. DeviceDetails never changes device state itself.",
+    guidance: "Use the same composition for every device-details entry point. Contact labels are Good contact, Check placement, and No contact. Disconnected battery is last known, and its freshness cannot say Live. Connect/Disconnect uses neutral tone and is disabled without a handler. DeviceDetails never changes device state itself. DeviceConnectionLabel pairs Connected with an sm animated non-emoji PulseWave; Disconnected uses a static neutral pulse. Healthy device tiles use a dark green gradient and white glyphs. Sensor-contact badges use light tonal gradients.",
     props: [{ name: "device", type: "DeviceProfile", description: "Required id, name, battery percentage, connected boolean, lastSyncedAt timestamp, and sensorContact clinical status." }, { name: "onConnectionChange", type: "() => void", description: "Optional action handler. Omit to keep the Connect/Disconnect button disabled." }],
-    tokens: ["--color-surface", "--radius-card", "--shadow-card", "--color-button-neutral-fill", "--color-text-strong"],
+    tokens: [
+      "--gradient-surface",
+      "--gradient-status-sheen",
+      "--gradient-signifier-safe",
+      "--color-signifier-safe-fill",
+      "--color-signifier-safe-on-fill",
+      "--gradient-badge-safe",
+      "--gradient-badge-caution",
+      "--gradient-badge-critical",
+      "--color-surface", "--radius-card", "--shadow-card", "--color-button-neutral-fill", "--color-text-strong"],
   },
   "connection-status": {
     title: "Connection status",
     description: "Reading freshness expressed with an icon, state word, and color.",
     usage: 'import { ConnectionStatus } from "@/components/patterns/connection-status";\n\n<ConnectionStatus lastSyncedAt={lastReadingTimestamp} />\n<ConnectionStatus lastSyncedAt={lastReadingTimestamp} forceState="reconnecting" />',
-    guidance: "A reading is Live for less than 60 seconds by default; the exact threshold is stale. The clock refreshes every 15 seconds and stops on unmount. Stale labels round elapsed minutes and show Last synced just now below half a minute. Reconnecting is an explicit caller state, never inferred from age. Device connection, battery, and infant risk remain independent.",
+    guidance: "A reading is Live for less than 60 seconds by default; the exact threshold is stale. Server and initial client markup show Checking freshness… until the mount effect reads the browser clock, then refresh every 15 seconds until unmount. Explicit forceState remains authoritative; forced stale defers elapsed-time copy until that clock is available. Stale labels round elapsed minutes and show Last synced just now below half a minute. Reconnecting is an explicit caller state, never inferred from age. Device connection, battery, and infant risk remain independent.",
     props: [
       { name: "lastSyncedAt", type: "number", description: "Required Unix epoch-millisecond timestamp of the last reading." },
       { name: "staleAfterMs", type: "number", default: "60000", description: "Age threshold in milliseconds; equality is stale." },
@@ -47,14 +56,14 @@ export const COMPONENT_CONTENT = {
   },
   "status-summary": {
     title: "Infant status",
-    description: "A full-width infant-status card with an extra-large face above its heading and description.",
+    description: "A transparent infant summary with an extra-large face above its heading and description.",
     usage: 'import { InfantStatusCard } from "@/components/patterns/status-summary-cards";\n\n<InfantStatusCard infant={{ status: "safe", title: "Baby is resting safely", description: "Based on the latest available readings." }} />',
-    guidance: "Uses Card and an 80px XL PulseWave. The face sits above the text, with the title matching DeviceHeader: Plus Jakarta Sans, text-xl, bold. The card fills its container at every viewport size. Supply clinical status and copy from application data. For prototype caregiver and parent screens, InfantStatusSection adds a Badge with the literal status word below the card and handles demo-only emergency feedback. The section accepts only infant; the card accepts infant and an optional onCallAmbulance handler.",
+    guidance: "Uses an 80px XL PulseWave above a Plus Jakarta Sans, text-heading-page (24px, 1.3 line height), bold heading. The full-width summary has a transparent background, no border, and no shadow. Supply clinical status and copy from application data. For caregiver, parent, and clinical example Home screens, HomeOverview composes InfantStatusSection, which adds a Badge with the literal status word below the card and handles demo-only emergency feedback. The section accepts only infant; the card accepts infant and an optional onCallAmbulance handler.",
     props: [
       { name: "infant", type: "{ status: safe | caution | critical; title: string; description: string }", description: "Required infant state and visible clinical copy. Critical replaces the description with Call ambulance when onCallAmbulance is supplied." },
       { name: "onCallAmbulance", type: "() => void", description: "InfantStatusCard only: optional critical action handler. Renders the shared critical button beneath the heading instead of the description. InfantStatusSection provides demo feedback internally and does not accept this prop." },
     ],
-    tokens: ["--color-surface", "--radius-card", "--shadow-card", "--color-text-strong", "--color-text-subtle", "--spacing-pulse-xl", "--color-motion-safe", "--color-caution", "--color-critical", "--color-text-muted"],
+    tokens: ["--text-heading-page", "--text-heading-page--line-height", "--color-text-strong", "--color-text-subtle", "--spacing-pulse-xl", "--color-motion-safe", "--color-caution", "--color-critical", "--color-text-muted"],
   },
   motion: {
     title: "Pulse wave",
@@ -63,7 +72,7 @@ export const COMPONENT_CONTENT = {
     usage:
       'import { PulseWave } from "@/components/motion/pulse-wave";\n\n<PulseWave emoji size="lg" tone="safe" />\n<PulseWave size="sm" tone="safe" />',
     guidance:
-      "PulseWave is decorative: pair it with visible status text. Emoji adds a stationary face inside hollow rings; without emoji the same rings surround a smaller tone-colored center dot. Size is independent: sm 16px, md 32px, lg 52px, xl 80px. Faces follow tone: happy for safe, straight-mouth for caution, unhappy/squinting for critical, and a sleeping face for neutral. Safe cycles over 6 seconds, caution over 2.5 seconds with brisk easing, and critical over 1.2 seconds. Neutral is always still. Only transform and opacity animate. Reduced motion stops all animation. StatusCard and InfantStatusCard share this asset; clinical and device states remain independent.",
+      "PulseWave is decorative: pair it with visible status text. Emoji adds a stationary face inside hollow rings; without emoji the same rings surround a smaller tone-colored center dot. Size is independent: sm 16px, md 32px, lg 52px, xl 80px. Faces follow tone: happy for safe, straight-mouth for caution, unhappy/squinting for critical, and a sleeping face for neutral. Safe cycles over 6 seconds, caution over 2.5 seconds with brisk easing, and critical over 1.2 seconds. Neutral is always still. Only transform and opacity animate. Reduced motion stops all animation. StatusCard and InfantStatusCard share this asset; clinical and device states remain independent. DeviceHeader is a flat white wordmark-and-actions bar; device identity, battery, and connection status belong in device details.",
     props: [
       {
         name: "emoji",
@@ -97,33 +106,14 @@ export const COMPONENT_CONTENT = {
         description: "Optional placement classes.",
       },
       {
-        name: "DeviceHeader.deviceName",
+        name: "DeviceHeader.readingsHref / settingsHref",
         type: "string",
-        description: "Required device name.",
-      },
-      {
-        name: "DeviceHeader.connected",
-        type: "boolean",
-        default: "true",
-        description:
-          "Disconnected shows explicit text, a static neutral pulse, and a neutral last-known battery percentage.",
-      },
-      {
-        name: "DeviceHeader.slowInternet",
-        type: "boolean",
-        default: "false",
-        description: "Shows Slow internet with caution motion while connected. Disconnected takes precedence.",
-      },
-      {
-        name: "DeviceHeader.battery",
-        type: "number",
-        description:
-          "Optional battery percentage followed by a divider, small non-emoji pulse, and connection label. Shares Settings battery thresholds with lighter text on the dark header. Missing or nonfinite values and their divider are omitted; disconnected is last known.",
+        description: "Optional real navigation destinations. Parent supplies only settingsHref for its device list. Links share the same header action styling as handler-driven buttons.",
       },
       {
         name: "DeviceHeader.onReadings / onSettings",
         type: "() => void",
-        description: "Required handlers for the two named header actions.",
+        description: "Optional handlers for controlled header actions. Each action is omitted unless its handler or corresponding href is provided.",
       },
     ],
     tokens: [
@@ -139,10 +129,8 @@ export const COMPONENT_CONTENT = {
       "--color-motion-safe",
       "--color-status-tile",
       "--color-device-header-surface",
-      "--color-device-header-battery-healthy",
-      "--color-device-header-battery-medium",
-      "--color-device-header-battery-low",
-      "--color-device-header-battery-disconnected",
+      "--color-device-header-text",
+      "--color-device-header-action-hover",
       "--color-device-healthy-surface",
       "--color-device-healthy-icon",
       "--color-device-medium-surface",
@@ -232,6 +220,8 @@ export const COMPONENT_CONTENT = {
       },
     ],
     tokens: [
+      "--gradient-control-sheen",
+
       "--color-button-brand-fill",
       "--color-button-brand-on-fill",
       "--color-button-brand-surface",
@@ -290,6 +280,8 @@ export const COMPONENT_CONTENT = {
       },
     ],
     tokens: [
+      "--gradient-input-surface",
+
       "--radius-input",
       "--color-border",
       "--color-border-focus",
@@ -386,6 +378,8 @@ export const COMPONENT_CONTENT = {
       },
     ],
     tokens: [
+      "--gradient-input-surface",
+
       "--radius-input",
       "--color-surface",
       "--color-border-focus",
@@ -419,6 +413,8 @@ export const COMPONENT_CONTENT = {
       { name: "disabled", type: "boolean", description: "Prevents editing." },
     ],
     tokens: [
+      "--gradient-input-surface",
+
       "--radius-input",
       "--color-border",
       "--color-border-focus",
@@ -512,7 +508,9 @@ export const COMPONENT_CONTENT = {
       },
       { name: "disabled", type: "boolean", description: "Prevents changes." },
     ],
-    tokens: ["--color-brand-fill", "--color-border", "--shadow-focus"],
+    tokens: [
+      "--gradient-control-sheen",
+      "--gradient-surface","--color-brand-fill", "--color-border", "--shadow-focus"],
   },
   card: {
     title: "Card",
@@ -521,13 +519,15 @@ export const COMPONENT_CONTENT = {
     usage:
       'import { DeviceCard } from "@/components/patterns/clinical-cards"\n\n<DeviceCard\n  name="Device-SKU-1234"\n  identifier="Device ID: SKU-1234"\n  battery={90}\n/>',
     guidance:
-      "Use CardHeader, CardTitle, CardDescription, CardContent, and CardFooter for a new composition. Reuse StatusCard, DeviceCard, VitalCard, and InstructionCard for existing clinical patterns. Each owns its spacing. Status, device, and instruction tiles are square and follow the adjacent content height through ContentTileRow; avoid adding a second padded wrapper.",
+      "Use CardHeader, CardTitle, CardDescription, CardContent, and CardFooter for a new composition. Reuse StatusCard, DeviceCard, VitalCard, and InstructionCard for existing clinical patterns. HomeVitals uses a Pulse-led bento grid on phones and three equal cards side by side from 768px. HomeOverview composes it with the shared infant section, a supplied See all action, and state-specific instructions in frontend and example Home screens. ClinicalScreen supplies viewport geometry and ClinicalMetricGrid supplies six-card spacing. Caution uses yellow-100 soft surfaces and yellow-600 accents with dark-neutral text. Filled VitalCards use a yellow-400 to yellow-600 caution gradient or a pink-200 to pink-300 critical gradient, with dark-neutral labels, icons, values, and trends. Shared cards use a subtle white-to-neutral surface gradient; healthy device tiles use a dark green gradient with white glyphs, while clinical badges use light tonal gradients. DeviceCard displays an sm non-emoji connection pulse independently of battery state. White cards have a semantic 1px stroke and crisp shared shadow; filled vital cards retain their gradients with a translucent stroke. VitalCard accepts optional trendHeight (26px by default); values appear above trends. Each owns its spacing. StatusCard uses a stable 64px square tile centered beside wrapping text. Device and instruction tiles follow adjacent content height through ContentTileRow; avoid adding a second padded wrapper.",
     props: [
+      { name: "HomeVitals.pulse / temperature / activity", type: "MetricSummary", description: "Required metric data: value, optional unit, data, and status. The composition owns the phone bento layout, the equal-width three-card row from 768px, and the 88px Pulse trend." },
+      { name: "VitalCard.trendHeight", type: "number", default: "26", description: "Sparkline height in pixels when data is supplied. Values remain above the trend." },
       {
         name: "Card.children",
         type: "ReactNode",
         description:
-          "The card's content. Card supplies the surface, 24px corners, padding, and shadow.",
+          "The card's content. Card supplies the surface, 24px corners, padding, 1px stroke, and crisp shadow.",
       },
       {
         name: "CardAction",
@@ -545,7 +545,7 @@ export const COMPONENT_CONTENT = {
         type: "boolean",
         default: "true",
         description:
-          "False takes precedence over battery, showing a neutral tile and a disconnected label. Any battery value is last known.",
+          "Displays Connected with an animated sm non-emoji PulseWave, or Disconnected with a static neutral pulse. False takes precedence over battery, showing a neutral tile. Medium/low battery labels supplement connection text; disconnected battery is last known.",
       },
       {
         name: "StatusCard.status",
@@ -560,8 +560,18 @@ export const COMPONENT_CONTENT = {
       },
     ],
     tokens: [
+      "--gradient-surface",
+      "--gradient-vital-caution",
+      "--gradient-vital-critical",
+      "--gradient-status-sheen",
+
       "--radius-card",
       "--shadow-card",
+      "--color-card-border",
+      "--color-vital-card-border",
+      "--color-vital-caution-fill",
+      "--color-vital-critical-fill",
+      "--color-vital-alert-text",
       "--shadow-card-device",
       "--color-device-healthy-surface",
       "--color-device-healthy-icon",
@@ -657,6 +667,9 @@ export const COMPONENT_CONTENT = {
       },
     ],
     tokens: [
+      "--gradient-surface",
+      "--gradient-control-sheen",
+
       "--color-nav-active",
       "--color-nav-indicator",
       "--radius-nav-bar",
@@ -666,11 +679,11 @@ export const COMPONENT_CONTENT = {
   badge: {
     title: "Badge",
     description:
-      "Add a short status label to a card, device, or reading. Clinical statuses pair an icon with text so the meaning survives without color.",
+      "Add a short status label to a card, device, or reading. Choose icon plus text or text only. Explicit status labels keep the meaning clear without relying on color.",
     usage:
-      'import { Badge } from "@/components/ui/badge"\n\n<Badge status="safe">Connected</Badge>\n<Badge status="caution">Needs attention</Badge>\n<Badge status="critical">Critical</Badge>',
+      'import { Badge } from "@/components/ui/badge"\n\n<Badge status="safe" showIcon={true}>Stable</Badge>\n<Badge status="safe" showIcon={false}>Stable</Badge>\n<Badge status="critical">Critical</Badge>',
     guidance:
-      "Name the actual status in the label. Use neutral or brand for metadata that does not indicate health. Keep icons visible on clinical statuses and avoid placing several badges beside the same title.",
+      "Badge uses a light tonal gradient (safe green-100 to green-200, caution yellow-100 to yellow-200, critical pink-100 to pink-200) on a borderless rounded rectangle with an 8px radius from --radius-badge. Name the actual status in the label. Use neutral or brand for metadata that does not indicate health. Choose icon plus text with showIcon={true} (default), or text only with showIcon={false}. Vitals summaries use text only. Both appearances retain explicit status labels and semantic colors; avoid placing several badges beside the same title.",
     props: [
       {
         name: "status",
@@ -683,7 +696,7 @@ export const COMPONENT_CONTENT = {
         type: "boolean",
         default: "true",
         description:
-          "Controls the status icon. Keep it enabled for clinical information.",
+          "Independent appearance option: true shows a clinical status icon beside the text; false renders text only. VitalDetailCard summaries use false.",
       },
       {
         name: "children",
@@ -692,6 +705,12 @@ export const COMPONENT_CONTENT = {
       },
     ],
     tokens: [
+      "--gradient-status-sheen",
+      "--gradient-badge-safe",
+      "--gradient-badge-caution",
+      "--gradient-badge-critical",
+
+      "--radius-badge",
       "--color-safe-soft",
       "--color-safe-dark",
       "--color-caution-soft",
@@ -749,6 +768,8 @@ export const COMPONENT_CONTENT = {
       },
     ],
     tokens: [
+      "--gradient-control-sheen",
+
       "--color-safe-soft",
       "--color-safe-fill",
       "--color-safe-dark",
@@ -770,7 +791,7 @@ export const COMPONENT_CONTENT = {
     usage:
       'import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"\n\n<ToggleGroup type="single" defaultValue="day" aria-label="Time range">\n  <ToggleGroupItem value="hour">Hour</ToggleGroupItem>\n  <ToggleGroupItem value="day">Day</ToggleGroupItem>\n  <ToggleGroupItem value="week">Week</ToggleGroupItem>\n</ToggleGroup>',
     guidance:
-      "Supply labels that describe the available views. For a required single selection, keep the current value when onValueChange returns an empty string. The white group surface, neutral-100 inactive hover, and dark neutral selection are shared by documentation controls and clinical screens. Use equal fit with small size for a compact time-range row.",
+      "Supply labels that describe the available views. For a required single selection, keep the current value when onValueChange returns an empty string. The neutral-100 group surface with its neutral-200 stroke and inactive hover, and dark neutral selection are shared by documentation controls and clinical screens. Use equal fit with small size for a compact time-range row.",
     props: [
       {
         name: "fit",
@@ -811,10 +832,13 @@ export const COMPONENT_CONTENT = {
       },
     ],
     tokens: [
+      "--gradient-control-sheen",
+
       "--color-bg",
       "--color-surface",
       "--color-toggle-active",
       "--color-toggle-surface",
+      "--color-toggle-border",
       "--color-toggle-hover",
       "--color-toggle-text",
       "--color-toggle-active-text",
@@ -828,7 +852,7 @@ export const COMPONENT_CONTENT = {
     usage:
       'import { VitalDetailCard } from "@/components/patterns/vital-detail-card"\n\n<VitalDetailCard\n  title="Thermoregulation"\n  icon="temperature"\n  description="All systems stable"\n  chart={{\n    data: readings,\n    xKey: "time",\n    timeAxis: true,\n    series: [{ key: "value", label: "Thermoregulation", color: "var(--color-safe)", domain: [94, 100], showDots: false }],\n  }}\n/>',
     guidance:
-      "VitalDetailCard owns the metric icon, calendar-marked time range, and latest value; its chart prop accepts VitalsTrendChart options. Supply epoch-millisecond timestamps with timeAxis enabled. Every reading contributes a straight line segment. Time labels use evenly spaced 30-minute steps, or a consistent larger interval on narrow charts. The range-start label is omitted. Gridlines align with visible ticks; tooltips retain the individual reading time. Sample data uses variable 1–3-minute intervals, not raw waveforms.",
+      "VitalDetailCard summary headers show a shared text-only badge (showIcon={false}) at the far right: Stable, Caution, Critical, or neutral Unscored/Unavailable. Summary values sit below the badge. Chart headers retain the metric icon, calendar-marked time range, and latest value; its chart prop accepts VitalsTrendChart options. The plotting area is transparent so the parent Card gradient remains continuous. Safe metric icon tiles use a dark green gradient with white glyphs; values and chart lines retain their existing semantic colors. StatsView and the clinical example share TrendTimeScale: 2H, 4H (default), 6H, 8H, 10H, 12H, and 24H. Supply epoch-millisecond timestamps with timeAxis enabled. Every reading contributes a straight line segment. Time labels use evenly spaced 30-minute steps, or a consistent larger interval on narrow charts. The range-start label is omitted. Gridlines align with visible ticks; tooltips retain the individual reading time. Sample data uses variable 1–3-minute intervals, not raw waveforms.",
     props: [
       {
         name: "value / unit",
@@ -845,7 +869,7 @@ export const COMPONENT_CONTENT = {
       {
         name: "status",
         type: "safe | caution | critical | unscored | unavailable",
-        description: "Unscored preserves values and charts in neutral colors with Not yet assessed copy. Unavailable suppresses values and charts and shows neutral device-support copy. VitalDetailCard: colors the icon, latest value, and chart lines consistently. Explicit status takes precedence over critical.",
+        description: "Unscored preserves values and charts in neutral colors with Not yet assessed copy. Unavailable suppresses values and charts and shows neutral device-support copy. VitalDetailCard: colors the icon, latest value, and chart lines consistently; summary headers show the corresponding shared Badge. Explicit status takes precedence over critical.",
       },
       {
         name: "critical",
@@ -896,6 +920,12 @@ export const COMPONENT_CONTENT = {
       },
     ],
     tokens: [
+      "--gradient-surface",
+      "--gradient-status-sheen",
+      "--gradient-signifier-safe",
+      "--color-signifier-safe-fill",
+      "--color-signifier-safe-on-fill",
+
       "--color-safe",
       "--color-brand",
       "--color-text-muted",

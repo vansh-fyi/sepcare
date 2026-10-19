@@ -86,3 +86,8 @@ function AlertsField({ hasError }: { hasError: boolean }) {
 `disabled:opacity-50 disabled:cursor-not-allowed` on the root — the exact same treatment
 `Input`/`Select`/`Textarea`/`Checkbox`/`RadioGroup`/`Field` already use, matching UI-SPEC's
 "loading" row instruction not to invent a new pattern for the new form fields.
+
+
+## Shared surface depth
+
+The switch track uses --gradient-control-sheen over its checked/unchecked fill and the thumb uses --gradient-surface. Shared static gradients add definition without changing size, toggle behavior, focus, or motion.

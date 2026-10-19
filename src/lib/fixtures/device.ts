@@ -11,12 +11,12 @@ export interface DeviceProfile {
   sensorContact: ClinicalStatus;
 }
 
-/** Static sample captured at module load, not a live device or clock. Replace with device telemetry when wiring the backend. */
+/** Fixed illustrative sample, identical on the server and client. Replace with device telemetry when wiring the backend. */
 export const DEVICE: DeviceProfile = {
   id: DEVICE_ID,
   name: "SepCare Armband — NICU Bay 4",
   battery: 76,
   connected: true,
-  lastSyncedAt: Date.now() - 30_000,
+  lastSyncedAt: 1790812800000,
   sensorContact: "safe",
 };

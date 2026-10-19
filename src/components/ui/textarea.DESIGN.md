@@ -83,3 +83,8 @@ the new form fields.
 `field-sizing-content` (kept from the shadcn scaffold) lets the textarea grow with its content up
 from `min-h-16` rather than staying fixed-height with an internal scrollbar. Not independently
 re-verified by this plan's own automated checks.
+
+
+## Shared surface depth
+
+Field surfaces use --gradient-input-surface over a white base. The subtle gradient is shared with cards and remains separate from border, focus, disabled, and validation states.

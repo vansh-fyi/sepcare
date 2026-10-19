@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
+const DEVICE_BEZEL = 8;
 const VIEWPORTS = { phone: 390, tablet: 768, desktop: 1280 };
 
 export function ExampleBrowser({
@@ -22,12 +23,11 @@ export function ExampleBrowser({
   const stage = useRef<HTMLDivElement>(null);
   const frame = useRef<HTMLIFrameElement>(null);
   const width = VIEWPORTS[device];
+  const outerWidth = width + DEVICE_BEZEL * 2;
+  const outerHeight = 720 + DEVICE_BEZEL * 2;
   const scale =
     available.width > 0
-      ? Math.max(
-          0.1,
-          Math.min(1, available.width / width, available.height / 720),
-        )
+      ? Math.min(1, available.width / outerWidth, available.height / outerHeight)
       : 0;
 
   useEffect(() => {
@@ -115,30 +115,37 @@ export function ExampleBrowser({
       <div className="docs-example-stage" ref={stage}>
         <div
           style={{
-            width: width * scale,
-            height: 720 * scale,
+            width: outerWidth * scale,
+            height: outerHeight * scale,
             visibility: scale ? "visible" : "hidden",
           }}
         >
-          <iframe
-            ref={frame}
-            title={`${title} — ${device} preview`}
-            src={source}
-            width={width}
-            height={720}
-            className="docs-example-frame"
+          <div
+            className="docs-example-device"
             style={{
+              "--preview-bezel": `${DEVICE_BEZEL}px`,
+              width: outerWidth,
+              height: outerHeight,
               transform: `scale(${scale})`,
               transformOrigin: "top left",
-            }}
-            onLoad={() => {
-              if (clinical)
-                frame.current?.contentWindow?.postMessage(
-                  { type: "sepcare-preview-status", status },
-                  window.location.origin,
-                );
-            }}
-          />
+            } as CSSProperties}
+          >
+            <iframe
+              ref={frame}
+              title={`${title} — ${device} preview`}
+              src={source}
+              width={width}
+              height={720}
+              className="docs-example-frame"
+              onLoad={() => {
+                if (clinical)
+                  frame.current?.contentWindow?.postMessage(
+                    { type: "sepcare-preview-status", status },
+                    window.location.origin,
+                  );
+              }}
+            />
+          </div>
         </div>
       </div>
     </article>

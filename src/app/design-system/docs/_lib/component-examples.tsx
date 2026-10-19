@@ -1,5 +1,7 @@
 "use client";
 
+import { HomeVitals } from "@/components/patterns/home-vitals";
+
 import { VitalDetailCard } from "@/components/patterns/vital-detail-card";
 import { ConnectionStatusExample } from "./connection-status-example";
 import { DeviceHistoryExample } from "./device-history-examples";
@@ -66,6 +68,36 @@ export const SAMPLE_TREND = [
 const SERIES = [
   { key: "perfusion", label: "Perfusion index", color: "var(--color-safe)" },
 ];
+function BadgeExample() {
+  const [showIcon, setShowIcon] = useState(true);
+  return (
+    <Preview
+      code={`import { Badge } from "@/components/ui/badge";\n\n<Badge status="safe" showIcon={${showIcon}}>Stable</Badge>\n<Badge status="caution" showIcon={${showIcon}}>Caution</Badge>\n<Badge status="critical" showIcon={${showIcon}}>Critical</Badge>`}
+      caption="Icon and text-only appearances share the same status colors and rounded rectangle. Vitals uses text-only badges."
+      controls={
+        <ToggleGroup
+          type="single"
+          value={showIcon ? "icon" : "text"}
+          size="sm"
+          aria-label="Badge appearance"
+          onValueChange={(value) => {
+            if (value) setShowIcon(value === "icon");
+          }}
+        >
+          <ToggleGroupItem value="icon">With icon</ToggleGroupItem>
+          <ToggleGroupItem value="text">Without icon</ToggleGroupItem>
+        </ToggleGroup>
+      }
+    >
+      <div className="docs-example-row">
+        <Badge status="safe" showIcon={showIcon}>Stable</Badge>
+        <Badge status="caution" showIcon={showIcon}>Caution</Badge>
+        <Badge status="critical" showIcon={showIcon}>Critical</Badge>
+      </div>
+    </Preview>
+  );
+}
+
 export function CardExample() {
   const [pattern, setPattern] = useState("device");
   const [deviceState, setDeviceState] = useState("healthy");
@@ -78,6 +110,7 @@ export function CardExample() {
       '<StatusCard\n  status="safe"\n  title="Baby is resting safely"\n  description="Based on the latest available readings."\n/>',
     vitals:
       '<VitalCard\n  metric="pulse"\n  value="128"\n  unit="bpm"\n  data={readings}\n/>',
+    bento: '<HomeVitals\n  pulse={{ value: "128", unit: "bpm", data: readings }}\n  temperature={{ value: "98.6", unit: "°F" }}\n  activity={{ value: "Healthy" }}\n/>',
     instruction:
       '<InstructionCard\n  icon="ankleBand"\n  title="Check the band"\n  description="Follow the fitting instructions supplied with the device."\n/>',
   }[pattern]!;
@@ -86,7 +119,7 @@ export function CardExample() {
       tone="canvas"
       code={
         'import { DeviceCard, StatusCard, VitalCard, InstructionCard } from "@/components/patterns/clinical-cards"\n\n' +
-        code
+        (pattern === "bento" ? 'import { HomeVitals } from "@/components/patterns/home-vitals"\n\n' : "") + code
       }
       caption="Sample device and readings."
       controls={
@@ -100,6 +133,7 @@ export function CardExample() {
               <option value="device">Device</option>
               <option value="status">Status</option>
               <option value="vitals">Vital</option>
+              <option value="bento">Home vitals</option>
               <option value="instruction">Instruction</option>
             </select>
           </label>
@@ -145,6 +179,13 @@ export function CardExample() {
               data={SAMPLE_TREND}
             />
           </div>
+        )}
+        {pattern === "bento" && (
+          <HomeVitals
+            pulse={{ value: "128", unit: "bpm", data: SAMPLE_TREND }}
+            temperature={{ value: "98.6", unit: "°F" }}
+            activity={{ value: "Healthy" }}
+          />
         )}
         {pattern === "instruction" && (
           <InstructionCard
@@ -470,7 +511,7 @@ function ChartExample({ small = false }: { small?: boolean }) {
   chart={{ data: ${empty ? "[]" : "readings"}, xKey: "time", timeAxis: true, series: [{ key: "value", label: "Thermoregulation", color: "var(--color-safe)", domain: [94, 100], showDots: false }] }}
 />`
       }
-      caption="Sample readings for the component preview."
+      caption={summary && !small ? "Sample vital summary. The shared badge reflects the selected status." : "Sample readings for the component preview."}
       controls={
         <>
           <label>
@@ -601,19 +642,7 @@ export function ComponentExample({ name }: { name: ComponentName }) {
     case "item":
       return <ItemExample />;
     case "badge":
-      return (
-        <Preview
-          code={
-            '<Badge status="safe">Connected</Badge>\n<Badge status="caution">Needs attention</Badge>\n<Badge status="critical">Critical</Badge>'
-          }
-        >
-          <div className="docs-example-row">
-            <Badge status="safe">Connected</Badge>
-            <Badge status="caution">Needs attention</Badge>
-            <Badge status="critical">Critical</Badge>
-          </div>
-        </Preview>
-      );
+      return <BadgeExample />;
   }
 }
 

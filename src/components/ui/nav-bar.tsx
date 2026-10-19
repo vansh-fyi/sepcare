@@ -33,7 +33,7 @@ export function NavBar({
       data-slot="nav-bar"
       aria-label="Main navigation"
       className={cn(
-        "flex items-center gap-2 rounded-t-[var(--radius-nav-bar)] bg-surface px-6 py-4 shadow-nav-bar",
+        "flex items-center gap-2 rounded-t-[var(--radius-nav-bar)] border-t border-card-border bg-surface bg-[image:var(--gradient-surface)] px-6 py-4 shadow-nav-bar",
         position === "fixed" && "fixed inset-x-0 bottom-0 z-30",
         className,
       )}

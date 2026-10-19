@@ -12,7 +12,11 @@
   display: grid;
   place-items: center;
   border-radius: var(--radius-card-sm);
+  background-image: var(--tile-gradient, var(--gradient-status-sheen));
   box-shadow: none;
+}
+.row[data-fixed-tile="true"] {
+  align-items: center;
 }
 .tile > svg {
   width: 45%;

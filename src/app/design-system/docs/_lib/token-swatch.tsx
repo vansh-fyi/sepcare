@@ -14,7 +14,7 @@ export function TokenSwatch({ name, value }: TokenSwatchValue) {
     : name.startsWith("--shadow-")
       ? { boxShadow: cssVar, background: "var(--color-surface)" }
       : name.startsWith("--gradient-")
-        ? { backgroundImage: cssVar }
+        ? { backgroundColor: name.includes("sheen") ? "var(--color-neutral-300)" : "var(--color-surface)", backgroundImage: cssVar }
         : name.startsWith("--color-")
           ? { background: cssVar }
           : { background: "var(--color-bg)" };

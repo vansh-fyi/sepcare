@@ -50,7 +50,7 @@ export function ComponentDocs({ name }: { name: ComponentName }) {
         title="API reference"
         description={
           name === "status-summary"
-            ? "InfantStatusCard renders the card. InfantStatusSection adds the status Badge and prototype feedback; it accepts the same infant prop only."
+            ? "InfantStatusCard renders the transparent summary. InfantStatusSection adds the status Badge and prototype feedback; it accepts the same infant prop only."
             : name === "connection-status"
             ? "ConnectionStatus accepts the props below; it does not forward arbitrary span attributes."
             : name === "risk-timeline" || name === "device-select-list" || name === "device-details"

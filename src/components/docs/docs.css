@@ -823,9 +823,16 @@
     place-items: center;
     padding: 16px;
     overflow: hidden;
-    background: var(--color-page-canvas);
-    border: 1px solid var(--color-border-subtle);
+    background: var(--color-preview-stage);
+    border: 1px solid var(--color-preview-stage);
     border-radius: var(--radius-card);
+  }
+  .docs-example-device {
+    box-sizing: border-box;
+    padding: var(--preview-bezel);
+    border-radius: calc(var(--radius-card) + var(--preview-bezel));
+    background: var(--color-preview-device-frame);
+    box-shadow: 0 0 0 1px var(--color-preview-device-edge);
   }
   .docs-example-frame {
     display: block;
@@ -835,6 +842,5 @@
     border: 0;
     border-radius: var(--radius-card);
     background: var(--color-surface);
-    box-shadow: var(--shadow-floating);
   }
 }

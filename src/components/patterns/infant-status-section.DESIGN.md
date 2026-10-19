@@ -12,6 +12,6 @@ Critical status replaces the description with the card's shared critical Call am
 
 ## Consumers and documentation
 
-Caregiver and parent prototype Home screens share this composition unchanged. It accepts clinical data rather than fetching readings. The containing prototype shell must identify static sample data. The lower-level `InfantStatusCard` remains available for other compositions and applications that supply a real action handler.
+HomeOverview shares this composition across caregiver, parent, and clinical-dashboard example Home screens. It accepts clinical data rather than fetching readings. The containing prototype shell must identify static sample data. The lower-level `InfantStatusCard` remains available for other compositions and applications that supply a real action handler.
 
 Live preview, copyable example, and API distinctions: `/design-system/docs/status-summary`.

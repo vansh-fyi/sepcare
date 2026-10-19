@@ -7,3 +7,5 @@ Card contains DeviceTileRow with a wrapping Plus Jakarta Sans text-xl bold headi
 Optional `onConnectionChange: () => void` lets route consumers supply demo feedback or a real action. Without a handler, the button is disabled rather than silently doing nothing. No destructive confirmation is involved. The component never mutates fixture state. Errors belong to the containing route boundary and its retry affordance.
 
 Live docs: `/design-system/docs/device-details`.
+
+DeviceConnectionLabel appears below the identifier: Connected with an animated sm non-emoji PulseWave, or Disconnected with a static neutral pulse. Healthy wearable tiles use --gradient-signifier-safe and white glyphs. Sensor-contact badges use light tonal gradients with dark text. Reading freshness remains separate from physical connection.
