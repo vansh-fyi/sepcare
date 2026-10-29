@@ -45,15 +45,22 @@ describe("Supabase keep-alive cron", () => {
     expect(query.from).not.toHaveBeenCalled();
   });
 
-  it("executes a bounded database read and succeeds even with an empty table", async () => {
+  it("executes one bounded read per keep-alive table and succeeds even with empty tables", async () => {
     const response = await GET(request("Bearer test-cron-secret"));
 
     expect(response.status).toBe(200);
     expect(response.headers.get("cache-control")).toBe("no-store");
     await expect(response.json()).resolves.toEqual({ status: "ok" });
-    expect(query.from).toHaveBeenCalledWith("devices");
+    expect(query.from.mock.calls.map(([table]) => table)).toEqual([
+      "devices",
+      "readings",
+      "risk_scores",
+    ]);
     expect(query.select).toHaveBeenCalledWith("device_id");
+    expect(query.select).toHaveBeenCalledWith("deviceId");
+    expect(query.select).toHaveBeenCalledTimes(3);
     expect(query.limit).toHaveBeenCalledWith(1);
+    expect(query.abortSignal).toHaveBeenCalledTimes(3);
     expect(query.abortSignal).toHaveBeenCalledWith(expect.any(AbortSignal));
   });
 
@@ -76,4 +83,18 @@ describe("Supabase keep-alive cron", () => {
       expect(console.error).toHaveBeenCalled();
     }
   );
+
+  it("reports failure when only one of the keep-alive queries fails", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const error = new Error("private database details");
+    query.abortSignal
+      .mockResolvedValueOnce({ data: [], error: null })
+      .mockResolvedValueOnce({ data: [], error: null })
+      .mockResolvedValueOnce({ data: null, error });
+
+    const response = await GET(request("Bearer test-cron-secret"));
+
+    expect(response.status).toBe(503);
+    await expect(response.json()).resolves.toEqual({ error: "Supabase keep-alive failed" });
+  });
 });

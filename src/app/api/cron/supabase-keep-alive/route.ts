@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
+// One bounded read per table so a single daily invocation still produces
+// "a few" real PostgREST→Postgres requests, which is what Supabase's
+// free-plan inactivity check measures.
+const KEEP_ALIVE_QUERIES = [
+  { table: "devices", column: "device_id" },
+  { table: "readings", column: "deviceId" },
+  { table: "risk_scores", column: "deviceId" },
+] as const;
+
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
   const headers = { "Cache-Control": "no-store" };
@@ -10,13 +19,18 @@ export async function GET(request: Request) {
   }
 
   try {
-    const { error } = await supabaseAdmin
-      .from("devices")
-      .select("device_id")
-      .limit(1)
-      .abortSignal(AbortSignal.timeout(10_000));
+    const results = await Promise.all(
+      KEEP_ALIVE_QUERIES.map(({ table, column }) =>
+        supabaseAdmin
+          .from(table)
+          .select(column)
+          .limit(1)
+          .abortSignal(AbortSignal.timeout(10_000))
+      )
+    );
 
-    if (error) throw error;
+    const failure = results.find((result) => result.error !== null);
+    if (failure) throw failure.error;
 
     return NextResponse.json({ status: "ok" }, { headers });
   } catch (error) {

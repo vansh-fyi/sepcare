@@ -8,7 +8,7 @@ Use `npm run build:turbo` to reproduce or investigate the Turbopack build separa
 
 ## Supabase keep-alive
 
-`vercel.json` schedules `/api/cron/supabase-keep-alive` daily at midnight UTC (05:30 IST). On Vercel Hobby, invocation can occur anywhere within that hour. The endpoint reads at most one device ID from Supabase, including when the table is empty, and returns only a success status. It does not modify data. Database errors or the 10-second query timeout return HTTP 503 and log the failure.
+`vercel.json` schedules `/api/cron/supabase-keep-alive` daily at midnight UTC (05:30 IST). On Vercel Hobby, invocation can occur anywhere within that hour. The endpoint issues one bounded read per table (`devices`, `readings`, `risk_scores`), each limited to a single row, including when the tables are empty, and returns only a success status. This produces a few real PostgREST→Postgres requests per run, which is what Supabase's free-plan inactivity check measures. It does not modify data. Database errors or the 10-second query timeout on any query return HTTP 503 and log the failure.
 
 Before deploying, generate a secret with `openssl rand -hex 32` and add it as `CRON_SECRET` to the Vercel project's **Production** environment variables. The existing `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` must also be configured. Redeploy to activate the schedule and environment variables. Vercel sends the secret automatically in the Authorization header; the endpoint rejects requests if the secret is missing or incorrect.
 
